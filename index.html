@@ -42,6 +42,10 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-main); color: var(--text-main); padding-bottom: 120px; transition: background-color 0.3s ease; overflow-x: hidden;}
+        
+        /* PREVENTS BACKGROUND SCROLL WHEN MODAL IS OPEN */
+        body.no-scroll { overflow: hidden; }
+
         .container { padding: 16px; max-width: 600px; margin: 0 auto; position: relative; }
         svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
         button, input, select, textarea { font-family: inherit; outline: none; border: none; background: none; }
@@ -251,7 +255,7 @@
     <div id="announcementBanner"></div>
 
     <div class="container">
-        <div class="closed-banner" id="closedBanner">Store is currently closed.</div>
+        <div class="closed-banner" id="closedBanner">La boutique est actuellement fermée.</div>
 
         <header class="header">
             <div class="brand-logo">
@@ -320,7 +324,7 @@
         
         <div class="pm-content">
             <div id="modalTraits"></div>
-            <h2 class="pm-title" id="modalTitle">Product Name</h2>
+            <h2 class="pm-title" id="modalTitle">Nom du produit</h2>
             <div class="pm-price" id="modalPrice">0 DH</div>
             <p class="pm-desc" id="modalDesc"></p>
 
@@ -332,7 +336,7 @@
                     <span class="pm-section-title">Instructions Spéciales</span>
                     <span class="badge-opt">OPTIONNEL</span>
                 </div>
-                <textarea class="textarea-notes" id="modalNotes" rows="2" placeholder="Sans oignons, extra sauce..."></textarea>
+                <textarea class="textarea-notes" id="modalNotes" rows="2" placeholder="Ex: Sans sucre, sans glaçons, bien cuit..."></textarea>
             </div>
         </div>
         
@@ -387,7 +391,7 @@
     </div>
 
     <div class="toast" id="toastBox">
-        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg><span id="toastMsg">Action successful</span>
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg><span id="toastMsg">Action réussie</span>
     </div>
 
     <script type="module">
@@ -412,14 +416,19 @@
         let activeMainCategory = 'Top ventes'; 
         let activeSubCategory = 'All';
         
+        // CART LOAD FROM LOCALSTORAGE
         let cart = [];
+        try {
+            const savedCart = localStorage.getItem('lasGoCart');
+            if (savedCart) cart = JSON.parse(savedCart);
+        } catch(e) {}
+
         let currentProductData = null;
         
-        // Smart dynamic state object for modular choices
         let customModalState = { 
             qty: 1, 
             basePrice: 0,
-            selections: {} // Will hold { groupId: [{name, price}] }
+            selections: {} 
         };
 
         const categoryAssets = {
@@ -430,7 +439,6 @@
             return currentMode === 'Resto' ? "🍽️" : "🛒";
         }
 
-        // --- DYNAMIC ZONES ---
         onSnapshot(collection(db, "zones"), snap => {
             let allZones = snap.docs.map(d => ({id: d.id, ...d.data()}));
             allZones.sort((a,b) => a.name.localeCompare(b.name));
@@ -453,7 +461,6 @@
             if(currCart) cartSelect.value = currCart;
         });
 
-        // --- DYNAMIC ANNOUNCEMENT BANNER ---
         onSnapshot(doc(db, "settings", "announcement"), snap => {
             const banner = document.getElementById('announcementBanner');
             if(snap.exists() && snap.data().isVisible && snap.data().text) {
@@ -464,7 +471,6 @@
             }
         });
 
-        // --- STORE STATUS LOGIC ---
         onSnapshot(doc(db, "settings", "store_status"), snap => {
             const banner = document.getElementById('closedBanner');
             const btnSubmit = document.getElementById('btnSubmitOrder');
@@ -526,7 +532,7 @@
             renderMainCategories();
             renderSubCategories();
             renderProductGrid();
-            updateFloatingCart();
+            updateFloatingCart(); // Load floating cart on UI render
         }
 
         function renderMainCategories() {
@@ -564,7 +570,7 @@
             if(uniqueSubs.length === 0) { container.style.display = 'none'; return; }
 
             container.style.display = 'flex';
-            let html = `<div class="sc-pill ${activeSubCategory === 'All' ? 'active' : ''}" onclick="selectSubCategory('All', this)">All</div>`;
+            let html = `<div class="sc-pill ${activeSubCategory === 'All' ? 'active' : ''}" onclick="selectSubCategory('All', this)">Tous</div>`;
             uniqueSubs.forEach(sub => { html += `<div class="sc-pill ${activeSubCategory === sub ? 'active' : ''}" onclick="selectSubCategory('${sub}', this)">${sub}</div>`; });
             container.innerHTML = html;
             
@@ -581,7 +587,6 @@
             const modeProducts = allProducts.filter(p => p.productType === currentMode);
             
             if(activeMainCategory === 'Top ventes') {
-                // In Top Ventes, we look for items with a high sortWeight (or fallback to legacy 'featured')
                 displayProducts = modeProducts.filter(p => p.featured === true || (p.sortWeight && p.sortWeight > 0) || (p.badge && p.badge !== 'Standard'));
                 document.getElementById('gridTitle').innerHTML = `Nos produits les plus populaires <span class="count">${displayProducts.length} produits</span>`;
             } else if (activeMainCategory === 'Tous') {
@@ -593,7 +598,6 @@
                 document.getElementById('gridTitle').innerHTML = `${activeMainCategory} <span class="count">${displayProducts.length} produits</span>`;
             }
 
-            // SMART SORTING: High weight first, then alphabetical
             displayProducts.sort((a, b) => {
                 const wa = a.sortWeight || 0;
                 const wb = b.sortWeight || 0;
@@ -617,7 +621,6 @@
 
             const imgTag = p.imageUrl ? `<img src="${p.imageUrl}" class="prod-img">` : `<span style="font-weight:800; color:var(--text-muted); font-size:24px;">${p.name.charAt(0)}</span>`;
             
-            // 1. MAIN BADGE LOGIC (Top Corner)
             let tagHtml = '';
             if (hasPromo) {
                 tagHtml = `<div class="prod-tag tag-promo">% PROMO</div>`;
@@ -629,22 +632,19 @@
                 if(p.badge === 'Combo Pack') badgeClass = 'tag-combo';
                 tagHtml = `<div class="prod-tag ${badgeClass}">★ ${p.badge.toUpperCase()}</div>`;
             } else if (p.featured) {
-                tagHtml = `<div class="prod-tag tag-vedette">★ VEDETTE</div>`; // Legacy support
+                tagHtml = `<div class="prod-tag tag-vedette">★ VEDETTE</div>`; 
             }
 
             let subText = p.subtitle || p.category || '';
 
-            // 2. TRAIT LOGIC (Under Subtitle)
             let traitHtml = '';
             if (p.traits && p.traits.length > 0) {
-                // Limit to maximum 2 traits to prevent stretching the card vertically
                 const displayTraits = p.traits.slice(0, 2);
                 traitHtml = `<div class="card-trait-wrap">` + 
                     displayTraits.map(t => `<span class="card-trait">${t}</span>`).join('') + 
                     `</div>`;
             }
 
-            // Adjust the bottom margin if traits exist so it looks perfectly spaced
             const subMargin = traitHtml ? 'margin-bottom: 8px;' : 'margin-bottom: 16px;';
 
             return `
@@ -663,13 +663,11 @@
             </div>`;
         }
 
-        // --- SEARCH LOGIC ---
         document.getElementById('searchInput').addEventListener('input', e => {
             const q = e.target.value.toLowerCase();
             if(q.length === 0) { renderUI(); return; }
             let subset = allProducts.filter(p => p.productType === currentMode && p.name.toLowerCase().includes(q));
             
-            // Apply Smart Sorting to search results as well
             subset.sort((a, b) => {
                 const wa = a.sortWeight || 0;
                 const wb = b.sortWeight || 0;
@@ -690,7 +688,6 @@
         
         document.getElementById('searchInput').addEventListener('blur', e => { if(e.target.value.trim() === '') { document.getElementById('mainCatContainer').style.display = 'flex'; renderUI(); } });
 
-        // --- CUSTOM MODAL UI (WITH MODULAR OPTIONS) ---
         window.openProductModal = (id) => {
             const p = allProducts.find(x => x.id === id); if(!p) return;
             currentProductData = p;
@@ -699,7 +696,6 @@
             const hasPromo = p.promoPrice !== null && p.promoPrice !== undefined;
             const baseP = hasPromo ? p.promoPrice : p.sellPrice;
 
-            // Reset Smart State
             customModalState = { 
                 qty: 1, 
                 basePrice: baseP, 
@@ -711,7 +707,6 @@
                 ? `<span style="text-decoration:line-through; color:var(--text-muted); font-size:16px; margin-right:8px;">${formatPrice(p.sellPrice)} DH</span>${formatPrice(p.promoPrice)} DH`
                 : `${formatPrice(p.sellPrice)} DH`;
             
-            // Render ALL Traits in the modal
             const traitsContainer = document.getElementById('modalTraits');
             if(p.traits && p.traits.length > 0) {
                 traitsContainer.innerHTML = `<div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;">` + 
@@ -729,10 +724,8 @@
 
             let sectionsHtml = '';
 
-            // BUILD MODULAR OPTION GROUPS
             if (p.optionGroups && p.optionGroups.length > 0) {
                 p.optionGroups.forEach(g => {
-                    // Pre-select first item if it's a single choice group
                     if(g.selection === 'single' && g.items.length > 0) {
                         customModalState.selections[g.id] = [{ name: g.items[0].name, price: g.items[0].price }];
                     } else {
@@ -752,6 +745,8 @@
             document.getElementById('modalConfigSections').innerHTML = sectionsHtml;
 
             updateModalDOMPrice();
+            
+            document.body.classList.add('no-scroll'); // LOCK SCROLL
             document.getElementById('productOverlay').classList.add('active'); 
             document.getElementById('productModal').classList.add('active');
         };
@@ -786,13 +781,11 @@
             let selections = customModalState.selections[groupId] || [];
 
             if (type === 'single') {
-                // Radio behavior
                 const siblings = element.parentElement.querySelectorAll('.opt-pill'); 
                 siblings.forEach(el => el.classList.remove('selected'));
                 element.classList.add('selected');
                 customModalState.selections[groupId] = [{ name: itemName, price: price }];
             } else {
-                // Checkbox behavior
                 const idx = selections.findIndex(s => s.name === itemName);
                 if (idx > -1) {
                     selections.splice(idx, 1);
@@ -830,6 +823,7 @@
         window.addEventListener('popstate', (e) => { closeModals(true); });
 
         window.closeModals = (fromHistory = false) => { 
+            document.body.classList.remove('no-scroll'); // UNLOCK SCROLL
             document.querySelectorAll('.overlay').forEach(el => el.classList.remove('active')); 
             document.querySelectorAll('.bottom-sheet, .std-sheet, .product-sheet').forEach(el => el.classList.remove('active')); 
             if(!fromHistory && history.state && history.state.modalOpen) { history.back(); }
@@ -877,6 +871,8 @@
                 });
             }
 
+            localStorage.setItem('lasGoCart', JSON.stringify(cart)); // SAVE TO STORAGE
+
             closeModals(); updateFloatingCart(); showToast("Ajouté au panier !");
         };
 
@@ -896,12 +892,16 @@
             if(cart.length === 0) return showToast("Votre panier est vide");
             history.pushState({ modalOpen: true }, ""); 
             renderCartItems(); updateCartTotals();
+            document.body.classList.add('no-scroll'); // LOCK SCROLL
             document.getElementById('cartOverlay').classList.add('active'); document.getElementById('cartModal').classList.add('active');
         };
 
         window.updateCartItemQty = (index, change) => {
             cart[index].qty += change;
             if(cart[index].qty <= 0) cart.splice(index, 1);
+            
+            localStorage.setItem('lasGoCart', JSON.stringify(cart)); // UPDATE STORAGE
+            
             if(cart.length === 0) { closeModals(); updateFloatingCart(); return; }
             renderCartItems(); updateCartTotals(); updateFloatingCart();
         };
@@ -1008,7 +1008,21 @@
                 
                 const waUrl = `https://wa.me/212600000000?text=${encodeURIComponent(waText)}`; 
                 
-                cart = []; updateFloatingCart(); closeModals(); window.location.href = waUrl;
+                // CLEAR CART AFTER SUCCESSFUL ORDER
+                cart = []; 
+                localStorage.removeItem('lasGoCart'); 
+                
+                updateFloatingCart(); 
+                closeModals(); 
+                
+                window.open(waUrl, '_blank'); // Open WhatsApp in new tab so button can reset
+                
+                // Reset Button after 2 seconds
+                setTimeout(() => {
+                    btn.innerHTML = "Commander via WhatsApp"; 
+                    btn.disabled = false;
+                }, 2000);
+
             } catch (e) {
                 console.error(e); alert("Erreur lors de la commande.");
                 btn.innerHTML = `Commander via WhatsApp`; 
