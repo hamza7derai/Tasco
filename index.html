@@ -78,13 +78,31 @@
         .search-box input:focus { border-color: var(--theme-color); background: var(--surface); box-shadow: 0 0 0 3px var(--theme-light); }
         .search-box .s-icon { position: absolute; left: 16px; top: 16px; color: var(--text-muted); width: 20px; }
 
+        /* SKELETON LOADING ANIMATION */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        .skeleton {
+            background: #f6f7f8;
+            background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+            background-repeat: no-repeat;
+            background-size: 1000px 100%;
+            animation-duration: 1.5s;
+            animation-fill-mode: forwards;
+            animation-iteration-count: infinite;
+            animation-name: shimmer;
+            animation-timing-function: linear;
+        }
+        .skel-cat { min-width: 85px; height: 100px; border-radius: 16px; border: 1px solid var(--border-light); }
+        .skel-card { height: 240px; border-radius: 18px; border: 1px solid var(--border-light); }
+
         /* TIER 1: MAIN CATEGORIES */
         .main-cats { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px 20px; padding: 0 16px; scroll-behavior: smooth; }
         .main-cats::-webkit-scrollbar { display: none; }
         .mc-card { min-width: 85px; background: var(--surface); border: 1px solid var(--border-dark); border-radius: 16px; padding: 16px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02);}
         .mc-card:active { transform: scale(0.95); }
         
-        /* --- NEW MAGIC EMOJI CSS --- */
         .mc-icon { font-size: 32px; line-height: 1; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .mc-card:not(.active) .mc-icon { opacity: 0.5; filter: grayscale(100%); transform: scale(0.85); }
         .mc-card.active .mc-icon { transform: scale(1.15); filter: drop-shadow(0 6px 8px rgba(255, 69, 0, 0.25)); }
@@ -262,8 +280,8 @@
         <div class="closed-banner" id="closedBanner">La boutique est actuellement fermée.</div>
 
         <header class="header">
-            <div class="brand-logo" style="display: flex; align-items: center; margin-left: -4px;">
-                <img src="https://i.postimg.cc/HWJW9ySr/file-000000007c5c720ab4e6e16943cc7514.png" alt="lasGo Logo" style="height: 46px; width: auto; object-fit: contain; mix-blend-mode: multiply;">
+            <div class="brand-logo" style="display: flex; align-items: center;">
+                <img src="https://i.postimg.cc/HWJW9ySr/file-000000007c5c720ab4e6e16943cc7514.png" alt="lasGo Logo" style="height: 38px; width: auto; object-fit: contain; mix-blend-mode: multiply;">
             </div>
 
             <div class="location-pill">
@@ -278,7 +296,7 @@
             <div class="mode-toggle">
                 <div class="toggle-bg" id="toggleBg"></div>
                 <div class="m-btn active" id="btnResto" onclick="setMode('Resto')">
-                    <svg viewBox="0 0 24 24"><path d="M11 4v16"></path><path d="M11 4C11 2.9 8.31 2 5 2S-1 2.9-1 4v6c0 2.21 2.69 4 6 4s6-1.79 6-4V4z"></path><path d="M19 2v20"></path><path d="M15 6h8"></path><path d="M15 10h8"></path></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path d="M7 2v20"></path><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path></svg>
                     Resto
                 </div>
                 <div class="m-btn" id="btnGrocery" onclick="setMode('Grocery')">
@@ -293,13 +311,23 @@
             <input type="text" id="searchInput" placeholder="Pizza, tacos, jus, lait...">
         </div>
 
-        <div class="main-cats" id="mainCatContainer"></div>
+        <div class="main-cats" id="mainCatContainer">
+            <div class="skeleton skel-cat"></div>
+            <div class="skeleton skel-cat"></div>
+            <div class="skeleton skel-cat"></div>
+            <div class="skeleton skel-cat"></div>
+        </div>
 
         <div class="sub-cats" id="subCatContainer"></div>
 
         <div id="gridSection">
             <h2 class="grid-header" id="gridTitle">Nos produits les plus populaires <span class="count" id="gridCount"></span></h2>
-            <div class="product-grid" id="mainGrid"></div>
+            <div class="product-grid" id="mainGrid">
+                <div class="skeleton skel-card"></div>
+                <div class="skeleton skel-card"></div>
+                <div class="skeleton skel-card"></div>
+                <div class="skeleton skel-card"></div>
+            </div>
         </div>
 
     </div>
@@ -322,7 +350,7 @@
     
     <div class="bottom-sheet product-sheet" id="productModal">
         <div class="pm-header-img-wrap">
-            <img src="" class="pm-img" id="modalImg">
+            <img src="" class="pm-img" id="modalImg" loading="lazy" decoding="async">
             <div class="pm-close-btn" onclick="closeModals()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>
         </div>
         
@@ -631,7 +659,8 @@
                 ? `<span class="p-old-price">${formatPrice(p.sellPrice)} DH</span><span class="prod-price">${formatPrice(p.promoPrice)} DH</span>`
                 : `<span class="prod-price">${formatPrice(p.sellPrice)} DH</span>`;
 
-            const imgTag = p.imageUrl ? `<img src="${p.imageUrl}" class="prod-img">` : `<span style="font-weight:800; color:var(--text-muted); font-size:24px;">${p.name.charAt(0)}</span>`;
+            // INJECTED: loading="lazy" decoding="async" for faster image loading
+            const imgTag = p.imageUrl ? `<img src="${p.imageUrl}" class="prod-img" loading="lazy" decoding="async">` : `<span style="font-weight:800; color:var(--text-muted); font-size:24px;">${p.name.charAt(0)}</span>`;
             
             let tagHtml = '';
             if (hasPromo) {
@@ -923,7 +952,8 @@
             document.getElementById('cartCountHeader').innerText = `${totalItems} article${totalItems>1?'s':''}`;
 
             document.getElementById('cartItemsList').innerHTML = cart.map((item, i) => {
-                const imgHtml = item.product.imageUrl ? `<img src="${item.product.imageUrl}" class="ci-img">` : `<div class="ci-img" style="display:flex;align-items:center;justify-content:center;font-size:10px; font-weight:bold; color:var(--text-muted);">${item.product.name.charAt(0)}</div>`;
+                // INJECTED: loading="lazy" for cart images
+                const imgHtml = item.product.imageUrl ? `<img src="${item.product.imageUrl}" class="ci-img" loading="lazy">` : `<div class="ci-img" style="display:flex;align-items:center;justify-content:center;font-size:10px; font-weight:bold; color:var(--text-muted);">${item.product.name.charAt(0)}</div>`;
                 
                 let metaText = [];
                 if(item.modularChoices && item.modularChoices.length > 0) {
