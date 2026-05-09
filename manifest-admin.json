@@ -1,10 +1,13 @@
 {
+  "id": "/admin",
   "name": "Lasco Admin",
   "short_name": "Admin",
   "start_url": "./admin.html",
   "display": "standalone",
-  "theme_color": "#FF4500",
+  "background_color": "#FF4500",
+  "theme_color": "#FFFFFF",
   "icons": [
+    { "src": "https://i.postimg.cc/d3cF4KcS/file-000000008388720a93281fce7688b821.png", "sizes": "192x192", "type": "image/png" },
     { "src": "https://i.postimg.cc/d3cF4KcS/file-000000008388720a93281fce7688b821.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
