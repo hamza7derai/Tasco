@@ -467,7 +467,6 @@
         let currentMode = 'Resto'; 
         let activeMainCategory = 'Top ventes'; 
         let activeSubCategory = 'All';
-        let isFirstDataLoad = true; 
         
         let cart = [];
         try {
@@ -587,19 +586,11 @@
 
         onSnapshot(collection(db, "products"), snap => {
             allProducts = snap.docs.map(d => ({id: d.id, ...d.data()})).filter(p => p.isAvailable !== false);
-            
-            if (isFirstDataLoad && snap.metadata.fromCache && allProducts.length === 0) {
-                setTimeout(() => { if (isFirstDataLoad) { isFirstDataLoad = false; renderUI(); } }, 1500);
-                return;
-            }
-            isFirstDataLoad = false;
-
             if(!document.getElementById('productModal').classList.contains('active')) {
                 renderUI();
             }
         });
 
-        // HELPER FUNCTION FOR TIME AND DAY LIMITS
         function isProductTimeValid(p) {
             if (!p.startTime && !p.endTime && (!p.daysAvailable || p.daysAvailable.length === 0)) {
                 return true; 
@@ -626,7 +617,6 @@
         }
 
         function renderUI() {
-            if (isFirstDataLoad) return; 
             renderMainCategories();
             renderSubCategories();
             renderProductGrid();
@@ -701,7 +691,7 @@
             displayProducts.sort((a, b) => {
                 const wa = a.sortWeight || 0;
                 const wb = b.sortWeight || 0;
-                if (weightB !== weightA) return weightB - weightA;
+                if (wb !== wa) return wb - wa;
                 return (a.name || "").localeCompare(b.name || "");
             });
 
@@ -1175,10 +1165,12 @@
     </script>
 
     <script>
-        // 1. Register the Service Worker
+        // 1. Register the Service Worker (Safely handles errors without breaking page)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js');
+                navigator.serviceWorker.register('sw.js').catch(err => {
+                    console.log("Service worker not active, but app will still run.");
+                });
             });
         }
 
@@ -1191,19 +1183,14 @@
         installBanner.style.display = 'none';
 
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent Chrome from showing the automatic mini-bar
             e.preventDefault();
-            // Stash the event so we can trigger it later
             deferredPrompt = e;
-            // Show OUR custom sticky banner instead
             installBanner.style.display = 'flex';
         });
 
         installBtn.addEventListener('click', async () => {
             if (deferredPrompt) {
-                // Show the native Android install prompt
                 deferredPrompt.prompt();
-                // Wait for the user to respond
                 const { outcome } = await deferredPrompt.userChoice;
                 if (outcome === 'accepted') {
                     installBanner.style.display = 'none';
@@ -1213,7 +1200,6 @@
         });
 
         window.addEventListener('appinstalled', () => {
-            // If they install it, hide the banner forever
             installBanner.style.display = 'none';
         });
     </script>
