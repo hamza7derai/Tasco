@@ -277,6 +277,17 @@
 </head>
 <body>
 
+    <div id="installBanner" style="display: none; background: var(--text-main); color: white; padding: 12px 16px; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative; z-index: 1000;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <img src="https://i.postimg.cc/q7yMGWc1/file-00000000906471f4b781f0c5b3944220.png" style="width: 32px; height: 32px; border-radius: 8px; background: white; padding: 2px; object-fit: contain;">
+            <div>
+                <div style="font-weight: 800; font-size: 14px;">Installer l'app lasco.</div>
+                <div style="font-size: 11px; opacity: 0.8; font-weight: 500;">Commandez plus rapidement !</div>
+            </div>
+        </div>
+        <button id="installBtn" style="background: var(--theme-color); color: white; padding: 8px 16px; border-radius: 50px; font-weight: 800; font-size: 12px; border: none; box-shadow: 0 4px 10px rgba(255,69,0,0.3); cursor:pointer;">Installer</button>
+    </div>
+
     <div id="announcementBanner"></div>
 
     <div class="container">
@@ -588,7 +599,7 @@
             }
         });
 
-        // UPDATED HELPER FUNCTION FOR TIME AND DAY LIMITS
+        // HELPER FUNCTION FOR TIME AND DAY LIMITS
         function isProductTimeValid(p) {
             if (!p.startTime && !p.endTime && (!p.daysAvailable || p.daysAvailable.length === 0)) {
                 return true; 
@@ -690,7 +701,7 @@
             displayProducts.sort((a, b) => {
                 const wa = a.sortWeight || 0;
                 const wb = b.sortWeight || 0;
-                if (wb !== wa) return wb - wa;
+                if (weightB !== weightA) return weightB - weightA;
                 return (a.name || "").localeCompare(b.name || "");
             });
 
@@ -771,7 +782,7 @@
             subset.sort((a, b) => {
                 const wa = a.sortWeight || 0;
                 const wb = b.sortWeight || 0;
-                if (wb !== wa) return wb - wa;
+                if (weightB !== weightA) return weightB - weightA;
                 return (a.name || "").localeCompare(b.name || "");
             });
 
@@ -1161,6 +1172,50 @@
 
         const savedTab = localStorage.getItem('lasGoActiveTab') || 'Resto';
         setMode(savedTab);
+    </script>
+
+    <script>
+        // 1. Register the Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+
+        // 2. The Sticky Banner Logic
+        let deferredPrompt;
+        const installBanner = document.getElementById('installBanner');
+        const installBtn = document.getElementById('installBtn');
+
+        // Hide it by default until the prompt triggers
+        installBanner.style.display = 'none';
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome from showing the automatic mini-bar
+            e.preventDefault();
+            // Stash the event so we can trigger it later
+            deferredPrompt = e;
+            // Show OUR custom sticky banner instead
+            installBanner.style.display = 'flex';
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                // Show the native Android install prompt
+                deferredPrompt.prompt();
+                // Wait for the user to respond
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installBanner.style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            // If they install it, hide the banner forever
+            installBanner.style.display = 'none';
+        });
     </script>
 </body>
 </html>
