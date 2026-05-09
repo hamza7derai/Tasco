@@ -1,0 +1,22 @@
+{
+  "id": "/driver",
+  "name": "Lasco Driver",
+  "short_name": "Driver",
+  "start_url": "./driver.html",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#3B82F6",
+  "icons": [
+    {
+      "src": "https://i.postimg.cc/cJjTqxCs/file-0000000036a0720ab76c26bad2b8b866.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://i.postimg.cc/cJjTqxCs/file-0000000036a0720ab76c26bad2b8b866.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+
