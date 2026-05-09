@@ -1,4 +1,5 @@
 {
+  "id": "/customer",
   "name": "lasco.",
   "short_name": "lasco",
   "start_url": "./index.html",
@@ -6,15 +7,7 @@
   "background_color": "#ffffff",
   "theme_color": "#FF4500",
   "icons": [
-    {
-      "src": "https://i.postimg.cc/0jFQ8Spd/file-000000007c5c720ab4e6e16943cc7514.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "https://i.postimg.cc/0jFQ8Spd/file-000000007c5c720ab4e6e16943cc7514.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    { "src": "https://i.postimg.cc/0jFQ8Spd/file-000000007c5c720ab4e6e16943cc7514.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "https://i.postimg.cc/0jFQ8Spd/file-000000007c5c720ab4e6e16943cc7514.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
