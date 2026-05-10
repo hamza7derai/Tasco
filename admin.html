@@ -129,7 +129,8 @@
         .cat-list-actions { display: flex; gap: 6px; align-items: center;}
         .btn-action { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: 0.2s; flex-shrink: 0;}
         .btn-action:active { transform: scale(0.9); }
-        .btn-action.copy { background: var(--bg-main); color: var(--text-muted); border: 1px solid var(--border);}
+        .btn-action.link { background: var(--bg-main); color: var(--text-main); border: 1px solid var(--border);}
+        .btn-action.copy { background: #F1F5F9; color: #475569; }
         .btn-action.edit { background: var(--primary-light); color: var(--primary); }
         .btn-action.del { background: var(--danger-light); color: var(--danger); }
 
@@ -265,7 +266,7 @@
     <div id="view-dashboard" class="app-view active container">
         <div class="header-top">
             <div>
-                <h1>Hello, Lasco 👋</h1>
+                <h1>Hello, <span style="color: var(--primary);">Lasco</span> 👋</h1>
                 <p>Here's what's happening with your store today.</p>
             </div>
             <div class="btn-exit" onclick="logoutAdmin()">
@@ -277,7 +278,7 @@
         <div class="card toggle-wrapper" style="padding: 16px; margin-bottom: 24px;">
             <div style="display:flex; align-items:center; gap:16px;">
                 <div id="statusIconBox" style="width: 44px; height: 44px; border-radius: 12px; background: var(--danger-light); color: var(--danger); display: flex; align-items: center; justify-content: center; transition: 0.3s;">
-                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2-2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                 </div>
                 <div>
                     <span id="statusTextMain" style="display:block; font-size:15px; font-weight:800; color:var(--text-main);">Store Closed</span>
@@ -320,7 +321,10 @@
         <div class="card" style="padding:0; overflow:hidden;">
             <div style="padding:16px; border-bottom:1px solid var(--border);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <div style="font-size:14px; font-weight:800;">Live Announcement</div>
+                    <div style="font-size:14px; font-weight:800; display:flex; align-items:center; gap:6px;">
+                        <svg viewBox="0 0 24 24" style="width:16px; color:var(--primary);"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        Live Announcement
+                    </div>
                     <label class="switch"><input type="checkbox" id="tglAnnounce"><span class="slider"></span></label>
                 </div>
                 <div style="display:flex; gap:8px;">
@@ -329,7 +333,10 @@
                 </div>
             </div>
             <div style="padding:16px;">
-                <div style="font-size:14px; font-weight:800; margin-bottom:12px;">Delivery Zones & Fees</div>
+                <div style="font-size:14px; font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+                    <svg viewBox="0 0 24 24" style="width:16px; color:var(--primary);"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    Delivery Zones & Fees
+                </div>
                 <div style="display:flex; gap:8px; margin-bottom:16px;">
                     <input type="text" id="inpZoneName" class="form-control" placeholder="Area Name" style="font-size:13px;">
                     <input type="number" id="inpZoneFee" class="form-control" placeholder="Fee (DH)" style="font-size:13px; width:100px;">
@@ -1203,6 +1210,22 @@
             `).join('');
         };
 
+        // ---------------- DEEP LINK COPY LOGIC ----------------
+        window.copyDeepLink = (id, type) => {
+            event.stopPropagation();
+            // Dynamically grab the base URL whether you are on local, github pages, or a custom domain
+            const domain = window.location.origin + window.location.pathname.replace('/admin.html', '/').replace('admin.html', ''); 
+            const param = type === 'Grocery' ? 'add' : 'open';
+            const link = `${domain}?${param}=${id}`;
+            
+            navigator.clipboard.writeText(link).then(() => {
+                showToast("🔗 Ad Link Copied!");
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+                showToast("Error copying link");
+            });
+        };
+
         // ---------------- CATALOG LOGIC (WITH SEARCH & QUICK TOGGLE) ----------------
         window.setCatalogMode = (mode) => {
             currentCatalogMode = mode;
@@ -1309,9 +1332,10 @@
                     <div class="cat-list-bottom">
                         <label class="switch" style="transform: scale(0.85); transform-origin: left;"><input type="checkbox" ${isAvail ? 'checked' : ''} onchange="toggleProductAvailability('${p.id}', this.checked)"><span class="slider"></span></label>
                         <div class="cat-list-actions">
-                            <button class="btn-action copy" onclick="duplicateProduct('${p.id}')"><svg viewBox="0 0 24 24" style="width:16px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
-                            <button class="btn-action edit" onclick="editProduct('${p.id}')"><svg viewBox="0 0 24 24" style="width:16px;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></button>
-                            <button class="btn-action del" onclick="promptDeleteProduct('${p.id}')"><svg viewBox="0 0 24 24" style="width:16px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+                            <button class="btn-action link" onclick="copyDeepLink('${p.id}', '${p.productType}')" title="Copy Ad Link"><svg viewBox="0 0 24 24" style="width:14px;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button>
+                            <button class="btn-action copy" onclick="duplicateProduct('${p.id}')" title="Duplicate"><svg viewBox="0 0 24 24" style="width:14px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+                            <button class="btn-action edit" onclick="editProduct('${p.id}')" title="Edit"><svg viewBox="0 0 24 24" style="width:14px;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></button>
+                            <button class="btn-action del" onclick="promptDeleteProduct('${p.id}')" title="Delete"><svg viewBox="0 0 24 24" style="width:14px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
                         </div>
                     </div>
                 </div>`;
@@ -1355,18 +1379,8 @@
 
         // ---------------- GLOBAL EMPTY STATE HTML ----------------
         const getEmptyOrdersHTML = () => `
-            <div style="background: #FFFAF5; border-radius: 20px; padding: 40px 20px; text-align: center; border: 1px solid #FEF0E6; margin-top: 12px;">
-                <div style="width: 80px; height: 80px; background: #FFEDD5; border-radius: 50%; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center;">
-                    <svg viewBox="0 0 64 64" style="width: 44px; height: 44px; stroke: #EA580C; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;">
-                        <rect x="18" y="24" width="28" height="28" rx="3"></rect>
-                        <path d="M26 24v-4a6 6 0 0 1 12 0v4"></path>
-                        <line x1="42" y1="18" x2="46" y2="14"></line>
-                        <line x1="48" y1="26" x2="52" y2="26"></line>
-                        <line x1="36" y1="12" x2="36" y2="8"></line>
-                    </svg>
-                </div>
-                <h4 style="font-size: 18px; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">No orders yet</h4>
-                <p style="font-size: 14px; color: var(--text-muted); font-weight: 500; line-height: 1.4;">Orders from your customers<br>will appear here.</p>
+            <div style="text-align:center; padding:24px 20px; color:var(--text-muted); font-size:13px; font-weight:600; background:var(--surface); border-radius:var(--radius-card); border:1px solid var(--border); box-shadow:var(--shadow-sm); margin-top:12px;">
+                Waiting for your first order.
             </div>
         `;
 
