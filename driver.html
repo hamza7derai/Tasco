@@ -126,7 +126,7 @@
         .item-row:last-child { border-bottom: none; padding-bottom: 0;}
         .item-img { width: 48px; height: 48px; border-radius: 12px; background: var(--bg-main); object-fit: cover; flex-shrink: 0; border: 1px solid var(--border);}
         .item-details { flex: 1; }
-        .item-name { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+        .item-name { font-size: 14px; font-weight: 800; margin-bottom: 2px; }
         .item-meta { font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-top: 4px;}
         .item-qty-badge { background: var(--accent-light); color: var(--accent); font-size: 13px; font-weight: 800; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
 
@@ -156,12 +156,24 @@
 
         .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--text-main); color: white; padding: 12px 24px; border-radius: 50px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-sm); z-index: 1100; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast-alarm { background: var(--warning); color: white; font-weight: 800; box-shadow: 0 10px 40px rgba(234, 88, 12, 0.4); border: 2px solid white; }
     </style>
 </head>
 <body>
+
+    <div class="overlay" id="shiftOverlay" style="background: rgba(15,23,42,0.9); z-index: 9999;">
+        <div class="modal" style="background: white; text-align: center; padding: 30px 20px; display: block;">
+            <div style="font-size: 40px; margin-bottom: 12px;">🛵</div>
+            <h3 style="font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">Prêt pour la livraison ?</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 24px;">Activez l'alarme pour recevoir les notifications sonores des nouvelles commandes.</p>
+            <button id="btnStartShift" style="width: 100%; background: var(--primary); color: white; border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 20px rgba(13,93,255,0.3);">
+                Démarrer le service
+            </button>
+        </div>
+    </div>
     
     <audio id="notificationSound" preload="auto">
-        <source src="data:audio/mp3;base64,//NExAAAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq" type="audio/mpeg">
+        <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
     </audio>
 
     <div id="view-dashboard" class="app-view container active">
@@ -312,25 +324,37 @@
         let currentTab = 'available'; 
         let openedOrderId = null;
         let currentDriver = null;
+        
         let isInitialLoad = true;
+        let blockNotifications = true; // Block until shift starts!
         const safeNum = (val) => isNaN(parseFloat(val)) ? 0 : parseFloat(val);
 
-        // SILENT AUDIO UNLOCKER FOR MOBILE BROWSERS
-        function unlockAudio() {
-            const sound = document.getElementById("notificationSound");
-            if(sound) {
-                sound.play().then(() => {
-                    sound.pause();
-                    sound.currentTime = 0;
-                }).catch(e => {});
-            }
-            document.removeEventListener('click', unlockAudio);
-            document.removeEventListener('touchstart', unlockAudio);
-        }
-        document.addEventListener('click', unlockAudio);
-        document.addEventListener('touchstart', unlockAudio);
+        const formatPrice = (num) => { const p = Number(num); return p % 1 === 0 ? p.toString() : p.toFixed(2); };
 
-        // --- THE BOUNCER & NOTIFICATION SETUP ---
+        // --- NEW: FORCED INTERACTION TO UNLOCK AUDIO & NOTIFICATIONS ---
+        document.getElementById('shiftOverlay').classList.add('active'); // Show on load
+
+        document.getElementById('btnStartShift').addEventListener('click', () => {
+            // 1. Force the audio to play a silent blank frame to unlock it in the browser
+            const sound = document.getElementById("notificationSound");
+            sound.volume = 0; // mute it for the fake play
+            sound.play().then(() => {
+                sound.pause();
+                sound.currentTime = 0;
+                sound.volume = 1; // turn volume back up for real orders
+            }).catch(e => console.log("Audio unlock failed:", e));
+
+            // 2. Request native notification permissions
+            if ("Notification" in window && Notification.permission !== "granted") {
+                Notification.requestPermission();
+            }
+
+            // 3. Hide the overlay and allow Firebase to ring
+            document.getElementById('shiftOverlay').classList.remove('active');
+            blockNotifications = false; 
+            showToast("Notifications activées !");
+        });
+
         onAuthStateChanged(auth, async user => {
             if (user) {
                 currentDriver = user;
@@ -345,12 +369,6 @@
                     lastActive: new Date().toISOString()
                 }, { merge: true });
 
-                if ("Notification" in window) {
-                    if (Notification.permission !== "granted" && Notification.permission !== "denied") {
-                        Notification.requestPermission();
-                    }
-                }
-
                 const savedTab = localStorage.getItem('lasGoDriverTab') || 'dashboard';
                 switchTab(savedTab === 'login' ? 'dashboard' : savedTab);
             } else {
@@ -359,16 +377,39 @@
             }
         });
 
-        function playNotification(orderId, area) {
+        // --- ALARM ENGINE ---
+        function playNotification(area) {
+            if(blockNotifications) return;
+
+            // 1. Play Sound
             const sound = document.getElementById("notificationSound");
-            if (sound) { sound.play().catch(e => console.log("Audio play blocked. Tap screen to unlock.")); }
+            if (sound) { sound.play().catch(e => console.log("Audio play blocked", e)); }
             
+            // 2. Vibrate Phone
+            if (navigator.vibrate) { navigator.vibrate([200, 100, 200, 100, 400]); }
+
+            // 3. Show Native Push Notification
             if ("Notification" in window && Notification.permission === "granted") {
-                new Notification("New Delivery Available! 🛵", {
-                    body: `A new unassigned order in ${area || 'your area'} is ready to be claimed.`,
-                    icon: "https://cdn-icons-png.flaticon.com/512/3063/3063822.png" 
-                });
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.ready.then(registration => {
+                        registration.showNotification("🚨 Nouvelle Commande !", {
+                            body: `Zone : ${area || 'Marrakech'}. Cliquez pour voir.`,
+                            icon: "https://i.postimg.cc/q7yMGWc1/file-00000000906471f4b781f0c5b3944220.png",
+                            vibrate: [200, 100, 200]
+                        });
+                    });
+                }
             }
+
+            // 4. Show App Toast
+            const t = document.getElementById('toastBox'); 
+            document.getElementById('toastMsg').innerText = `🚨 Commande : ${area || 'Disponible'} !`; 
+            t.classList.add('show');
+            t.classList.add('toast-alarm'); 
+            setTimeout(() => { 
+                t.classList.remove('show'); 
+                t.classList.remove('toast-alarm'); 
+            }, 6000);
         }
 
         window.logoutDriver = async () => {
@@ -379,21 +420,20 @@
             } catch(e) { console.error(e); }
         };
 
-        // --- LISTENERS ---
         onSnapshot(collection(db, "products"), snap => {
             allProducts = snap.docs.map(d => ({id: d.id, ...d.data()}));
             if(document.getElementById('view-wallet').classList.contains('active') && currentDriver) renderWallet();
         });
 
         onSnapshot(collection(db, "orders"), snap => {
-            if(currentDriver && !isInitialLoad) {
+            if(currentDriver && !isInitialLoad && !blockNotifications) {
                 snap.docChanges().forEach(change => {
                     if (change.type === "added") {
                         const newOrder = change.doc.data();
                         
-                        // Fire notification if it's a brand new order with NO driver assigned
+                        // Fire Notification Engine ONLY if order is Pending with no driver
                         if (newOrder.status === 'Pending' && (!newOrder.driverEmail || newOrder.driverEmail === "")) {
-                            playNotification(change.doc.id, newOrder.neighborhood);
+                            playNotification(newOrder.neighborhood);
                         }
                     }
                 });
@@ -411,7 +451,9 @@
                     else goBack(); 
                 }
             }
-            isInitialLoad = false;
+            
+            // Allow a short delay on the first load so it doesn't ring for old orders
+            setTimeout(() => { isInitialLoad = false; }, 2000);
         });
 
         // --- UI NAVIGATION ---
@@ -451,7 +493,6 @@
         function renderDashboard() {
             if(!currentDriver) return;
 
-            // NEW OPEN POOL LOGIC
             const unassignedOrders = allOrders.filter(o => o.status === 'Pending' && (!o.driverEmail || o.driverEmail === ""));
             const myOrders = allOrders.filter(o => o.driverEmail === currentDriver.email);
             
@@ -477,7 +518,7 @@
                 container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-illustration">
-                        <svg viewBox="0 0 24 24" style="width:60px; height:60px; stroke-width:1.5;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        <svg viewBox="0 0 24 24" style="width:60px; height:60px; stroke-width:1.5;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2-2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                     </div>
                     <h3>No orders available</h3>
                     <p>New deliveries will appear here.</p>
@@ -680,20 +721,18 @@
 
             document.getElementById('det-items-count').innerText = `Items (${o.totalItems || 0})`;
             
-            // FULLY UPDATED MODULAR CART LIST FOR DRIVER
+            // FULLY UPDATED PRICING INJECTION
             document.getElementById('det-cart-list').innerHTML = (o.cart || []).map(item => {
                 const p = item.product || {}; 
                 const img = p.imageUrl && p.imageUrl !== "local_file_selected" ? `<img src="${p.imageUrl}" class="item-img">` : `<div class="item-img" style="display:flex;align-items:center;justify-content:center;font-size:10px;">No Img</div>`;
                 
                 let metaText = [];
                 
-                // Legacy support
                 if(item.variantName) metaText.push(`Size: ${item.variantName}`);
                 if(item.extras && item.extras.length > 0) metaText.push(`+ ${item.extras.join(', ')}`);
                 if(item.sauces && item.sauces.length > 0) metaText.push(`Sauce: ${item.sauces.join(', ')}`);
                 if(item.drinks && item.drinks.length > 0) metaText.push(`<span style="color:var(--primary); font-weight:700;">Drink: ${item.drinks.join(', ')}</span>`);
                 
-                // NEW MODULAR CHOICES
                 if(item.modularChoices && item.modularChoices.length > 0) {
                     item.modularChoices.forEach(choice => {
                         metaText.push(`<span style="color:var(--primary); font-weight:700;">${choice.groupName}:</span> ${choice.itemName}`);
@@ -703,15 +742,22 @@
                 if(item.note) metaText.push(`Note: <span style="color:var(--danger); font-weight:700;">${item.note}</span>`);
 
                 const metaHtml = metaText.length > 0 ? `<div class="item-meta" style="margin-top:4px;">${metaText.join('<br>')}</div>` : '';
+                
+                // INJECTED UNIT PRICE LOGIC
+                const unitPrice = safeNum(item.unitPrice) || safeNum(p.sellPrice);
 
                 return `
                 <div class="item-row" style="align-items:center;">
                     ${img}
                     <div class="item-details">
                         <div class="item-name">${p.name || 'Item'}</div>
+                        <div style="font-size: 13px; font-weight: 800; color: var(--primary); margin-top: 2px; margin-bottom: 4px;">${formatPrice(unitPrice)} DH</div>
                         ${metaHtml}
                     </div>
-                    <div class="item-qty-badge">x${item.qty}</div>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+                        <div class="item-qty-badge">x${item.qty}</div>
+                        <div style="font-size: 13px; font-weight: 800; color: var(--text-main);">${formatPrice(unitPrice * item.qty)} DH</div>
+                    </div>
                 </div>`;
             }).join('');
 
@@ -771,7 +817,6 @@
             }
         };
 
-        // NEW: Unclaim Order Function
         window.unclaimOrder = async (orderId) => {
             try {
                 await updateDoc(doc(db, "orders", orderId), { 
@@ -799,6 +844,15 @@
             document.getElementById('toastMsg').innerText = msg; 
             t.classList.add('show'); 
             setTimeout(() => t.classList.remove('show'), 3000); 
+        }
+        
+        // PWA Install Script for Driver
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => {
+                    console.log("Service worker not active, but app will still run.");
+                });
+            });
         }
     </script>
 </body>
