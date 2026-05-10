@@ -62,7 +62,7 @@
         #announcementBanner { display: none; background: var(--text-main); color: white; text-align: center; font-size: 13px; font-weight: 700; padding: 10px; }
 
         /* HEADER & LOGO */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); z-index: 50; padding: 12px 0; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 50; padding: 12px 0; }
         .brand-logo { display: flex; align-items: center; gap: 4px; }
         
         /* HEADER RIGHT SECTION (Location + Support) */
@@ -74,10 +74,10 @@
         .location-pill select { appearance: none; border: none; background: transparent; font-family: inherit; font-size: 12px; font-weight: 700; color: var(--text-main); outline: none; padding-right: 14px; cursor: pointer; width: 105px;}
         .location-pill::after { content: ''; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 4px solid var(--text-main); pointer-events: none;}
 
-        /* SUPPORT BUTTON */
-        .support-btn { background: var(--surface); border: 1px solid var(--border-dark); width: 36px; height: 36px; border-radius: 50px; display: flex; align-items: center; justify-content: center; color: var(--text-main); box-shadow: var(--shadow-sm); cursor: pointer; transition: 0.2s; text-decoration: none;}
-        .support-btn:active { transform: scale(0.95); }
-        .support-btn svg { width: 18px; height: 18px; }
+        /* SUPPORT & INSTALL BUTTONS */
+        .action-btn-circle { background: var(--surface); border: 1px solid var(--border-dark); width: 36px; height: 36px; border-radius: 50px; display: flex; align-items: center; justify-content: center; color: var(--text-main); box-shadow: var(--shadow-sm); cursor: pointer; transition: 0.2s; text-decoration: none;}
+        .action-btn-circle:active { transform: scale(0.95); }
+        .action-btn-circle svg { width: 18px; height: 18px; }
 
         /* ANIMATED MODE TOGGLE */
         .mode-toggle-wrapper { display: flex; justify-content: center; margin-bottom: 20px; }
@@ -99,15 +99,29 @@
         .skel-cat { min-width: 85px; height: 100px; border-radius: 16px; border: 1px solid var(--border-light); }
         .skel-card { height: 240px; border-radius: 18px; border: 1px solid var(--border-light); }
 
+        /* STICKY CATEGORY WRAPPER */
+        .category-sticky-wrapper {
+            position: sticky;
+            top: 70px; /* Locks right under the header */
+            z-index: 45;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(8px);
+            padding-top: 10px;
+            margin: 0 -16px;
+            padding-left: 16px;
+            padding-right: 16px;
+            box-shadow: 0 10px 15px -10px rgba(0,0,0,0.05); /* Smooth fade below sticky */
+        }
+
         /* TIER 1: MAIN CATEGORIES */
-        .main-cats { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px 20px; padding: 0 16px; scroll-behavior: smooth; }
+        .main-cats { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px 12px; padding: 0 16px; scroll-behavior: smooth; }
         .main-cats::-webkit-scrollbar { display: none; }
         .mc-card { min-width: 85px; background: var(--surface); border: 1px solid var(--border-dark); border-radius: 16px; padding: 16px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02);}
         .mc-card:active { transform: scale(0.95); }
         
         .mc-icon { font-size: 28px; line-height: 1; transition: 0.2s ease; display: flex; align-items: center; justify-content: center;}
         .mc-icon svg { width: 28px; height: 28px; stroke-width: 1.5; color: var(--text-main); transition: 0.2s ease; }
-        .mc-card:not(.active) .mc-icon { opacity: 0.5; filter: grayscale(100%); }
+        .mc-card:not(.active) .mc-icon { opacity: 0.6; } /* REMOVED GRAYSCALE, KEPT OPACITY FOR VIBRANCY */
         .mc-card.active .mc-icon { opacity: 1; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.08)); }
         .mc-card.active .mc-icon svg { color: var(--theme-color); }
         
@@ -116,13 +130,13 @@
         .mc-card.active .mc-text { color: var(--theme-color); }
         
         /* TIER 2: SUBCATEGORIES */
-        .sub-cats { display: none; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px 24px; padding: 0 16px; scroll-behavior: smooth; }
+        .sub-cats { display: none; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px 16px; padding: 0 16px 10px; scroll-behavior: smooth; }
         .sub-cats::-webkit-scrollbar { display: none; }
         .sc-pill { padding: 8px 16px; border-radius: 50px; background: var(--surface); border: 1px solid var(--border-dark); font-size: 13px; font-weight: 600; color: var(--text-muted); white-space: nowrap; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02);}
         .sc-pill.active { background: var(--theme-color); color: white; border-color: var(--theme-color); }
 
         /* GRID HEADER */
-        .grid-header { font-size: 18px; font-weight: 800; color: var(--text-main); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;}
+        .grid-header { font-size: 18px; font-weight: 800; color: var(--text-main); margin-bottom: 16px; margin-top: 8px; display: flex; align-items: center; gap: 8px;}
         .grid-header .count { font-size: 13px; color: var(--text-muted); font-weight: 500; }
 
         /* PRODUCT GRID */
@@ -130,11 +144,12 @@
         .prod-card { background: var(--surface); border-radius: 18px; padding: 10px; position: relative; border: 1px solid var(--border-dark); display: flex; flex-direction: column; cursor: pointer; transition: 0.2s; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.02);} 
         .prod-card:active { transform: scale(0.98); }
         
-        .prod-img-wrap { width: 100%; aspect-ratio: 5 / 4; overflow: hidden; background: transparent; transition: transform 0.3s; margin-bottom: 12px; display: flex; align-items: center; justify-content: center;}
-        .prod-img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; display: block; }
+        /* REMOVED MULTIPLY BLEND MODE FOR FASTER LOADING */
+        .prod-img-wrap { width: 100%; aspect-ratio: 5 / 4; overflow: hidden; background: #F8F9FB; border-radius: 12px; transition: transform 0.3s; margin-bottom: 12px; display: flex; align-items: center; justify-content: center;}
+        .prod-img { width: 100%; height: 100%; object-fit: contain; display: block; }
         
         /* NEW BADGES & TRAITS */
-        .prod-tag { position: absolute; top: 10px; left: 10px; font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 6px; z-index: 2; display: flex; align-items: center; gap: 3px; letter-spacing: 0.5px;}
+        .prod-tag { position: absolute; top: 10px; left: 10px; font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 6px; z-index: 2; display: flex; align-items: center; gap: 3px; letter-spacing: 0.5px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);}
         .tag-promo { background: var(--promo-light); color: var(--promo); }
         .tag-vedette { background: var(--danger-light); color: var(--danger); }
         .tag-nouveau { background: var(--purple-light); color: var(--purple); }
@@ -153,17 +168,22 @@
         .prod-bottom-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto;}
         
         .p-old-price { font-size: 11px; color: var(--text-muted); text-decoration: line-through; font-weight: 600; margin-bottom: 2px; line-height: 1; display: block;}
-        .prod-price { font-size: 16px; font-weight: 800; color: var(--theme-color); line-height: 1; display: block;} 
+        .prod-price { font-size: 17px; font-weight: 800; color: var(--theme-color); line-height: 1; display: block;} 
 
-        .btn-add { width: 34px; height: 34px; background: var(--theme-color); color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background-color 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.1);} 
+        .btn-add { width: 36px; height: 36px; background: var(--theme-color); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background-color 0.3s ease, transform 0.1s; box-shadow: 0 4px 10px rgba(0,0,0,0.1);} 
+        .btn-add:active { transform: scale(0.9); }
 
-        /* FULL WIDTH BOTTOM CART BAR */
+        /* FULL WIDTH BOTTOM CART BAR + ANIMATIONS */
+        @keyframes pulseCartAnim { 0% { transform: translateY(0) scale(1); } 50% { transform: translateY(0) scale(1.04); } 100% { transform: translateY(0) scale(1); } }
+        
         .floating-cart { position: fixed; bottom: 20px; left: 16px; right: 16px; max-width: 568px; margin: 0 auto; background: var(--theme-color); border-radius: 16px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: var(--shadow-floating); z-index: 90; cursor: pointer; transform: translateY(200%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1), background-color 0.3s ease; }
         .floating-cart.visible { transform: translateY(0); }
+        .floating-cart.visible.pulse-anim { animation: pulseCartAnim 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
         .fc-left { display: flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 800;}
         .fc-icon-wrapper { position: relative; display: flex; align-items: center; justify-content: center;}
         .fc-icon-wrapper svg { width: 24px; height: 24px; stroke-width: 2.5;}
-        .fc-badge { position: absolute; top: -6px; right: -8px; background: white; color: var(--theme-color); font-size: 11px; font-weight: 800; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .fc-badge { position: absolute; top: -6px; right: -8px; background: white; color: var(--theme-color); font-size: 11px; font-weight: 800; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
         .fc-right { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 800;}
         .fc-arrow { background: white; color: var(--theme-color); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
@@ -178,7 +198,7 @@
         .product-sheet.active { transform: translateY(0); }
         
         .pm-header-img-wrap { position: relative; width: 100%; aspect-ratio: 5 / 4; height: auto; background: #F8F9FB; flex-shrink: 0;}
-        .pm-img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply;}
+        .pm-img { width: 100%; height: 100%; object-fit: contain; } /* Removed multiply */
         .pm-close-btn { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-main); cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 10;}
         
         .pm-content { overflow-y: auto; padding: 20px 20px 100px; flex: 1; scrollbar-width: none;}
@@ -236,7 +256,7 @@
         .cart-subtitle { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-bottom: 24px; }
         .cart-item { display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--border-dark); align-items: center;}
         .cart-item:last-child { border-bottom: none; }
-        .ci-img { width: 64px; height: 64px; border-radius: 14px; object-fit: cover; background: var(--bg-main); mix-blend-mode: multiply; border: 1px solid var(--border-dark);}
+        .ci-img { width: 64px; height: 64px; border-radius: 14px; object-fit: cover; background: #F8F9FB; border: 1px solid var(--border-dark);}
         .ci-details { flex: 1; }
         .ci-name { font-size: 15px; font-weight: 800; margin-bottom: 4px; color: var(--text-main); }
         .ci-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; line-height: 1.3; }
@@ -260,7 +280,6 @@
         .select-wrapper { position: relative; }
         .select-wrapper::after { content: ''; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid var(--text-main); pointer-events: none;}
 
-        /* CSS FOR THE NEW CART ZONE ICON */
         .cart-zone-wrapper .zone-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 18px; color: var(--text-muted); pointer-events: none; }
         .cart-zone-wrapper select.form-input { padding-left: 44px; }
 
@@ -284,7 +303,7 @@
 
         <header class="header">
             <div class="brand-logo" style="display: flex; align-items: center;">
-                <img src="https://i.postimg.cc/q7yMGWc1/file-00000000906471f4b781f0c5b3944220.png" alt="lasGo Logo" style="height: 48px; width: auto; object-fit: contain; mix-blend-mode: multiply;">
+                <img src="https://i.postimg.cc/q7yMGWc1/file-00000000906471f4b781f0c5b3944220.png" alt="lasGo Logo" style="height: 48px; width: auto; object-fit: contain;">
             </div>
 
             <div class="header-right">
@@ -294,7 +313,12 @@
                         <option value="" disabled selected>Choisir la zone</option>
                     </select>
                 </div>
-                <a href="https://wa.me/212708006088" target="_blank" class="support-btn" aria-label="Support">
+                
+                <button id="navInstallBtn" class="action-btn-circle" style="display:none; color: var(--theme-color); background: var(--theme-light); border-color: var(--theme-color);" title="Installer l'App">
+                    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+                
+                <a href="https://wa.me/212708006088" target="_blank" class="action-btn-circle" aria-label="Support">
                     <svg viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
                 </a>
             </div>
@@ -319,14 +343,16 @@
             <input type="text" id="searchInput" placeholder="Pizza, tacos, jus, lait...">
         </div>
 
-        <div class="main-cats" id="mainCatContainer">
-            <div class="skeleton skel-cat"></div>
-            <div class="skeleton skel-cat"></div>
-            <div class="skeleton skel-cat"></div>
-            <div class="skeleton skel-cat"></div>
-        </div>
+        <div class="category-sticky-wrapper">
+            <div class="main-cats" id="mainCatContainer">
+                <div class="skeleton skel-cat"></div>
+                <div class="skeleton skel-cat"></div>
+                <div class="skeleton skel-cat"></div>
+                <div class="skeleton skel-cat"></div>
+            </div>
 
-        <div class="sub-cats" id="subCatContainer"></div>
+            <div class="sub-cats" id="subCatContainer"></div>
+        </div>
 
         <div id="gridSection">
             <h2 class="grid-header" id="gridTitle">Nos produits les plus populaires <span class="count" id="gridCount"></span></h2>
@@ -458,6 +484,9 @@
         let activeSubCategory = 'All';
         let isFirstDataLoad = true; 
         
+        // ANIMATION STATE FOR CART NUMBER
+        let previousCartTotal = 0;
+        
         let cart = [];
         try {
             const savedCart = localStorage.getItem('lasGoCart');
@@ -492,11 +521,28 @@
             return currentMode === 'Resto' ? "🍽️" : "🛒";
         }
 
+        // SMOOTH NUMBER ROLLING ANIMATION
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const current = start + progress * (end - start);
+                obj.innerText = formatPrice(current) + ' DH';
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    obj.innerText = formatPrice(end) + ' DH';
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
         onSnapshot(collection(db, "zones"), snap => {
             let allZones = snap.docs.map(d => ({id: d.id, ...d.data()}));
             allZones.sort((a,b) => a.name.localeCompare(b.name));
             
-            let html = '<option value="" disabled selected>Choisissez votre zone...</option>';
+            let html = '<option value="" disabled selected>Choisir la zone</option>';
             allZones.forEach(z => {
                 html += `<option value="${z.name}|${z.fee}">${z.name} (${formatPrice(z.fee)} DH)</option>`;
             });
@@ -586,13 +632,35 @@
             if(!document.getElementById('productModal').classList.contains('active')) {
                 renderUI();
             }
+
+            // --- INSTAGRAM DEEP LINKING LOGIC ---
+            if (!window.deepLinkExecuted) {
+                window.deepLinkExecuted = true;
+                const urlParams = new URLSearchParams(window.location.search);
+                
+                const openId = urlParams.get('open');
+                if (openId && allProducts.find(p => p.id === openId)) {
+                    const p = allProducts.find(x => x.id === openId);
+                    if(p.productType !== currentMode) setMode(p.productType);
+                    setTimeout(() => openProductModal(openId), 400);
+                    window.history.replaceState({}, document.title, window.location.pathname); 
+                }
+                
+                const addId = urlParams.get('add');
+                if (addId && allProducts.find(p => p.id === addId)) {
+                    const p = allProducts.find(x => x.id === addId);
+                    if(p.productType !== currentMode) setMode(p.productType);
+                    setTimeout(() => {
+                        quickAddToCart(addId);
+                        openCartModal(); 
+                    }, 400);
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+            }
         });
 
-        // UPDATED HELPER FUNCTION FOR TIME AND DAY LIMITS
         function isProductTimeValid(p) {
-            if (!p.startTime && !p.endTime && (!p.daysAvailable || p.daysAvailable.length === 0)) {
-                return true; 
-            }
+            if (!p.startTime && !p.endTime && (!p.daysAvailable || p.daysAvailable.length === 0)) return true; 
 
             const now = new Date();
             const currentDay = now.getDay(); 
@@ -605,12 +673,8 @@
                 const currentHour = now.getHours().toString().padStart(2, '0');
                 const currentMin = now.getMinutes().toString().padStart(2, '0');
                 const currentTimeStr = `${currentHour}:${currentMin}`;
-                
-                if (currentTimeStr < p.startTime || currentTimeStr > p.endTime) {
-                    return false;
-                }
+                if (currentTimeStr < p.startTime || currentTimeStr > p.endTime) return false;
             }
-
             return true;
         }
 
@@ -619,7 +683,7 @@
             renderMainCategories();
             renderSubCategories();
             renderProductGrid();
-            updateFloatingCart(); 
+            updateFloatingCart(false); 
         }
 
         function renderMainCategories() {
@@ -956,7 +1020,7 @@
             }
 
             localStorage.setItem('lasGoCart', JSON.stringify(cart));
-            updateFloatingCart(); 
+            updateFloatingCart(true); 
             showToast(p.name + " ajouté !");
         };
 
@@ -1003,10 +1067,11 @@
 
             localStorage.setItem('lasGoCart', JSON.stringify(cart)); 
 
-            closeModals(); updateFloatingCart(); showToast("Ajouté au panier !");
+            closeModals(); updateFloatingCart(true); showToast("Ajouté au panier !");
         };
 
-        function updateFloatingCart() {
+        // ENHANCED CART UPDATE WITH ANIMATIONS
+        function updateFloatingCart(animate = false) {
             const banner = document.getElementById('floatingCart');
             if(cart.length === 0) { banner.classList.remove('visible'); return; }
 
@@ -1014,7 +1079,18 @@
             cart.forEach(item => { totalItems += item.qty; totalPrice += (item.qty * item.unitPrice); });
 
             document.getElementById('floatCartBadge').innerText = totalItems;
-            document.getElementById('floatCartTotal').innerText = `${formatPrice(totalPrice)} DH`;
+            
+            if(animate) {
+                animateValue(document.getElementById('floatCartTotal'), previousCartTotal, totalPrice, 400);
+                // Pulse Animation
+                banner.classList.remove('pulse-anim');
+                void banner.offsetWidth; // Trigger reflow
+                banner.classList.add('pulse-anim');
+            } else {
+                document.getElementById('floatCartTotal').innerText = `${formatPrice(totalPrice)} DH`;
+            }
+            
+            previousCartTotal = totalPrice;
             banner.classList.add('visible');
         }
 
@@ -1032,8 +1108,8 @@
             
             localStorage.setItem('lasGoCart', JSON.stringify(cart)); 
             
-            if(cart.length === 0) { closeModals(); updateFloatingCart(); return; }
-            renderCartItems(); updateCartTotals(); updateFloatingCart();
+            if(cart.length === 0) { closeModals(); updateFloatingCart(false); return; }
+            renderCartItems(); updateCartTotals(); updateFloatingCart(true);
         };
 
         function renderCartItems() {
@@ -1140,7 +1216,7 @@
                 cart = []; 
                 localStorage.removeItem('lasGoCart'); 
                 
-                updateFloatingCart(); 
+                updateFloatingCart(false); 
                 closeModals(); 
                 
                 window.open(waUrl, '_blank'); 
@@ -1161,6 +1237,41 @@
 
         const savedTab = localStorage.getItem('lasGoActiveTab') || 'Resto';
         setMode(savedTab);
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js', { scope: '/' }).catch(err => {
+                    console.log("SW registration failed: ", err);
+                });
+            });
+        }
+
+        let deferredPrompt;
+        const navInstallBtn = document.getElementById('navInstallBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // The browser allows installation! Show the header button.
+            navInstallBtn.style.display = 'flex';
+        });
+
+        navInstallBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    navInstallBtn.style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            navInstallBtn.style.display = 'none';
+        });
     </script>
 </body>
 </html>
