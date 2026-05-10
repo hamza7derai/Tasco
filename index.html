@@ -7,7 +7,7 @@
     
     <meta property="og:title" content="lasco.">
     <meta property="og:description" content="Vos repas et courses livrés en un éclair à Marrakech !">
-    <meta property="og:image" content="https://i.postimg.cc/XqTp3P5T/file-0000000009f0720ab5835928279247d4.png">
+    <meta property="og:image" content="https://i.postimg.cc/q7yMGWc1/file-00000000906471f4b781f0c5b3944220.png">
     <meta property="og:url" content="https://hamza7derai.github.io/">
     <meta property="og:type" content="website">
     
@@ -295,7 +295,7 @@
 
         <header class="header">
             <div class="brand-logo" style="display: flex; align-items: center;">
-                <img src="https://i.postimg.cc/0jFQ8Spd/file-000000007c5c720ab4e6e16943cc7514.png" alt="lasGo Logo" style="height: 48px; width: auto; object-fit: contain; mix-blend-mode: multiply;">
+                <img src="https://i.postimg.cc/q7yMGWc1/file-00000000906471f4b781f0c5b3944220.png" alt="lasGo Logo" style="height: 48px; width: auto; object-fit: contain; mix-blend-mode: multiply;">
             </div>
 
             <div class="header-right">
@@ -634,6 +634,7 @@
         }
 
         function renderUI() {
+            if (!hasLoadedData) return; // LAZY LOADING FIX
             renderMainCategories();
             renderSubCategories();
             renderProductGrid();
