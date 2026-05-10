@@ -23,7 +23,7 @@
             --text-main: #0F172A; --text-muted: #64748B;
             --border: #E2E8F0; --radius-card: 20px; --radius-btn: 12px;
             --shadow-sm: 0 4px 12px rgba(0,0,0,0.04); 
-            --shadow-card: 0 10px 40px rgba(0,0,0,0.05);
+            --shadow-card: 0 12px 30px rgba(0,0,0,0.06); /* Deeper, softer premium shadow */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -44,7 +44,7 @@
         .header-top h1 { font-size: 24px; font-weight: 800; color: var(--text-main); line-height: 1.2; display: flex; align-items: center; gap: 8px;}
         .header-top p { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 4px; }
         
-        .btn-wallet { background: var(--accent-light); color: var(--accent); border-radius: 12px; padding: 10px 16px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; border: 1px solid #BBF7D0;}
+        .btn-wallet { background: var(--accent-light); color: var(--accent); border-radius: 12px; padding: 10px 16px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; border: 1px solid #BBF7D0; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15); transition: 0.2s;}
         .btn-wallet:active { transform: scale(0.95); }
 
         /* ANIMATED TABS TOGGLE */
@@ -55,7 +55,9 @@
         .badge-count { background: var(--primary-light); color: var(--primary); font-size: 12px; font-weight: 800; padding: 2px 10px; border-radius: 20px; transition: 0.3s;}
         .tab-btn.active .badge-count { background: white; color: var(--primary); }
 
-        .order-card { background: var(--surface); border-radius: 24px; padding: 20px; box-shadow: var(--shadow-card); border: 1px solid var(--border); margin-bottom: 24px; position: relative; overflow: hidden;}
+        /* TACTILE ORDER CARDS */
+        .order-card { background: var(--surface); border-radius: 24px; padding: 20px; box-shadow: var(--shadow-card); border: 1px solid var(--border); margin-bottom: 24px; position: relative; overflow: hidden; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;}
+        .order-card:active { transform: scale(0.97); box-shadow: 0 4px 15px rgba(0,0,0,0.04); }
         .oc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .oc-id { font-size: 20px; font-weight: 800; color: var(--primary); }
         .oc-time { font-size: 12px; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 4px;}
@@ -100,7 +102,8 @@
 
         /* DETAIL VIEW */
         .detail-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-top: 20px;}
-        .back-btn { width: 40px; height: 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-main); cursor: pointer; box-shadow: var(--shadow-sm);}
+        .back-btn { width: 40px; height: 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-main); cursor: pointer; box-shadow: var(--shadow-sm); transition: 0.2s;}
+        .back-btn:active { transform: scale(0.9); }
         .detail-id { font-size: 20px; font-weight: 800; margin-left: 12px; flex: 1; }
         .detail-badge { background: var(--primary-light); color: var(--primary); font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 20px; letter-spacing: 0.5px; text-transform: uppercase;}
         
@@ -532,10 +535,11 @@
             const displayList = currentTab === 'available' ? available : active;
 
             if(displayList.length === 0) {
+                // UPDATED PREMIUM EMPTY STATE ICON
                 container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-illustration">
-                        <svg viewBox="0 0 24 24" style="width:60px; height:60px; stroke-width:1.5;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2-2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        <svg viewBox="0 0 24 24" style="width:60px; height:60px; stroke-width:1.5;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
                     </div>
                     <h3>No orders available</h3>
                     <p>New deliveries will appear here.</p>
@@ -621,7 +625,7 @@
             }
         }
 
-        // --- WALLET LOGIC ---
+        // --- WALLET LOGIC (FIXED MODULAR OPTION MATH) ---
         function renderWallet() {
             if(!currentDriver) return;
             const myOrders = allOrders.filter(o => o.driverEmail === currentDriver.email);
@@ -638,16 +642,32 @@
                     o.cart.forEach(item => {
                         const dbProduct = allProducts.find(x => x.id === item.product.id);
                         let unitCost = dbProduct ? safeNum(dbProduct.costPrice) : 0;
+                        
+                        // LEGACY SIZES
                         if(dbProduct && dbProduct.sizes && item.variantName) {
                             const sizeData = dbProduct.sizes.find(s => s.name === item.variantName);
                             if(sizeData && sizeData.costPrice) unitCost = safeNum(sizeData.costPrice);
                         }
                         orderCost += (unitCost * item.qty);
 
+                        // LEGACY EXTRAS
                         if(item.extras && item.extras.length > 0 && dbProduct && dbProduct.extras) {
                             item.extras.forEach(extName => {
                                 const extra = dbProduct.extras.find(e => e.name === extName);
                                 if(extra && extra.costPrice) orderCost += (safeNum(extra.costPrice) * item.qty);
+                            });
+                        }
+                        
+                        // FIX: NEW MODULAR CHOICES COST TRACKING
+                        if(item.modularChoices && item.modularChoices.length > 0 && dbProduct && dbProduct.optionGroups) {
+                            item.modularChoices.forEach(choice => {
+                                const group = dbProduct.optionGroups.find(g => g.id === choice.groupId || g.name === choice.groupName);
+                                if(group) {
+                                    const groupItem = group.items.find(i => i.name === choice.itemName);
+                                    if(groupItem && groupItem.cost) {
+                                        orderCost += (safeNum(groupItem.cost) * item.qty);
+                                    }
+                                }
                             });
                         }
                     });
@@ -738,7 +758,6 @@
 
             document.getElementById('det-items-count').innerText = `Items (${o.totalItems || 0})`;
             
-            // FULLY UPDATED PRICING INJECTION
             document.getElementById('det-cart-list').innerHTML = (o.cart || []).map(item => {
                 const p = item.product || {}; 
                 const img = p.imageUrl && p.imageUrl !== "local_file_selected" ? `<img src="${p.imageUrl}" class="item-img">` : `<div class="item-img" style="display:flex;align-items:center;justify-content:center;font-size:10px;">No Img</div>`;
@@ -760,7 +779,6 @@
 
                 const metaHtml = metaText.length > 0 ? `<div class="item-meta" style="margin-top:4px;">${metaText.join('<br>')}</div>` : '';
                 
-                // INJECTED UNIT PRICE LOGIC
                 const unitPrice = safeNum(item.unitPrice) || safeNum(p.sellPrice);
 
                 return `
