@@ -4,30 +4,41 @@
     <link rel="manifest" href="manifest-driver.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lasco | Driver Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>TASCO | Driver Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         /* =========================================
-           VARIABLES & RESET (Driver Theme)
+           TASCO DARK MODE THEME
         ========================================= */
         :root {
-            --bg-main: #F8F9FB; --surface: #FFFFFF;
-            --primary: #0D5DFF; /* Vibrant Blue */
-            --primary-light: #EFF6FF;
+            --bg-main: #171717; /* Deep Charcoal */
+            --surface: #1E1E1E; /* Elevated Charcoal */
+            --primary: #FF5A00; /* TASCO Orange */
+            --primary-light: rgba(255, 90, 0, 0.15);
             --accent: #16A34A; /* Success Green */
-            --accent-light: #DCFCE7;
-            --warning: #EA580C; /* Orange */
-            --warning-light: #FFEDD5;
-            --danger: #EF4444; --danger-light: #FEE2E2;
-            --text-main: #0F172A; --text-muted: #64748B;
-            --border: #E2E8F0; --radius-card: 20px; --radius-btn: 12px;
-            --shadow-sm: 0 4px 12px rgba(0,0,0,0.04); 
-            --shadow-card: 0 12px 30px rgba(0,0,0,0.06); /* Deeper, softer premium shadow */
+            --accent-light: rgba(22, 163, 74, 0.15);
+            --warning: #EAB308; /* Yellow for New Orders */
+            --warning-light: rgba(234, 179, 8, 0.15);
+            --danger: #EF4444; 
+            --danger-light: rgba(239, 68, 68, 0.15);
+            --text-main: #F8F4EE; /* Warm Cream */
+            --text-muted: #A1A1AA; /* Zinc 400 */
+            --border: #333333; 
+            --radius-card: 20px; 
+            --radius-btn: 12px;
+            --shadow-sm: 0 8px 24px rgba(0,0,0,0.4); 
+            --shadow-card: 0 12px 30px rgba(0,0,0,0.5);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-main); color: var(--text-main); }
+        body { 
+            font-family: 'Space Grotesk', sans-serif; 
+            background: var(--bg-main); 
+            color: var(--text-main); 
+            background-image: radial-gradient(circle at 50% 0%, #2a2a2a 0%, #171717 60%);
+            min-height: 100vh;
+        }
         .container { padding: 20px; max-width: 600px; margin: 0 auto; position: relative; min-height: 100vh;}
         svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
         button, a { font-family: inherit; cursor: pointer; outline: none; border: none; background: none; text-decoration: none;}
@@ -41,50 +52,51 @@
            MAIN DASHBOARD STYLES
         ========================================= */
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-top: 20px;}
-        .header-top h1 { font-size: 24px; font-weight: 800; color: var(--text-main); line-height: 1.2; display: flex; align-items: center; gap: 8px;}
-        .header-top p { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 4px; }
+        .header-top h1 { font-size: 24px; font-weight: 800; color: var(--text-main); line-height: 1.2; display: flex; align-items: center; gap: 8px; letter-spacing: -0.5px;}
+        .header-top p { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px;}
         
-        .btn-wallet { background: var(--accent-light); color: var(--accent); border-radius: 12px; padding: 10px 16px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; border: 1px solid #BBF7D0; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15); transition: 0.2s;}
+        .btn-wallet { background: var(--surface); color: var(--text-main); border-radius: 12px; padding: 10px 16px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); transition: 0.2s;}
         .btn-wallet:active { transform: scale(0.95); }
+        .btn-wallet svg { color: var(--accent); }
 
         /* ANIMATED TABS TOGGLE */
-        .tabs-toggle { position: relative; display: flex; background: var(--surface); border-radius: 50px; padding: 6px; border: 1px solid var(--border); margin-bottom: 24px; box-shadow: var(--shadow-sm); z-index: 1;}
-        .tab-bg { position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc(50% - 6px); background: var(--primary); border-radius: 50px; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); z-index: -1; box-shadow: 0 4px 12px rgba(13, 93, 255, 0.3);}
-        .tab-btn { flex: 1; padding: 12px; text-align: center; font-size: 14px; font-weight: 700; border-radius: 50px; color: var(--text-muted); transition: color 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;}
-        .tab-btn.active { color: white; }
-        .badge-count { background: var(--primary-light); color: var(--primary); font-size: 12px; font-weight: 800; padding: 2px 10px; border-radius: 20px; transition: 0.3s;}
-        .tab-btn.active .badge-count { background: white; color: var(--primary); }
+        .tabs-toggle { position: relative; display: flex; background: var(--bg-main); border-radius: 50px; padding: 6px; border: 1px solid var(--border); margin-bottom: 24px; box-shadow: inset 0 4px 10px rgba(0,0,0,0.5); z-index: 1;}
+        .tab-bg { position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc(50% - 6px); background: var(--primary); border-radius: 50px; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); z-index: -1; box-shadow: 0 4px 12px rgba(255, 90, 0, 0.3);}
+        .tab-btn { flex: 1; padding: 12px; text-align: center; font-size: 14px; font-weight: 700; border-radius: 50px; color: var(--text-muted); transition: color 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;}
+        .tab-btn.active { color: var(--bg-main); font-weight: 800;}
+        .badge-count { background: var(--surface); color: var(--text-main); font-size: 12px; font-weight: 800; padding: 2px 10px; border-radius: 20px; transition: 0.3s; border: 1px solid var(--border);}
+        .tab-btn.active .badge-count { background: var(--bg-main); color: var(--primary); border-color: transparent;}
 
         /* TACTILE ORDER CARDS */
-        .order-card { background: var(--surface); border-radius: 24px; padding: 20px; box-shadow: var(--shadow-card); border: 1px solid var(--border); margin-bottom: 24px; position: relative; overflow: hidden; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;}
-        .order-card:active { transform: scale(0.97); box-shadow: 0 4px 15px rgba(0,0,0,0.04); }
+        .order-card { background: var(--surface); border-radius: 24px; padding: 20px; box-shadow: var(--shadow-card); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 24px; position: relative; overflow: hidden; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;}
+        .order-card:active { transform: scale(0.97); box-shadow: var(--shadow-sm); }
         .oc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .oc-id { font-size: 20px; font-weight: 800; color: var(--primary); }
-        .oc-time { font-size: 12px; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 4px;}
+        .oc-id { font-size: 22px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px;}
+        .oc-time { font-size: 13px; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 2px;}
         
         .oc-location { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-        .loc-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
+        .loc-icon { width: 44px; height: 44px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
         .loc-text h4 { font-size: 18px; font-weight: 800; color: var(--text-main); margin-bottom: 2px;}
-        .loc-text p { font-size: 13px; color: var(--text-muted); font-weight: 500;}
+        .loc-text p { font-size: 14px; color: var(--text-muted); font-weight: 500;}
         
-        .oc-stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; background: var(--bg-main); border-radius: 16px; padding: 16px 12px; margin-bottom: 20px; border: 1px solid var(--border);}
+        .oc-stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; background: var(--bg-main); border-radius: 16px; padding: 16px 12px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);}
         .oc-stat { text-align: center; border-right: 1px solid var(--border); }
         .oc-stat:last-child { border-right: none; }
-        .oc-stat-val { font-size: 15px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; display: flex; align-items: center; justify-content: center; gap: 6px;}
+        .oc-stat-val { font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; display: flex; align-items: center; justify-content: center; gap: 6px;}
         .oc-stat-val svg { width: 16px; color: var(--primary); }
-        .oc-stat-label { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+        .oc-stat-label { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
 
-        .btn-view { width: 100%; background: var(--primary); color: white; border-radius: 16px; padding: 16px; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 8px 16px rgba(13, 93, 255, 0.25); transition: 0.2s;}
+        .btn-view { width: 100%; background: var(--primary); color: var(--bg-main); border-radius: 16px; padding: 18px; font-size: 15px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 8px 24px rgba(255, 90, 0, 0.25); transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px;}
         .btn-view:active { transform: scale(0.98); }
 
         .empty-state { background: var(--surface); border-radius: 24px; padding: 40px 20px; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow-card); margin-bottom: 24px;}
         .empty-illustration { background: var(--primary-light); width: 120px; height: 120px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: var(--primary); }
         .empty-state h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--text-main);}
         .empty-state p { font-size: 14px; color: var(--text-muted); font-weight: 500; margin-bottom: 16px;}
-        .empty-state span { font-size: 14px; font-weight: 800; color: var(--primary); }
+        .empty-state span { font-size: 14px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;}
 
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; margin-top: 32px; }
-        .section-header h3 { font-size: 16px; font-weight: 800; color: var(--text-main); }
+        .section-header h3 { font-size: 14px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;}
         
         .activity-card { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); padding: 0 16px; box-shadow: var(--shadow-sm);}
         .activity-item { display: flex; align-items: center; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--border); }
@@ -93,54 +105,54 @@
         .act-icon.success { background: var(--accent-light); color: var(--accent); }
         .act-icon.danger { background: var(--danger-light); color: var(--danger); }
         .act-info { flex: 1; }
-        .act-id { font-size: 15px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
+        .act-id { font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 2px; }
         .act-meta { font-size: 12px; color: var(--text-muted); font-weight: 500; display: flex; align-items: center; gap: 4px; margin-bottom: 4px;}
-        .act-price { font-size: 14px; font-weight: 800; color: var(--text-main); }
-        .act-status { font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; }
+        .act-price { font-size: 14px; font-weight: 800; color: var(--primary); }
+        .act-status { font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
         .act-status.success { background: var(--accent-light); color: var(--accent); }
         .act-status.danger { background: var(--danger-light); color: var(--danger); }
 
         /* DETAIL VIEW */
         .detail-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-top: 20px;}
-        .back-btn { width: 40px; height: 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-main); cursor: pointer; box-shadow: var(--shadow-sm); transition: 0.2s;}
+        .back-btn { width: 44px; height: 44px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-main); cursor: pointer; box-shadow: var(--shadow-sm); transition: 0.2s;}
         .back-btn:active { transform: scale(0.9); }
-        .detail-id { font-size: 20px; font-weight: 800; margin-left: 12px; flex: 1; }
+        .detail-id { font-size: 24px; font-weight: 800; margin-left: 12px; flex: 1; letter-spacing: -0.5px;}
         .detail-badge { background: var(--primary-light); color: var(--primary); font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 20px; letter-spacing: 0.5px; text-transform: uppercase;}
         
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
         .action-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; box-shadow: var(--shadow-sm); cursor: pointer; transition: 0.2s;}
         .action-btn:active { transform: scale(0.95); background: var(--bg-main); }
         .action-btn svg { width: 24px; height: 24px; }
-        .action-btn span { font-size: 12px; font-weight: 700; color: var(--text-main); text-align: center;}
-        .ab-call { color: var(--accent); } .ab-wa { color: #25D366; } .ab-nav { color: var(--primary); }
+        .action-btn span { font-size: 12px; font-weight: 700; color: var(--text-main); text-align: center; text-transform: uppercase; letter-spacing: 0.5px;}
+        .ab-call { color: var(--primary); } .ab-wa { color: #25D366; }
 
         .info-card { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); padding: 20px; margin-bottom: 24px; box-shadow: var(--shadow-sm);}
-        .ic-row { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--bg-main); }
+        .ic-row { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
         .ic-icon { width: 40px; height: 40px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .ic-row h4 { font-size: 16px; font-weight: 800; margin-bottom: 2px; }
-        .ic-row p { font-size: 13px; color: var(--text-muted); font-weight: 500; display: flex; align-items: center; gap: 4px;}
+        .ic-row h4 { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
+        .ic-row p { font-size: 14px; color: var(--text-muted); font-weight: 500; display: flex; align-items: center; gap: 4px;}
         .ic-total-row { display: flex; justify-content: space-between; align-items: center; }
-        .ic-total-label { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--text-muted); }
-        .ic-total-val { font-size: 22px; font-weight: 800; color: var(--accent); }
+        .ic-total-label { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
+        .ic-total-val { font-size: 24px; font-weight: 800; color: var(--primary); }
 
         .items-card { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); padding: 20px; margin-bottom: 24px; box-shadow: var(--shadow-sm);}
-        .items-card h3 { font-size: 15px; font-weight: 800; margin-bottom: 16px; }
+        .items-card h3 { font-size: 14px; font-weight: 800; margin-bottom: 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;}
 
-        /* --- NEW CHECKBOX STYLES --- */
-        .category-header { font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 4px 8px 4px; display: flex; align-items: center; gap: 6px; }
+        /* CHECKBOX STYLES */
+        .category-header { font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 4px 8px 4px; display: flex; align-items: center; gap: 6px; }
         .item-row { display: flex; align-items: center; gap: 12px; padding: 12px; border-bottom: 1px solid var(--border); border-radius: 12px; transition: all 0.2s ease; cursor: pointer; background: transparent; }
         .item-row:last-child { border-bottom: none; }
-        .item-checkbox { width: 24px; height: 24px; border: 2px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; color: transparent; background: var(--surface); box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);}
+        .item-checkbox { width: 24px; height: 24px; border: 2px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; color: transparent; background: var(--bg-main); box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);}
         
         .item-row.checked { opacity: 0.5; background: var(--bg-main); border-color: transparent; }
-        .item-row.checked .item-checkbox { background: var(--accent); border-color: var(--accent); color: white; }
+        .item-row.checked .item-checkbox { background: var(--primary); border-color: var(--primary); color: var(--bg-main); }
         .item-row.checked .item-name { text-decoration: line-through; }
         
         .item-img { width: 48px; height: 48px; border-radius: 12px; background: var(--bg-main); object-fit: cover; flex-shrink: 0; border: 1px solid var(--border);}
         .item-details { flex: 1; }
-        .item-name { font-size: 14px; font-weight: 800; margin-bottom: 2px; transition: 0.2s;}
-        .item-meta { font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-top: 4px;}
-        .item-qty-badge { background: var(--accent-light); color: var(--accent); font-size: 13px; font-weight: 800; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
+        .item-name { font-size: 15px; font-weight: 800; margin-bottom: 2px; transition: 0.2s;}
+        .item-meta { font-size: 13px; color: var(--text-muted); line-height: 1.4; margin-top: 4px;}
+        .item-qty-badge { background: var(--primary-light); color: var(--primary); font-size: 13px; font-weight: 800; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
 
         /* WALLET VIEW */
         .wallet-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding-top: 20px;}
@@ -148,27 +160,27 @@
         .w-card { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); padding: 20px; display: flex; align-items: center; gap: 16px; box-shadow: var(--shadow-sm);}
         .w-icon { width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .w-info { flex: 1; }
-        .w-info p { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
+        .w-info p { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;}
         .w-info h2 { font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
         .w-info span { font-size: 12px; color: var(--text-muted); }
         .w-card.earned .w-icon { background: var(--accent-light); color: var(--accent); }
         .w-card.earned h2 { color: var(--accent); }
-        .w-card.debt .w-icon { background: var(--warning-light); color: var(--warning); }
-        .w-card.debt h2 { color: var(--warning); }
+        .w-card.debt .w-icon { background: var(--primary-light); color: var(--primary); }
+        .w-card.debt h2 { color: var(--primary); }
         
-        .w-list-header { font-size: 15px; font-weight: 800; margin-bottom: 12px; }
+        .w-list-header { font-size: 14px; font-weight: 800; margin-bottom: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;}
         .w-list { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); padding: 0 16px; margin-bottom: 24px;}
         .w-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border); }
         .w-item:last-child { border-bottom: none; }
         .w-item-left { display: flex; gap: 12px; align-items: center; }
         .w-item-icon { width: 36px; height: 36px; background: var(--bg-main); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
-        .w-item-id { font-size: 14px; font-weight: 800; margin-bottom: 2px;}
-        .w-item-meta { font-size: 11px; color: var(--text-muted); font-weight: 500;}
+        .w-item-id { font-size: 15px; font-weight: 800; margin-bottom: 2px;}
+        .w-item-meta { font-size: 12px; color: var(--text-muted); font-weight: 500;}
         .w-item-price { font-size: 15px; font-weight: 800; color: var(--accent); }
 
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--text-main); color: white; padding: 12px 24px; border-radius: 50px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-sm); z-index: 1100; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--surface); color: var(--text-main); padding: 14px 24px; border-radius: 50px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 1100; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .toast.show { transform: translateX(-50%) translateY(0); }
-        .toast-alarm { background: var(--warning); color: white; font-weight: 800; box-shadow: 0 10px 40px rgba(234, 88, 12, 0.4); border: 2px solid white; }
+        .toast-alarm { background: var(--primary); color: var(--bg-main); font-weight: 800; box-shadow: 0 10px 40px rgba(255, 90, 0, 0.4); border: 2px solid var(--primary); }
     </style>
 </head>
 <body>
@@ -183,11 +195,11 @@
                 <h1 style="font-size: 24px; font-weight: 800; color: var(--text-main); line-height: 1.2; display: flex; align-items: center; gap: 8px;">
                     Hi, <span id="driverNameDisplay" style="color: var(--primary); text-transform: capitalize;">Driver</span> 🛵
                 </h1>
-                <p style="font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 4px;">Manage your deliveries</p>
+                <p style="font-size: 13px; color: var(--text-muted); font-weight: 700; margin-top: 4px;">Manage Deliveries</p>
             </div>
             
             <div style="display: flex; gap: 8px; align-items: center;">
-                <button id="btnToggleAlarm" style="background: var(--danger-light); color: var(--danger); border: 1px solid #FECACA; border-radius: 12px; padding: 10px; display: flex; align-items: center; justify-content: center; transition: 0.3s; box-shadow: var(--shadow-sm);" onclick="toggleAlarm()">
+                <button id="btnToggleAlarm" style="background: var(--danger-light); color: var(--danger); border: 1px solid var(--border); border-radius: 12px; padding: 10px; display: flex; align-items: center; justify-content: center; transition: 0.3s; box-shadow: var(--shadow-sm);" onclick="toggleAlarm()">
                     <svg id="iconAlarmOff" viewBox="0 0 24 24" style="width: 20px;"><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M18.63 13A17.89 17.89 0 0 1 18 8"></path><path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14"></path><path d="M18 8a6 6 0 0 0-9.33-5"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
                     <svg id="iconAlarmOn" viewBox="0 0 24 24" style="width: 20px; display: none;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                 </button>
@@ -204,7 +216,7 @@
                 Available <span class="badge-count" id="countAvailable">0</span>
             </div>
             <div class="tab-btn" id="tabActive" onclick="switchList('active')">
-                My Deliveries <span class="badge-count" id="countActive">0</span>
+                Active <span class="badge-count" id="countActive">0</span>
             </div>
         </div>
 
@@ -230,7 +242,7 @@
             </a>
             <a href="#" class="action-btn ab-wa" id="btnWa" target="_blank">
                 <svg viewBox="0 0 24 24" stroke="currentColor" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                <span>Ask Location</span>
+                <span>Location</span>
             </a>
         </div>
 
@@ -260,8 +272,8 @@
         <div class="wallet-header">
             <div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
             <div>
-                <h1 style="font-size: 20px; font-weight: 800;">Wallet</h1>
-                <p style="font-size: 12px; color: var(--text-muted); font-weight: 500;">Your earnings and settlements</p>
+                <h1 style="font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Wallet</h1>
+                <p style="font-size: 13px; color: var(--text-muted); font-weight: 600;">EARNINGS & SETTLEMENTS</p>
             </div>
         </div>
 
@@ -286,28 +298,28 @@
         </div>
 
         <h3 class="w-list-header">Unsettled Deliveries</h3>
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;" id="walletCount">0 deliveries to settle</p>
+        <p style="font-size: 13px; color: var(--text-muted); font-weight: 500; margin-bottom: 16px;" id="walletCount">0 deliveries to settle</p>
         
         <div class="w-list" id="walletList"></div>
 
-        <div style="background: var(--primary-light); color: var(--primary); padding: 16px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; gap: 12px; margin-bottom: 24px;">
-            <svg viewBox="0 0 24 24" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <div style="background: var(--bg-main); border: 1px solid var(--border); color: var(--text-muted); padding: 16px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; gap: 12px; margin-bottom: 24px;">
+            <svg viewBox="0 0 24 24" style="flex-shrink:0; color: var(--primary);"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             Give back shop money at the end of your shift to clear your wallet.
         </div>
 
-        <button onclick="markAsPaid()" style="width: 100%; background: var(--accent); color: white; border-radius: 16px; padding: 18px; font-size: 16px; font-weight: 800; display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 16px; cursor: pointer; border: none; transition: 0.2s;">
+        <button onclick="markAsPaid()" style="width: 100%; background: var(--accent); color: white; border-radius: 16px; padding: 18px; font-size: 16px; font-weight: 800; display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 16px; cursor: pointer; border: none; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px;">
             <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
             Mark as Paid
         </button>
 
-        <button onclick="logoutDriver()" style="width: 100%; background: transparent; color: var(--danger); border: 1px solid var(--danger-light); border-radius: 16px; padding: 18px; font-size: 16px; font-weight: 800; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; transition: 0.2s;">
+        <button onclick="logoutDriver()" style="width: 100%; background: transparent; color: var(--danger); border: 1px solid var(--danger-light); border-radius: 16px; padding: 18px; font-size: 16px; font-weight: 800; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px;">
             <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
             Log Out
         </button>
     </div>
 
     <div class="toast" id="toastBox">
-        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg><span id="toastMsg">Action successful</span>
+        <svg viewBox="0 0 24 24" style="color:var(--primary);"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg><span id="toastMsg">Action successful</span>
     </div>
 
     <script type="module">
@@ -354,11 +366,11 @@
                 if(totalItems > 0 && totalItems === checkedItems) {
                     btnStart.style.opacity = "1";
                     btnStart.style.pointerEvents = "auto";
-                    btnStart.innerHTML = `<svg viewBox="0 0 24 24" style="width:20px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> Start Delivery`;
+                    btnStart.innerHTML = `<svg viewBox="0 0 24 24" style="width:20px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> START DELIVERY`;
                 } else {
                     btnStart.style.opacity = "0.5";
                     btnStart.style.pointerEvents = "none";
-                    btnStart.innerHTML = `<svg viewBox="0 0 24 24" style="width:20px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Check off all items to Start`;
+                    btnStart.innerHTML = `<svg viewBox="0 0 24 24" style="width:20px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> CHECK OFF ITEMS TO START`;
                 }
             }
         };
@@ -381,30 +393,27 @@
                     }).catch(e => console.log("Audio unlock failed:", e));
                 }
 
-                // Request native notification permissions
                 if ("Notification" in window && Notification.permission !== "granted") {
                     Notification.requestPermission();
                 }
 
-                // Update UI to Green
                 blockNotifications = false;
                 btn.style.background = 'var(--accent-light)';
                 btn.style.color = 'var(--accent)';
-                btn.style.borderColor = '#BBF7D0';
+                btn.style.borderColor = 'transparent';
                 iconOff.style.display = 'none';
                 iconOn.style.display = 'block';
                 
-                showToast("Alarme Activée 🔊");
+                showToast("Alarm Active 🔊");
             } else {
-                // TURN OFF: Update UI to Red
                 blockNotifications = true;
                 btn.style.background = 'var(--danger-light)';
                 btn.style.color = 'var(--danger)';
-                btn.style.borderColor = '#FECACA';
+                btn.style.borderColor = 'var(--border)';
                 iconOff.style.display = 'block';
                 iconOn.style.display = 'none';
                 
-                showToast("Alarme Désactivée 🔕");
+                showToast("Alarm Muted 🔕");
             }
         };
 
@@ -434,19 +443,16 @@
         function playNotification(area) {
             if(blockNotifications) return;
 
-            // 1. Play Sound
             const sound = document.getElementById("notificationSound");
             if (sound) { sound.play().catch(e => console.log("Audio play blocked", e)); }
             
-            // 2. Vibrate Phone
             if (navigator.vibrate) { navigator.vibrate([200, 100, 200, 100, 400]); }
 
-            // 3. Show Native Push Notification
             if ("Notification" in window && Notification.permission === "granted") {
                 if ('serviceWorker' in navigator) {
                     navigator.serviceWorker.ready.then(registration => {
-                        registration.showNotification("🚨 Nouvelle Commande !", {
-                            body: `Zone : ${area || 'Marrakech'}. Cliquez pour voir.`,
+                        registration.showNotification("🚨 TASCO: New Order!", {
+                            body: `Zone: ${area || 'Marrakech'}. Click to view.`,
                             icon: "https://i.postimg.cc/q7yMGWc1/file-00000000906471f4b781f0c5b3944220.png",
                             vibrate: [200, 100, 200]
                         });
@@ -454,9 +460,8 @@
                 }
             }
 
-            // 4. Show App Toast
             const t = document.getElementById('toastBox'); 
-            document.getElementById('toastMsg').innerText = `🚨 Commande : ${area || 'Disponible'} !`; 
+            document.getElementById('toastMsg').innerText = `🚨 New Order: ${area || 'Available'} !`; 
             t.classList.add('show');
             t.classList.add('toast-alarm'); 
             setTimeout(() => { 
@@ -483,8 +488,6 @@
                 snap.docChanges().forEach(change => {
                     if (change.type === "added") {
                         const newOrder = change.doc.data();
-                        
-                        // Fire Notification Engine ONLY if order is Pending with no driver
                         if (newOrder.status === 'Pending' && (!newOrder.driverEmail || newOrder.driverEmail === "")) {
                             playNotification(newOrder.neighborhood);
                         }
@@ -505,7 +508,6 @@
                 }
             }
             
-            // Allow a short delay on the first load so it doesn't ring for old orders
             setTimeout(() => { isInitialLoad = false; }, 2000);
         });
 
@@ -568,7 +570,6 @@
             const displayList = currentTab === 'available' ? available : active;
 
             if(displayList.length === 0) {
-                // UPDATED PREMIUM EMPTY STATE ICON
                 container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-illustration">
@@ -585,12 +586,12 @@
                     
                     let statusBadgeHtml = '';
                     if (o.status === 'Pending') {
-                        statusBadgeHtml = `<div style="background:var(--warning-light); color:var(--warning); font-size:10px; font-weight:800; padding:4px 8px; border-radius:8px;">NEW ORDER</div>`;
+                        statusBadgeHtml = `<div style="background:var(--warning-light); color:var(--warning); font-size:10px; font-weight:800; padding:4px 8px; border-radius:8px; text-transform:uppercase; border: 1px solid rgba(234, 179, 8, 0.3);">NEW</div>`;
                     } else if (o.status === 'Preparing') {
-                        statusBadgeHtml = `<div style="background:var(--primary-light); color:var(--primary); font-size:10px; font-weight:800; padding:4px 8px; border-radius:8px;">PREPARING</div>`;
+                        statusBadgeHtml = `<div style="background:var(--primary-light); color:var(--primary); font-size:10px; font-weight:800; padding:4px 8px; border-radius:8px; text-transform:uppercase; border: 1px solid rgba(255, 90, 0, 0.3);">PREPARING</div>`;
                     }
                     
-                    const btnHtml = currentTab === 'available' ? 'View Details to Claim' : 'Manage Delivery';
+                    const btnHtml = currentTab === 'available' ? 'View Details' : 'Manage Delivery';
                     
                     return `
                     <div class="order-card" onclick="openOrder('${o.id}')">
@@ -615,12 +616,12 @@
                                 <div class="oc-stat-label">Items</div>
                             </div>
                             <div class="oc-stat">
-                                <div class="oc-stat-val"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg> ${Number(o.totalPrice).toFixed(2)}</div>
+                                <div class="oc-stat-val"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg> ${Number(o.totalPrice).toFixed(0)}</div>
                                 <div class="oc-stat-label">Cash</div>
                             </div>
                             <div class="oc-stat">
                                 <div class="oc-stat-val"><svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"></circle><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path></svg> ~ km</div>
-                                <div class="oc-stat-label">Distance</div>
+                                <div class="oc-stat-label">Dist.</div>
                             </div>
                         </div>
                         
@@ -652,13 +653,13 @@
                             </div>
                             <div class="act-price">${Number(o.totalPrice).toFixed(2)} DH</div>
                         </div>
-                        <div class="act-status ${isSuccess ? 'success' : 'danger'}">${isSuccess ? 'Delivered' : 'Rejected'}</div>
+                        <div class="act-status ${isSuccess ? 'success' : 'danger'}">${isSuccess ? 'Delivered' : 'Failed'}</div>
                     </div>`;
                 }).join('');
             }
         }
 
-        // --- WALLET LOGIC (UNCHANGED, PERFECT MATH) ---
+        // --- WALLET LOGIC ---
         function renderWallet() {
             if(!currentDriver) return;
             const myOrders = allOrders.filter(o => o.driverEmail === currentDriver.email);
@@ -676,14 +677,12 @@
                         const dbProduct = allProducts.find(x => x.id === item.product.id);
                         let unitCost = dbProduct ? safeNum(dbProduct.costPrice) : 0;
                         
-                        // LEGACY SIZES
                         if(dbProduct && dbProduct.sizes && item.variantName) {
                             const sizeData = dbProduct.sizes.find(s => s.name === item.variantName);
                             if(sizeData && sizeData.costPrice) unitCost = safeNum(sizeData.costPrice);
                         }
                         orderCost += (unitCost * item.qty);
 
-                        // LEGACY EXTRAS
                         if(item.extras && item.extras.length > 0 && dbProduct && dbProduct.extras) {
                             item.extras.forEach(extName => {
                                 const extra = dbProduct.extras.find(e => e.name === extName);
@@ -691,7 +690,6 @@
                             });
                         }
                         
-                        // MODULAR CHOICES COST TRACKING
                         if(item.modularChoices && item.modularChoices.length > 0 && dbProduct && dbProduct.optionGroups) {
                             item.modularChoices.forEach(choice => {
                                 const group = dbProduct.optionGroups.find(g => g.id === choice.groupId || g.name === choice.groupName);
@@ -741,14 +739,14 @@
             if(unsettledDeliveries.length === 0) return showToast("No deliveries to settle.");
             
             const btn = document.querySelector('button[onclick="markAsPaid()"]');
-            const originalText = btn.innerHTML; btn.innerHTML = "Processing...";
+            const originalText = btn.innerHTML; btn.innerHTML = "PROCESSING...";
             try {
                 for(let order of unsettledDeliveries) await updateDoc(doc(db, "orders", order.id), { driverSettled: true });
                 showToast("Wallet settled successfully!");
             } catch(e) { console.error(e); alert("Error settling wallet."); } finally { btn.innerHTML = originalText; }
         }
 
-        // --- ORDER DETAILS (UPGRADED CATEGORY SPLITTING) ---
+        // --- ORDER DETAILS ---
         window.openOrder = (id) => {
             const o = allOrders.find(x => x.id === id); if(!o) return;
             openedOrderId = id;
@@ -767,14 +765,14 @@
             
             if(o.status === 'Pending') { statBadge.style.background = 'var(--warning-light)'; statBadge.style.color = 'var(--warning)'; }
             else if(o.status === 'Preparing') { statBadge.style.background = 'var(--primary-light)'; statBadge.style.color = 'var(--primary)'; }
-            else { statBadge.style.background = 'var(--primary)'; statBadge.style.color = 'white'; }
+            else { statBadge.style.background = 'var(--primary)'; statBadge.style.color = 'var(--bg-main)'; }
 
             const btnCall = document.getElementById('btnCall');
             const btnWa = document.getElementById('btnWa');
             
             if(o.customerPhone) {
                 let cleanPhone = o.customerPhone.replace(/^0+/, '');
-                let waMsg = `Bonjour ${o.customerName || ''}, c'est Lasco ! 🛵\nNous préparons votre commande #${o.id.substring(0,6).toUpperCase()} d'un total de ${Number(o.totalPrice).toFixed(2)} DH.\n\nPouvez-vous nous envoyer votre position exacte (localisation) ici s'il vous plaît ? 📍`;
+                let waMsg = `Bonjour ${o.customerName || ''}, c'est TASCO ! 🛵\nNous préparons votre commande #${o.id.substring(0,6).toUpperCase()} d'un total de ${Number(o.totalPrice).toFixed(2)} DH.\n\nPouvez-vous nous envoyer votre position exacte (localisation) ici s'il vous plaît ? 📍`;
                 btnCall.href = `tel:${o.customerPhone}`;
                 btnWa.href = `https://wa.me/212${cleanPhone}?text=${encodeURIComponent(waMsg)}`;
                 
@@ -789,31 +787,25 @@
             if(o.status === 'Delivered' || o.status === 'Cancelled') document.getElementById('det-action-grid').style.display = 'none';
             else document.getElementById('det-action-grid').style.display = 'grid';
 
-            document.getElementById('det-items-count').innerText = `Items (${o.totalItems || 0})`;
+            document.getElementById('det-items-count').innerText = `ITEMS (${o.totalItems || 0})`;
             
             const restoItems = [];
             const groceryItems = [];
 
-            // Robust keyword checking to catch ANY grocery item format
             const groceryKeywords = ['grocery', 'epicerie', 'épicerie', 'market', 'supermarket', 'snacks', 'lait', 'oeufs', 'chips', 'biscuits', 'boissons', 'pack'];
 
             (o.cart || []).forEach(item => {
                 const p = item.product || {}; 
-                
-                // CRITICAL FIX: Look up the original product from Firebase to guarantee we check the real category
                 const dbProduct = allProducts.find(x => x.id === p.id) || p;
                 
-                // Combine every possible property where the category could be hiding
                 const catStr = String(dbProduct.category || p.category || '').toLowerCase();
                 const typeStr = String(dbProduct.type || p.type || dbProduct.storeType || '').toLowerCase();
                 
                 let isGrocery = false;
                 
-                // Condition 1: If the type explicitly says grocery
                 if (typeStr === 'grocery' || typeStr === 'epicerie' || typeStr === 'market') {
                     isGrocery = true;
                 } 
-                // Condition 2: If the category name contains any of our grocery keywords
                 else if (groceryKeywords.some(kw => catStr.includes(kw))) {
                     isGrocery = true;
                 }
@@ -833,7 +825,7 @@
                     });
                 }
 
-                if(item.note) metaText.push(`Note: <span style="color:var(--danger); font-weight:700;">${item.note}</span>`);
+                if(item.note) metaText.push(`Note: <span style="color:var(--warning); font-weight:700;">${item.note}</span>`);
 
                 const metaHtml = metaText.length > 0 ? `<div class="item-meta" style="margin-top:4px;">${metaText.join('<br>')}</div>` : '';
                 const unitPrice = safeNum(item.unitPrice) || safeNum(p.sellPrice);
@@ -853,7 +845,6 @@
                     </div>
                 </div>`;
 
-                // Push to the correct array
                 if (isGrocery) {
                     groceryItems.push(itemHtml);
                 } else {
@@ -875,33 +866,32 @@
             
             if ((!o.driverEmail || o.driverEmail === "") && o.status === 'Pending') {
                 actionContainer.innerHTML = `
-                    <button style="width: 100%; background: var(--primary); color: white; border: none; padding: 18px; border-radius: 16px; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 8px 20px rgba(13, 93, 255, 0.3); transition: 0.2s; cursor: pointer;" onclick="claimOrder('${o.id}')">
+                    <button style="width: 100%; background: var(--primary); color: var(--bg-main); border: none; padding: 18px; border-radius: 16px; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 8px 24px rgba(255, 90, 0, 0.3); transition: 0.2s; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;" onclick="claimOrder('${o.id}')">
                         <svg viewBox="0 0 24 24" style="width:20px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                        Claim Delivery
+                        CLAIM DELIVERY
                     </button>`;
             } else if (o.driverEmail === currentDriver.email) {
                 if(o.status === 'Preparing') {
-                    // Start delivery button is locked until checkboxes are ticked
                     actionContainer.innerHTML = `
-                        <button id="btnStartDelivery" style="width: 100%; opacity: 0.5; pointer-events: none; background: var(--primary); color: white; border: none; padding: 18px; border-radius: 16px; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 8px 20px rgba(13, 93, 255, 0.3); transition: 0.2s; cursor: pointer; margin-bottom: 12px;" onclick="updateOrderStatus('${o.id}', 'Out for Delivery')">
+                        <button id="btnStartDelivery" style="width: 100%; opacity: 0.5; pointer-events: none; background: var(--primary); color: var(--bg-main); border: none; padding: 18px; border-radius: 16px; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 8px 24px rgba(255, 90, 0, 0.3); transition: 0.2s; cursor: pointer; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;" onclick="updateOrderStatus('${o.id}', 'Out for Delivery')">
                             <svg viewBox="0 0 24 24" style="width:20px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                            Check off all items to Start
+                            CHECK OFF ITEMS TO START
                         </button>
-                        <button style="width: 100%; background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 16px; padding: 18px; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; cursor: pointer;" onclick="unclaimOrder('${o.id}')">
+                        <button style="width: 100%; background: transparent; color: var(--text-muted); border: 1px solid var(--border); border-radius: 16px; padding: 18px; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;" onclick="unclaimOrder('${o.id}')">
                             <svg viewBox="0 0 24 24" style="width:20px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                            Release back to Pool
+                            RELEASE BACK TO POOL
                         </button>
                         `;
-                    setTimeout(() => checkDeliveryReadiness(), 50); // initial check in case order is somehow empty
+                    setTimeout(() => checkDeliveryReadiness(), 50); 
                 } else if (o.status === 'Out for Delivery') {
                     actionContainer.innerHTML = `
-                        <button style="width: 100%; background: var(--accent); color: white; border: none; border-radius: 16px; padding: 18px; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 8px 20px rgba(22, 163, 74, 0.3); margin-bottom: 12px; transition: 0.2s; cursor: pointer;" onclick="updateOrderStatus('${o.id}', 'Delivered')">
+                        <button style="width: 100%; background: var(--accent); color: white; border: none; border-radius: 16px; padding: 18px; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 8px 24px rgba(22, 163, 74, 0.3); margin-bottom: 12px; transition: 0.2s; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;" onclick="updateOrderStatus('${o.id}', 'Delivered')">
                             <svg viewBox="0 0 24 24" style="width:22px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Mark as Delivered
+                            MARK AS DELIVERED
                         </button>
-                        <button style="width: 100%; background: transparent; color: var(--danger); border: 1px solid var(--danger-light); border-radius: 16px; padding: 18px; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; cursor: pointer;" onclick="updateOrderStatus('${o.id}', 'Cancelled')">
+                        <button style="width: 100%; background: transparent; color: var(--danger); border: 1px solid var(--danger-light); border-radius: 16px; padding: 18px; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;" onclick="updateOrderStatus('${o.id}', 'Cancelled')">
                             <svg viewBox="0 0 24 24" style="width:20px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                            Delivery Failed / Returned
+                            DELIVERY FAILED / RETURNED
                         </button>
                     `;
                 } else {
@@ -909,8 +899,8 @@
                 }
             } else {
                 actionContainer.innerHTML = `
-                    <div style="text-align:center; padding:18px; background:var(--danger-light); color:var(--danger); border-radius:16px; font-weight:800; font-size:15px;">
-                        This order was claimed by another driver.
+                    <div style="text-align:center; padding:18px; background:var(--danger-light); color:var(--danger); border-radius:16px; font-weight:800; font-size:14px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        CLAIMED BY ANOTHER DRIVER
                     </div>`;
             }
         };
@@ -935,7 +925,7 @@
                     driverEmail: "",
                     status: 'Pending'
                 });
-                showToast("Order released to other drivers");
+                showToast("Order released to pool");
                 goBack();
             } catch (e) { 
                 console.error(e); 
@@ -958,7 +948,6 @@
             setTimeout(() => t.classList.remove('show'), 3000); 
         }
         
-        // PWA Install Script for Driver
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').catch(err => {
