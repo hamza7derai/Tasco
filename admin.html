@@ -3,36 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lasco Admin</title>
+    <title>TASCO | Admin Command Center</title>
     
     <link rel="manifest" href="manifest-admin.json">
     
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         /* =========================================
-           VARIABLES & RESET (Admin Theme)
+           TASCO PREMIUM LIGHT (ADMIN)
         ========================================= */
         :root {
-            --bg-main: #F8F9FB; --surface: #FFFFFF;
-            --primary: #EA580C; --primary-light: #FFEDD5;
-            --accent: #16A34A; --accent-light: #DCFCE7;
-            --warning: #F59E0B; --warning-light: #FEF3C7;
-            --danger: #EF4444; --danger-light: #FEE2E2;
-            --purple: #8B5CF6; --purple-light: #EDE9FE;
-            --blue: #3B82F6; --blue-light: #DBEAFE;
-            --text-main: #111827; --text-muted: #6B7280;
-            --border: #E5E7EB; --border-dark: #D1D5DB;
-            --radius-card: 20px; --radius-btn: 12px;
-            --shadow-sm: 0 4px 12px rgba(0,0,0,0.03); 
-            --shadow-nav: 0 -4px 20px rgba(0,0,0,0.05); 
-            --shadow-modal: 0 10px 40px rgba(0,0,0,0.1);
+            --bg-main: #F8F4EE; /* TASCO Warm Cream */
+            --surface: #FFFFFF; /* Pure White Cards */
+            --primary: #FF5A00; /* TASCO Orange */
+            --primary-light: rgba(255, 90, 0, 0.1);
+            --accent: #16A34A; /* Success Green */
+            --accent-light: #DCFCE7;
+            --warning: #F59E0B; /* Yellow */
+            --warning-light: #FEF3C7;
+            --danger: #EF4444; /* Red */
+            --danger-light: #FEE2E2;
+            --purple: #8B5CF6; 
+            --purple-light: #EDE9FE;
+            --blue: #3B82F6; 
+            --blue-light: #DBEAFE;
+            --text-main: #171717; /* TASCO Deep Charcoal */
+            --text-muted: #6B7280;
+            --border: #E6E2DC; /* Warm Border */
+            --border-dark: #D1D5DB;
+            --radius-card: 20px; 
+            --radius-btn: 12px;
+            --shadow-sm: 0 4px 16px rgba(23, 23, 23, 0.04); 
+            --shadow-nav: 0 -4px 20px rgba(23, 23, 23, 0.05); 
+            --shadow-modal: 0 10px 40px rgba(23, 23, 23, 0.1);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
         /* SECURITY: HIDE BODY UNTIL BOUNCER APPROVES */
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-main); color: var(--text-main); padding-bottom: 90px; display: none; }
+        body { font-family: 'Space Grotesk', sans-serif; background: var(--bg-main); color: var(--text-main); padding-bottom: 90px; display: none; }
         
         /* PREVENTS BACKGROUND SCROLL WHEN MODAL IS OPEN */
         body.modal-open { overflow: hidden; }
@@ -49,15 +59,15 @@
 
         /* HEADERS */
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .header-top h1 { font-size: 24px; font-weight: 800; color: var(--text-main); line-height: 1.2; letter-spacing: -0.5px;}
-        .header-top p { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 4px; }
-        .btn-exit { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: var(--surface); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); color: var(--text-main); font-size: 10px; font-weight: 700; cursor: pointer;}
+        .header-top h1 { font-size: 24px; font-weight: 800; color: var(--text-main); line-height: 1.2; letter-spacing: -1px;}
+        .header-top p { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .btn-exit { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: var(--surface); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); color: var(--text-main); font-size: 10px; font-weight: 700; cursor: pointer; text-transform: uppercase;}
         .icon-btn { width: 44px; height: 44px; background: var(--surface); border-radius: var(--radius-btn); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); border: 1px solid var(--border); color: var(--text-main); cursor: pointer;}
-        .section-title { font-size: 16px; font-weight: 800; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
-        .section-link { font-size: 13px; color: var(--primary); font-weight: 700; text-decoration: none; cursor: pointer; }
+        .section-title { font-size: 15px; font-weight: 800; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);}
+        .section-link { font-size: 13px; color: var(--primary); font-weight: 700; text-decoration: none; cursor: pointer; text-transform: none; letter-spacing: 0;}
 
         /* CARDS & TOGGLES */
-        .card { background: var(--surface); border-radius: var(--radius-card); padding: 16px; box-shadow: var(--shadow-sm); margin-bottom: 16px; border: 1px solid rgba(0,0,0,0.02);}
+        .card { background: var(--surface); border-radius: var(--radius-card); padding: 16px; box-shadow: var(--shadow-sm); margin-bottom: 16px; border: 1px solid rgba(23,23,23,0.03);}
         
         .toggle-wrapper { display: flex; justify-content: space-between; align-items: center; padding: 0; background: transparent; border: none; margin-bottom: 0; width: 100%;}
         .switch { position: relative; display: inline-block; width: 44px; height: 26px; flex-shrink: 0;}
@@ -69,65 +79,65 @@
 
         /* ANIMATED TABS TOGGLE */
         .tabs-toggle { position: relative; display: flex; background: var(--surface); border-radius: 50px; padding: 6px; border: 1px solid var(--border); margin-bottom: 24px; box-shadow: var(--shadow-sm); z-index: 1;}
-        .tab-bg { position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc(50% - 6px); background: var(--primary); border-radius: 50px; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); z-index: -1; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);}
-        .tab-btn { flex: 1; padding: 12px; text-align: center; font-size: 14px; font-weight: 700; border-radius: 50px; color: var(--text-muted); transition: color 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;}
-        .tab-btn.active { color: white; }
+        .tab-bg { position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc(50% - 6px); background: var(--primary); border-radius: 50px; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); z-index: -1; box-shadow: 0 4px 12px rgba(255, 90, 0, 0.25);}
+        .tab-btn { flex: 1; padding: 12px; text-align: center; font-size: 14px; font-weight: 700; border-radius: 50px; color: var(--text-muted); transition: color 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;}
+        .tab-btn.active { color: white; font-weight: 800;}
 
         /* DASHBOARD STATS */
-        .dash-stats-row { display: flex; justify-content: space-between; background: var(--surface); border-radius: var(--radius-card); padding: 16px; margin-bottom: 24px; box-shadow: var(--shadow-sm); }
+        .dash-stats-row { display: flex; justify-content: space-between; background: var(--surface); border-radius: var(--radius-card); padding: 16px; margin-bottom: 24px; box-shadow: var(--shadow-sm); border: 1px solid rgba(23,23,23,0.03);}
         .dash-stat-col { flex: 1; text-align: center; border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
         .dash-stat-col:last-child { border-right: none; }
         .dash-stat-icon { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
         .dash-stat-val { font-size: 18px; font-weight: 800; color: var(--text-main); line-height: 1; margin-bottom: 4px; }
-        .dash-stat-label { font-size: 11px; color: var(--text-muted); font-weight: 600; line-height: 1.2; }
+        .dash-stat-label { font-size: 11px; color: var(--text-muted); font-weight: 700; line-height: 1.2; text-transform: uppercase;}
 
         /* DRIVER BALANCES */
-        .driver-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--bg-main); }
+        .driver-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--border); }
         .driver-row:last-child { border-bottom: none; padding-bottom: 0;}
         .d-info h4 { font-size: 14px; font-weight: 800; color: var(--text-main); text-transform: capitalize; margin-bottom: 2px;}
-        .d-info p { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+        .d-info p { font-size: 12px; color: var(--text-muted); font-weight: 600; }
         .d-debt { font-size: 15px; font-weight: 800; color: var(--primary); }
 
         /* ORDERS LISTS */
         .order-card { padding: 16px; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; background: var(--surface); border-radius: var(--radius-card); margin-bottom: 12px; box-shadow: var(--shadow-sm); }
         .order-card:active { transform: scale(0.98); }
         .order-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;}
-        .o-id { font-size: 15px; font-weight: 800; color: var(--text-main);}
-        .o-date { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-weight: 500;}
-        .o-client { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; color: var(--text-main);}
+        .o-id { font-size: 16px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px;}
+        .o-date { font-size: 12px; color: var(--text-muted); margin-top: 4px; font-weight: 500;}
+        .o-client { font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; color: var(--text-main);}
         .o-items { font-size: 12px; color: var(--text-muted); font-weight: 500;}
         .o-price { font-size: 16px; font-weight: 800; color: var(--text-main); text-align: right; }
         
-        .badge { padding: 6px 10px; border-radius: 8px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
-        .b-pending { background: var(--warning-light); color: var(--warning); }
-        .b-processing { background: var(--blue-light); color: var(--blue); }
-        .b-transit { background: var(--primary-light); color: var(--primary); }
-        .b-delivered { background: var(--accent-light); color: var(--accent); }
-        .b-cancelled { background: var(--danger-light); color: var(--danger); }
+        .badge { padding: 6px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .b-pending { background: var(--warning-light); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.2); }
+        .b-processing { background: var(--blue-light); color: var(--blue); border: 1px solid rgba(59, 130, 246, 0.2);}
+        .b-transit { background: var(--primary-light); color: var(--primary); border: 1px solid rgba(255, 90, 0, 0.2);}
+        .b-delivered { background: var(--accent-light); color: var(--accent); border: 1px solid rgba(22, 163, 74, 0.2);}
+        .b-cancelled { background: var(--danger-light); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2);}
 
         /* SNAP SCROLL TABS */
         .tabs-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -20px 20px; padding: 0 20px; position: relative; z-index: 10; scroll-behavior: smooth; scroll-snap-type: x mandatory;}
         .tabs-scroll::-webkit-scrollbar { display: none; }
-        .tab-pill { padding: 8px 16px; border-radius: 50px; font-size: 13px; font-weight: 600; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); white-space: nowrap; cursor: pointer; transition: 0.2s; scroll-snap-align: center;}
+        .tab-pill { padding: 10px 18px; border-radius: 50px; font-size: 13px; font-weight: 700; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); white-space: nowrap; cursor: pointer; transition: 0.2s; scroll-snap-align: center; text-transform: uppercase; letter-spacing: 0.5px;}
         .tab-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
 
         /* CATALOG TOGGLE & ACCORDIONS */
         .cat-toggle-wrapper { background: var(--surface); border-radius: 50px; padding: 4px; display: flex; box-shadow: var(--shadow-sm); border: 1px solid var(--border); margin-bottom: 20px;}
-        .cat-toggle-btn { flex: 1; padding: 10px; font-size: 13px; font-weight: 700; color: var(--text-muted); border-radius: 50px; transition: 0.3s; text-align: center; display: flex; justify-content: center; align-items: center; gap: 6px; cursor: pointer;}
+        .cat-toggle-btn { flex: 1; padding: 10px; font-size: 13px; font-weight: 700; color: var(--text-muted); border-radius: 50px; transition: 0.3s; text-align: center; display: flex; justify-content: center; align-items: center; gap: 6px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;}
         .cat-toggle-btn.active { background: var(--primary); color: white; }
 
         /* HORIZONTAL LIST CATALOG */
         .catalog-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px;}
-        .cat-list-item { display: flex; flex-direction: column; padding: 12px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); box-shadow: 0 2px 8px rgba(0,0,0,0.02);}
+        .cat-list-item { display: flex; flex-direction: column; padding: 12px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); box-shadow: var(--shadow-sm);}
         .cat-list-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px;}
-        .cat-list-img { width: 56px; height: 56px; border-radius: 12px; background: var(--bg-main); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; color: var(--text-muted); overflow: hidden; flex-shrink: 0;}
+        .cat-list-img { width: 56px; height: 56px; border-radius: 12px; background: var(--bg-main); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; color: var(--text-muted); overflow: hidden; flex-shrink: 0; border: 1px solid var(--border);}
         .cat-list-img img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply;}
         .cat-list-info { flex: 1; overflow: hidden; }
         .cat-list-info h4 { font-size: 15px; font-weight: 800; color: var(--text-main); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-        .cat-list-info p { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+        .cat-list-info p { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
         .cat-list-bottom { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border); padding-top: 12px;}
         .cat-list-actions { display: flex; gap: 6px; align-items: center;}
-        .btn-action { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: 0.2s; flex-shrink: 0;}
+        .btn-action { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: 0.2s; flex-shrink: 0;}
         .btn-action:active { transform: scale(0.9); }
         .btn-action.link { background: var(--bg-main); color: var(--text-main); border: 1px solid var(--border);}
         .btn-action.copy { background: #F1F5F9; color: #475569; }
@@ -136,24 +146,24 @@
 
         /* ANALYTICS VIEW */
         .analytics-hero { background: var(--surface); border-radius: 24px; padding: 24px; margin-bottom: 24px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 12px;}
-        .hero-title { font-size: 13px; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 8px;}
-        .hero-val { font-size: 36px; font-weight: 800; color: var(--text-main); letter-spacing: -1px;}
+        .hero-title { font-size: 13px; color: var(--text-muted); font-weight: 700; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .hero-val { font-size: 36px; font-weight: 800; color: var(--text-main); letter-spacing: -2px;}
         .hero-profit { background: var(--accent-light); color: var(--accent); padding: 10px 16px; border-radius: 12px; font-size: 14px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;}
         
         .analytics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px;}
         .metric-card { background: var(--surface); border-radius: 16px; padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); text-align: center; display: flex; flex-direction: column; align-items: center;}
         .mc-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items:center; justify-content: center; margin-bottom: 12px;}
         .mc-val { font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; line-height: 1;}
-        .mc-title { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+        .mc-title { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;}
         
         .compare-row { background: var(--surface); border-radius: 16px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 12px;}
-        .compare-label { font-size: 14px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 12px;}
+        .compare-label { font-size: 13px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 12px; text-transform: uppercase; letter-spacing: 0.5px;}
         .compare-val { font-size: 16px; font-weight: 800; color: var(--text-main); }
 
         /* WIZARD (SAAS STYLE) */
         .wizard-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
         .stepper-container { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 32px; }
-        .step-pill { font-size: 12px; font-weight: 800; color: var(--text-muted); display: flex; align-items: center; gap: 6px;}
+        .step-pill { font-size: 12px; font-weight: 800; color: var(--text-muted); display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px;}
         .step-pill.active { color: var(--primary); }
         .step-dots { display: flex; gap: 6px; }
         .s-dot { width: 20px; height: 4px; border-radius: 4px; background: var(--border); }
@@ -164,16 +174,16 @@
         .wizard-step.active { display: block; }
         
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px; }
-        .upload-card { border: 1.5px dashed var(--border); border-radius: 16px; padding: 20px 12px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 8px; background: var(--surface); }
+        .upload-card { border: 1.5px dashed var(--border-dark); border-radius: 16px; padding: 20px 12px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 8px; background: var(--surface); }
         .upload-card:hover { border-color: var(--primary); background: var(--primary-light); }
         .upload-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--primary-light); display: flex; align-items: center; justify-content: center; color: var(--primary); }
-        .upload-card h5 { font-size: 13px; font-weight: 800; color: var(--text-main); }
-        .upload-card p { font-size: 10px; color: var(--text-muted); line-height: 1.4; }
+        .upload-card h5 { font-size: 13px; font-weight: 800; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px;}
+        .upload-card p { font-size: 11px; color: var(--text-muted); line-height: 1.4; font-weight: 500;}
         
         .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
         .type-card { border: 2px solid var(--border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: 0.2s; background: var(--surface); text-align: center; position: relative;}
         .type-icon { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
-        .type-card h5 { font-size: 15px; font-weight: 800; color: var(--text-main); }
+        .type-card h5 { font-size: 15px; font-weight: 800; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px;}
         .radio-dot { position: absolute; top: 12px; right: 12px; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; background: white;}
         
         .type-card.tc-resto.active { border-color: var(--primary); background: var(--primary-light); }
@@ -187,77 +197,75 @@
         .type-card.tc-grocery.active .radio-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: white; }
 
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; }
-        .form-control { width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius-btn); background: var(--surface); outline: none; font-size: 14px; font-weight: 500; transition: 0.2s; color: var(--text-main); }
+        .form-group label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .form-control { width: 100%; padding: 14px 16px; border: 1px solid var(--border-dark); border-radius: var(--radius-btn); background: var(--surface); outline: none; font-size: 14px; font-weight: 600; transition: 0.2s; color: var(--text-main); }
         .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
         .input-with-action { display: flex; gap: 10px; }
-        .btn-plus-field { width: 48px; height: 48px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-btn); display: flex; align-items: center; justify-content: center; color: var(--text-main); cursor: pointer; flex-shrink: 0; font-size: 20px; font-weight: 400;}
-        .help-text { font-size: 11px; color: var(--text-muted); margin-top: 6px; display: block; }
+        .btn-plus-field { width: 48px; height: 48px; background: var(--surface); border: 1px solid var(--border-dark); border-radius: var(--radius-btn); display: flex; align-items: center; justify-content: center; color: var(--text-main); cursor: pointer; flex-shrink: 0; font-size: 20px; font-weight: 400;}
+        .help-text { font-size: 11px; color: var(--text-muted); margin-top: 6px; display: block; font-weight: 500;}
         
-        .btn { width: 100%; padding: 16px; border-radius: var(--radius-btn); font-size: 15px; font-weight: 800; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; border: none; }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-success { background: var(--accent); color: white; }
+        .btn { width: 100%; padding: 18px; border-radius: var(--radius-btn); font-size: 15px; font-weight: 800; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; border: none; text-transform: uppercase; letter-spacing: 0.5px;}
+        .btn:active { transform: scale(0.98); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none;}
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 8px 20px rgba(255, 90, 0, 0.25);}
+        .btn-success { background: var(--accent); color: white; box-shadow: 0 8px 20px rgba(22, 163, 74, 0.25);}
         .btn-warning { background: var(--warning); color: white; }
         .btn-info { background: #3B82F6; color: white; }
-        .btn-danger-outline { background: transparent; color: var(--danger); border: 1px solid var(--danger-light); }
-        .btn-outline { background: var(--surface); color: var(--text-main); border: 1px solid var(--border); }
+        .btn-danger-outline { background: var(--surface); color: var(--danger); border: 1px solid var(--danger-light); }
+        .btn-outline { background: var(--surface); color: var(--text-main); border: 1px solid var(--border-dark); }
         
         .wizard-footer { display: flex; gap: 12px; align-items: center; margin-top: 32px;}
         .wizard-footer .btn-outline { width: 30%; }
         .wizard-footer .btn-primary { width: 70%; }
 
         /* MODULAR OPTION SYSTEM CSS */
-        .group-builder-card { background: #F8FAFC; border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 16px; }
+        .group-builder-card { background: var(--bg-main); border: 1px solid var(--border-dark); border-radius: 16px; padding: 16px; margin-bottom: 16px; }
         .group-item-row { display: grid; grid-template-columns: 2fr 1fr 1fr 40px; gap: 8px; margin-top: 8px; align-items: center; }
-        .btn-add-group { width: 100%; padding: 16px; border: 2px dashed var(--border-dark); border-radius: 16px; color: var(--text-muted); font-weight: 800; margin: 20px 0; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s;}
-        .btn-add-group:active { transform: scale(0.98); background: var(--bg-main); }
+        .btn-add-group { width: 100%; padding: 16px; border: 2px dashed var(--border-dark); border-radius: 16px; color: var(--text-muted); font-weight: 800; margin: 20px 0; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px;}
+        .btn-add-group:active { transform: scale(0.98); background: var(--surface); }
         
         .toggle-card-config { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow-sm); }
         .config-panel { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border); animation: fadeIn 0.3s ease; }
-        .list-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-btn); margin-bottom: 8px; background: var(--bg-main);}
-        .list-info h5 { font-size: 14px; font-weight: 700; color: var(--text-main); }
-        .list-info p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
         /* ORDER DETAILS */
         .detail-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
-        .back-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--surface); border-radius: 50%; box-shadow: var(--shadow-sm); cursor: pointer; flex-shrink: 0;}
+        .back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--surface); border-radius: 50%; box-shadow: var(--shadow-sm); border: 1px solid var(--border); cursor: pointer; flex-shrink: 0;}
         .info-list { padding: 8px 16px; margin-bottom: 24px;}
-        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 13px; }
         .info-row:last-child { border-bottom: none; }
-        .info-label { color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
-        .info-val { font-weight: 600; text-align: right; }
+        .info-label { color: var(--text-muted); display: flex; align-items: center; gap: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
+        .info-val { font-weight: 700; text-align: right; }
         
-        .item-row { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+        .item-row { display: flex; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--border); }
         .item-row:last-child { border-bottom: none; padding-bottom: 0;}
-        .item-img { width: 48px; height: 48px; background: var(--bg-main); border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 2px;}
+        .item-img { width: 56px; height: 56px; background: var(--bg-main); border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 2px; border: 1px solid var(--border);}
         .item-img img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply;}
         .item-details { flex: 1; }
-        .item-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-        .item-meta { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
-        .item-price { font-size: 13px; font-weight: 700; text-align: right; }
+        .item-name { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+        .item-meta { font-size: 12px; color: var(--text-muted); line-height: 1.4; font-weight: 500;}
+        .item-price { font-size: 14px; font-weight: 800; text-align: right; }
         
-        .summary-box { background: var(--surface); border-radius: var(--radius-btn); padding: 16px; margin-top: 24px; border: 1px solid var(--border); }
-        .summary-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 12px; color: var(--text-muted); font-weight: 500; }
-        .summary-row.total { font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 0; padding-top: 12px; border-top: 1px dashed var(--border); }
+        .summary-box { background: var(--surface); border-radius: var(--radius-btn); padding: 20px; margin-top: 24px; border: 1px solid var(--border); box-shadow: var(--shadow-sm);}
+        .summary-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
+        .summary-row.total { font-size: 18px; font-weight: 800; color: var(--primary); margin-bottom: 0; padding-top: 16px; border-top: 1px dashed var(--border-dark); }
         .action-stack { display: flex; flex-direction: column; gap: 12px; margin-top: 32px; }
 
         /* BOTTOM NAV */
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 12px 10px 24px; z-index: 100; box-shadow: var(--shadow-nav); max-width: 600px; margin: 0 auto; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #94A3B8; font-size: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; width: 20%; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #94A3B8; font-size: 10px; font-weight: 800; cursor: pointer; transition: 0.2s; width: 20%; text-transform: uppercase; letter-spacing: 0.5px;}
         .nav-item.active { color: var(--primary); }
         .nav-item svg { width: 22px; height: 22px; stroke-width: 2.2; }
         .nav-item.active svg { fill: var(--primary-light); }
         
         /* Modals & Toasts */
-        .overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .overlay { position: fixed; inset: 0; background: rgba(23, 23, 23, 0.6); backdrop-filter: blur(4px); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .overlay.active { opacity: 1; pointer-events: auto; }
-        .modal { background: var(--surface); width: 100%; max-width: 340px; border-radius: 24px; padding: 24px; box-shadow: var(--shadow-modal); transform: scale(0.95); transition: 0.3s; text-align: center; display: none;}
+        .modal { background: var(--surface); width: 100%; max-width: 340px; border-radius: 24px; padding: 32px 24px; box-shadow: var(--shadow-modal); transform: scale(0.95); transition: 0.3s; text-align: center; display: none; border: 1px solid var(--border);}
         .overlay.active .modal { display: block; transform: scale(1); }
-        .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-radius: 30px 30px 0 0; padding: 25px 20px 40px; z-index: 1001; transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); max-width: 600px; margin: 0 auto; box-shadow: var(--shadow-modal);}
+        .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-radius: 30px 30px 0 0; padding: 25px 20px 40px; z-index: 1001; transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); max-width: 600px; margin: 0 auto; box-shadow: var(--shadow-modal); border-top: 1px solid var(--border);}
         .bottom-sheet.active { transform: translateY(0); }
-        .sheet-handle { width: 40px; height: 5px; background: #CBD5E1; border-radius: 10px; margin: 0 auto 20px; }
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--text-main); color: white; padding: 12px 24px; border-radius: 50px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-modal); z-index: 1100; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .sheet-handle { width: 40px; height: 5px; background: var(--border-dark); border-radius: 10px; margin: 0 auto 20px; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--text-main); color: white; padding: 14px 24px; border-radius: 50px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-modal); z-index: 1100; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .toast.show { transform: translateX(-50%) translateY(0); }
     </style>
 </head>
@@ -266,8 +274,8 @@
     <div id="view-dashboard" class="app-view active container">
         <div class="header-top">
             <div>
-                <h1>Hello, <span style="color: var(--primary);">Lasco</span> 👋</h1>
-                <p>Here's what's happening with your store today.</p>
+                <h1>Hello, <span style="color: var(--primary);">TASCO</span> ⚡</h1>
+                <p>Command Center Overview</p>
             </div>
             <div class="btn-exit" onclick="logoutAdmin()">
                 <svg viewBox="0 0 24 24" style="width:18px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
@@ -281,8 +289,8 @@
                     <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                 </div>
                 <div>
-                    <span id="statusTextMain" style="display:block; font-size:15px; font-weight:800; color:var(--text-main);">Store Closed</span>
-                    <span id="statusTextSub" style="font-size:12px; font-weight: 500; color:var(--text-muted);">You are not receiving orders</span>
+                    <span id="statusTextMain" style="display:block; font-size:15px; font-weight:800; color:var(--text-main); text-transform:uppercase; letter-spacing:0.5px;">Store Closed</span>
+                    <span id="statusTextSub" style="font-size:12px; font-weight: 600; color:var(--text-muted);">You are not receiving orders</span>
                 </div>
             </div>
             <label class="switch"><input type="checkbox" id="storeStatusToggle" onchange="toggleStoreStatus(this.checked)"><span class="slider"></span></label>
@@ -290,17 +298,17 @@
 
         <div class="dash-stats-row">
             <div class="dash-stat-col">
-                <div class="dash-stat-icon" style="background:#FFEDD5; color:#EA580C;"><svg viewBox="0 0 24 24" style="width:16px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>
+                <div class="dash-stat-icon" style="background:var(--warning-light); color:var(--warning);"><svg viewBox="0 0 24 24" style="width:16px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>
                 <div class="dash-stat-val" id="dashStatOrders">0</div>
                 <div class="dash-stat-label">Orders<br>Today</div>
             </div>
             <div class="dash-stat-col">
-                <div class="dash-stat-icon" style="background:#DCFCE7; color:#16A34A;"><svg viewBox="0 0 24 24" style="width:16px;"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><line x1="12" y1="18" x2="12" y2="22"></line><line x1="12" y1="2" x2="12" y2="6"></line></svg></div>
-                <div class="dash-stat-val" id="dashStatRevenue" style="font-size:14px;">0 DH</div>
+                <div class="dash-stat-icon" style="background:var(--accent-light); color:var(--accent);"><svg viewBox="0 0 24 24" style="width:16px;"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><line x1="12" y1="18" x2="12" y2="22"></line><line x1="12" y1="2" x2="12" y2="6"></line></svg></div>
+                <div class="dash-stat-val" id="dashStatRevenue" style="font-size:15px;">0 DH</div>
                 <div class="dash-stat-label">Revenue<br>(Gross)</div>
             </div>
             <div class="dash-stat-col">
-                <div class="dash-stat-icon" style="background:#EDE9FE; color:#8B5CF6;"><svg viewBox="0 0 24 24" style="width:16px;"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></div>
+                <div class="dash-stat-icon" style="background:var(--primary-light); color:var(--primary);"><svg viewBox="0 0 24 24" style="width:16px;"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg></div>
                 <div class="dash-stat-val" id="dashStatItems">0</div>
                 <div class="dash-stat-label">Items<br>Sold</div>
             </div>
@@ -321,7 +329,7 @@
         <div class="card" style="padding:0; overflow:hidden;">
             <div style="padding:16px; border-bottom:1px solid var(--border);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <div style="font-size:14px; font-weight:800; display:flex; align-items:center; gap:6px;">
+                    <div style="font-size:13px; font-weight:800; text-transform:uppercase; display:flex; align-items:center; gap:6px;">
                         <svg viewBox="0 0 24 24" style="width:16px; color:var(--primary);"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                         Live Announcement
                     </div>
@@ -333,7 +341,7 @@
                 </div>
             </div>
             <div style="padding:16px;">
-                <div style="font-size:14px; font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+                <div style="font-size:13px; font-weight:800; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
                     <svg viewBox="0 0 24 24" style="width:16px; color:var(--primary);"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                     Delivery Zones & Fees
                 </div>
@@ -350,7 +358,7 @@
 
     <div id="view-commandes" class="app-view container">
         <div class="header-top">
-            <h1 style="font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Orders</h1>
+            <h1 style="font-size: 24px; font-weight: 800; letter-spacing: -1px;">ORDERS</h1>
         </div>
         
         <div class="tabs-scroll">
@@ -367,11 +375,11 @@
         <div class="detail-header">
             <div class="back-btn" onclick="switchTab('commandes')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
             <div style="flex:1; display: flex; justify-content: space-between; align-items: center;">
-                <h1 style="font-size: 20px; font-weight: 800;" id="det-id">#ID</h1>
+                <h1 style="font-size: 22px; font-weight: 800; letter-spacing:-0.5px;" id="det-id">#ID</h1>
                 <div class="badge" id="det-badge">STATUS</div>
             </div>
         </div>
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; font-weight: 500;" id="det-date">Date</p>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px; font-weight: 600; text-transform:uppercase; letter-spacing:0.5px;" id="det-date">Date</p>
         
         <div class="card info-list">
             <div class="info-row"><div class="info-label"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Customer</div><div class="info-val" id="det-client">-</div></div>
@@ -380,21 +388,21 @@
             <div class="info-row"><div class="info-label"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Payment</div><div class="info-val">Cash on Delivery</div></div>
         </div>
         
-        <div class="card"><h3 style="font-size: 14px; margin-bottom: 12px;" id="det-items-count">Items (0)</h3><div id="det-items-list"></div></div>
+        <div class="card"><h3 style="font-size: 13px; margin-bottom: 12px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);" id="det-items-count">Items (0)</h3><div id="det-items-list"></div></div>
         
-        <div class="summary-box" style="background: var(--surface); border-radius: 12px; padding: 16px; margin-top: 24px; border: 1px solid var(--border);">
-            <div class="summary-row" style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 12px; color: var(--text-muted);"><span>Subtotal</span><span id="det-subtotal">0.00 DH</span></div>
-            <div class="summary-row" style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 12px; color: var(--text-muted);"><span>Delivery Fee</span><span id="det-shipping">0.00 DH</span></div>
-            <div class="summary-row total" style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; color: var(--primary); padding-top: 12px; border-top: 1px dashed var(--border);"><span>Total</span><span id="det-total">0.00 DH</span></div>
+        <div class="summary-box">
+            <div class="summary-row"><span>Subtotal</span><span id="det-subtotal">0.00 DH</span></div>
+            <div class="summary-row"><span>Delivery Fee</span><span id="det-shipping">0.00 DH</span></div>
+            <div class="summary-row total"><span>TOTAL</span><span id="det-total">0.00 DH</span></div>
         </div>
 
-        <div class="action-stack" id="det-actions" style="display: flex; flex-direction: column; gap: 12px; margin-top: 32px;"></div>
+        <div class="action-stack" id="det-actions"></div>
     </div>
 
     <div id="view-produits" class="app-view container">
         <div class="header-top">
             <div>
-                <h1>Menu & Catalog</h1>
+                <h1>CATALOG</h1>
                 <p id="prodCountText">0 items • Updated just now</p>
             </div>
         </div>
@@ -407,12 +415,12 @@
 
         <div style="margin-bottom: 20px; position: relative;">
             <svg viewBox="0 0 24 24" style="position: absolute; left: 16px; top: 14px; width: 18px; color: var(--text-muted);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" id="catSearch" class="form-control" placeholder="Search catalog..." style="padding-left: 44px; font-size: 13px;" oninput="renderCatalog()">
+            <input type="text" id="catSearch" class="form-control" placeholder="Search catalog..." style="padding-left: 44px; font-size: 14px;" oninput="renderCatalog()">
         </div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
-            <span style="font-size:13px; font-weight:800; color:var(--text-main);">Categories</span>
-            <span style="font-size:12px; font-weight:700; color:var(--primary); cursor:pointer; display:flex; align-items:center; gap:4px;" onclick="openCatManager()">
+            <span style="font-size:13px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Categories</span>
+            <span style="font-size:12px; font-weight:800; color:var(--primary); cursor:pointer; display:flex; align-items:center; gap:4px; text-transform:uppercase;" onclick="openCatManager()">
                 <svg viewBox="0 0 24 24" style="width:14px;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                 Manage
             </span>
@@ -425,17 +433,17 @@
     <div class="overlay" id="catManagerOverlay" onclick="if(event.target===this) closeModals()"></div>
     <div class="bottom-sheet" id="catManagerModal" style="max-height: 80vh; overflow-y:auto;">
         <div class="sheet-handle"></div>
-        <h2 style="font-size: 18px; font-weight:800; margin-bottom:4px;">Manage Categories</h2>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px; line-height:1.4;">Set weights to control tab order (higher = first), or rename categories across all items instantly.</p>
+        <h2 style="font-size: 18px; font-weight:800; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.5px;">Manage Categories</h2>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px; line-height:1.4; font-weight:600;">Set weights to control tab order (higher = first), or rename categories across all items instantly.</p>
         <div id="catManagerList" style="display:flex; flex-direction:column; gap:12px;"></div>
     </div>
 
     <div id="view-ajouter" class="app-view container" style="background: var(--surface); min-height: 100vh;">
         
         <div class="wizard-header-top">
-            <div class="icon-btn" onclick="switchTab('produits')" style="width:40px; height:40px; border-radius: 50%; border:none; box-shadow:none; background: var(--bg-main);"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
-            <h1 style="font-size: 16px; font-weight:800;" id="wizardTitle">Add Item</h1>
-            <div style="width:40px;"></div>
+            <div class="icon-btn" onclick="switchTab('produits')" style="width:44px; height:44px; border-radius: 50%; border:1px solid var(--border); box-shadow:none; background: var(--surface);"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+            <h1 style="font-size: 16px; font-weight:800; text-transform:uppercase; letter-spacing:1px;" id="wizardTitle">Add Item</h1>
+            <div style="width:44px;"></div>
         </div>
 
         <div class="stepper-container">
@@ -459,16 +467,16 @@
                             <h5 style="color:var(--primary);">Upload Photo</h5>
                             <p>Drag & drop or click</p>
                         </div>
-                        <div class="upload-card" style="border-style: solid; border-color: #E2E8F0; background: #F8FAFC;" onclick="document.getElementById('pImg').focus()">
-                            <div class="upload-icon" style="background: white; color: var(--accent);"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></div>
-                            <h5 style="color:var(--accent);">Paste Image URL</h5>
+                        <div class="upload-card" style="border-style: solid; border-color: var(--border); background: var(--bg-main);" onclick="document.getElementById('pImg').focus()">
+                            <div class="upload-icon" style="background: var(--surface); color: var(--accent);"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></div>
+                            <h5 style="color:var(--accent);">Paste URL</h5>
                             <p>Add image from link</p>
                         </div>
                     </div>
                     
-                    <div style="display:flex; align-items:center; background:var(--bg-main); border:1px solid var(--border); border-radius:12px; padding:0 12px; margin-bottom:8px;">
+                    <div style="display:flex; align-items:center; background:var(--surface); border:1px solid var(--border-dark); border-radius:12px; padding:0 12px; margin-bottom:8px;">
                         <svg style="width:16px; color:var(--text-muted);"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-                        <input type="text" id="pImg" placeholder="https://example.com/image.jpg" style="border:none; box-shadow:none; padding:12px; width:100%; background:transparent; outline:none; font-size: 13px;" oninput="previewWizardImg(); validateStep1();">
+                        <input type="text" id="pImg" placeholder="https://example.com/image.jpg" style="border:none; box-shadow:none; padding:14px; width:100%; background:transparent; outline:none; font-size: 14px; font-weight:500;" oninput="previewWizardImg(); validateStep1();">
                     </div>
                     <span class="help-text" style="margin-bottom:24px;">Recommended: 1000x800px (5:4 ratio) · JPG, PNG transparent</span>
                     
@@ -481,7 +489,7 @@
                 </div>
 
                 <div class="form-group" style="margin-bottom: 32px;">
-                    <label>Short Subtitle <span style="color:var(--text-muted); font-weight:500;">(optional)</span></label>
+                    <label>Short Subtitle <span style="color:var(--text-muted); font-weight:600; text-transform:none;">(optional)</span></label>
                     <input type="text" id="pSubtitle" class="form-control" placeholder="Ex: Spicy · Cheese · Bestseller" maxlength="80">
                 </div>
 
@@ -504,7 +512,7 @@
                 <div class="form-group">
                     <label>Category *</label>
                     <div class="input-with-action">
-                        <select id="pCat" class="form-control" onchange="loadSubCats(); validateStep1();" style="color:var(--text-muted);">
+                        <select id="pCat" class="form-control" onchange="loadSubCats(); validateStep1();" style="color:var(--text-main);">
                             <option value="">Select category</option>
                         </select>
                         <div class="btn-plus-field" onclick="openAddCategoryModal('main')">+</div>
@@ -514,7 +522,7 @@
                 <div class="form-group">
                     <label>Subcategory</label>
                     <div class="input-with-action">
-                        <select id="pSubCat" class="form-control" style="color:var(--text-muted);">
+                        <select id="pSubCat" class="form-control" style="color:var(--text-main);">
                             <option value="">Select subcategory</option>
                         </select>
                         <div class="btn-plus-field" onclick="openAddCategoryModal('sub')">+</div>
@@ -544,7 +552,7 @@
                 
                 <button class="btn-add-group" onclick="addOptionGroup()">
                     <svg viewBox="0 0 24 24" style="width:20px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    Add Option Group
+                    ADD OPTION GROUP
                 </button>
 
                 <div class="wizard-footer">
@@ -567,7 +575,7 @@
                 </div>
                 
                 <div class="form-group">
-                    <label>Priorité d'affichage (Sort Weight) <span style="color:var(--text-muted); font-weight:500;">(Optional)</span></label>
+                    <label>Priorité d'affichage (Sort Weight) <span style="color:var(--text-muted); font-weight:600; text-transform:none;">(Optional)</span></label>
                     <input type="number" id="pSortWeight" class="form-control" placeholder="Higher number = appears first (e.g. 100)">
                     <span class="help-text">Leave blank to use default alphabetical or badge-based sorting.</span>
                 </div>
@@ -584,8 +592,8 @@
                 <div class="toggle-card-config">
                     <div class="toggle-wrapper">
                         <div>
-                            <span style="display:block; font-size:14px; font-weight:800;">Time Restricted</span>
-                            <span style="font-size:11px; color:var(--text-muted);">E.g., Only available 07:00 to 11:30</span>
+                            <span style="display:block; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">Time Restricted</span>
+                            <span style="font-size:11px; color:var(--text-muted); font-weight:600;">E.g., Only available 07:00 to 11:30</span>
                         </div>
                         <label class="switch"><input type="checkbox" id="tglTimeLimit" onchange="document.getElementById('cfgTimeLimit').style.display = this.checked ? 'block' : 'none'"><span class="slider"></span></label>
                     </div>
@@ -606,13 +614,13 @@
                 <div class="toggle-card-config">
                     <div class="toggle-wrapper">
                         <div>
-                            <span style="display:block; font-size:14px; font-weight:800;">Day Restricted</span>
-                            <span style="font-size:11px; color:var(--text-muted);">E.g., Only available on Fridays</span>
+                            <span style="display:block; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">Day Restricted</span>
+                            <span style="font-size:11px; color:var(--text-muted); font-weight:600;">E.g., Only available on Fridays</span>
                         </div>
                         <label class="switch"><input type="checkbox" id="tglDayLimit" onchange="document.getElementById('cfgDayLimit').style.display = this.checked ? 'block' : 'none'"><span class="slider"></span></label>
                     </div>
                     <div class="config-panel" id="cfgDayLimit">
-                        <label style="font-size:13px; font-weight:800; color:var(--text-main); margin-bottom:8px; display:block;">Select Available Days:</label>
+                        <label style="font-size:12px; font-weight:800; color:var(--text-main); margin-bottom:8px; display:block; text-transform:uppercase; letter-spacing:0.5px;">Select Available Days:</label>
                         <div style="display:flex; gap:8px; flex-wrap:wrap;" id="dayCheckboxes">
                             <label style="font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; background:var(--bg-main); padding:8px 12px; border-radius:8px; border:1px solid var(--border); cursor:pointer;">
                                 <input type="checkbox" value="1" class="day-check" style="accent-color:var(--primary);"> Mon
@@ -642,8 +650,8 @@
                 <div class="toggle-card-config">
                     <div class="toggle-wrapper">
                         <div>
-                            <span style="display:block; font-size:14px; font-weight:800;">Discount Promo</span>
-                            <span style="font-size:11px; color:var(--text-muted);">Apply a special offer</span>
+                            <span style="display:block; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">Discount Promo</span>
+                            <span style="font-size:11px; color:var(--text-muted); font-weight:600;">Apply a special offer</span>
                         </div>
                         <label class="switch"><input type="checkbox" id="tglPromo" onchange="document.getElementById('cfgPromo').style.display = this.checked ? 'block' : 'none'"><span class="slider"></span></label>
                     </div>
@@ -658,8 +666,8 @@
                 <div class="toggle-card-config">
                     <div class="toggle-wrapper">
                         <div>
-                            <span style="display:block; font-size:14px; font-weight:800;">Available</span>
-                            <span style="font-size:11px; color:var(--text-muted);">In stock & visible</span>
+                            <span style="display:block; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">Available</span>
+                            <span style="font-size:11px; color:var(--text-muted); font-weight:600;">In stock & visible</span>
                         </div>
                         <label class="switch"><input type="checkbox" id="tglAvailable" checked><span class="slider"></span></label>
                     </div>
@@ -672,7 +680,7 @@
 
                 <div class="wizard-footer">
                     <button class="btn btn-outline" onclick="goToStep(2)">Back</button>
-                    <button class="btn btn-primary" onclick="saveProductData()">Save Item</button>
+                    <button class="btn btn-primary" onclick="saveProductData()">SAVE ITEM</button>
                 </div>
             </div>
         </div>
@@ -680,13 +688,13 @@
 
     <div id="view-analytics" class="app-view container">
         <div class="header-top">
-            <h1 style="font-size: 24px; font-weight:800; letter-spacing: -0.5px;">Analytics</h1>
-            <div class="btn-exit" onclick="exportCSV()" style="flex-direction:row; padding:10px 16px; font-size:12px; gap:8px; color:var(--accent); background:var(--accent-light); border:none;">
+            <h1 style="font-size: 24px; font-weight:800; letter-spacing: -1px;">ANALYTICS</h1>
+            <div class="btn-exit" onclick="exportCSV()" style="flex-direction:row; padding:10px 16px; font-size:12px; gap:8px; color:var(--surface); background:var(--text-main); border:none;">
                 <svg viewBox="0 0 24 24" style="width:14px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                Export Excel
+                Export CSV
             </div>
         </div>
-        <p style="font-size: 13px; color: var(--text-muted); margin-top: -16px; margin-bottom: 24px;">Track your store performance</p>
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: -16px; margin-bottom: 24px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Track Performance</p>
 
         <div class="analytics-hero">
             <div style="display:flex; align-items:center; gap:16px;">
@@ -703,7 +711,7 @@
                 <svg viewBox="0 0 24 24" style="width:16px;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 Profit: 0 DH
             </div>
-            <div style="font-size:11px; color:var(--text-muted); font-weight:600; padding-left:16px;">Yesterday: <span id="yestProfit">0 DH</span></div>
+            <div style="font-size:11px; color:var(--text-muted); font-weight:700; padding-left:16px; text-transform:uppercase; letter-spacing:0.5px;">Yesterday: <span id="yestProfit">0 DH</span></div>
         </div>
 
         <div class="analytics-grid">
@@ -711,13 +719,13 @@
                 <div class="mc-icon" style="background:var(--primary-light); color:var(--primary);"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
                 <div class="mc-val" id="statOrdersTotal">0</div>
                 <div class="mc-title">Orders</div>
-                <div style="font-size:9px; color:var(--text-muted); margin-top:4px;">Yest: <span id="yestOrders">0</span></div>
+                <div style="font-size:10px; color:var(--text-muted); margin-top:4px; font-weight:600;">Yest: <span id="yestOrders">0</span></div>
             </div>
             <div class="metric-card">
                 <div class="mc-icon" style="background:var(--blue-light); color:var(--blue);"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>
                 <div class="mc-val" id="statItemsTotal">0</div>
                 <div class="mc-title">Items Sold</div>
-                <div style="font-size:9px; color:var(--text-muted); margin-top:4px;">Yest: <span id="yestItems">0</span></div>
+                <div style="font-size:10px; color:var(--text-muted); margin-top:4px; font-weight:600;">Yest: <span id="yestItems">0</span></div>
             </div>
             <div class="metric-card">
                 <div class="mc-icon" style="background:var(--purple-light); color:var(--purple);"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
@@ -748,21 +756,21 @@
     <div class="overlay" id="confirmOverlay">
         <div class="modal">
             <div class="modal-icon" style="color:var(--danger); margin-bottom:12px;"><svg viewBox="0 0 24 24" style="width:36px;height:36px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div>
-            <h3 id="modalTitle" style="font-size:18px; font-weight:800; margin-bottom:8px;">Confirmation</h3>
-            <p id="modalMsg" style="font-size:13px; color:var(--text-muted); margin-bottom:24px;">Are you sure?</p>
-            <div style="display: flex; gap: 12px;"><button class="btn btn-outline" style="flex:1; padding:12px; font-size:14px;" onclick="closeModals()">Cancel</button><button class="btn btn-primary" id="modalConfirmBtn" style="flex:1; padding:12px; font-size:14px;">Confirm</button></div>
+            <h3 id="modalTitle" style="font-size:18px; font-weight:800; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">Confirmation</h3>
+            <p id="modalMsg" style="font-size:13px; color:var(--text-muted); margin-bottom:24px; font-weight:600;">Are you sure?</p>
+            <div style="display: flex; gap: 12px;"><button class="btn btn-outline" style="flex:1; padding:14px; font-size:14px;" onclick="closeModals()">Cancel</button><button class="btn btn-primary" id="modalConfirmBtn" style="flex:1; padding:14px; font-size:14px;">Confirm</button></div>
         </div>
     </div>
     
     <div class="overlay" id="addCatOverlay" onclick="if(event.target===this) closeModals()"></div>
     <div class="bottom-sheet" id="addCatModal">
-        <div class="sheet-handle"></div><h2 style="font-size: 18px; font-weight:800; margin-bottom:20px;" id="catModalTitle">Add</h2>
+        <div class="sheet-handle"></div><h2 style="font-size: 18px; font-weight:800; margin-bottom:20px; text-transform:uppercase; letter-spacing:0.5px;" id="catModalTitle">Add</h2>
         <div class="form-group"><input type="text" id="newCatInput" class="form-control" placeholder="Category name..." autofocus></div>
         <button class="btn btn-primary" id="btnSaveCategory">Add</button>
     </div>
     
     <div class="toast" id="toastBox">
-        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg><span id="toastMsg">Action successful</span>
+        <svg viewBox="0 0 24 24" style="color:var(--primary);"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg><span id="toastMsg">Action successful</span>
     </div>
 
     <script type="module">
@@ -770,6 +778,7 @@
         import { getFirestore, collection, onSnapshot, addDoc, updateDoc, doc, deleteDoc, setDoc, writeBatch, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+        // KEEP YOUR FIREBASE CONFIG
         const firebaseConfig = {
           apiKey: "AIzaSyAaaR52bvyQfkxmZL16lcg4Bd4M76OtbI4",
           authDomain: "lesgo-cd7f9.firebaseapp.com",
@@ -785,7 +794,7 @@
         // ==========================================
         // THE SMART BOUNCER
         // ==========================================
-        const ADMIN_EMAILS = ["admin@lasco.ma"]; 
+        const ADMIN_EMAILS = ["admin@tasco.ma"]; // UPDATED TO TASCO
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
@@ -891,14 +900,14 @@
         function renderZones() {
             const container = document.getElementById('zoneListContainer');
             if(allZones.length === 0) {
-                container.innerHTML = `<div style="font-size:12px; color:var(--text-muted); font-weight:500;">No zones configured. Delivery fee will be 0 DH.</div>`;
+                container.innerHTML = `<div style="font-size:12px; color:var(--text-muted); font-weight:600;">No zones configured. Delivery fee will be 0 DH.</div>`;
                 return;
             }
             container.innerHTML = allZones.map(z => `
-                <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-main); padding:10px 12px; border-radius:12px; border:1px solid var(--border);">
-                    <div style="font-size:13px; font-weight:700;">${z.name}</div>
+                <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface); padding:12px 16px; border-radius:12px; border:1px solid var(--border-dark);">
+                    <div style="font-size:13px; font-weight:800; text-transform:uppercase;">${z.name}</div>
                     <div style="display:flex; align-items:center; gap:12px;">
-                        <span style="font-size:13px; font-weight:800; color:var(--primary);">${formatPrice(z.fee)} DH</span>
+                        <span style="font-size:14px; font-weight:800; color:var(--primary);">${formatPrice(z.fee)} DH</span>
                         <svg viewBox="0 0 24 24" style="width:16px; color:var(--danger); cursor:pointer;" onclick="deleteZone('${z.id}')"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                     </div>
                 </div>
@@ -948,10 +957,10 @@
                     `).join('');
 
                     html += `
-                    <div style="background:var(--bg-main); padding:10px; border-radius:12px; border:1px solid var(--border); margin-bottom: 8px;">
+                    <div style="background:var(--bg-main); padding:10px; border-radius:12px; border:1px solid var(--border-dark); margin-bottom: 8px;">
                         <div style="display:flex; gap:8px; align-items:center;">
-                            <input type="text" id="catName_${c.id}" class="form-control" style="padding:8px; font-size:13px; font-weight:700;" value="${c.name}">
-                            <input type="number" id="catWeight_${c.id}" class="form-control" style="width:70px; padding:8px; font-size:13px; text-align:center;" placeholder="Wgt" value="${c.sortWeight || 0}">
+                            <input type="text" id="catName_${c.id}" class="form-control" style="padding:10px; font-size:13px; font-weight:700;" value="${c.name}">
+                            <input type="number" id="catWeight_${c.id}" class="form-control" style="width:70px; padding:10px; font-size:13px; text-align:center;" placeholder="Wgt" value="${c.sortWeight || 0}">
                             <button class="btn-action edit" onclick="saveCategoryChanges('${c.id}', '${c.name.replace(/'/g, "\\'")}')"><svg viewBox="0 0 24 24" style="width:16px;"><polyline points="20 6 9 17 4 12"></polyline></svg></button>
                             <button class="btn-action del" onclick="deleteCategoryDb('${c.id}')"><svg viewBox="0 0 24 24" style="width:16px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
                         </div>
@@ -1074,10 +1083,10 @@
                         <input type="text" placeholder="Group Name (e.g. Choose 1st Pizza)" class="form-control" 
                                style="width:80%; font-weight:800;" value="${g.name}" 
                                oninput="updateGroupName(${g.id}, this.value)">
-                        <button onclick="removeGroup(${g.id})" style="color:var(--danger); background:var(--danger-light); width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center;"><svg viewBox="0 0 24 24" style="width:18px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+                        <button onclick="removeGroup(${g.id})" style="color:var(--danger); background:var(--surface); border:1px solid var(--danger-light); width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center;"><svg viewBox="0 0 24 24" style="width:18px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
                     </div>
                     
-                    <div style="display:flex; gap:16px; margin-bottom:12px; background:var(--bg-main); padding:10px; border-radius:10px; border:1px solid var(--border);">
+                    <div style="display:flex; gap:16px; margin-bottom:12px; background:var(--surface); padding:12px; border-radius:12px; border:1px solid var(--border-dark);">
                         <label style="font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; cursor:pointer;">
                             <input type="radio" name="sel_${g.id}" ${g.selection==='single'?'checked':''} onchange="updateGroupSel(${g.id}, 'single')" style="accent-color:var(--primary);"> Pick Only 1 (Radio)
                         </label>
@@ -1089,15 +1098,15 @@
                     <div id="items_${g.id}">
                         ${g.items.map((item, idx) => `
                             <div class="group-item-row">
-                                <input type="text" placeholder="Choice Name" class="form-control" style="font-size:12px; padding:10px;" value="${item.name}" oninput="updateItemField(${g.id}, ${idx}, 'name', this.value)">
-                                <input type="number" placeholder="+DH Sell" class="form-control" style="font-size:12px; padding:10px;" value="${item.price}" oninput="updateItemField(${g.id}, ${idx}, 'price', this.value)">
-                                <input type="number" placeholder="+DH Cost" class="form-control" style="font-size:12px; padding:10px;" value="${item.cost}" oninput="updateItemField(${g.id}, ${idx}, 'cost', this.value)">
-                                <button onclick="removeItem(${g.id}, ${idx})" style="color:var(--text-muted); background:var(--bg-main); border:1px solid var(--border); border-radius:8px; height:36px; display:flex; align-items:center; justify-content:center;">×</button>
+                                <input type="text" placeholder="Choice Name" class="form-control" style="font-size:12px; padding:12px;" value="${item.name}" oninput="updateItemField(${g.id}, ${idx}, 'name', this.value)">
+                                <input type="number" placeholder="+DH Sell" class="form-control" style="font-size:12px; padding:12px;" value="${item.price}" oninput="updateItemField(${g.id}, ${idx}, 'price', this.value)">
+                                <input type="number" placeholder="+DH Cost" class="form-control" style="font-size:12px; padding:12px;" value="${item.cost}" oninput="updateItemField(${g.id}, ${idx}, 'cost', this.value)">
+                                <button onclick="removeItem(${g.id}, ${idx})" style="color:var(--text-muted); background:var(--surface); border:1px solid var(--border-dark); border-radius:10px; height:42px; display:flex; align-items:center; justify-content:center;">×</button>
                             </div>
                         `).join('')}
                     </div>
 
-                    <button class="btn btn-outline" style="margin-top:12px; font-size:12px; padding:8px 16px; width:auto; border-radius:8px;" onclick="addGroupItem(${g.id})">+ Add Option to Group</button>
+                    <button class="btn btn-outline" style="margin-top:12px; font-size:12px; padding:10px 16px; width:auto; border-radius:10px;" onclick="addGroupItem(${g.id})">+ ADD OPTION</button>
                 </div>
             `).join('');
         };
@@ -1204,7 +1213,7 @@
         window.renderCustomTraits = () => {
             const container = document.getElementById('customTraitsContainer');
             container.innerHTML = window.currentProductTraits.map(t => `
-                <div style="background:var(--bg-main); border:1px solid var(--border); padding:6px 12px; border-radius:50px; font-size:12px; font-weight:700; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
+                <div style="background:var(--surface); border:1px solid var(--border-dark); padding:6px 12px; border-radius:50px; font-size:12px; font-weight:700; color:var(--text-muted); display:flex; align-items:center; gap:6px;">
                     ${t} <span style="cursor:pointer; color:var(--danger); font-size:14px; line-height:1;" onclick="removeCustomTrait('${t}')">×</span>
                 </div>
             `).join('');
@@ -1213,7 +1222,6 @@
         // ---------------- DEEP LINK COPY LOGIC ----------------
         window.copyDeepLink = (id, type) => {
             event.stopPropagation();
-            // Dynamically grab the base URL whether you are on local, github pages, or a custom domain
             const domain = window.location.origin + window.location.pathname.replace('/admin.html', '/').replace('admin.html', ''); 
             const param = type === 'Grocery' ? 'add' : 'open';
             const link = `${domain}?${param}=${id}`;
@@ -1300,7 +1308,7 @@
             document.getElementById('prodCountText').innerText = `${filteredProducts.length} items • Updated just now`;
 
             if(filteredProducts.length === 0) {
-                container.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:14px; font-weight:600;">No items found.</div>`;
+                container.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:14px; font-weight:700; text-transform:uppercase;">No items found.</div>`;
                 return;
             }
 
@@ -1315,7 +1323,7 @@
                     if(p.badge === 'Vedette') { bColor = 'var(--danger)'; bBg = 'var(--danger-light)'; }
                     if(p.badge === 'Nouveau') { bColor = 'var(--purple)'; bBg = 'var(--purple-light)'; }
                     if(p.badge === 'Populaire') { bColor = 'var(--warning)'; bBg = 'var(--warning-light)'; }
-                    badgeHtml = `<span style="background:${bBg}; color:${bColor}; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; margin-bottom:4px; display:inline-block;">${p.badge}</span>`;
+                    badgeHtml = `<span style="background:${bBg}; color:${bColor}; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; margin-bottom:4px; display:inline-block; text-transform:uppercase;">${p.badge}</span>`;
                 }
 
                 return `
@@ -1326,7 +1334,7 @@
                             ${badgeHtml}
                             <h4>${p.name}</h4>
                             <p>${p.category || 'Uncategorized'}</p>
-                            <div style="font-weight:800; color:var(--text-main); font-size:14px; margin-top:4px;">${formatPrice(price)} DH</div>
+                            <div style="font-weight:800; color:var(--text-main); font-size:15px; margin-top:4px;">${formatPrice(price)} DH</div>
                         </div>
                     </div>
                     <div class="cat-list-bottom">
@@ -1379,7 +1387,7 @@
 
         // ---------------- GLOBAL EMPTY STATE HTML ----------------
         const getEmptyOrdersHTML = () => `
-            <div style="text-align:center; padding:24px 20px; color:var(--text-muted); font-size:13px; font-weight:600; background:var(--surface); border-radius:var(--radius-card); border:1px solid var(--border); box-shadow:var(--shadow-sm); margin-top:12px;">
+            <div style="text-align:center; padding:24px 20px; color:var(--text-muted); font-size:13px; font-weight:700; background:var(--surface); border-radius:var(--radius-card); border:1px solid var(--border); box-shadow:var(--shadow-sm); margin-top:12px; text-transform:uppercase; letter-spacing:0.5px;">
                 Waiting for your first order.
             </div>
         `;
@@ -1426,10 +1434,13 @@
                                 if(catalogProduct) {
                                     itemCost = safeNum(catalogProduct.costPrice);
                                     
+                                    // SIZES/VARIANTS
                                     if(item.variantName && catalogProduct.sizes) {
                                         const variant = catalogProduct.sizes.find(s => s.name === item.variantName);
                                         if(variant && variant.costPrice) itemCost = safeNum(variant.costPrice);
                                     }
+                                    
+                                    // EXTRAS
                                     if(item.extras && item.extras.length > 0 && catalogProduct.extras) {
                                         item.extras.forEach(extName => {
                                             const extra = catalogProduct.extras.find(e => e.name === extName);
@@ -1437,9 +1448,10 @@
                                         });
                                     }
 
+                                    // MODULAR CHOICES (BUG FIXED: Matches by ID or Name)
                                     if(item.modularChoices && catalogProduct.optionGroups) {
                                         item.modularChoices.forEach(choice => {
-                                            const group = catalogProduct.optionGroups.find(g => g.id === choice.groupId);
+                                            const group = catalogProduct.optionGroups.find(g => g.id == choice.groupId || g.name === choice.groupName);
                                             if(group) {
                                                 const groupItem = group.items.find(i => i.name === choice.itemName);
                                                 if(groupItem && groupItem.cost) {
@@ -1541,15 +1553,28 @@
                                     const variant = catalogProduct.sizes.find(s => s.name === item.variantName);
                                     if(variant && variant.costPrice) itemCost = safeNum(variant.costPrice);
                                 }
+                                
+                                if(item.extras && item.extras.length > 0 && catalogProduct.extras) {
+                                    item.extras.forEach(extName => {
+                                        const extra = catalogProduct.extras.find(e => e.name === extName);
+                                        if(extra && extra.costPrice) orderCost += (safeNum(extra.costPrice) * qty);
+                                    });
+                                }
+                                
+                                // BUG FIXED: Modular Choices Cost Check
+                                if(item.modularChoices && catalogProduct.optionGroups) {
+                                    item.modularChoices.forEach(choice => {
+                                        const group = catalogProduct.optionGroups.find(g => g.id == choice.groupId || g.name === choice.groupName);
+                                        if(group) {
+                                            const groupItem = group.items.find(i => i.name === choice.itemName);
+                                            if(groupItem && groupItem.cost) {
+                                                orderCost += (safeNum(groupItem.cost) * qty);
+                                            }
+                                        }
+                                    });
+                                }
                             }
                             orderCost += (itemCost * qty);
-                            
-                            if(item.extras && item.extras.length > 0 && catalogProduct && catalogProduct.extras) {
-                                item.extras.forEach(extName => {
-                                    const extra = catalogProduct.extras.find(e => e.name === extName);
-                                    if(extra && extra.costPrice) orderCost += (safeNum(extra.costPrice) * qty);
-                                });
-                            }
                         });
                     }
                     const fee = safeNum(o.deliveryFee);
@@ -1564,23 +1589,23 @@
                     html += `
                     <div class="driver-row">
                         <div style="display:flex; align-items:center; gap:12px;">
-                            <div style="width:40px;height:40px; border-radius:12px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center;">
+                            <div style="width:44px;height:44px; border-radius:12px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; border: 1px solid var(--border);">
                                 <svg viewBox="0 0 24 24" style="width:20px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                             </div>
                             <div class="d-info">
                                 <h4>${driver.name || driver.email.split('@')[0]}</h4>
-                                <p style="color:var(--danger); font-weight:800;">Owes: ${formatPrice(debt)} DH</p>
+                                <p style="color:var(--danger); font-weight:800;">OWES: ${formatPrice(debt)} DH</p>
                             </div>
                         </div>
-                        <button class="btn btn-outline" style="width:auto; padding:8px 16px; font-size:12px; font-weight:800;" onclick="settleDriver('${driver.email}')">Settle</button>
+                        <button class="btn btn-outline" style="width:auto; padding:10px 16px; font-size:12px; font-weight:800;" onclick="settleDriver('${driver.email}')">SETTLE</button>
                     </div>`;
                 }
             });
 
             if(html === '') {
-                container.innerHTML = `<div style="text-align:center; padding:12px; color:var(--text-muted); font-size:13px; font-weight:500;">No pending settlements.</div>`;
+                container.innerHTML = `<div style="text-align:center; padding:12px; color:var(--text-muted); font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">No pending settlements.</div>`;
             } else {
-                container.innerHTML = html + `<div style="padding-top:16px; margin-top:8px; border-top:1px dashed var(--border); display:flex; justify-content:space-between; font-weight:800; font-size:15px; color:var(--text-main);"><span>Total Cash to Collect</span><span style="color:var(--primary);">${formatPrice(totalDriversOwe)} DH</span></div>`;
+                container.innerHTML = html + `<div style="padding-top:16px; margin-top:12px; border-top:1px dashed var(--border-dark); display:flex; justify-content:space-between; font-weight:800; font-size:15px; color:var(--text-main); text-transform:uppercase; letter-spacing:0.5px;"><span>Cash to Collect</span><span style="color:var(--primary);">${formatPrice(totalDriversOwe)} DH</span></div>`;
             }
         }
 
@@ -1606,7 +1631,7 @@
             const link = document.createElement("a");
             const url = URL.createObjectURL(blob);
             link.setAttribute("href", url);
-            link.setAttribute("download", `lasgo_orders_${new Date().toISOString().split('T')[0]}.csv`);
+            link.setAttribute("download", `tasco_orders_${new Date().toISOString().split('T')[0]}.csv`);
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
@@ -1705,7 +1730,7 @@
                     </style>
                 </head>
                 <body>
-                    <div class="center bold" style="font-size: 20px; margin-bottom:10px;">LASCO</div>
+                    <div class="center bold" style="font-size: 24px; margin-bottom:10px;">TASCO</div>
                     <div class="center">Order #${o.id.substring(0,6).toUpperCase()}</div>
                     <div class="center">${orderDate}</div>
                     
@@ -1724,7 +1749,7 @@
                     
                     <div class="line"></div>
                     <div class="center" style="font-size:12px; margin-top:10px;">Thank you for ordering!</div>
-                    <div class="center" style="font-size:12px;">Powered by Lasco</div>
+                    <div class="center" style="font-size:12px;">Powered by TASCO</div>
                 </body>
                 </html>
             `;
@@ -1757,7 +1782,7 @@
             
             const badge = document.getElementById('det-badge'); badge.className = `badge ${statusClass}`; badge.innerText = (order.status || 'Unknown').toUpperCase();
 
-            document.getElementById('det-items-count').innerText = `Items (${order.totalItems || 0})`;
+            document.getElementById('det-items-count').innerText = `ITEMS (${order.totalItems || 0})`;
             document.getElementById('det-items-list').innerHTML = (order.cart || []).map(item => {
                 const p = item.product || {}; 
                 const img = p.imageUrl ? `<img src="${p.imageUrl}">` : ''; 
@@ -1782,7 +1807,7 @@
                             <div class="item-img">${img}</div>
                             <div class="item-details">
                                 <div class="item-name">${p.name || 'Item'}</div>
-                                <div style="font-size:12px; font-weight:600; color:var(--text-main);">x${item.qty}</div>
+                                <div style="font-size:12px; font-weight:800; color:var(--text-muted);">x${item.qty}</div>
                                 ${metaHtml}
                             </div>
                             <div class="item-price">${formatPrice(price * item.qty)} DH</div>
@@ -1796,28 +1821,28 @@
 
             let actionsHTML = '';
 
-            actionsHTML += `<button class="btn btn-outline" style="margin-bottom:12px; background:var(--bg-main);" onclick="printReceipt('${order.id}')"><svg viewBox="0 0 24 24" style="width:18px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1-2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Print Receipt</button>`;
+            actionsHTML += `<button class="btn btn-outline" style="margin-bottom:12px; background:var(--surface);" onclick="printReceipt('${order.id}')"><svg viewBox="0 0 24 24" style="width:18px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1-2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> PRINT RECEIPT</button>`;
             
             if (order.driverEmail && order.driverEmail !== "") {
                 const d = allDrivers.find(x => x.email === order.driverEmail);
                 const dName = d ? (d.name || d.email.split('@')[0]) : order.driverEmail.split('@')[0];
-                actionsHTML += `<div style="text-align:center; padding:16px; background:var(--blue-light); color:var(--blue); border-radius:16px; font-weight:800; font-size:14px; margin-bottom:12px; border: 1px dashed var(--blue);">Assigned Driver: <span style="text-transform:capitalize;">${dName}</span></div>`;
+                actionsHTML += `<div style="text-align:center; padding:16px; background:var(--blue-light); color:var(--blue); border-radius:16px; font-weight:800; font-size:14px; margin-bottom:12px; border: 1px dashed rgba(59, 130, 246, 0.3); text-transform:uppercase; letter-spacing:0.5px;">Assigned Driver: <span>${dName}</span></div>`;
             } else if (order.status === 'Pending') {
-                actionsHTML += `<div style="text-align:center; padding:16px; background:var(--warning-light); color:var(--warning); border-radius:16px; font-weight:800; font-size:14px; margin-bottom:12px; border: 1px dashed var(--warning);">Waiting for a driver to claim...</div>`;
+                actionsHTML += `<div style="text-align:center; padding:16px; background:var(--warning-light); color:var(--warning); border-radius:16px; font-weight:800; font-size:14px; margin-bottom:12px; border: 1px dashed rgba(245, 158, 11, 0.3); text-transform:uppercase; letter-spacing:0.5px;">Waiting for a driver...</div>`;
             }
 
             if(order.status !== 'Cancelled' && order.status !== 'Delivered') {
-                actionsHTML += `<button class="btn btn-danger-outline" onclick="promptOrderStatus('${order.id}', 'Cancelled')">Cancel Order</button>`;
+                actionsHTML += `<button class="btn btn-danger-outline" onclick="promptOrderStatus('${order.id}', 'Cancelled')">CANCEL ORDER</button>`;
                 if(order.status === 'Out for Delivery') {
-                    actionsHTML += `<button class="btn btn-success" style="margin-top:12px;" onclick="promptOrderStatus('${order.id}', 'Delivered')">Force Delivered</button>`;
+                    actionsHTML += `<button class="btn btn-success" style="margin-top:12px;" onclick="promptOrderStatus('${order.id}', 'Delivered')">FORCE DELIVERED</button>`;
                 }
             } else if (order.status === 'Cancelled') { 
-                actionsHTML += `<div style="text-align:center; color:var(--danger); font-weight:700; padding:16px; background:var(--danger-light); border-radius:16px;">Order Cancelled</div>`; 
+                actionsHTML += `<div style="text-align:center; color:var(--danger); font-weight:800; padding:16px; background:var(--danger-light); border-radius:16px; text-transform:uppercase; letter-spacing:0.5px;">Order Cancelled</div>`; 
             } else { 
-                actionsHTML += `<div style="text-align:center; color:var(--accent); font-weight:700; padding:16px; background:var(--accent-light); border-radius:16px;">Order Delivered</div>`; 
+                actionsHTML += `<div style="text-align:center; color:var(--accent); font-weight:800; padding:16px; background:var(--accent-light); border-radius:16px; text-transform:uppercase; letter-spacing:0.5px;">Order Delivered</div>`; 
             }
             
-            actionsHTML += `<button class="btn btn-outline" style="color:var(--danger); border-color:var(--danger-light); margin-top: 12px;" onclick="promptDeleteOrder('${order.id}')">Delete Order</button>`;
+            actionsHTML += `<button class="btn btn-outline" style="color:var(--danger); border-color:var(--danger-light); margin-top: 12px; background: transparent;" onclick="promptDeleteOrder('${order.id}')">DELETE RECORD</button>`;
             
             document.getElementById('det-actions').innerHTML = actionsHTML; switchTab('order-detail');
         };
@@ -1852,12 +1877,11 @@
             selectProductType('Resto'); 
 
             document.getElementById('pBadge').value = 'Standard';
-            document.getElementById('pSortWeight').value = ''; // Reset Custom Sort Weight
+            document.getElementById('pSortWeight').value = ''; 
             
             window.currentProductTraits = []; 
             renderCustomTraits();
             
-            // RESET TIME AND DAY LIMITS
             document.getElementById('tglTimeLimit').checked = false;
             document.getElementById('cfgTimeLimit').style.display = 'none';
             document.getElementById('pStartTime').value = '';
@@ -1896,19 +1920,17 @@
             document.getElementById('pCost').value = p.costPrice || '';
             
             document.getElementById('pBadge').value = p.badge || 'Standard';
-            document.getElementById('pSortWeight').value = p.sortWeight || ''; // Load Custom Weight
+            document.getElementById('pSortWeight').value = p.sortWeight || ''; 
             
             window.currentProductTraits = p.traits ? JSON.parse(JSON.stringify(p.traits)) : []; 
             renderCustomTraits();
 
-            // LOAD TIME LIMITS
             const hasTime = p.startTime && p.endTime;
             document.getElementById('tglTimeLimit').checked = hasTime;
             document.getElementById('cfgTimeLimit').style.display = hasTime ? 'block' : 'none';
             document.getElementById('pStartTime').value = hasTime ? p.startTime : '';
             document.getElementById('pEndTime').value = hasTime ? p.endTime : '';
 
-            // LOAD DAY LIMITS
             const hasDays = p.daysAvailable && p.daysAvailable.length > 0;
             document.getElementById('tglDayLimit').checked = hasDays;
             document.getElementById('cfgDayLimit').style.display = hasDays ? 'block' : 'none';
@@ -1940,11 +1962,9 @@
         };
 
         window.saveProductData = async () => {
-            // HANDLE SORT WEIGHT OVERRIDE
             const badgeType = document.getElementById('pBadge').value;
             let weight = parseInt(document.getElementById('pSortWeight').value);
             
-            // If custom weight is blank, fallback to automatic badge priority
             if(isNaN(weight)) {
                 weight = 0;
                 if(badgeType === 'Vedette') weight = 100;
@@ -1954,14 +1974,12 @@
                 else if(badgeType === 'Combo Pack') weight = 80;
             }
 
-            // EXTRACT TIME LIMITS
             let sTime = null, eTime = null;
             if(document.getElementById('tglTimeLimit').checked) {
                 sTime = document.getElementById('pStartTime').value || null;
                 eTime = document.getElementById('pEndTime').value || null;
             }
 
-            // EXTRACT DAY LIMITS
             let dAvail = [];
             if(document.getElementById('tglDayLimit').checked) {
                 dAvail = Array.from(document.querySelectorAll('.day-check:checked')).map(cb => parseInt(cb.value));
@@ -1977,11 +1995,11 @@
                 costPrice: parseFloat(document.getElementById('pCost').value) || 0, 
                 imageUrl: document.getElementById('pImg').value, 
                 badge: badgeType,
-                sortWeight: weight, // Uses custom or default
+                sortWeight: weight, 
                 traits: window.currentProductTraits,
-                startTime: sTime, // New Time logic
-                endTime: eTime,   // New Time logic
-                daysAvailable: dAvail, // New Day logic
+                startTime: sTime, 
+                endTime: eTime,   
+                daysAvailable: dAvail, 
                 promoPrice: document.getElementById('tglPromo').checked ? (parseFloat(document.getElementById('vPromoPrice').value) || null) : null,
                 optionGroups: window.optionGroups,
                 isAvailable: document.getElementById('tglAvailable').checked,
