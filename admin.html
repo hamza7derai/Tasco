@@ -121,11 +121,6 @@
         .tab-pill { padding: 10px 18px; border-radius: 50px; font-size: 13px; font-weight: 700; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); white-space: nowrap; cursor: pointer; transition: 0.2s; scroll-snap-align: center; text-transform: uppercase; letter-spacing: 0.5px;}
         .tab-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* CATALOG TOGGLE & ACCORDIONS */
-        .cat-toggle-wrapper { background: var(--surface); border-radius: 50px; padding: 4px; display: flex; box-shadow: var(--shadow-sm); border: 1px solid var(--border); margin-bottom: 20px;}
-        .cat-toggle-btn { flex: 1; padding: 10px; font-size: 13px; font-weight: 700; color: var(--text-muted); border-radius: 50px; transition: 0.3s; text-align: center; display: flex; justify-content: center; align-items: center; gap: 6px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;}
-        .cat-toggle-btn.active { background: var(--primary); color: white; }
-
         /* HORIZONTAL LIST CATALOG */
         .catalog-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px;}
         .cat-list-item { display: flex; flex-direction: column; padding: 12px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); box-shadow: var(--shadow-sm);}
@@ -220,7 +215,7 @@
 
         /* MODULAR OPTION SYSTEM CSS */
         .group-builder-card { background: var(--bg-main); border: 1px solid var(--border-dark); border-radius: 16px; padding: 16px; margin-bottom: 16px; }
-        .group-item-row { display: grid; grid-template-columns: 2fr 1fr 1fr 40px; gap: 8px; margin-top: 8px; align-items: center; }
+        .group-item-row { display: grid; grid-template-columns: 2fr 1fr 1fr 40px; gap: 8px; margin-bottom: 8px; align-items: center; }
         .btn-add-group { width: 100%; padding: 16px; border: 2px dashed var(--border-dark); border-radius: 16px; color: var(--text-muted); font-weight: 800; margin: 20px 0; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px;}
         .btn-add-group:active { transform: scale(0.98); background: var(--surface); }
         
@@ -493,7 +488,7 @@
                     <input type="text" id="pSubtitle" class="form-control" placeholder="Ex: Spicy · Cheese · Bestseller" maxlength="80">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" style="display: none;">
                     <label>Product Type *</label>
                     <div class="type-grid">
                         <div class="type-card tc-resto active" id="typeCardResto" onclick="selectProductType('Resto')">
@@ -1064,14 +1059,14 @@
 
         // ---------------- OPTION GROUP BUILDER LOGIC ----------------
         window.addOptionGroup = () => {
-            const group = { id: Date.now(), name: "", selection: "single", items: [] };
+            const group = { id: Date.now(), name: "", selection: "single", layout: "text", items: [] };
             window.optionGroups.push(group);
             renderOptionGroups();
         };
 
         window.addGroupItem = (groupId) => {
             const group = window.optionGroups.find(g => g.id === groupId);
-            group.items.push({ name: "", price: 0, cost: 0 });
+            group.items.push({ name: "", price: 0, cost: 0, imageUrl: "" });
             renderOptionGroups();
         };
 
@@ -1086,22 +1081,32 @@
                         <button onclick="removeGroup(${g.id})" style="color:var(--danger); background:var(--surface); border:1px solid var(--danger-light); width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center;"><svg viewBox="0 0 24 24" style="width:18px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
                     </div>
                     
-                    <div style="display:flex; gap:16px; margin-bottom:12px; background:var(--surface); padding:12px; border-radius:12px; border:1px solid var(--border-dark);">
-                        <label style="font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; cursor:pointer;">
-                            <input type="radio" name="sel_${g.id}" ${g.selection==='single'?'checked':''} onchange="updateGroupSel(${g.id}, 'single')" style="accent-color:var(--primary);"> Pick Only 1 (Radio)
-                        </label>
-                        <label style="font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; cursor:pointer;">
-                            <input type="radio" name="sel_${g.id}" ${g.selection==='multiple'?'checked':''} onchange="updateGroupSel(${g.id}, 'multiple')" style="accent-color:var(--primary);"> Pick Multiple (Checkbox)
-                        </label>
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:12px; background:var(--surface); padding:12px; border-radius:12px; border:1px solid var(--border-dark);">
+                        <div style="display:flex; flex-direction:column; gap:8px;">
+                            <label style="font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; cursor:pointer;">
+                                <input type="radio" name="sel_${g.id}" ${g.selection==='single'?'checked':''} onchange="updateGroupSel(${g.id}, 'single')" style="accent-color:var(--primary);"> Pick Only 1 (Radio)
+                            </label>
+                            <label style="font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; cursor:pointer;">
+                                <input type="radio" name="sel_${g.id}" ${g.selection==='multiple'?'checked':''} onchange="updateGroupSel(${g.id}, 'multiple')" style="accent-color:var(--primary);"> Pick Multiple (Checkbox)
+                            </label>
+                        </div>
+                        <select class="form-control" style="width: 140px; font-size:12px; padding:10px;" onchange="updateGroupLayout(${g.id}, this.value)">
+                            <option value="text" ${g.layout==='text' || !g.layout ? 'selected' : ''}>Pills (Text)</option>
+                            <option value="grid" ${g.layout==='grid' ? 'selected' : ''}>Grid (Images)</option>
+                            <option value="list" ${g.layout==='list' ? 'selected' : ''}>List (Images)</option>
+                        </select>
                     </div>
 
                     <div id="items_${g.id}">
                         ${g.items.map((item, idx) => `
-                            <div class="group-item-row">
-                                <input type="text" placeholder="Choice Name" class="form-control" style="font-size:12px; padding:12px;" value="${item.name}" oninput="updateItemField(${g.id}, ${idx}, 'name', this.value)">
-                                <input type="number" placeholder="+DH Sell" class="form-control" style="font-size:12px; padding:12px;" value="${item.price}" oninput="updateItemField(${g.id}, ${idx}, 'price', this.value)">
-                                <input type="number" placeholder="+DH Cost" class="form-control" style="font-size:12px; padding:12px;" value="${item.cost}" oninput="updateItemField(${g.id}, ${idx}, 'cost', this.value)">
-                                <button onclick="removeItem(${g.id}, ${idx})" style="color:var(--text-muted); background:var(--surface); border:1px solid var(--border-dark); border-radius:10px; height:42px; display:flex; align-items:center; justify-content:center;">×</button>
+                            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; margin-bottom: 8px;">
+                                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 40px; gap: 8px; align-items: center; margin-bottom: 8px;">
+                                    <input type="text" placeholder="Choice Name" class="form-control" style="font-size:12px; padding:10px;" value="${item.name}" oninput="updateItemField(${g.id}, ${idx}, 'name', this.value)">
+                                    <input type="number" placeholder="+DH Sell" class="form-control" style="font-size:12px; padding:10px;" value="${item.price}" oninput="updateItemField(${g.id}, ${idx}, 'price', this.value)">
+                                    <input type="number" placeholder="+DH Cost" class="form-control" style="font-size:12px; padding:10px;" value="${item.cost}" oninput="updateItemField(${g.id}, ${idx}, 'cost', this.value)">
+                                    <button onclick="removeItem(${g.id}, ${idx})" style="color:var(--text-muted); background:var(--bg-main); border:1px solid var(--border-dark); border-radius:8px; height:38px; display:flex; align-items:center; justify-content:center;">×</button>
+                                </div>
+                                <input type="text" placeholder="Image URL (optional for grid/list layouts)" class="form-control" style="font-size:12px; padding:10px; width: 100%;" value="${item.imageUrl || ''}" oninput="updateItemField(${g.id}, ${idx}, 'imageUrl', this.value)">
                             </div>
                         `).join('')}
                     </div>
@@ -1113,9 +1118,10 @@
 
         window.updateGroupName = (id, val) => { window.optionGroups.find(g => g.id === id).name = val; };
         window.updateGroupSel = (id, val) => { window.optionGroups.find(g => g.id === id).selection = val; };
+        window.updateGroupLayout = (id, val) => { window.optionGroups.find(g => g.id === id).layout = val; };
         window.updateItemField = (gid, idx, field, val) => { 
             const item = window.optionGroups.find(g => g.id === gid).items[idx];
-            item[field] = field === 'name' ? val : parseFloat(val) || 0;
+            item[field] = (field === 'name' || field === 'imageUrl') ? val : parseFloat(val) || 0;
         };
         window.removeGroup = (id) => { window.optionGroups = window.optionGroups.filter(g => g.id !== id); renderOptionGroups(); };
         window.removeItem = (gid, idx) => { window.optionGroups.find(g => g.id === gid).items.splice(idx, 1); renderOptionGroups(); };
@@ -1448,7 +1454,7 @@
                                         });
                                     }
 
-                                    // MODULAR CHOICES (BUG FIXED: Matches by ID or Name)
+                                    // MODULAR CHOICES
                                     if(item.modularChoices && catalogProduct.optionGroups) {
                                         item.modularChoices.forEach(choice => {
                                             const group = catalogProduct.optionGroups.find(g => g.id == choice.groupId || g.name === choice.groupName);
@@ -1561,7 +1567,6 @@
                                     });
                                 }
                                 
-                                // BUG FIXED: Modular Choices Cost Check
                                 if(item.modularChoices && catalogProduct.optionGroups) {
                                     item.modularChoices.forEach(choice => {
                                         const group = catalogProduct.optionGroups.find(g => g.id == choice.groupId || g.name === choice.groupName);
