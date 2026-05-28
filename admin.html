@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TASCO | Command Center</title>
+<title>TASCO | Operations Center</title>
 
 <link rel="manifest" href="manifest-admin.json">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -51,7 +51,6 @@ body {
 .container { padding: 20px; max-width: 600px; margin: 0 auto; position: relative; min-height: 100vh;}
 svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 button { font-family: inherit; cursor: pointer; outline: none; border: none; background: none; }
-input, select { font-family: inherit; }
 
 /* SPA VIEWS */
 .app-view { display: none; animation: fadeIn 0.3s ease; }
@@ -84,18 +83,12 @@ input:checked + .slider:before { transform: translateX(18px); }
 .dash-stat-val { font-size: 18px; font-weight: 800; color: var(--text-main); line-height: 1; margin-bottom: 4px; }
 .dash-stat-label { font-size: 11px; color: var(--text-muted); font-weight: 700; line-height: 1.2; text-transform: uppercase;}
 
-/* DRIVER CARDS (VERTICAL) */
-.driver-card { background: var(--surface); border-radius: var(--radius-card); padding: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 16px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
-.driver-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--bg-main); display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; overflow: hidden; border: 1px solid var(--border);}
-.driver-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.status-dot { position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--surface); }
-.dot-online { background: var(--accent); }
-.dot-offline { background: var(--text-muted); }
-.driver-info { flex: 1; }
-.driver-info h4 { font-size: 15px; font-weight: 800; color: var(--text-main); margin-bottom: 2px;}
-.driver-meta { font-size: 12px; color: var(--text-muted); font-weight: 600; display: flex; flex-direction: column; gap: 2px;}
-.btn-view { padding: 8px 16px; background: var(--bg-main); border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 800; color: var(--text-main); cursor: pointer; transition: 0.2s;}
-.btn-view:active { transform: scale(0.95); }
+/* DRIVER ROW DESIGN */
+.driver-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--border); }
+.driver-row:last-child { border-bottom: none; padding-bottom: 0;}
+.d-info h4 { font-size: 14px; font-weight: 800; color: var(--text-main); text-transform: capitalize; margin-bottom: 2px;}
+.d-info p { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+.d-debt { font-size: 15px; font-weight: 800; color: var(--primary); }
 
 /* ORDER CARDS */
 .order-card { padding: 16px; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; background: var(--surface); border-radius: var(--radius-card); margin-bottom: 12px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 12px;}
@@ -126,7 +119,7 @@ input:checked + .slider:before { transform: translateX(18px); }
 .detail-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
 .back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--surface); border-radius: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); cursor: pointer; flex-shrink: 0;}
 
-/* CUSTOMER / INFO CARDS */
+/* CUSTOMER INFO CARDS */
 .info-card { background: var(--surface); border-radius: var(--radius-card); padding: 16px; border: 1px solid var(--border); margin-bottom: 20px;}
 .info-row { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start;}
 .info-icon { color: var(--text-muted); margin-top: 2px;}
@@ -135,7 +128,7 @@ input:checked + .slider:before { transform: translateX(18px); }
 .action-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 16px; border-top: 1px solid var(--border); padding-top: 16px;}
 .action-btn-sm { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--text-main); background: var(--bg-main); border: 1px solid var(--border); padding: 12px 8px; border-radius: 12px; text-decoration: none;}
 
-/* ITEMS LIST (FIXED MARGINS) */
+/* ITEMS LIST (FIXED CONTAINER & MARGINS) */
 .item-card { background: var(--surface); border-radius: var(--radius-card); border: 1px solid var(--border); margin-bottom: 12px; padding: 12px; display: flex; gap: 12px; align-items: center; box-shadow: var(--shadow-sm);}
 .item-img { width: 56px; height: 56px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; background: transparent; }
 .item-img img { width: 100%; height: 100%; object-fit: contain; }
@@ -148,46 +141,41 @@ input:checked + .slider:before { transform: translateX(18px); }
 .summary-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 12px; color: var(--text-muted); font-weight: 600;}
 .summary-row.total { font-size: 18px; font-weight: 800; color: var(--primary); margin-bottom: 0; padding-top: 16px; border-top: 1px dashed var(--border-dark); }
 
-/* MAIN BUTTONS & FORMS */
+/* MAIN OPERATIONAL CTA BUTTONS */
 .btn { width: 100%; padding: 16px; border-radius: var(--radius-btn); font-size: 14px; font-weight: 800; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; border: none; text-transform: uppercase; letter-spacing: 0.5px;}
 .btn:active { transform: scale(0.98); }
-.btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none;}
 .btn-primary { background: var(--primary); color: white; }
 .btn-success { background: var(--accent); color: white; }
-.btn-danger { background: var(--danger); color: white; }
 .btn-outline { background: var(--surface); color: var(--text-main); border: 1px solid var(--border-dark); }
 
-.form-group { margin-bottom: 16px; text-align: left;}
-.form-group label { display: block; font-size: 11px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;}
-.form-control { width: 100%; padding: 14px 16px; border: 1px solid var(--border-dark); border-radius: var(--radius-btn); background: var(--bg-main); outline: none; font-size: 14px; font-weight: 600; color: var(--text-main); transition: 0.2s;}
-.form-control:focus { border-color: var(--primary); background: var(--surface);}
+/* PREMIUM METRIC CARDS (ANALYTICS) */
+.analytics-hero { background: var(--surface); border-radius: 24px; padding: 24px; margin-bottom: 24px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 12px;}
+.hero-title { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
+.hero-val { font-size: 36px; font-weight: 800; color: var(--text-main); letter-spacing: -2px;}
+.hero-profit { background: var(--accent-light); color: var(--accent); padding: 10px 16px; border-radius: 12px; font-size: 14px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;}
+.analytics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px;}
+.metric-card { background: var(--surface); border-radius: 16px; padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); text-align: center; display: flex; flex-direction: column; align-items: center;}
+.mc-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items:center; justify-content: center; margin-bottom: 12px;}
+.mc-val { font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; line-height: 1;}
+.mc-title { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;}
+.compare-row { background: var(--surface); border-radius: 16px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 12px;}
+.compare-label { font-size: 13px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 12px; text-transform: uppercase; letter-spacing: 0.5px;}
+.compare-val { font-size: 16px; font-weight: 800; color: var(--text-main); }
 
-/* BOTTOM NAV */
+/* FIXED BOTTOM NAV */
 .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 12px 20px 24px; z-index: 100; box-shadow: var(--shadow-nav); max-width: 600px; margin: 0 auto; transition: bottom 0.3s ease;}
 .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #94A3B8; font-size: 10px; font-weight: 800; cursor: pointer; transition: 0.2s; width: 33%; text-transform: uppercase; letter-spacing: 0.5px;}
 .nav-item.active { color: var(--primary); }
 .nav-item svg { width: 24px; height: 24px; stroke-width: 2.2; }
 .nav-item.active svg { fill: var(--primary-light); }
 
-/* TOAST & MODALS */
+/* INFRASTRUCTURE UI */
 .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--text-main); color: white; padding: 14px 24px; border-radius: 50px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 40px rgba(23, 23, 23, 0.2); z-index: 1100; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .toast.show { transform: translateX(-50%) translateY(0); }
-
 .overlay { position: fixed; inset: 0; background: rgba(23, 23, 23, 0.6); backdrop-filter: blur(4px); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; padding: 20px; }
 .overlay.active { opacity: 1; pointer-events: auto; }
 .modal { background: var(--surface); width: 100%; max-width: 340px; border-radius: 24px; padding: 32px 24px; box-shadow: 0 10px 40px rgba(23, 23, 23, 0.1); transform: scale(0.95); transition: 0.3s; text-align: center; display: none; border: 1px solid var(--border);}
 .overlay.active .modal { display: block; transform: scale(1); }
-
-.bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-radius: 30px 30px 0 0; padding: 25px 20px 40px; z-index: 1001; transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); max-width: 600px; margin: 0 auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.1); border-top: 1px solid var(--border);}
-.bottom-sheet.active { transform: translateY(0); }
-.sheet-handle { width: 40px; height: 5px; background: var(--border-dark); border-radius: 10px; margin: 0 auto 20px; }
-
-/* DRIVER STATS GRID */
-.driver-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
-.ds-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 8px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;}
-.ds-icon { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
-.ds-val { font-size: 16px; font-weight: 800; color: var(--text-main); line-height: 1; margin-bottom: 2px;}
-.ds-label { font-size: 9px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;}
 </style>
 </head>
 <body>
@@ -239,7 +227,7 @@ input:checked + .slider:before { transform: translateX(18px); }
         <span>ACTIVE DRIVERS</span>
         <span class="section-link" onclick="switchTab('drivers')">View all</span>
     </div>
-    <div id="dashDriversContainer"></div>
+    <div class="card" id="dashDriversContainer" style="padding: 12px 16px;"></div>
 
     <div class="section-title" style="margin-top: 24px;">
         <span>RECENT ORDERS</span>
@@ -330,40 +318,74 @@ input:checked + .slider:before { transform: translateX(18px); }
 
 <div id="view-drivers" class="app-view container">
     <div class="header-top">
-        <h1 style="font-size: 24px; font-weight: 800; letter-spacing: -1px;">DRIVERS</h1>
-        <button class="btn btn-primary" style="width:auto; padding: 10px 16px; font-size: 12px;" onclick="openAddDriverModal()">+ ADD DRIVER</button>
-    </div>
-
-    <div class="driver-stats-grid">
-        <div class="ds-card">
-            <div class="ds-icon" style="background:var(--bg-main);"><svg viewBox="0 0 24 24" style="width:14px; color:var(--text-main)"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-            <div class="ds-val" id="ds-total">0</div>
-            <div class="ds-label">Total</div>
-        </div>
-        <div class="ds-card">
-            <div class="ds-icon" style="background:var(--accent-light);"><div style="width:10px;height:10px;border-radius:50%;background:var(--accent);"></div></div>
-            <div class="ds-val" id="ds-online">0</div>
-            <div class="ds-label">Online</div>
-        </div>
-        <div class="ds-card">
-            <div class="ds-icon" style="background:var(--primary-light);"><svg viewBox="0 0 24 24" style="width:14px; color:var(--primary)"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg></div>
-            <div class="ds-val" id="ds-delivery">0</div>
-            <div class="ds-label">On Delivery</div>
-        </div>
-        <div class="ds-card">
-            <div class="ds-icon" style="background:var(--border-dark);"><div style="width:10px;height:10px;border-radius:50%;background:var(--text-muted);"></div></div>
-            <div class="ds-val" id="ds-offline">0</div>
-            <div class="ds-label">Offline</div>
+        <div>
+            <h1>DRIVERS</h1>
+            <p>Cash Settlements & Live Monitoring</p>
         </div>
     </div>
 
-    <div id="adminDriversListContainer"></div>
+    <div class="card" id="adminDriversListContainer" style="padding: 12px 16px;"></div>
+</div>
+
+<div id="view-analytics" class="app-view container">
+    <div class="header-top">
+        <div>
+            <h1>ANALYTICS</h1>
+            <p>Track Performance</p>
+        </div>
+    </div>
+
+    <div class="analytics-hero">
+        <div style="display:flex; align-items:center; gap:16px;">
+            <div style="width:48px; height:48px; background:var(--accent-light); color:var(--accent); border-radius:14px; display:flex; align-items:center; justify-content:center;">
+                <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            </div>
+            <div>
+                <div class="hero-val" id="statGrossRevenue">0 DH</div>
+                <div class="hero-title">Gross Revenue (Sales + Delivery)</div>
+            </div>
+        </div>
+
+        <div class="hero-profit" id="statNetProfit">
+            <svg viewBox="0 0 24 24" style="width:16px;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            Profit: 0 DH
+        </div>
+    </div>
+
+    <div class="analytics-grid">
+        <div class="metric-card">
+            <div class="mc-icon" style="background:var(--primary-light); color:var(--primary);"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+            <div class="mc-val" id="statOrdersTotal">0</div>
+            <div class="mc-title">Orders</div>
+        </div>
+        <div class="metric-card">
+            <div class="mc-icon" style="background:var(--blue-light); color:var(--blue);"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>
+            <div class="mc-val" id="statItemsTotal">0</div>
+            <div class="mc-title">Items Sold</div>
+        </div>
+        <div class="metric-card">
+            <div class="mc-icon" style="background:var(--purple-light); color:var(--purple);"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+            <div class="mc-val" id="statCustomersTotal">0</div>
+            <div class="mc-title">Customers</div>
+        </div>
+    </div>
+
+    <div class="compare-row">
+        <div class="compare-label">
+            <div style="width:36px; height:36px; background:var(--warning-light); color:var(--warning); border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+            </div>
+            Delivery Fees (Driver)
+        </div>
+        <div class="compare-val" id="statDeliveryTotal">0 DH</div>
+    </div>
 </div>
 
 <nav class="bottom-nav" id="mainNav">
     <div class="nav-item active" id="nav-dashboard" onclick="switchTab('dashboard')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Home</div>
     <div class="nav-item" id="nav-commandes" onclick="switchTab('commandes')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Orders</div>
-    <div class="nav-item" id="nav-drivers" onclick="switchTab('drivers')"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Drivers</div>
+    <div class="nav-item" id="nav-drivers" onclick="switchTab('drivers')"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> Drivers</div>
+    <div class="nav-item" id="nav-analytics" onclick="switchTab('analytics')"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Analytics</div>
 </nav>
 
 <div class="overlay" id="confirmOverlay">
@@ -377,32 +399,6 @@ input:checked + .slider:before { transform: translateX(18px); }
     </div>
 </div>
 
-<div class="overlay" id="addDriverOverlay" onclick="if(event.target===this) closeModals()"></div>
-<div class="bottom-sheet" id="addDriverModal">
-    <div class="sheet-handle"></div>
-    <h2 style="font-size: 18px; font-weight:800; margin-bottom:24px; text-transform:uppercase; letter-spacing:0.5px; text-align:center;">Add New Driver</h2>
-    
-    <div class="form-group" style="text-align: center;">
-        <label>Driver Photo</label>
-        <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--bg-main); border: 1px dashed var(--border-dark); margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; position: relative;" onclick="document.getElementById('drvPhoto').click()">
-            <img id="drvPhotoPreview" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
-            <svg id="drvPhotoIcon" viewBox="0 0 24 24" style="color:var(--text-muted);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-        </div>
-        <input type="file" id="drvPhoto" accept="image/*" style="display:none;" onchange="previewDriverPhoto(event)">
-    </div>
-
-    <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" id="drvName" class="form-control" placeholder="e.g. Hamza K.">
-    </div>
-    <div class="form-group" style="margin-bottom: 32px;">
-        <label>Phone Number (Login ID)</label>
-        <input type="tel" id="drvPhone" class="form-control" placeholder="+212 600 000 000">
-    </div>
-
-    <button class="btn btn-primary" id="btnCreateDriver" onclick="createDriver()">CREATE DRIVER</button>
-</div>
-
 <div class="toast" id="toastBox">
     <svg viewBox="0 0 24 24" style="color:var(--primary);"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
     <span id="toastMsg">Action successful</span>
@@ -412,7 +408,6 @@ input:checked + .slider:before { transform: translateX(18px); }
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, onSnapshot, updateDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAaaR52bvyQfkxmZL16lcg4Bd4M76OtbI4",
@@ -423,18 +418,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
-const storage = getStorage(app);
 
 const ADMIN_EMAILS = ["admin@tasco.ma"];
 
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
-        document.body.style.display = "block"; // Dev bypass
+        document.body.style.display = "block"; // Dev bypass fallback
     } else {
         if (ADMIN_EMAILS.includes(user.email.toLowerCase())) {
             document.body.style.display = "block";
         } else {
-            alert("Security Alert: You are not authorized to view the Admin panel.");
+            alert("Security Alert: Unauthorized allocation profile.");
             await signOut(auth);
         }
     }
@@ -442,7 +436,7 @@ onAuthStateChanged(auth, async (user) => {
 
 window.logoutAdmin = async () => { try { await signOut(auth); } catch(e) { console.error(e); } };
 
-let allOrders = [], allDrivers = [];
+let allOrders = [], allDrivers = [], allProducts = [];
 let currentOrderFilter = 'All';
 
 const safeNum = (val) => isNaN(parseFloat(val)) ? 0 : parseFloat(val);
@@ -470,16 +464,14 @@ document.addEventListener('DOMContentLoaded', () => {
     switchTab(savedTab);
 });
 
-// ---------------- STORE STATUS ----------------
+// ---------------- GLOBAL RETAIL OUTLET TOGGLE ----------------
 window.toggleStoreStatus = async (isOnline) => {
     try {
         await setDoc(doc(db, "settings", "store_status"), { isOnline: isOnline }, { merge: true });
         showToast(isOnline ? "Store is now Open!" : "Store is Closed!");
     } catch(e) { 
         console.error(e); 
-        // Show Firebase error explicitly so user knows if it's a Firestore Rules issue
         alert("Firebase Error: " + e.message); 
-        // Revert toggle visually if it failed
         document.getElementById('storeStatusToggle').checked = !isOnline;
     }
 };
@@ -502,17 +494,22 @@ onSnapshot(doc(db, "settings", "store_status"), (docSnap) => {
     }
 });
 
-// ---------------- LISTENERS ----------------
+// ---------------- REAL-TIME ENGINE SYNCHRONIZATIONS ----------------
+onSnapshot(collection(db, "products"), snap => {
+    allProducts = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    calculateDashboard(); // Refresh arithmetic analytics matrices once item cost profiles exist
+});
+
 onSnapshot(collection(db, "drivers"), snap => {
     allDrivers = snap.docs.map(d => ({id: d.id, ...d.data()}));
-    renderDriversList();
+    renderDriversAllocationEngine();
 });
 
 onSnapshot(collection(db, "orders"), snap => {
     allOrders = snap.docs.map(d => ({id: d.id, ...d.data()}));
     calculateDashboard();
     renderFullOrdersList();
-    renderDriversList(); 
+    renderDriversAllocationEngine(); 
     
     if (document.getElementById('view-order-detail').classList.contains('active')) {
         const currentId = document.getElementById('det-id').innerText.replace('#', '').toLowerCase();
@@ -523,10 +520,21 @@ onSnapshot(collection(db, "orders"), snap => {
 
 const getEmptyOrdersHTML = () => `<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:13px; font-weight:700; text-transform:uppercase;">No orders found.</div>`;
 
-// ---------------- DASHBOARD LOGIC ----------------
+// ---------------- BUSINESS MODEL ANALYTICS ENGINES ----------------
 function calculateDashboard() {
     const todayStr = new Date().toDateString();
-    let ordersTodayCount = 0, grossToday = 0, pendingCount = 0;
+    
+    let ordersTodayCount = 0;
+    let grossToday = 0;
+    let pendingCount = 0;
+
+    // Universal Cumulative Totals Metrics
+    let totalDeliveredOrdersCount = 0;
+    let cumulativeGrossRevenue = 0;
+    let cumulativeNetProfit = 0;
+    let cumulativeItemsSold = 0;
+    let cumulativeDriverFeesAllocation = 0;
+    let uniqueCustomersSet = new Set();
 
     allOrders.forEach(order => {
         let orderDate = new Date();
@@ -538,161 +546,151 @@ function calculateDashboard() {
             if(order.status !== 'Cancelled') grossToday += safeNum(order.totalPrice);
         }
         if (order.status === 'Pending') pendingCount++;
+
+        // Process global valuation variables strictly based on Delivered pipeline metrics
+        if (order.status === 'Delivered') {
+            totalDeliveredOrdersCount++;
+            cumulativeGrossRevenue += safeNum(order.totalPrice);
+            cumulativeDriverFeesAllocation += safeNum(order.deliveryFee);
+            cumulativeItemsSold += parseInt(order.totalItems) || 0;
+            if (order.customerId) uniqueCustomersSet.add(order.customerId);
+
+            // Arbitrage Profit Core Parsing Routine: Selling Price - Wholesale Cost Price
+            let totalCostBasisForOrder = 0;
+            if (order.cart && Array.isArray(order.cart)) {
+                order.cart.forEach(cartItem => {
+                    const qty = parseInt(cartItem.qty) || 0;
+                    const catalogProductRef = allProducts.find(p => p.id === cartItem.product?.id);
+                    
+                    if (catalogProductRef) {
+                        let singleItemWholesaleCostBasis = safeNum(catalogProductRef.costPrice);
+                        totalCostBasisForOrder += (singleItemWholesaleCostBasis * qty);
+                    }
+                });
+            }
+            
+            // Total pricing minus delivery allocation leaves gross merchant receipts
+            let orderMerchantRevenue = safeNum(order.totalPrice) - safeNum(order.deliveryFee);
+            let orderNetArbitrageProfit = orderMerchantRevenue - totalCostBasisForOrder;
+            cumulativeNetProfit += orderNetArbitrageProfit;
+        }
     });
 
+    // Populate Daily Dashboard Operations Counters
     document.getElementById('dashStatOrders').innerText = ordersTodayCount;
     document.getElementById('dashStatRevenue').innerText = formatPrice(grossToday) + ' DH';
     document.getElementById('dashStatPending').innerText = pendingCount;
 
+    // Populate Dedicated Core Analytics View Data Fields
+    document.getElementById('statGrossRevenue').innerText = formatPrice(cumulativeGrossRevenue) + ' DH';
+    document.getElementById('statNetProfit').innerHTML = `<svg viewBox="0 0 24 24" style="width:16px;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> Profit: ${formatPrice(cumulativeNetProfit)} DH`;
+    
+    document.getElementById('statOrdersTotal').innerText = totalDeliveredOrdersCount;
+    document.getElementById('statItemsTotal').innerText = cumulativeItemsSold;
+    document.getElementById('statCustomersTotal').innerText = uniqueCustomersSet.size;
+    document.getElementById('statDeliveryTotal').innerText = formatPrice(cumulativeDriverFeesAllocation) + ' DH';
+
+    // Build Recent Operations Stream Card elements
     const getTime = (ts) => { if (!ts) return 0; const t = new Date(ts).getTime(); return isNaN(t) ? 0 : t; };
     const recentOrders = [...allOrders].sort((a,b) => getTime(b.timestamp) - getTime(a.timestamp)).slice(0, 2); 
     const dashRecentContainer = document.getElementById('dashRecentOrdersContainer');
     if(dashRecentContainer) dashRecentContainer.innerHTML = recentOrders.length === 0 ? getEmptyOrdersHTML() : generateOrdersHTML(recentOrders);
 }
 
-// ---------------- DRIVERS LOGIC ----------------
-function calculateDriverMetrics(driverId) {
-    const todayStr = new Date().toDateString();
-    const driverOrders = allOrders.filter(o => o.driverId === driverId);
+// ---------------- CASH SETTLEMENTS & FLEET TRACKING ----------------
+function calculateDriverMetrics(driverPhoneId) {
+    const driverOrders = allOrders.filter(o => o.driverId === driverPhoneId);
     
     let activeOrder = null;
-    let deliveriesToday = 0;
-    let cashToReturn = 0; 
+    let cashToCollectFromDriver = 0; 
 
     driverOrders.forEach(o => {
         if (o.status === 'Driver Assigned' || o.status === 'Out for Delivery') activeOrder = o;
         
-        let orderDate = new Date();
-        if (o.timestamp) orderDate = new Date(o.timestamp);
-        
-        if (o.status === 'Delivered') {
-            if (orderDate.toDateString() === todayStr) deliveriesToday++;
-            if (o.driverSettled !== true) {
-                cashToReturn += (safeNum(o.totalPrice) - safeNum(o.deliveryFee)); 
-            }
+        if (o.status === 'Delivered' && o.driverSettled !== true) {
+            // Driver paid merchant's cost + profit in advance, so they return total value minus their execution delivery fee allocation
+            cashToCollectFromDriver += (safeNum(o.totalPrice) - safeNum(o.deliveryFee)); 
         }
     });
-    return { activeOrder, deliveriesToday, cashToReturn };
+    return { activeOrder, cashToCollectFromDriver };
 }
 
-function renderDriversList() {
-    let total = allDrivers.length, online = 0, onDeliv = 0, offline = 0;
-    
-    const renderCard = (driver) => {
-        const metrics = calculateDriverMetrics(driver.id);
-        let statusClass = 'dot-offline';
-        let statusText = 'Offline';
-        
-        if(driver.isActive) { // Based on your screenshot, active = online
-            if(metrics.activeOrder) { onDeliv++; statusClass = 'dot-online'; statusText = 'On Delivery'; }
-            else { online++; statusClass = 'dot-online'; statusText = 'Online'; }
-        } else { offline++; }
-
-        const imgTag = driver.photoUrl ? `<img src="${driver.photoUrl}">` : `<svg viewBox="0 0 24 24" style="width:24px; color:var(--text-muted);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`;
-        
-        return `<div class="driver-card">
-            <div class="driver-avatar">
-                ${imgTag}
-                <div class="status-dot ${statusClass}"></div>
-            </div>
-            <div class="driver-info">
-                <h4>${driver.name}</h4>
-                <div class="driver-meta">
-                    <span>${statusText}</span>
-                    <span style="color:var(--accent);">Deliveries Today: ${metrics.deliveriesToday}</span>
-                    <span style="color:var(--danger);">To Return: ${formatPrice(metrics.cashToReturn)} DH</span>
-                </div>
-            </div>
-        </div>`;
-    };
-
-    const homeContainer = document.getElementById('dashDriversContainer');
-    if(homeContainer) {
-        const activeOnly = allDrivers.filter(d => d.isActive).slice(0, 2);
-        homeContainer.innerHTML = activeOnly.length ? activeOnly.map(renderCard).join('') : `<div style="text-align:center; padding:20px; font-size:13px; color:var(--text-muted); font-weight:700;">No active drivers.</div>`;
-    }
-
-    document.getElementById('ds-total').innerText = total;
-    document.getElementById('ds-online').innerText = online;
-    document.getElementById('ds-delivery').innerText = onDeliv;
-    document.getElementById('ds-offline').innerText = offline;
-
-    const listContainer = document.getElementById('adminDriversListContainer');
-    if(listContainer) {
-        listContainer.innerHTML = allDrivers.map(renderCard).join('');
-    }
-}
-
-// ---------------- ADD DRIVER SYSTEM (SMS Login Flow) ----------------
-window.openAddDriverModal = () => {
-    document.getElementById('drvName').value = '';
-    document.getElementById('drvPhone').value = '';
-    document.getElementById('drvPhotoPreview').style.display = 'none';
-    document.getElementById('drvPhotoIcon').style.display = 'block';
-    document.getElementById('drvPhoto').value = '';
-    
-    document.getElementById('addDriverOverlay').classList.add('active');
-    document.getElementById('addDriverModal').classList.add('active');
-};
-
-let selectedDriverPhoto = null;
-window.previewDriverPhoto = (e) => {
-    if(e.target.files && e.target.files[0]) {
-        selectedDriverPhoto = e.target.files[0];
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            document.getElementById('drvPhotoPreview').src = e.target.result;
-            document.getElementById('drvPhotoPreview').style.display = 'block';
-            document.getElementById('drvPhotoIcon').style.display = 'none';
-        }
-        reader.readAsDataURL(selectedDriverPhoto);
-    }
-};
-
-window.createDriver = async () => {
-    const name = document.getElementById('drvName').value.trim();
-    const phone = document.getElementById('drvPhone').value.trim();
-    const btn = document.getElementById('btnCreateDriver');
-
-    if(!name || !phone) return showToast("Please fill all fields");
-    
-    btn.innerText = "CREATING...";
-    btn.disabled = true;
-
+window.settleDriverCashAccount = async (driverPhoneId) => {
+    if(!confirm(`Confirm full collection of physical cash debt from driver ${driverPhoneId}?`)) return;
     try {
-        let photoUrl = "";
-        if (selectedDriverPhoto) {
-            const storageRef = ref(storage, `drivers/${Date.now()}_${selectedDriverPhoto.name}`);
-            await uploadBytes(storageRef, selectedDriverPhoto);
-            photoUrl = await getDownloadURL(storageRef);
+        const activeUnsettledOrders = allOrders.filter(o => o.driverId === driverPhoneId && o.status === 'Delivered' && o.driverSettled !== true);
+        for (let orderDoc of activeUnsettledOrders) {
+            await updateDoc(doc(db, "orders", orderDoc.id), { driverSettled: true });
         }
-
-        // As per your screenshot, document ID is the phone number
-        const driverId = phone.replace(/[^0-9+]/g, ''); 
-        
-        const driverData = {
-            name: name,
-            phone: driverId,
-            photoUrl: photoUrl,
-            isActive: true, // Auto active based on schema
-            createdAt: new Date().toISOString()
-        };
-
-        await setDoc(doc(db, "drivers", driverId), driverData);
-        showToast("Driver account created!");
-        closeModals();
+        showToast("Cash settlement finalized. Driver debt cleared.");
     } catch(e) {
         console.error(e);
-        alert("Firebase Error: " + e.message);
-    } finally {
-        btn.innerText = "CREATE DRIVER";
-        btn.disabled = false;
-        selectedDriverPhoto = null;
+        alert("Settlement Execution Error: " + e.message);
     }
 };
 
+function renderDriversAllocationEngine() {
+    let globalOwedFleetCapital = 0;
+    let layoutHtml = '';
 
-// ---------------- ORDERS LOGIC ----------------
+    allDrivers.forEach(driver => {
+        const metrics = calculateDriverMetrics(driver.phone);
+        globalOwedFleetCapital += metrics.cashToCollectFromDriver;
+
+        let statusClass = 'dot-offline';
+        let statusText = 'Offline';
+        if(driver.isActive) {
+            if(metrics.activeOrder) { statusClass = 'dot-online'; statusText = `In Transit (#${metrics.activeOrder.id.substring(0,4).toUpperCase()})`; }
+            else { statusClass = 'dot-online'; statusText = 'Online · Ready'; }
+        }
+
+        layoutHtml += `<div class="driver-row">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div class="driver-avatar" style="width:40px; height:40px;">
+                    ${driver.photoUrl ? `<img src="${driver.photoUrl}">` : `<svg viewBox="0 0 24 24" style="width:20px; color:var(--text-muted);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`}
+                    <div class="status-dot ${statusClass}" style="width:10px; height:10px;"></div>
+                </div>
+                <div class="d-info">
+                    <h4>${driver.name}</h4>
+                    <p style="font-size:11px; color:var(--text-muted); font-weight:700;">${statusText} • ${driver.phone}</p>
+                    <p style="color:var(--danger); font-weight:800; margin-top:2px;">Owes: ${formatPrice(metrics.cashToCollectFromDriver)} DH</p>
+                </div>
+            </div>
+            ${metrics.cashToCollectFromDriver > 0 ? 
+                `<button class="btn btn-outline" style="width:auto; padding:8px 14px; font-size:11px; font-weight:800;" onclick="settleDriverCashAccount('${driver.phone}')">SETTLE</button>` : 
+                `<svg viewBox="0 0 24 24" style="width:18px; color:var(--accent); margin-right:12px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`
+            }
+        </div>`;
+    });
+
+    // Populate Home Dashboard Driver Card Component (Strictly restricted visibility limit: 2 maximum)
+    const homeContainer = document.getElementById('dashDriversContainer');
+    if(homeContainer) {
+        const homeDriversList = allDrivers.slice(0, 2);
+        homeContainer.innerHTML = homeDriversList.length ? homeDriversList.map(d => {
+            const metrics = calculateDriverMetrics(d.phone);
+            return `<div class="driver-row">
+                <div class="d-info">
+                    <h4>${d.name}</h4>
+                    <p>Owes: ${formatPrice(metrics.cashToCollectFromDriver)} DH</p>
+                </div>
+                <span class="d-debt" style="font-size:13px; font-weight:700; color:var(--text-muted);">${d.phone}</span>
+            </div>`;
+        }).join('') : `<div style="text-align:center; padding:8px; color:var(--text-muted); font-size:12px;">No drivers listed.</div>`;
+    }
+
+    // Populate Master Dedicated Drivers Ledger Screen
+    const masterLedgerTarget = document.getElementById('adminDriversListContainer');
+    if(masterLedgerTarget) {
+        if(layoutHtml === '') {
+            masterLedgerTarget.innerHTML = `<div style="text-align:center; padding:12px; color:var(--text-muted); font-size:13px; font-weight:600;">No active fleet units cataloged.</div>`;
+        } else {
+            masterLedgerTarget.innerHTML = layoutHtml + `<div style="padding-top:16px; margin-top:12px; border-top:1px dashed var(--border-dark); display:flex; justify-content:space-between; font-weight:800; font-size:14px; color:var(--text-main); text-transform:uppercase; letter-spacing:0.5px;"><span>Fleet Cash To Collect</span><span style="color:var(--primary);">${formatPrice(globalOwedFleetCapital)} DH</span></div>`;
+        }
+    }
+}
+
+// ---------------- ORDERS MANAGEMENT SUITE ----------------
 window.filterOrdersList = (status, tabElement) => { 
     document.querySelectorAll('#view-commandes .tab-pill').forEach(t => t.classList.remove('active')); 
     tabElement.classList.add('active'); 
@@ -753,10 +751,9 @@ window.viewOrder = (orderId) => {
     document.getElementById('btnCallCustomer').href = order.customerPhone ? `tel:${order.customerPhone}` : '#';
     document.getElementById('btnWaCustomer').href = order.customerPhone ? `https://wa.me/${order.customerPhone.replace(/\+/g, '')}` : '#';
     
-    // GPS Navigation Setup
     const mapLink = document.getElementById('btnNavCustomer');
     if (order.deliveryCoords && order.deliveryCoords.lat) {
-        mapLink.href = `https://www.google.com/maps/dir/?api=1&destination=${order.deliveryCoords.lat},${order.deliveryCoords.lng}`;
+        mapLink.href = `https://www.google.com/maps/search/?api=1&query=${order.deliveryCoords.lat},${order.deliveryCoords.lng}`;
     } else {
         mapLink.href = order.deliveryAddress ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.deliveryAddress)}` : '#';
     }
@@ -771,10 +768,11 @@ window.viewOrder = (orderId) => {
     badge.className = `badge ${statusClass}`; 
     badge.innerText = (order.status || 'Unknown').toUpperCase();
 
+    // Render Items securely with clean visual margin protection constraints
     document.getElementById('det-items-list').innerHTML = (order.cart || []).map(item => {
         const p = item.product || {}; 
         const price = safeNum(item.unitPrice) || safeNum(p.sellPrice);
-        const img = p.imageUrl ? `<img src="${p.imageUrl}">` : ``;
+        const img = p.imageUrl ? `<img src="${p.imageUrl}">` : `<svg viewBox="0 0 24 24" style="width:24px;color:var(--border-dark);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>`;
         
         let metaHtml = '';
         if(item.variantName) metaHtml += `<span style="color:var(--primary);">Size:</span> ${item.variantName}<br>`;
@@ -795,78 +793,72 @@ window.viewOrder = (orderId) => {
     document.getElementById('det-shipping').innerText = `${formatPrice(safeNum(order.deliveryFee))} DH`;
     document.getElementById('det-total').innerText = `${formatPrice(safeNum(order.totalPrice))} DH`;
 
-    // Operational Action Buttons logic
-    let actionTop = '';
+    let actionContextHtml = '';
     const btnCancel = document.getElementById('btnCancelOrder');
     const btnPrint = document.getElementById('btnPrintReceipt');
 
     if (order.status === 'Pending') {
-        actionTop = `<button class="btn btn-primary" onclick="promptOrderStatus('${order.id}', 'Preparing')">ACCEPT ORDER</button>`;
+        actionContextHtml = `<button class="btn btn-primary" onclick="promptOrderStatus('${order.id}', 'Preparing')">ACCEPT & MARK PREPARING</button>`;
         btnCancel.style.display = 'block';
     } else if (order.status === 'Preparing') {
-        actionTop = `<div style="text-align:center; padding:16px; background:var(--bg-main); border-radius:12px; font-weight:800; font-size:14px; text-transform:uppercase; border: 1px dashed var(--border-dark);">WAITING FOR DRIVER (POOL)</div>`;
+        actionContextHtml = `<div style="text-align:center; padding:16px; background:var(--bg-main); border-radius:12px; font-weight:800; font-size:13px; text-transform:uppercase; border: 1px dashed var(--border-dark);">WAITING FOR DRIVER POOL DISPATCH</div>`;
         btnCancel.style.display = 'block';
     } else if (order.status === 'Driver Assigned' || order.status === 'Out for Delivery') {
-        const dName = order.driverName || 'Assigned Driver';
-        actionTop = `<div style="text-align:center; padding:16px; background:var(--blue-light); color:var(--blue); border-radius:12px; font-weight:800; font-size:14px; text-transform:uppercase;">Driver: ${dName}</div>`;
-        btnCancel.style.display = 'none'; // Usually don't cancel once out for delivery
+        const dName = order.driverName || 'Assigned Courier';
+        actionContextHtml = `<div style="text-align:center; padding:16px; background:var(--blue-light); color:var(--blue); border-radius:12px; font-weight:800; font-size:13px; text-transform:uppercase;">Dispatched To: ${dName}</div>`;
+        btnCancel.style.display = 'none'; 
     } else if (order.status === 'Delivered') {
-        actionTop = `<div style="text-align:center; color:var(--accent); font-weight:800; padding:16px; background:var(--accent-light); border-radius:12px;">ORDER DELIVERED</div>`;
+        actionContextHtml = `<div style="text-align:center; color:var(--accent); font-weight:800; padding:16px; background:var(--accent-light); border-radius:12px;">ORDER DELIVERED SUCCESSFULLY</div>`;
         btnCancel.style.display = 'none';
     } else if (order.status === 'Cancelled') {
-        actionTop = `<div style="text-align:center; color:var(--danger); font-weight:800; padding:16px; background:var(--danger-light); border-radius:12px;">ORDER CANCELLED</div>`;
+        actionContextHtml = `<div style="text-align:center; color:var(--danger); font-weight:800; padding:16px; background:var(--danger-light); border-radius:12px;">ORDER CANCELLED</div>`;
         btnCancel.style.display = 'none';
     }
 
-    document.getElementById('det-status-actions').innerHTML = actionTop; 
+    document.getElementById('det-status-actions').innerHTML = actionContextHtml; 
     
-    // Wire up Print & Cancel
     btnPrint.onclick = () => printReceipt(order.id);
     btnCancel.onclick = () => promptOrderStatus(order.id, 'Cancelled');
 
     switchTab('order-detail');
 };
 
-// ---------------- THERMAL RECEIPT PRINTER ----------------
+// ---------------- THERMAL RECEIPT GENERATOR ENGINE ----------------
 window.printReceipt = (orderId) => {
     const o = allOrders.find(x => x.id === orderId); if(!o) return;
-
     let orderDate = "Date not found";
-    if (o.timestamp) { const parsed = new Date(o.timestamp); if (!isNaN(parsed.getTime())) orderDate = parsed.toLocaleString('en-US', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}); }
+    if (o.timestamp) { const parsed = new Date(o.timestamp); if (!isNaN(parsed.getTime())) orderDate = parsed.toLocaleString('en-US'); }
 
     let itemsHtml = (o.cart || []).map(item => {
         const p = item.product || {};
         let metaHtml = "";
-
         if(item.variantName) metaHtml += `<div>- Size: ${item.variantName}</div>`; 
         if(item.extras && item.extras.length > 0) metaHtml += `<div>- + ${item.extras.join(', ')}</div>`;
-        if(item.modularChoices && item.modularChoices.length > 0) {
-            item.modularChoices.forEach(choice => { metaHtml += `<div>- ${choice.groupName}: ${choice.itemName}</div>`; });
-        }
-        if(item.note) metaHtml += `<div>** NOTE: ${item.note} **</div>`;
+        if(item.modularChoices) item.modularChoices.forEach(c => { metaHtml += `<div>- ${c.groupName}: ${c.itemName}</div>`; });
+        if(item.note) metaHtml += `<div>** Note: ${item.note} **</div>`;
 
         const price = safeNum(item.unitPrice) || safeNum(p.sellPrice);
-        return `<div style="display:flex; justify-content:space-between; margin-top:10px; font-weight:bold;">
+        return `<div style="display:flex; justify-content:space-between; margin-top:8px; font-weight:bold;">
             <div>${item.qty}x ${p.name || 'Item'}</div>
             <div>${formatPrice(price * item.qty)}</div>
         </div>
-        <div style="font-size:12px; margin-left:15px; margin-bottom:5px;">${metaHtml}</div>`;
+        <div style="font-size:12px; margin-left:12px; color:#333;">${metaHtml}</div>`;
     }).join('');
 
-    const receiptHtml = `<html><head><title>Print Receipt - #${o.id.substring(0,6).toUpperCase()}</title>
+    const receiptHtml = `<html><head><title>Receipt #${o.id.substring(0,6).toUpperCase()}</title>
     <style>
-        body { font-family: monospace; color: #000; width: 300px; margin: 0 auto; padding: 10px; font-size:14px; line-height: 1.2;}
+        body { font-family: monospace; color: #000; width: 280px; margin: 0 auto; padding: 5px; font-size:13px; line-height: 1.3;}
         .center { text-align: center; }
-        .line { border-bottom: 1px dashed #000; margin: 10px 0; }
+        .line { border-bottom: 1px dashed #000; margin: 8px 0; }
         .bold { font-weight: bold; }
         .flex { display: flex; justify-content: space-between; }
     </style>
     </head><body>
-        <div class="center bold" style="font-size: 24px; margin-bottom:10px;">TASCO</div>
+        <div class="center bold" style="font-size: 22px; margin-bottom:4px;">TASCO</div>
         <div class="center">Order #${o.id.substring(0,6).toUpperCase()}</div>
         <div class="center">${orderDate}</div>
         <div class="line"></div>
-        <div><span class="bold">Name:</span> ${o.customerName || 'Unknown'}</div>
+        <div><span class="bold">Customer:</span> ${o.customerName || 'Unknown'}</div>
         <div><span class="bold">Phone:</span> ${o.customerPhone || 'Not provided'}</div>
         <div><span class="bold">Zone:</span> ${o.neighborhood || 'Not specified'}</div>
         <div class="line"></div>
@@ -874,12 +866,12 @@ window.printReceipt = (orderId) => {
         <div class="line"></div>
         <div class="flex"><span>Subtotal:</span><span>${formatPrice(safeNum(o.totalPrice) - safeNum(o.deliveryFee))} DH</span></div>
         <div class="flex"><span>Delivery:</span><span>${formatPrice(safeNum(o.deliveryFee))} DH</span></div>
-        <div class="flex bold" style="font-size: 16px; margin-top:5px;"><span>TOTAL:</span><span>${formatPrice(safeNum(o.totalPrice))} DH</span></div>
+        <div class="flex bold" style="font-size: 15px; margin-top:4px;"><span>TOTAL:</span><span>${formatPrice(safeNum(o.totalPrice))} DH</span></div>
         <div class="line"></div>
-        <div class="center" style="font-size:12px; margin-top:10px;">Thank you for ordering!</div>
+        <div class="center" style="font-size:11px; margin-top:8px;">Fast Cravings. Real Satisfaction.</div>
     </body></html>`;
 
-    const printWindow = window.open('', '', 'width=400,height=600');
+    const printWindow = window.open('', '', 'width=380,height=550');
     printWindow.document.write(receiptHtml);
     printWindow.document.close();
     printWindow.focus();
@@ -888,7 +880,7 @@ window.printReceipt = (orderId) => {
 
 window.promptOrderStatus = (orderId, newStatus) => {
     document.getElementById('modalTitle').innerText = "Update Status"; 
-    document.getElementById('modalMsg').innerText = `Mark this order as ${newStatus}?`;
+    document.getElementById('modalMsg').innerText = `Confirm changing order status to ${newStatus}?`;
     const btn = document.getElementById('modalConfirmBtn'); 
     btn.className = 'btn ' + (newStatus === 'Cancelled' ? 'btn-danger' : 'btn-primary');
     
@@ -896,16 +888,14 @@ window.promptOrderStatus = (orderId, newStatus) => {
         closeModals(); 
         try { 
             await updateDoc(doc(db, "orders", orderId), { status: newStatus }); 
-            showToast("Status updated"); 
-        } catch(e) { alert("Network error: " + e.message); } 
+            showToast("Status synchronized successfully."); 
+        } catch(e) { alert("Network Sync Exception: " + e.message); } 
     }; 
     document.getElementById('confirmOverlay').classList.add('active');
 };
 
 window.closeModals = () => {
     document.getElementById('confirmOverlay').classList.remove('active');
-    document.getElementById('addDriverOverlay').classList.remove('active');
-    document.getElementById('addDriverModal').classList.remove('active');
 };
 
 document.getElementById('modalConfirmBtn').addEventListener('click', () => { 
@@ -918,7 +908,6 @@ function showToast(msg) {
     t.classList.add('show'); 
     setTimeout(() => t.classList.remove('show'), 3000); 
 }
-
 </script>
 </body>
 </html>
