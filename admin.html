@@ -13,23 +13,23 @@
    TASCO OPERATIONS PANEL
 ========================================= */
 :root {
-    --bg-main: #F8F4EE; /* TASCO Warm Cream */
-    --surface: #FFFFFF; /* Pure White Cards */
-    --primary: #FF5A00; /* TASCO Orange */
+    --bg-main: #F8F4EE;
+    --surface: #FFFFFF;
+    --primary: #FF5A00;
     --primary-light: rgba(255, 90, 0, 0.1);
-    --accent: #16A34A; /* Success Green */
+    --accent: #16A34A;
     --accent-light: #DCFCE7;
-    --warning: #F59E0B; /* Yellow */
+    --warning: #F59E0B;
     --warning-light: #FEF3C7;
-    --danger: #EF4444; /* Red */
+    --danger: #EF4444;
     --danger-light: #FEE2E2;
     --blue: #3B82F6;
     --blue-light: #DBEAFE;
     --purple: #8B5CF6;
     --purple-light: #EDE9FE;
-    --text-main: #171717; /* TASCO Deep Charcoal */
+    --text-main: #171717;
     --text-muted: #6B7280;
-    --border: #E6E2DC; /* Warm Border */
+    --border: #E6E2DC;
     --border-dark: #D1D5DB;
     
     --radius-card: 16px;
@@ -51,6 +51,7 @@ body {
 .container { padding: 20px; max-width: 600px; margin: 0 auto; position: relative; min-height: 100vh;}
 svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 button { font-family: inherit; cursor: pointer; outline: none; border: none; background: none; }
+input, select { font-family: inherit; }
 
 /* SPA VIEWS */
 .app-view { display: none; animation: fadeIn 0.3s ease; }
@@ -149,14 +150,20 @@ input:checked + .slider:before { transform: translateX(18px); }
 .summary-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 12px; color: var(--text-muted); font-weight: 600;}
 .summary-row.total { font-size: 18px; font-weight: 800; color: var(--primary); margin-bottom: 0; padding-top: 16px; border-top: 1px dashed var(--border-dark); }
 
-/* MAIN BUTTONS */
+/* MAIN BUTTONS & FORMS */
 .btn { width: 100%; padding: 16px; border-radius: var(--radius-btn); font-size: 14px; font-weight: 800; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; border: none; text-transform: uppercase; letter-spacing: 0.5px;}
 .btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none;}
 .btn-primary { background: var(--primary); color: white; }
 .btn-success { background: var(--accent); color: white; }
 .btn-warning { background: var(--warning); color: white; }
 .btn-danger { background: var(--danger); color: white; }
 .btn-outline { background: var(--surface); color: var(--text-main); border: 1px solid var(--border-dark); }
+
+.form-group { margin-bottom: 16px; text-align: left;}
+.form-group label { display: block; font-size: 11px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;}
+.form-control { width: 100%; padding: 14px 16px; border: 1px solid var(--border-dark); border-radius: var(--radius-btn); background: var(--bg-main); outline: none; font-size: 14px; font-weight: 600; color: var(--text-main); transition: 0.2s;}
+.form-control:focus { border-color: var(--primary); background: var(--surface);}
 
 /* BOTTOM NAV */
 .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 12px 20px 24px; z-index: 100; box-shadow: var(--shadow-nav); max-width: 600px; margin: 0 auto; transition: bottom 0.3s ease;}
@@ -165,17 +172,20 @@ input:checked + .slider:before { transform: translateX(18px); }
 .nav-item svg { width: 24px; height: 24px; stroke-width: 2.2; }
 .nav-item.active svg { fill: var(--primary-light); }
 
-/* TOAST */
+/* TOAST & MODALS */
 .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--text-main); color: white; padding: 14px 24px; border-radius: 50px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 40px rgba(23, 23, 23, 0.2); z-index: 1100; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* MODAL */
 .overlay { position: fixed; inset: 0; background: rgba(23, 23, 23, 0.6); backdrop-filter: blur(4px); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; padding: 20px; }
 .overlay.active { opacity: 1; pointer-events: auto; }
 .modal { background: var(--surface); width: 100%; max-width: 340px; border-radius: 24px; padding: 32px 24px; box-shadow: 0 10px 40px rgba(23, 23, 23, 0.1); transform: scale(0.95); transition: 0.3s; text-align: center; display: none; border: 1px solid var(--border);}
 .overlay.active .modal { display: block; transform: scale(1); }
 
-/* DRIVER STATS GRID (DRIVERS PAGE) */
+.bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-radius: 30px 30px 0 0; padding: 25px 20px 40px; z-index: 1001; transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); max-width: 600px; margin: 0 auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.1); border-top: 1px solid var(--border);}
+.bottom-sheet.active { transform: translateY(0); }
+.sheet-handle { width: 40px; height: 5px; background: var(--border-dark); border-radius: 10px; margin: 0 auto 20px; }
+
+/* DRIVER STATS GRID */
 .driver-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
 .ds-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 8px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;}
 .ds-icon { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
@@ -232,15 +242,13 @@ input:checked + .slider:before { transform: translateX(18px); }
         <span>ACTIVE DRIVERS</span>
         <span class="section-link" onclick="switchTab('drivers')">View all</span>
     </div>
-    <div id="dashDriversContainer">
-        </div>
+    <div id="dashDriversContainer"></div>
 
     <div class="section-title" style="margin-top: 24px;">
         <span>RECENT ORDERS</span>
         <span class="section-link" onclick="switchTab('commandes')">View all</span>
     </div>
-    <div id="dashRecentOrdersContainer">
-        </div>
+    <div id="dashRecentOrdersContainer"></div>
 </div>
 
 <div id="view-commandes" class="app-view container">
@@ -322,7 +330,7 @@ input:checked + .slider:before { transform: translateX(18px); }
 <div id="view-drivers" class="app-view container">
     <div class="header-top">
         <h1 style="font-size: 24px; font-weight: 800; letter-spacing: -1px;">DRIVERS</h1>
-        <button class="btn btn-primary" style="width:auto; padding: 10px 16px; font-size: 12px;" onclick="showToast('Add Driver logic to be added')">+ ADD DRIVER</button>
+        <button class="btn btn-primary" style="width:auto; padding: 10px 16px; font-size: 12px;" onclick="openAddDriverModal()">+ ADD DRIVER</button>
     </div>
 
     <div class="driver-stats-grid">
@@ -351,54 +359,6 @@ input:checked + .slider:before { transform: translateX(18px); }
     <div id="adminDriversListContainer"></div>
 </div>
 
-<div id="view-driver-detail" class="app-view container">
-    <div class="detail-header">
-        <div class="back-btn" onclick="switchTab('drivers')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
-        <h1 style="font-size: 20px; font-weight: 800; letter-spacing:-0.5px;" id="dd-name">Driver Name</h1>
-    </div>
-
-    <div style="text-align:center; margin-bottom: 24px;">
-        <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--border); margin: 0 auto 12px; position:relative;">
-            <svg viewBox="0 0 24 24" style="width:40px; height:40px; color:var(--text-muted); position:absolute; top:20px; left:20px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            <div id="dd-status-dot" class="status-dot dot-offline" style="width:16px;height:16px; border-width:3px; bottom:2px; right:2px;"></div>
-        </div>
-        <div style="font-size: 14px; font-weight:700; color:var(--text-muted);" id="dd-phone">-</div>
-    </div>
-
-    <div class="dash-stats-row" style="margin-bottom: 20px;">
-        <div class="dash-stat-col">
-            <div class="dash-stat-val" id="dd-deliveries" style="font-size: 24px; margin-bottom:8px;">0</div>
-            <div class="dash-stat-label">Deliveries<br>Today</div>
-        </div>
-        <div class="dash-stat-col">
-            <div class="dash-stat-val" id="dd-earnings" style="font-size: 18px; margin-bottom:8px; color:var(--accent);">0 DH</div>
-            <div class="dash-stat-label">Earnings<br>Today</div>
-        </div>
-        <div class="dash-stat-col">
-            <div class="dash-stat-val" id="dd-cash" style="font-size: 18px; margin-bottom:8px; color:var(--danger);">0 DH</div>
-            <div class="dash-stat-label">Cash to<br>Return</div>
-        </div>
-    </div>
-
-    <div class="info-card" id="dd-active-order-card" style="display:none; border-color:var(--primary); background:var(--primary-light);">
-        <h5 style="font-size:11px; font-weight:800; color:var(--primary); text-transform:uppercase; margin-bottom:8px;">Current Active Order</h5>
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="font-size:14px; font-weight:800; color:var(--text-main);" id="dd-active-order-id">#000000</div>
-            <button class="btn btn-primary" style="width:auto; padding:8px 16px; font-size:11px;" id="dd-btn-view-order">VIEW</button>
-        </div>
-    </div>
-
-    <div class="action-grid" style="border:none; padding:0; margin-bottom:24px;">
-        <a href="#" class="action-btn-sm" id="btnCallDriver"><svg viewBox="0 0 24 24" style="color:var(--text-main);"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> Call</a>
-        <a href="#" target="_blank" class="action-btn-sm" id="btnWaDriver"><svg viewBox="0 0 24 24" style="color:var(--accent);"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> WhatsApp</a>
-    </div>
-
-    <div style="display:flex; flex-direction:column; gap:12px;">
-        <button class="btn btn-outline" onclick="showToast('Settle Cash logic placeholder')">Settle Driver Cash</button>
-        <button class="btn btn-outline" style="color:var(--danger); border-color:var(--danger-light); background:transparent;" onclick="showToast('Disable logic placeholder')">Disable Account</button>
-    </div>
-</div>
-
 <nav class="bottom-nav" id="mainNav">
     <div class="nav-item active" id="nav-dashboard" onclick="switchTab('dashboard')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Home</div>
     <div class="nav-item" id="nav-commandes" onclick="switchTab('commandes')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Orders</div>
@@ -416,6 +376,53 @@ input:checked + .slider:before { transform: translateX(18px); }
     </div>
 </div>
 
+<div class="overlay" id="addDriverOverlay" onclick="if(event.target===this) closeModals()"></div>
+<div class="bottom-sheet" id="addDriverModal">
+    <div class="sheet-handle"></div>
+    <h2 style="font-size: 18px; font-weight:800; margin-bottom:20px; text-transform:uppercase; letter-spacing:0.5px;">Add New Driver</h2>
+    
+    <div class="form-group" style="text-align: center;">
+        <label>Driver Photo</label>
+        <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--bg-main); border: 1px dashed var(--border-dark); margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; position: relative;" onclick="document.getElementById('drvPhoto').click()">
+            <img id="drvPhotoPreview" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+            <svg id="drvPhotoIcon" viewBox="0 0 24 24" style="color:var(--text-muted);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        </div>
+        <input type="file" id="drvPhoto" accept="image/*" style="display:none;" onchange="previewDriverPhoto(event)">
+    </div>
+
+    <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="drvName" class="form-control" placeholder="e.g. Hamza K.">
+    </div>
+    <div class="form-group">
+        <label>Phone Number (Login ID)</label>
+        <input type="tel" id="drvPhone" class="form-control" placeholder="+212 600 000 000">
+    </div>
+    <div class="form-group">
+        <label>Password</label>
+        <input type="text" id="drvPass" class="form-control" placeholder="Set driver password">
+    </div>
+    <div class="form-group" style="margin-bottom: 32px;">
+        <label>Vehicle Type</label>
+        <select id="drvVehicle" class="form-control">
+            <option value="Motorcycle">Motorcycle</option>
+            <option value="Bicycle">Bicycle</option>
+            <option value="Car">Car</option>
+        </select>
+    </div>
+
+    <button class="btn btn-primary" id="btnCreateDriver" onclick="createDriver()">CREATE DRIVER</button>
+</div>
+
+<div class="overlay" id="assignDriverOverlay" onclick="if(event.target===this) closeModals()"></div>
+<div class="bottom-sheet" id="assignDriverModal">
+    <div class="sheet-handle"></div>
+    <h2 style="font-size: 18px; font-weight:800; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px;">Assign Driver</h2>
+    <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px; font-weight:600;">Select an online driver to assign to this order.</p>
+    <div id="assignDriverList" style="display: flex; flex-direction: column; gap: 8px; max-height: 50vh; overflow-y: auto;">
+        </div>
+</div>
+
 <div class="toast" id="toastBox">
     <svg viewBox="0 0 24 24" style="color:var(--primary);"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
     <span id="toastMsg">Action successful</span>
@@ -423,41 +430,41 @@ input:checked + .slider:before { transform: translateX(18px); }
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, onSnapshot, updateDoc, doc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, updateDoc, doc, setDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAaaR52bvyQfkxmZL16lcg4Bd4M76OtbI4",
     authDomain: "lesgo-cd7f9.firebaseapp.com",
-    projectId: "lesgo-cd7f9"
+    projectId: "lesgo-cd7f9",
+    storageBucket: "lesgo-cd7f9.appspot.com"
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+const storage = getStorage(app);
 
 const ADMIN_EMAILS = ["admin@tasco.ma"];
 
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
-        // window.location.replace("login.html"); // Uncomment for production
-        document.body.style.display = "block"; // Dev bypass
+        document.body.style.display = "block"; // Dev bypass (remove in prod)
     } else {
         if (ADMIN_EMAILS.includes(user.email.toLowerCase())) {
             document.body.style.display = "block";
         } else {
             alert("Security Alert: You are not authorized to view the Admin panel.");
             await signOut(auth);
-            // window.location.replace("login.html");
         }
     }
 });
 
-window.logoutAdmin = async () => {
-    try { await signOut(auth); /* window.location.replace("login.html"); */ } catch(e) { console.error(e); }
-};
+window.logoutAdmin = async () => { try { await signOut(auth); } catch(e) { console.error(e); } };
 
 let allOrders = [], allDrivers = [];
 let currentOrderFilter = 'All';
+let orderToAssign = null; // Temp holder for order ID being assigned
 
 const safeNum = (val) => isNaN(parseFloat(val)) ? 0 : parseFloat(val);
 const formatPrice = (num) => { const p = Number(num); return p % 1 === 0 ? p.toString() : p.toFixed(2); };
@@ -470,7 +477,7 @@ window.switchTab = (tabId) => {
     const navItem = document.getElementById(`nav-${tabId}`);
     if(navItem) navItem.classList.add('active');
 
-    if (tabId === 'order-detail' || tabId === 'driver-detail') {
+    if (tabId === 'order-detail') {
         document.getElementById('mainNav').style.bottom = '-100px';
     } else {
         document.getElementById('mainNav').style.bottom = '0';
@@ -512,7 +519,7 @@ onSnapshot(doc(db, "settings", "store_status"), (docSnap) => {
 
 // ---------------- LISTENERS ----------------
 onSnapshot(collection(db, "drivers"), snap => {
-    allDrivers = snap.docs.map(d => d.data());
+    allDrivers = snap.docs.map(d => ({id: d.id, ...d.data()}));
     renderDriversList();
 });
 
@@ -520,7 +527,7 @@ onSnapshot(collection(db, "orders"), snap => {
     allOrders = snap.docs.map(d => ({id: d.id, ...d.data()}));
     calculateDashboard();
     renderFullOrdersList();
-    renderDriversList(); // Refresh driver cash/active orders
+    renderDriversList(); 
     
     if (document.getElementById('view-order-detail').classList.contains('active')) {
         const currentId = document.getElementById('det-id').innerText.replace('#', '').toLowerCase();
@@ -553,46 +560,41 @@ function calculateDashboard() {
     document.getElementById('dashStatPending').innerText = pendingCount;
 
     const getTime = (ts) => { if (!ts) return 0; const t = new Date(ts).getTime(); return isNaN(t) ? 0 : t; };
-    const recentOrders = [...allOrders].sort((a,b) => getTime(b.timestamp) - getTime(a.timestamp)).slice(0, 3);
+    const recentOrders = [...allOrders].sort((a,b) => getTime(b.timestamp) - getTime(a.timestamp)).slice(0, 2); // Max 2 for Home
     const dashRecentContainer = document.getElementById('dashRecentOrdersContainer');
     if(dashRecentContainer) dashRecentContainer.innerHTML = recentOrders.length === 0 ? getEmptyOrdersHTML() : generateOrdersHTML(recentOrders);
 }
 
 // ---------------- DRIVERS LOGIC ----------------
-function calculateDriverMetrics(driverEmail) {
+function calculateDriverMetrics(driverId) {
     const todayStr = new Date().toDateString();
-    const driverOrders = allOrders.filter(o => o.driverEmail === driverEmail);
+    const driverOrders = allOrders.filter(o => o.driverId === driverId);
     
     let activeOrder = null;
     let deliveriesToday = 0;
-    let earningsToday = 0;
-    let cashToReturn = 0; // Simplified calculation for operation panel
+    let cashToReturn = 0; 
 
     driverOrders.forEach(o => {
-        if (o.status === 'Driver Assigned') activeOrder = o;
+        if (o.status === 'Driver Assigned' || o.status === 'Out for Delivery') activeOrder = o;
         
         let orderDate = new Date();
         if (o.timestamp) orderDate = new Date(o.timestamp);
         
         if (o.status === 'Delivered') {
-            if (orderDate.toDateString() === todayStr) {
-                deliveriesToday++;
-                earningsToday += safeNum(o.deliveryFee); // Assuming delivery fee goes to driver for simplified UI
-            }
+            if (orderDate.toDateString() === todayStr) deliveriesToday++;
             if (o.driverSettled !== true) {
-                // Simplified cash to return: Order total - driver's fee (Modify based on exact TASCO logic)
                 cashToReturn += (safeNum(o.totalPrice) - safeNum(o.deliveryFee)); 
             }
         }
     });
-    return { activeOrder, deliveriesToday, earningsToday, cashToReturn };
+    return { activeOrder, deliveriesToday, cashToReturn };
 }
 
 function renderDriversList() {
     let total = allDrivers.length, online = 0, onDeliv = 0, offline = 0;
     
     const renderCard = (driver) => {
-        const metrics = calculateDriverMetrics(driver.email);
+        const metrics = calculateDriverMetrics(driver.id);
         let statusClass = 'dot-offline';
         let statusText = 'Offline';
         
@@ -601,26 +603,25 @@ function renderDriversList() {
             else { online++; statusClass = 'dot-online'; statusText = 'Online'; }
         } else { offline++; }
 
-        const name = driver.name || driver.email.split('@')[0];
+        const imgTag = driver.photoUrl ? `<img src="${driver.photoUrl}">` : `<svg viewBox="0 0 24 24" style="width:24px; color:var(--text-muted);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`;
         
         return `<div class="driver-card">
             <div class="driver-avatar">
-                <svg viewBox="0 0 24 24" style="width:24px; color:var(--text-muted);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                ${imgTag}
                 <div class="status-dot ${statusClass}"></div>
             </div>
             <div class="driver-info">
-                <h4>${name}</h4>
+                <h4>${driver.name}</h4>
                 <div class="driver-meta">
                     <span>${statusText}</span>
                     <span style="color:var(--accent);">Deliveries Today: ${metrics.deliveriesToday}</span>
                     <span style="color:var(--danger);">To Return: ${formatPrice(metrics.cashToReturn)} DH</span>
                 </div>
             </div>
-            <button class="btn-view" onclick="viewDriver('${driver.email}')">View</button>
         </div>`;
     };
 
-    // Home Page (Max 2, preferably online ones)
+    // Home Page (Max 2)
     const homeContainer = document.getElementById('dashDriversContainer');
     if(homeContainer) {
         const activeOnly = allDrivers.filter(d => d.isOnline).slice(0, 2);
@@ -639,36 +640,79 @@ function renderDriversList() {
     }
 }
 
-window.viewDriver = (email) => {
-    const driver = allDrivers.find(d => d.email === email);
-    if(!driver) return;
+// ---------------- ADD DRIVER SYSTEM ----------------
+window.openAddDriverModal = () => {
+    document.getElementById('drvName').value = '';
+    document.getElementById('drvPhone').value = '';
+    document.getElementById('drvPass').value = '';
+    document.getElementById('drvVehicle').value = 'Motorcycle';
+    document.getElementById('drvPhotoPreview').style.display = 'none';
+    document.getElementById('drvPhotoIcon').style.display = 'block';
+    document.getElementById('drvPhoto').value = '';
     
-    const metrics = calculateDriverMetrics(driver.email);
-    const name = driver.name || driver.email.split('@')[0];
-    
-    document.getElementById('dd-name').innerText = name;
-    document.getElementById('dd-phone').innerText = driver.phone || 'No phone provided';
-    document.getElementById('dd-deliveries').innerText = metrics.deliveriesToday;
-    document.getElementById('dd-earnings').innerText = formatPrice(metrics.earningsToday) + ' DH';
-    document.getElementById('dd-cash').innerText = formatPrice(metrics.cashToReturn) + ' DH';
-
-    const statusDot = document.getElementById('dd-status-dot');
-    statusDot.className = driver.isOnline ? 'status-dot dot-online' : 'status-dot dot-offline';
-
-    const activeCard = document.getElementById('dd-active-order-card');
-    if(metrics.activeOrder) {
-        activeCard.style.display = 'block';
-        document.getElementById('dd-active-order-id').innerText = "#" + metrics.activeOrder.id.substring(0,6).toUpperCase();
-        document.getElementById('dd-btn-view-order').onclick = () => viewOrder(metrics.activeOrder.id);
-    } else {
-        activeCard.style.display = 'none';
-    }
-
-    document.getElementById('btnCallDriver').href = driver.phone ? `tel:${driver.phone}` : '#';
-    document.getElementById('btnWaDriver').href = driver.phone ? `https://wa.me/${driver.phone.replace(/\+/g, '')}` : '#';
-
-    switchTab('driver-detail');
+    document.getElementById('addDriverOverlay').classList.add('active');
+    document.getElementById('addDriverModal').classList.add('active');
 };
+
+let selectedDriverPhoto = null;
+window.previewDriverPhoto = (e) => {
+    if(e.target.files && e.target.files[0]) {
+        selectedDriverPhoto = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            document.getElementById('drvPhotoPreview').src = e.target.result;
+            document.getElementById('drvPhotoPreview').style.display = 'block';
+            document.getElementById('drvPhotoIcon').style.display = 'none';
+        }
+        reader.readAsDataURL(selectedDriverPhoto);
+    }
+};
+
+window.createDriver = async () => {
+    const name = document.getElementById('drvName').value.trim();
+    const phone = document.getElementById('drvPhone').value.trim();
+    const pass = document.getElementById('drvPass').value.trim();
+    const vehicle = document.getElementById('drvVehicle').value;
+    const btn = document.getElementById('btnCreateDriver');
+
+    if(!name || !phone || !pass) return showToast("Please fill all fields");
+    
+    btn.innerText = "CREATING...";
+    btn.disabled = true;
+
+    try {
+        let photoUrl = "";
+        if (selectedDriverPhoto) {
+            const storageRef = ref(storage, `drivers/${Date.now()}_${selectedDriverPhoto.name}`);
+            await uploadBytes(storageRef, selectedDriverPhoto);
+            photoUrl = await getDownloadURL(storageRef);
+        }
+
+        // We save directly to Firestore collection "drivers". 
+        // For true Auth, you'd use a Cloud Function or secondary App instance to create the Auth user without logging out Admin.
+        const driverData = {
+            name: name,
+            phone: phone,
+            password: pass, // In production, never store plaintext. Used here for operational simplicity per requirements.
+            vehicleType: vehicle,
+            photoUrl: photoUrl,
+            isOnline: false,
+            createdAt: new Date().toISOString()
+        };
+
+        await addDoc(collection(db, "drivers"), driverData);
+        showToast("Driver account created!");
+        closeModals();
+    } catch(e) {
+        console.error(e);
+        showToast("Error creating driver");
+    } finally {
+        btn.innerText = "CREATE DRIVER";
+        btn.disabled = false;
+        selectedDriverPhoto = null;
+    }
+};
+
 
 // ---------------- ORDERS LOGIC ----------------
 window.filterOrdersList = (status, tabElement) => { 
@@ -693,7 +737,7 @@ function generateOrdersHTML(ordersArray) {
 
         let statusClass = 'b-pending';
         if(o.status === 'Preparing') statusClass = 'b-preparing';
-        if(o.status === 'Driver Assigned') statusClass = 'b-driver';
+        if(o.status === 'Driver Assigned' || o.status === 'Out for Delivery') statusClass = 'b-driver';
         if(o.status === 'Delivered') statusClass = 'b-delivered';
         if(o.status === 'Cancelled') statusClass = 'b-cancelled';
 
@@ -730,11 +774,11 @@ window.viewOrder = (orderId) => {
 
     document.getElementById('btnCallCustomer').href = order.customerPhone ? `tel:${order.customerPhone}` : '#';
     document.getElementById('btnWaCustomer').href = order.customerPhone ? `https://wa.me/${order.customerPhone.replace(/\+/g, '')}` : '#';
-    document.getElementById('btnNavCustomer').href = order.neighborhood ? `https://maps.google.com/?q=${encodeURIComponent(order.neighborhood)}` : '#';
+    document.getElementById('btnNavCustomer').href = order.neighborhood ? `http://googleusercontent.com/maps.google.com/?q=${encodeURIComponent(order.neighborhood)}` : '#';
 
     let statusClass = 'b-pending';
     if(order.status === 'Preparing') statusClass = 'b-preparing';
-    if(order.status === 'Driver Assigned') statusClass = 'b-driver';
+    if(order.status === 'Driver Assigned' || order.status === 'Out for Delivery') statusClass = 'b-driver';
     if(order.status === 'Delivered') statusClass = 'b-delivered';
     if(order.status === 'Cancelled') statusClass = 'b-cancelled';
 
@@ -745,13 +789,16 @@ window.viewOrder = (orderId) => {
     document.getElementById('det-items-list').innerHTML = (order.cart || []).map(item => {
         const p = item.product || {}; 
         const price = safeNum(item.unitPrice) || safeNum(p.sellPrice);
+        const img = p.imageUrl ? `<img src="${p.imageUrl}">` : `<svg viewBox="0 0 24 24" style="width:24px;color:var(--border-dark);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>`;
+        
         let metaHtml = '';
-        if(item.variantName) metaHtml += `<div>Variant: ${item.variantName}</div>`;
+        if(item.variantName) metaHtml += `<div><span style="color:var(--primary);">Size:</span> ${item.variantName}</div>`;
         if(item.extras && item.extras.length > 0) metaHtml += `<div>+ ${item.extras.join(', ')}</div>`;
-        if(item.modularChoices) item.modularChoices.forEach(c => metaHtml += `<div>${c.groupName}: ${c.itemName}</div>`);
-        if(item.note) metaHtml += `<div style="color:var(--danger);">Note: ${item.note}</div>`;
+        if(item.modularChoices) item.modularChoices.forEach(c => metaHtml += `<div><span style="color:var(--primary);">${c.groupName}:</span> ${c.itemName}</div>`);
+        if(item.note) metaHtml += `<div style="color:var(--danger); font-weight:700;">Note: ${item.note}</div>`;
 
         return `<div class="item-row">
+            <div class="item-img">${img}</div>
             <div class="item-details">
                 <div class="item-name"><span>${item.qty}x ${p.name || 'Item'}</span> <span>${formatPrice(price * item.qty)} DH</span></div>
                 ${metaHtml ? `<div class="item-meta">${metaHtml}</div>` : ''}
@@ -769,11 +816,10 @@ window.viewOrder = (orderId) => {
         actionsHTML += `<button class="btn btn-primary" onclick="promptOrderStatus('${order.id}', 'Preparing')">ACCEPT ORDER</button>`;
         actionsHTML += `<button class="btn btn-outline" style="color:var(--danger); border-color:var(--danger-light);" onclick="promptOrderStatus('${order.id}', 'Cancelled')">CANCEL ORDER</button>`;
     } else if (order.status === 'Preparing') {
-        actionsHTML += `<button class="btn btn-primary" onclick="showToast('Assign Driver popup logic here')">ASSIGN DRIVER</button>`;
-    } else if (order.status === 'Driver Assigned') {
-        const dName = order.driverEmail ? order.driverEmail.split('@')[0] : 'Driver';
-        actionsHTML += `<div style="text-align:center; padding:16px; background:var(--bg-main); border-radius:12px; font-weight:800; font-size:14px;">Driver: <span style="color:var(--primary);">${dName}</span></div>`;
-        actionsHTML += `<button class="btn btn-outline" onclick="viewDriver('${order.driverEmail}')">VIEW DRIVER</button>`;
+        actionsHTML += `<button class="btn btn-primary" onclick="openAssignDriverModal('${order.id}')">ASSIGN DRIVER</button>`;
+    } else if (order.status === 'Driver Assigned' || order.status === 'Out for Delivery') {
+        const dName = order.driverName || 'Assigned Driver';
+        actionsHTML += `<div style="text-align:center; padding:16px; background:var(--blue-light); color:var(--blue); border-radius:12px; font-weight:800; font-size:14px; text-transform:uppercase;">Driver: ${dName}</div>`;
         actionsHTML += `<button class="btn btn-success" onclick="promptOrderStatus('${order.id}', 'Delivered')">FORCE DELIVERED</button>`;
     } else if (order.status === 'Delivered') {
         actionsHTML += `<div style="text-align:center; color:var(--accent); font-weight:800; padding:16px; background:var(--accent-light); border-radius:12px;">ORDER DELIVERED</div>`;
@@ -783,6 +829,54 @@ window.viewOrder = (orderId) => {
 
     document.getElementById('det-actions').innerHTML = actionsHTML; 
     switchTab('order-detail');
+};
+
+window.openAssignDriverModal = (orderId) => {
+    orderToAssign = orderId;
+    const list = document.getElementById('assignDriverList');
+    const onlineDrivers = allDrivers.filter(d => d.isOnline);
+    
+    if(onlineDrivers.length === 0) {
+        list.innerHTML = `<div style="text-align:center; padding:20px; font-size:13px; color:var(--text-muted); font-weight:700;">No drivers currently online.</div>`;
+    } else {
+        list.innerHTML = onlineDrivers.map(d => {
+            const imgTag = d.photoUrl ? `<img src="${d.photoUrl}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">` : `<div style="width:40px; height:40px; border-radius:50%; background:var(--border); display:flex; align-items:center; justify-content:center;"><svg viewBox="0 0 24 24" style="width:20px; color:var(--text-muted);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>`;
+            return `<div style="display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--bg-main); border:1px solid var(--border); border-radius:12px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    ${imgTag}
+                    <div>
+                        <div style="font-size:14px; font-weight:800; color:var(--text-main);">${d.name}</div>
+                        <div style="font-size:11px; font-weight:600; color:var(--text-muted);">${d.vehicleType}</div>
+                    </div>
+                </div>
+                <button class="btn btn-outline" style="width:auto; padding:8px 16px; font-size:12px;" onclick="assignDriverToOrder('${d.id}')">Select</button>
+            </div>`;
+        }).join('');
+    }
+    
+    document.getElementById('assignDriverOverlay').classList.add('active');
+    document.getElementById('assignDriverModal').classList.add('active');
+};
+
+window.assignDriverToOrder = async (driverId) => {
+    if(!orderToAssign) return;
+    const driver = allDrivers.find(d => d.id === driverId);
+    if(!driver) return;
+    
+    try {
+        // We write the driver details into the order so the client app (index.html) can read it instantly
+        await updateDoc(doc(db, "orders", orderToAssign), { 
+            status: 'Driver Assigned',
+            driverId: driver.id,
+            driverName: driver.name,
+            driverPhone: driver.phone,
+            driverPhoto: driver.photoUrl || null
+        });
+        showToast(`Assigned to ${driver.name}`);
+        closeModals();
+    } catch(e) {
+        alert("Error assigning driver");
+    }
 };
 
 window.promptOrderStatus = (orderId, newStatus) => {
@@ -803,6 +897,10 @@ window.promptOrderStatus = (orderId, newStatus) => {
 
 window.closeModals = () => {
     document.getElementById('confirmOverlay').classList.remove('active');
+    document.getElementById('addDriverOverlay').classList.remove('active');
+    document.getElementById('addDriverModal').classList.remove('active');
+    document.getElementById('assignDriverOverlay').classList.remove('active');
+    document.getElementById('assignDriverModal').classList.remove('active');
 };
 
 document.getElementById('modalConfirmBtn').addEventListener('click', () => { 
