@@ -7,20 +7,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --orange: #FF5A00;
-  --orange-light: #FFF0E5;
-  --green: #10B981;
-  --green-light: #E0F2FE;
-  --bg: #F9FAFB;
-  --surface: #FFFFFF;
-  --text-main: #111827;
-  --text-muted: #6B7280;
-  --border: #F3F4F6;
-  --border-dark: #E5E7EB;
-  --danger: #EF4444;
-  --danger-light: #FEF2F2;
-  --font: "Inter", sans-serif;
-  --nav-height: 80px;
+--orange: #FF5A00;
+--orange-light: #FFF0E5;
+--orange-mid: rgba(255,90,0,0.15);
+--green: #10B981;
+--green-light: #E0F2FE;
+--bg: #F9FAFB;
+--surface: #FFFFFF;
+--text-main: #111827;
+--text-muted: #6B7280;
+--border: #F3F4F6;
+--border-dark: #E5E7EB;
+--danger: #EF4444;
+--danger-light: #FEF2F2;
+--font: "Inter", sans-serif;
+--nav-height: 80px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -30,6 +31,20 @@ button, input, a { font-family: inherit; outline: none; border: none; background
 img { display: block; }
 ::-webkit-scrollbar { display: none; }
 
+/* AUTH GATE OVERLAY */
+#authGate { position: fixed; inset: 0; background: var(--bg); z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; transition: opacity 0.4s ease; }
+#authGate.hide { opacity: 0; pointer-events: none; display: none; }
+.auth-card { background: var(--surface); border: 1px solid var(--border-dark); border-radius: 20px; padding: 32px 24px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
+.auth-logo { font-size: 28px; font-weight: 800; color: var(--orange); margin-bottom: 8px; letter-spacing: -1px; }
+.auth-title { font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 24px; }
+.auth-label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); text-align: left; margin-bottom: 8px; letter-spacing: 0.5px;}
+.auth-input { width: 100%; padding: 16px; border: 2px solid var(--border-dark); border-radius: 12px; font-size: 16px; font-weight: 600; color: var(--text-main); margin-bottom: 20px; transition: 0.2s; background: var(--bg); }
+.auth-input:focus { border-color: var(--orange); background: var(--surface); }
+.otp-container { display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; }
+.otp-box { width: 44px; height: 52px; border: 2px solid var(--border-dark); border-radius: 10px; font-size: 20px; font-weight: 700; text-align: center; background: var(--bg); }
+.otp-box:focus { border-color: var(--orange); background: var(--surface); }
+.auth-back { font-size: 13px; color: var(--orange); font-weight: 600; margin-top: 16px; display: inline-block; }
+
 #app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; }
 #screens { flex: 1; position: relative; overflow: hidden; }
 .screen { position: absolute; inset: 0; overflow-y: auto; background: var(--bg); opacity: 0; pointer-events: none; transition: opacity 0.2s ease; padding-bottom: 32px; }
@@ -38,7 +53,7 @@ img { display: block; }
 /* BOTTOM NAV */
 #nav { flex-shrink: 0; height: var(--nav-height); background: var(--surface); border-top: 1px solid var(--border-dark); display: flex; padding-bottom: env(safe-area-inset-bottom, 16px); z-index: 100; }
 .ni { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--text-muted); font-size: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-.ni svg { width: 24px; height: 24px; stroke-width: 2; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
+.ni svg { width: 24px; height: 24px; stroke-width: 2; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; transition: 0.2s; }
 .ni.active { color: var(--orange); }
 
 /* GLOBALS & HEADERS */
@@ -50,6 +65,7 @@ img { display: block; }
 /* HOME SCREEN */
 .home-profile-row { display: flex; align-items: center; gap: 12px; }
 .avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; background: var(--orange-light); border: 2px solid var(--surface); box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--orange); font-size: 20px;}
+.avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .greeting { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
 .status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--green); margin-top: 2px; }
 .status-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
@@ -57,9 +73,9 @@ img { display: block; }
 .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 24px; }
 .dash-card { padding: 16px; display: flex; justify-content: space-between; align-items: flex-start; }
 .dash-lbl { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-bottom: 8px; }
-.dash-val { font-size: 20px; font-weight: 800; color: var(--text-main); }
+.dash-val { font-size: 20px; font-weight: 800; color: var(--text-main); line-height: 1; }
 .dash-val.green { color: var(--green); }
-.dash-ic { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--green-light); color: var(--green); }
+.dash-ic { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--green-light); color: var(--green); flex-shrink: 0; }
 .dash-ic.blue { background: #EEF2FF; color: #4F46E5; }
 .dash-ic svg { width: 16px; height: 16px; stroke-width: 2; }
 
@@ -71,7 +87,6 @@ img { display: block; }
 .oc-time svg { width: 14px; }
 .oc-loc { font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 6px; color: var(--text-muted); margin-bottom: 4px; }
 .oc-loc svg { width: 14px; }
-.oc-meta { font-size: 12px; color: var(--text-muted); margin-left: 20px; margin-bottom: 16px; }
 .badge-new { background: var(--orange-light); color: var(--orange); padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
 .oc-price { position: absolute; right: 16px; top: 48px; text-align: right; }
 .oc-price-val { font-size: 18px; font-weight: 700; color: var(--green); }
@@ -101,15 +116,14 @@ img { display: block; }
 .c-btn-circle.wa { color: #25D366; }
 .btn-nav-full { display: flex; align-items: center; justify-content: center; gap: 6px; background: var(--orange-light); color: var(--orange); padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 700; margin-top: 16px; width: 100%; }
 
-.item-list { margin: 16px 24px 0; }
-.item-row { display: flex; align-items: flex-start; gap: 12px; padding: 16px; border-bottom: 1px solid var(--border); }
+.item-list { margin: 16px 24px 0; background: var(--surface); border-radius: 16px; border: 1px solid var(--border-dark); padding: 0 16px; }
+.item-row { display: flex; align-items: center; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--border); }
 .item-row:last-child { border-bottom: none; }
-.item-img { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; background: var(--border); flex-shrink: 0; }
+.item-img { width: 48px; height: 48px; border-radius: 8px; object-fit: contain; background: transparent; flex-shrink: 0; }
 .item-details { flex: 1; }
-.item-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-.item-opts { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
-.item-qty { font-size: 13px; font-weight: 600; color: var(--text-muted); background: var(--bg); padding: 2px 8px; border-radius: 4px; }
-.item-price { font-size: 14px; font-weight: 700; text-align: right; }
+.item-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; display: flex; justify-content: space-between; }
+.item-meta { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+.item-qty { font-size: 13px; font-weight: 700; color: var(--orange); margin-right: 4px;}
 
 .pay-sum { margin: 16px 24px 0; padding: 16px; }
 .pay-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: var(--text-muted); }
@@ -120,14 +134,14 @@ img { display: block; }
 .step { display: flex; gap: 16px; margin-bottom: 24px; position: relative; }
 .step:last-child { margin-bottom: 0; }
 .step-line { position: absolute; left: 11px; top: 24px; bottom: -24px; width: 2px; background: var(--border-dark); }
+.step.active .step-line { background: var(--orange); }
+.step.done .step-line { background: var(--orange); }
 .step:last-child .step-line { display: none; }
 .step-dot { width: 24px; height: 24px; border-radius: 50%; background: var(--border-dark); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--text-muted); position: relative; z-index: 2; }
 .step.active .step-dot { background: var(--orange); color: white; box-shadow: 0 0 0 4px var(--orange-light); }
-.step.active .step-line { background: var(--orange); }
 .step.done .step-dot { background: var(--orange); color: white; }
-.step.done .step-line { background: var(--orange); }
 .step-text { flex: 1; padding-top: 2px; }
-.step-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+.step-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; color: var(--text-muted); }
 .step.active .step-title { color: var(--orange); }
 .step.done .step-title { color: var(--text-main); }
 .step-desc { font-size: 12px; color: var(--text-muted); }
@@ -141,150 +155,166 @@ img { display: block; }
 .btn-settle { background: var(--orange); color: white; padding: 12px 24px; border-radius: 10px; font-weight: 700; }
 .earn-list-item { padding: 16px 24px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-dark); }
 .prof-header { padding: 32px 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.prof-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--orange); color: white; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; }
+.prof-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--orange); color: white; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; overflow: hidden;}
+.prof-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .prof-name { font-size: 20px; font-weight: 700; }
 .prof-menu { margin: 0 24px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border-dark); overflow: hidden; }
 .prof-row { padding: 16px; border-bottom: 1px solid var(--border-dark); display: flex; align-items: center; gap: 16px; }
 .prof-row:last-child { border-bottom: none; }
-.btn-logout { margin: 32px 24px; padding: 16px; background: var(--danger-light); color: var(--danger); font-weight: 700; text-align: center; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-logout { margin: 32px 24px; padding: 16px; background: var(--danger-light); color: var(--danger); font-weight: 700; text-align: center; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; width: calc(100% - 48px); }
 .empty-state { text-align: center; padding: 60px 24px; color: var(--text-muted); font-weight: 500;}
+#recaptcha-container { position: fixed; bottom: 0; left: 0; z-index: 9999; }
 </style>
 </head>
 <body>
 
+<div id="authGate">
+    <div class="auth-card">
+        <div class="auth-logo">TASCO DRIVER</div>
+        
+        <div id="authStepPhone">
+            <div class="auth-title">Enter your phone number to sign in</div>
+            <label class="auth-label">Phone Number</label>
+            <input type="tel" id="inputPhone" class="auth-input" placeholder="06XXXXXXXX" value="">
+            <button class="btn-solid" id="btnSendOtp" onclick="executeSmsRequest()">GET VERIFICATION CODE</button>
+        </div>
+
+        <div id="authStepOtp" style="display:none;">
+            <div class="auth-title">Verify your mobile device</div>
+            <label class="auth-label">6-Digit Verification Code</label>
+            <div class="otp-container" id="otpBoxWrapper"></div>
+            <button class="btn-solid" id="btnVerifyOtp" onclick="executeOtpVerification()">VERIFY & UNLOCK</button>
+            <a href="#" class="auth-back" onclick="revertToPhoneEntry()">← Change Phone Number</a>
+        </div>
+    </div>
+    <div id="recaptcha-container"></div>
+</div>
+
 <div id="app">
-  <div id="screens">
+<div id="screens">
 
-    <div class="screen active" id="sHome">
-      <div class="header">
+<div class="screen active" id="sHome">
+    <div class="header">
         <div class="home-profile-row">
-          <div class="avatar" id="homeAv"></div>
-          <div>
-            <div class="greeting">Hi, <span id="drvName">...</span> 👋</div>
-            <div class="status-badge"><div class="status-dot"></div>Online</div>
-          </div>
+            <div class="avatar" id="homeAv"></div>
+            <div>
+                <div class="greeting">Hi, <span id="drvName">...</span> 👋</div>
+                <div class="status-badge"><div class="status-dot"></div>Online</div>
+            </div>
         </div>
-        <div style="position: relative; color: var(--text-main); cursor: pointer; padding: 4px;">
-          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
-          <div style="position: absolute; top: 2px; right: 4px; width: 10px; height: 10px; background: var(--orange); border-radius: 50%; border: 2px solid var(--bg);"></div>
-        </div>
-      </div>
-
-      <div class="dash-grid">
-        <div class="card dash-card">
-          <div><div class="dash-lbl">Today's earnings</div><div class="dash-val green" id="hEarn">0.00 DH</div></div>
-          <div class="dash-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        </div>
-        <div class="card dash-card">
-          <div><div class="dash-lbl">Today's orders</div><div class="dash-val" id="hOrders">0</div></div>
-          <div class="dash-ic blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
-        </div>
-      </div>
-
-      <div class="section-title">
-        <span>Available orders</span>
-        <span style="font-size:12px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:4px"><div class="status-dot"></div>Real-time updates</span>
-      </div>
-
-      <div id="poolList"></div>
     </div>
 
-    <div class="screen" id="sActive">
-      <div class="active-hdr">
+    <div class="dash-grid">
+        <div class="card dash-card">
+            <div><div class="dash-lbl">Today's earnings</div><div class="dash-val green" id="hEarn">0.00 DH</div></div>
+            <div class="dash-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        </div>
+        <div class="card dash-card">
+            <div><div class="dash-lbl">Today's orders</div><div class="dash-val" id="hOrders">0</div></div>
+            <div class="dash-ic blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        </div>
+    </div>
+
+    <div class="section-title">
+        <span>Available orders</span>
+        <span style="font-size:12px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:4px"><div class="status-dot"></div>Real-time updates</span>
+    </div>
+
+    <div id="poolList"></div>
+</div>
+
+<div class="screen" id="sActive">
+    <div class="active-hdr">
         <div class="back-btn" onclick="goHome()">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         </div>
         <div class="screen-title">Active Order</div>
         <a href="https://wa.me/212708006088" target="_blank" class="btn-help">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> Help
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> Help
         </a>
-      </div>
-      <div id="activeContent"></div>
     </div>
+    <div id="activeContent"></div>
+</div>
 
-    <div class="screen" id="sEarnings">
-      <div class="header"><div class="screen-title" style="text-align:center;width:100%">Earnings</div></div>
-      <div class="dash-grid">
+<div class="screen" id="sEarnings">
+    <div class="header"><div class="screen-title" style="text-align:center;width:100%">Earnings</div></div>
+    <div class="dash-grid">
         <div class="card dash-card">
-          <div><div class="dash-lbl">Today's earnings</div><div class="dash-val green" id="eEarn">0.00 DH</div></div>
+            <div><div class="dash-lbl">Today's earnings</div><div class="dash-val green" id="eEarn">0.00 DH</div></div>
         </div>
         <div class="card dash-card">
-          <div><div class="dash-lbl">Orders completed</div><div class="dash-val" id="eOrders">0</div></div>
+            <div><div class="dash-lbl">Orders completed</div><div class="dash-val" id="eOrders">0</div></div>
         </div>
-      </div>
-      <div class="card earn-card" style="margin-top:24px">
+    </div>
+    <div class="card earn-card" style="margin-top:24px">
         <div class="earn-card-left">
-          <div class="dash-ic" style="background:#fff;color:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
-          <div>
-            <div style="font-size:12px;color:var(--text-muted);font-weight:600">TASCO balance</div>
-            <div style="font-size:20px;font-weight:800;color:var(--orange)" id="eDebt">0.00 DH</div>
-            <div style="font-size:11px;color:var(--text-muted)">To give to admin</div>
-          </div>
+            <div class="dash-ic" style="background:#fff;color:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+            <div>
+                <div style="font-size:12px;color:var(--text-muted);font-weight:600">TASCO balance</div>
+                <div style="font-size:20px;font-weight:800;color:var(--orange)" id="eDebt">0.00 DH</div>
+                <div style="font-size:11px;color:var(--text-muted)">To give to admin</div>
+            </div>
         </div>
-        <button class="btn-settle" onclick="markSettled()">Settle</button>
-      </div>
-      <div class="section-title">Today's orders</div>
-      <div class="card" style="margin:0 24px;border-radius:16px" id="earnList"></div>
     </div>
+    <div class="section-title">Today's completed orders</div>
+    <div class="card" style="margin:0 24px;border-radius:16px" id="earnList"></div>
+</div>
 
-    <div class="screen" id="sProfile">
-      <div class="header"><div class="screen-title" style="text-align:center;width:100%">Profile</div></div>
-      <div class="prof-header">
+<div class="screen" id="sProfile">
+    <div class="header"><div class="screen-title" style="text-align:center;width:100%">Profile</div></div>
+    <div class="prof-header">
         <div class="prof-avatar" id="pAv"></div>
         <div style="text-align:center">
-          <div class="prof-name" id="pName">...</div>
-          <div style="color:var(--text-muted);font-size:14px;margin-bottom:8px">Driver</div>
-          <div class="status-badge" style="background:var(--green-light);padding:4px 10px;border-radius:99px"><div class="status-dot"></div>Online</div>
+            <div class="prof-name" id="pName">...</div>
+            <div style="color:var(--text-muted);font-size:14px;margin-bottom:8px">Driver Partner</div>
+            <div class="status-badge" style="background:var(--green-light);padding:4px 10px;border-radius:99px"><div class="status-dot"></div>Online</div>
         </div>
-      </div>
-      <div class="prof-menu">
+    </div>
+    <div class="prof-menu">
         <div class="prof-row">
-          <div class="dash-ic" style="background:#FFF1F2;color:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
-          <div style="flex:1">
-            <div style="font-size:12px;color:var(--text-muted);margin-bottom:2px">Phone number</div>
-            <div style="font-size:14px;font-weight:600" id="pPhone">...</div>
-          </div>
+            <div class="dash-ic" style="background:#FFF1F2;color:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+            <div style="flex:1">
+                <div style="font-size:12px;color:var(--text-muted);margin-bottom:2px">Phone number</div>
+                <div style="font-size:14px;font-weight:600" id="pPhone">...</div>
+            </div>
         </div>
-      </div>
-      <button class="btn-logout" onclick="logout()">
+    </div>
+    <button class="btn-logout" onclick="logout()">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         Log out
-      </button>
-    </div>
+    </button>
+</div>
 
-  </div>
+</div>
 
-  <nav id="nav">
+<nav id="nav">
     <div class="ni active" data-s="sHome" onclick="go('sHome')">
-      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home
     </div>
     <div class="ni" data-s="sActive" onclick="go('sActive')">
-      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>Active
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>Active
     </div>
     <div class="ni" data-s="sEarnings" onclick="go('sEarnings')">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="12" y1="2" x2="12" y2="6"/></svg>Earnings
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="12" y1="2" x2="12" y2="6"/></svg>Earnings
     </div>
     <div class="ni" data-s="sProfile" onclick="go('sProfile')">
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
     </div>
-  </nav>
+</nav>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, onSnapshot, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAaaR52bvyQfkxmZL16lcg4Bd4M76OtbI4",
-  authDomain: "lesgo-cd7f9.firebaseapp.com",
-  projectId: "lesgo-cd7f9",
-  storageBucket: "lesgo-cd7f9.firebasestorage.app",
-  messagingSenderId: "618932234525",
-  appId: "1:618932234525:web:8eb0b934b1bfd1060059f4"
+    apiKey: "AIzaSyAaaR52bvyQfkxmZL16lcg4Bd4M76OtbI4",
+    authDomain: "lesgo-cd7f9.firebaseapp.com",
+    projectId: "lesgo-cd7f9",
+    storageBucket: "lesgo-cd7f9.firebasestorage.app",
+    messagingSenderId: "618932234525",
+    appId: "1:618932234525:web:8eb0b934b1bfd1060059f4"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -292,409 +322,471 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 const S = {
-  orders: [],
-  driver: null,
-  activeId: null
+    orders: [],
+    driver: null,
+    activeId: null
 };
 
 const fmt = n => Number(n).toFixed(2);
 
-// AUTHENTICATION
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    const localDrv = localStorage.getItem("drv");
-    if (localDrv) {
-      S.driver = JSON.parse(localDrv);
-      updateProfileUI();
-      startOrderListener();
-    } else {
-      try {
-        const dDoc = await getDoc(doc(db, "drivers", user.phoneNumber));
-        if (dDoc.exists() && dDoc.data().isActive) {
-          S.driver = { name: dDoc.data().name, phone: dDoc.data().phone };
-          localStorage.setItem("drv", JSON.stringify(S.driver));
-          updateProfileUI();
-          startOrderListener();
-        } else {
-          throw new Error("Driver account not active");
-        }
-      } catch (err) {
-        await signOut(auth);
-        window.location.href = "login.html";
-        return;
-      }
+// MOROCCAN LOCAL PHONE NUMBER NORMALIZATION UTILITY
+function normalizeMoroccanPhone(inputPhone) {
+    let cleaned = inputPhone.trim().replace(/[\s\-\(\)]/g, '');
+    if (cleaned.startsWith('06') || cleaned.startsWith('07')) {
+        return '+212' + cleaned.substring(1);
     }
-  } else {
-    window.location.href = "login.html";
-  }
+    if ((cleaned.startsWith('6') || cleaned.startsWith('7')) && cleaned.length === 9) {
+        return '+212' + cleaned;
+    }
+    return cleaned;
+}
+
+// INTENT INITIALIZER FOR CAPTCHA OBJECT
+function initRecaptchaBouncer() {
+    if (window._recaptchaVerifier) return;
+    window._recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+        size: 'invisible'
+    });
+}
+
+// STATE REVERSION FLOW
+window.revertToPhoneEntry = () => {
+    document.getElementById('authStepOtp').style.display = 'none';
+    document.getElementById('authStepPhone').style.display = 'block';
+};
+
+// INITIALIZE ENTRY OF OTP INPUT BOX PIPELINE
+function buildOtpInputBoxes() {
+    const wrapper = document.getElementById('otpBoxWrapper');
+    wrapper.innerHTML = '';
+    for(let i = 0; i < 6; i++) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.inputMode = 'numeric';
+        input.maxLength = 1;
+        input.className = 'otp-box';
+        input.id = 'otp_' + i;
+        input.addEventListener('input', e => {
+            e.target.value = e.target.value.replace(/\D/g, '');
+            if(e.target.value && i < 5) document.getElementById('otp_' + (i + 1)).focus();
+        });
+        input.addEventListener('keydown', e => {
+            if(e.key === 'Backspace' && !e.target.value && i > 0) document.getElementById('otp_' + (i - 1)).focus();
+        });
+        wrapper.appendChild(input);
+    }
+    setTimeout(() => document.getElementById('otp_' + 0).focus(), 100);
+}
+
+// CORE INTERFACE EXECUTION: REQ SIGN-IN OTP
+window.executeSmsRequest = async () => {
+    const rawInput = document.getElementById('inputPhone').value.trim();
+    if (rawInput.length < 9) {
+        alert("Please provide a valid Moroccan phone number.");
+        return;
+    }
+    
+    const validFirestoreId = normalizeMoroccanPhone(rawInput);
+    const btn = document.getElementById('btnSendOtp');
+    btn.innerText = "CHECKING LEDGER...";
+    btn.disabled = true;
+
+    try {
+        // Validation Layer: Confirm profile existence before dispatching real text allocations
+        const driverDocSnap = await getDoc(doc(db, "drivers", validFirestoreId));
+        if (!driverDocSnap.exists() || !driverDocSnap.data().isActive) {
+            alert("Authorization denied. Active driver document profile not registered.");
+            btn.innerText = "GET VERIFICATION CODE";
+            btn.disabled = false;
+            return;
+        }
+
+        initRecaptchaBouncer();
+        btn.innerText = "SENDING CODE...";
+        
+        window._confirmationResult = await signInWithPhoneNumber(auth, validFirestoreId, window._recaptchaVerifier);
+        
+        document.getElementById('authStepPhone').style.display = 'none';
+        document.getElementById('authStepOtp').style.display = 'block';
+        buildOtpInputBoxes();
+    } catch(e) {
+        console.error(e);
+        alert("Authentication Dispatch Error: " + e.message);
+    } finally {
+        btn.innerText = "GET VERIFICATION CODE";
+        btn.disabled = false;
+    }
+};
+
+// CORE INTERFACE EXECUTION: LOG IN CONFIRMATION
+window.executeOtpVerification = async () => {
+    let verificationCode = '';
+    for(let i = 0; i < 6; i++) {
+        verificationCode += (document.getElementById('otp_' + i)?.value || '');
+    }
+    if (verificationCode.length < 6) {
+        alert("Please complete the verification pattern.");
+        return;
+    }
+
+    const btn = document.getElementById('btnVerifyOtp');
+    btn.innerText = "UNLOCKING...";
+    btn.disabled = true;
+
+    try {
+        await window._confirmationResult.confirm(verificationCode);
+        // Step authorization passed: App reloaded via standard Auth State Change context loop handler
+    } catch(e) {
+        alert("Invalid authorization response code.");
+        btn.disabled = false;
+        btn.innerText = "VERIFY & UNLOCK";
+    }
+};
+
+// AUTHENTICATION STATE WATCHDOG PIPELINE
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        try {
+            const dDoc = await getDoc(doc(db, "drivers", user.phoneNumber));
+            if (dDoc.exists() && dDoc.data().isActive) {
+                S.driver = { 
+                    name: dDoc.data().name, 
+                    phone: dDoc.data().phone,
+                    photoUrl: dDoc.data().photoUrl || null 
+                };
+                localStorage.setItem("drv", JSON.stringify(S.driver));
+                
+                // Hide Auth Screen overlay layer container seamlessly
+                document.getElementById('authGate').classList.add('hide');
+                
+                updateProfileUI();
+                startOrderListener();
+            } else {
+                throw new Error("Driver profile allocation inactive.");
+            }
+        } catch (err) {
+            alert(err.message);
+            await signOut(auth);
+            localStorage.removeItem("drv");
+            document.getElementById('authGate').classList.remove('hide');
+        }
+    } else {
+        localStorage.removeItem("drv");
+        document.getElementById('authGate').classList.remove('hide');
+    }
 });
 
 function updateProfileUI() {
-  if (!S.driver) return;
-  document.getElementById("drvName").textContent = S.driver.name;
-  document.getElementById("homeAv").textContent = S.driver.name.charAt(0).toUpperCase();
-  document.getElementById("pAv").textContent = S.driver.name.charAt(0).toUpperCase();
-  document.getElementById("pName").textContent = S.driver.name;
-  document.getElementById("pPhone").textContent = S.driver.phone;
+    if (!S.driver) return;
+    document.getElementById("drvName").textContent = S.driver.name;
+    document.getElementById("pName").textContent = S.driver.name;
+    document.getElementById("pPhone").textContent = S.driver.phone;
+    
+    const avatarContent = S.driver.photoUrl ? `<img src="${S.driver.photoUrl}">` : S.driver.name.charAt(0).toUpperCase();
+    document.getElementById("homeAv").innerHTML = avatarContent;
+    document.getElementById("pAv").innerHTML = avatarContent;
 }
 
 // REALTIME LISTENER
 function startOrderListener() {
-  onSnapshot(collection(db, "orders"), snap => {
-    S.orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    
-    // Auto-detect active order (handling both claimedBy and legacy driverEmail)
-    const active = S.orders.find(o => 
-      (o.claimedBy === S.driver.phone || o.driverEmail === S.driver.phone) && 
-      !['pending', 'delivered', 'cancelled'].includes((o.status || '').toLowerCase())
-    );
-    S.activeId = active ? active.id : null;
+    onSnapshot(collection(db, "orders"), snap => {
+        S.orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-    renderAll();
-  }, err => {
-    console.error("Firestore Error:", err);
-  });
+        // Auto-detect active order running globally on driver profile
+        const active = S.orders.find(o =>
+            (o.driverId === S.driver.phone || o.claimedBy === S.driver.phone) &&
+            !['pending', 'delivered', 'cancelled'].includes(o.status)
+        );
+        S.activeId = active ? active.id : null;
+
+        renderAll();
+    }, err => {
+        console.error("Firestore Error:", err);
+    });
 }
 
 // ROUTING
 window.go = s => {
-  document.querySelectorAll(".screen").forEach(x => x.classList.remove("active"));
-  document.querySelectorAll(".ni").forEach(x => x.classList.remove("active"));
-  document.getElementById(s).classList.add("active");
-  document.querySelector(`.ni[data-s="${s}"]`).classList.add("active");
-  renderAll();
+    document.querySelectorAll(".screen").forEach(x => x.classList.remove("active"));
+    document.querySelectorAll(".ni").forEach(x => x.classList.remove("active"));
+    document.getElementById(s).classList.add("active");
+    document.querySelector(`.ni[data-s="${s}"]`).classList.add("active");
+    renderAll();
 };
 window.goHome = () => go('sHome');
 
 function renderAll() {
-  renderHome();
-  renderActive();
-  renderEarnings();
+    renderHome();
+    renderActive();
+    renderEarnings();
 }
 
 function getTodayStats() {
-  if (!S.driver) return { count: 0, fees: 0 };
-  const today = new Date().toDateString();
-  const mineToday = S.orders.filter(o => 
-    (o.claimedBy === S.driver.phone || o.driverEmail === S.driver.phone) && 
-    (o.status || '').toLowerCase() === "delivered" && 
-    new Date(o.timestamp || 0).toDateString() === today
-  );
-  let todayFees = 0;
-  mineToday.forEach(o => todayFees += (o.deliveryFee || 0));
-  return { count: mineToday.length, fees: todayFees };
+    if (!S.driver) return { count: 0, fees: 0 };
+    const today = new Date().toDateString();
+    const mineToday = S.orders.filter(o =>
+        (o.driverId === S.driver.phone || o.claimedBy === S.driver.phone) &&
+        o.status === "Delivered" &&
+        new Date(o.timestamp || 0).toDateString() === today
+    );
+    let todayFees = 0;
+    mineToday.forEach(o => todayFees += (o.deliveryFee || 0));
+    return { count: mineToday.length, fees: todayFees };
 }
 
 // HOME RENDERER
 function renderHome() {
-  const stats = getTodayStats();
-  document.getElementById("hEarn").textContent = fmt(stats.fees) + " DH";
-  document.getElementById("hOrders").textContent = stats.count;
+    const stats = getTodayStats();
+    document.getElementById("hEarn").textContent = fmt(stats.fees) + " DH";
+    document.getElementById("hOrders").textContent = stats.count;
 
-  const pool = S.orders.filter(o => (o.status || '').toLowerCase() === "pending").sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
-  const el = document.getElementById("poolList");
-  
-  if(!pool.length) {
-    el.innerHTML = `<div class="empty-state">No orders available right now.</div>`;
-    return;
-  }
+    // Filter down strictly to Preparing order state—this matches manual workspace pool logic
+    const pool = S.orders.filter(o => o.status === "Preparing").sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
+    const el = document.getElementById("poolList");
 
-  el.innerHTML = pool.map(o => {
-    const id = "#TSC" + o.id.slice(-4).toUpperCase();
-    
-    const timeDiff = Math.floor((Date.now() - new Date(o.timestamp || Date.now()).getTime()) / 1000);
-    const secondsLeft = Math.max(0, 300 - timeDiff); 
-    const mins = Math.floor(secondsLeft / 60);
-    const secs = secondsLeft % 60;
-    const timerText = `${mins}:${secs.toString().padStart(2, '0')}`;
-    const isNew = timeDiff < 60;
+    if(!pool.length) {
+        el.innerHTML = `<div class="empty-state">No orders available right now.</div>`;
+        return;
+    }
 
-    return `
-      <div class="card order-card">
-        <div class="oc-head">
-          <div class="oc-id">${id}</div>
-          <div class="oc-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span class="countdown-timer" data-time="${secondsLeft}">${timerText}</span></div>
-        </div>
-        <div class="oc-loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${o.neighborhood || "Marrakech"}</div>
-        <div class="oc-meta">${o.totalItems || 1} items ${isNew ? '<span class="badge-new" style="margin-left:8px">New</span>' : ''}</div>
-        
-        <div class="oc-price">
-          <div class="oc-price-val">${fmt(o.totalPrice || 0)} DH</div>
-          <div class="oc-price-lbl">Cash to collect</div>
-        </div>
+    el.innerHTML = pool.map(o => {
+        const id = "#TSC" + o.id.slice(-4).toUpperCase();
+        const timeDiff = Math.floor((Date.now() - new Date(o.timestamp || Date.now()).getTime()) / 1000);
+        const timerText = "5:00"; 
+        const isNew = timeDiff < 60;
 
-        <div class="oc-actions">
-          <button class="btn-solid" onclick="viewOrder('${o.id}')">View Order</button>
-        </div>
-      </div>
-    `;
-  }).join("");
+        return `<div class="card order-card"> 
+            <div class="oc-head"> 
+                <div class="oc-id">${id}</div>
+                <div class="oc-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span class="countdown-timer" data-time="300">${timerText}</span></div>
+            </div>
+            <div class="oc-loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${o.totalItems || 1} items ${isNew ? '<span class="badge-new" style="margin-left:8px">New</span>' : ''}</div>
+            
+            <div style="font-size:12px; font-weight:600; color:var(--text-muted); margin-bottom:8px; display:flex; align-items:center; gap:4px;">📍 ${o.neighborhood || "Marrakech"}</div>
+
+            <div class="oc-price">
+                <div class="oc-price-val">${fmt(o.totalPrice || 0)} DH</div>
+                <div class="oc-price-lbl">Cash to collect</div>
+            </div>
+
+            <div class="oc-actions">
+                <button class="btn-solid" onclick="claimOrder('${o.id}')">CLAIM DISPATCH</button> 
+            </div> 
+        </div>`;
+    }).join("");
 }
 
-// ACTIVE ORDER RENDERER
+// ACTIVE ORDER WORKSPACE RENDERER
 function renderActive() {
-  const o = S.orders.find(x => x.id === S.activeId);
-  const el = document.getElementById("activeContent");
-  
-  if(!o) {
-    el.innerHTML = `<div class="empty-state">No active order. Accept one from the home screen.</div>`;
-    document.getElementById("detId").textContent = "—";
-    return;
-  }
+    const o = S.orders.find(x => x.id === S.activeId);
+    const el = document.getElementById("activeContent");
 
-  const sid = "#TSC" + o.id.slice(-4).toUpperCase();
-  document.getElementById("detId").textContent = sid;
+    if(!o) {
+        el.innerHTML = `<div class="empty-state">No active order. Claim one from the workspace stream dashboard.</div>`;
+        return;
+    }
 
-  // Map Delivery Progress Steps
-  let s = (o.status || '').toLowerCase();
-  
-  if (s === 'claimed') s = 'confirmed';
-  if (s === 'preparing') s = 'ready';
-  if (s === 'ontheway') s = 'on_the_way';
-  
-  let btnText = "Mark as Ready for Pickup";
-  let nextStatus = "ready";
-  let stepIndex = 0;
+    const sid = "#TSC" + o.id.slice(-4).toUpperCase();
+    let s = o.status;
 
-  switch(s) {
-      case 'confirmed':
-          btnText = "Mark as Ready for Pickup";
-          nextStatus = "ready";
-          stepIndex = 0;
-          break;
-      case 'ready':
-          btnText = "Mark as Picked Up";
-          nextStatus = "picked_up";
-          stepIndex = 1;
-          break;
-      case 'picked_up':
-          btnText = "Start Delivery";
-          nextStatus = "on_the_way";
-          stepIndex = 2;
-          break;
-      case 'on_the_way':
-          btnText = "Mark as Delivered";
-          nextStatus = "delivered";
-          stepIndex = 3;
-          break;
-      case 'delivered':
-          stepIndex = 4;
-          break;
-      default:
-          btnText = "Mark as Ready for Pickup";
-          nextStatus = "ready";
-          stepIndex = 0;
-  }
-  
-  let cp = (o.customerPhone || "").replace(/^0/, "");
-  if (!cp.startsWith("+") && !cp.startsWith("212")) cp = "212" + cp;
-  
-  // Navigation mapping
-  const navUrl = (o.customerLat && o.customerLng) 
-    ? `https://www.google.com/maps/dir/?api=1&destination=$${o.customerLat},${o.customerLng}`
-    : `https://www.google.com/maps/dir/?api=1&destination=$${encodeURIComponent(o.customerAddress || o.neighborhood || "Marrakech")}`;
+    let btnText = "Start Delivery (Out for Delivery)";
+    let nextStatus = "Out for Delivery";
+    let stepIndex = 1;
 
-  const acceptedTime = o.acceptedAt ? new Date(o.acceptedAt).toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"}) : new Date().toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"});
+    if (s === 'Driver Assigned') {
+        btnText = "Start Delivery (Out for Delivery)";
+        nextStatus = "Out for Delivery";
+        stepIndex = 1;
+    } else if (s === 'Out for Delivery') {
+        btnText = "Mark as Delivered";
+        nextStatus = "Delivered";
+        stepIndex = 2;
+    }
 
-  el.innerHTML = `
-    <div class="card summary-card">
-       <div>
-         <div style="font-size:12px;color:var(--text-muted);font-weight:600;margin-bottom:2px">Order ID</div>
-         <div style="font-size:18px;font-weight:800;color:var(--text-main);margin-bottom:6px">${sid}</div>
-         <div style="display:flex;align-items:center;gap:8px">
-            <span class="badge-green">Accepted</span>
-            <span style="font-size:11px;color:var(--text-muted);font-weight:500">Since ${acceptedTime}</span>
-         </div>
-       </div>
-       <div style="text-align:right">
-         <div style="font-size:20px;font-weight:800;color:var(--green)">${fmt(o.totalPrice || 0)} DH</div>
-         <div style="font-size:11px;color:var(--text-muted);font-weight:500">Cash to collect</div>
-       </div>
+    let cp = (o.customerPhone || "").replace(/^0/, "");
+    if (!cp.startsWith("+") && !cp.startsWith("212")) cp = "212" + cp;
+
+    const navUrl = (o.deliveryCoords && o.deliveryCoords.lat)
+        ? `https://maps.google.com/?q=${o.deliveryCoords.lat},${o.deliveryCoords.lng}`
+        : `https://maps.google.com/?q=${encodeURIComponent(o.deliveryAddress || o.neighborhood || "Marrakech")}`;
+
+    const acceptedTime = o.timestamp ? new Date(o.timestamp).toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"}) : '';
+
+    el.innerHTML = `<div class="card summary-card"> 
+        <div> 
+            <div style="font-size:12px;color:var(--text-muted);font-weight:600;margin-bottom:2px">Order ID</div> 
+            <div style="font-size:18px;font-weight:800;color:var(--text-main);margin-bottom:6px">${sid}</div>
+            <div style="display:flex;align-items:center;gap:8px">
+                <span class="badge-green">Active Process</span>
+            </div> 
+        </div> 
+        <div style="text-align:right"> 
+            <div style="font-size:20px;font-weight:800;color:var(--green)">${fmt(o.totalPrice || 0)} DH</div>
+            <div style="font-size:11px;color:var(--text-muted);font-weight:500">Total collection value</div>
+        </div>
     </div>
 
     <div class="card cust-card">
-      <div class="cust-header">
-        <div class="cust-av-ph"><svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div class="cust-info">
-          <div style="font-size:11px;color:var(--text-muted);font-weight:600">Customer</div>
-          <div class="cust-name">${o.customerName || "Client"}</div>
-          <div class="cust-addr">${o.customerAddress || o.neighborhood || "Marrakech"}</div>
+        <div class="cust-header">
+            <div class="cust-av-ph"><svg viewBox="0 0 24 24" width="20" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="cust-info">
+                <div style="font-size:11px;color:var(--text-muted);font-weight:600">Customer Address</div>
+                <div class="cust-name">${o.customerName || "Client"}</div> 
+                <div class="cust-addr">${o.deliveryAddress || o.neighborhood || "Marrakech"}</div>
+            </div>
         </div>
-      </div>
-      <div class="cust-actions-grid">
-        <a href="tel:${o.customerPhone||''}" class="action-btn-col">
-          <div class="c-btn-circle call"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.38 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
-          Call
+        <div class="cust-actions-grid">
+            <a href="tel:${o.customerPhone||''}" class="action-btn-col"> <div class="c-btn-circle call"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.38 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div> Call </a> 
+            <a href="https://wa.me/${cp}" target="_blank" class="action-btn-col">
+                <div class="c-btn-circle wa"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div> WhatsApp
+            </a>
+        </div>
+        <a href="${navUrl}" target="_blank" class="btn-nav-full">
+            <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg> Open Google Maps Pin
         </a>
-        <a href="https://wa.me/${cp}" target="_blank" class="action-btn-col">
-          <div class="c-btn-circle wa"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
-          WhatsApp
-        </a>
-      </div>
-      <a href="${navUrl}" target="_blank" class="btn-nav-full">
-         <svg viewBox="0 0 24 24" width="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg> Navigate Map
-      </a>
     </div>
 
-    <div class="card item-list">
-      <div style="padding:16px;border-bottom:1px solid var(--border);font-weight:700;font-size:14px">Order items (${o.totalItems||0})</div>
-      ${(o.items || o.cart || []).map(i => `
-        <div class="item-row">
-          <img src="${(i.product && i.product.imageUrl) || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2248%22 height=%2248%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23E5E7EB%22 stroke-width=%221%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><rect x=%223%22 y=%223%22 width=%2218%22 height=%2218%22 rx=%222%22 ry=%222%22></rect><circle cx=%228.5%22 cy=%228.5%22 r=%221.5%22></circle><polyline points=%2221 15 16 10 5 21%22></polyline></svg>'}" class="item-img" />
-          <div class="item-details">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                <div class="item-name"><span class="item-qty">${i.qty||1}x</span> ${i.product?.name || i.name || "Item"}</div>
-                <div class="item-price">${fmt((i.unitPrice||0) * (i.qty||1))} DH</div>
-            </div>
-            ${i.options ? `<div class="item-opts">${i.options.join(', ')}</div>` : ''}
-          </div>
-        </div>
-      `).join('') || '<div style="padding:16px;text-align:center;color:var(--text-muted)">No items</div>'}
+    <div class="item-list">
+        <div style="font-weight:700; font-size:13px; margin-bottom:12px; color:var(--text-muted); text-transform:uppercase;">Order payload items</div>
+        ${(o.cart || []).map(i => {
+            let optionsText = (i.modularChoices || []).map(ch => `${ch.groupName}: ${ch.itemName}`).join(', ');
+            if (i.note) optionsText += ` (Note: ${i.note})`;
+            return `<div class="item-row">
+                <div class="item-details">
+                    <div class="item-name">
+                        <div><span class="item-qty">${i.qty||1}x</span> ${i.product?.name || "Item"}</div>
+                        <div class="item-price">${fmt((i.unitPrice||0) * (i.qty||1))} DH</div> 
+                    </div> 
+                    ${optionsText ? `<div class="item-meta">${optionsText}</div>`: ''} 
+                </div> 
+            </div>`;
+        }).join('')}
     </div>
 
     <div class="card pay-sum">
-      <div style="font-weight:700;font-size:14px;margin-bottom:16px">Payment summary</div>
-      <div class="pay-row"><span>Cash to collect</span><span class="val-green">${fmt(o.totalPrice || 0)} DH</span></div>
-      <div class="pay-row"><span>Delivery fee</span><span>${fmt(o.deliveryFee||0)} DH</span></div>
-      <div class="pay-row bold"><span>Total amount</span><span>${fmt(o.totalPrice || 0)} DH</span></div>
+        <div style="font-weight:700; font-size:14px; margin-bottom:16px;">Payment summary mapping</div>
+        <div class="pay-row"><span>Your Delivery Fee Profit</span><span class="val-green">+ ${fmt(o.deliveryFee||0)} DH</span></div>
+        <div class="pay-row"><span>Wholesale Product Cost (Paid to Merchant)</span><span>${fmt(safeNum(o.totalPrice) - safeNum(o.deliveryFee))} DH</span></div>
+        <div class="pay-row bold"><span>Total Amount collected from Client</span><span>${fmt(o.totalPrice || 0)} DH</span></div>
     </div>
 
     <div class="card prog-box">
-      <div style="padding:16px;border-bottom:1px solid var(--border);font-weight:700;font-size:14px;margin-bottom:16px">Delivery progress</div>
-      <div style="padding:0 16px 16px">
-        ${[
-          {t: "Order Confirmed", d: "Restaurant confirmed the order"},
-          {t: "Ready for Pickup", d: "Order is prepared and ready"},
-          {t: "Picked Up", d: "Driver has picked up the order"},
-          {t: "On the Way", d: "Driver is heading to customer"},
-          {t: "Delivered", d: "Order successfully delivered"}
-        ].map((step, i) => `
-          <div class="step ${i<stepIndex?'done':i===stepIndex?'active':''}">
-            <div class="step-line"></div>
-            <div class="step-dot">${i<stepIndex?'✓':i+1}</div>
-            <div class="step-text">
-              <div class="step-title">${step.t}</div>
-              <div class="step-desc">${step.d}</div>
-            </div>
-          </div>
-        `).join('')}
-      </div>
+        <div style="padding:16px; font-weight:700; font-size:14px;">Delivery progress pipeline</div>
+        <div style="padding:0 16px 16px">
+            ${[
+                {t: "Preparing", d: "Order accepted by system dispatch"},
+                {t: "Driver Assigned", d: "Courier confirmed and processing inventory pickup"},
+                {t: "Out for Delivery", d: "Fleet asset dispatched transit to target location Coordinates"},
+                {t: "Delivered", d: "Handover verified, physical liquidity transaction secured"}
+            ].map((step, i) => `
+                <div class="step ${i < stepIndex ? 'done' : ''} ${i === stepIndex ? 'active' : ''}">
+                    <div class="step-dot">${i < stepIndex ? '✓' : i + 1}</div>
+                    <div class="step-text">
+                        <div class="step-title">${step.t}</div>
+                        <div class="step-desc">${step.d}</div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
     </div>
 
     <div class="action-stack">
-      ${stepIndex < 4 ? `<button class="btn-solid" onclick="updateNextStep('${o.id}','${nextStatus}')">${btnText}</button>` : ''}
-      <div class="btn-release" onclick="releaseOrder('${o.id}')">Release Order</div>
-    </div>
-  `;
+        <button class="btn-solid" onclick="updateNextStep('${o.id}', '${nextStatus}')">${btnText}</button>
+        <div class="btn-release" onclick="releaseOrder('${o.id}')">Release Back to Pool</div>
+    </div>`;
 }
 
 // EARNINGS RENDERER
 function renderEarnings() {
-  if (!S.driver) return;
-  const mineAll = S.orders.filter(o => 
-    (o.claimedBy === S.driver.phone || o.driverEmail === S.driver.phone) && 
-    (o.status || '').toLowerCase() === "delivered"
-  );
-  const unS = mineAll.filter(o => !o.driverSettled);
-  
-  const stats = getTodayStats();
-  document.getElementById("eEarn").textContent = fmt(stats.fees) + " DH";
-  document.getElementById("eOrders").textContent = stats.count;
+    if (!S.driver) return;
+    const mineAll = S.orders.filter(o =>
+        (o.driverId === S.driver.phone || o.claimedBy === S.driver.phone) &&
+        o.status === "Delivered"
+    );
+    const unS = mineAll.filter(o => !o.driverSettled);
 
-  let debt = 0;
-  unS.forEach(o => { debt += ((o.totalPrice || 0) - (o.deliveryFee || 0)); });
-  document.getElementById("eDebt").textContent = fmt(debt) + " DH";
+    const stats = getTodayStats();
+    document.getElementById("eEarn").textContent = fmt(stats.fees) + " DH";
+    document.getElementById("eOrders").textContent = stats.count;
 
-  const el = document.getElementById("earnList");
-  if(!unS.length) { el.innerHTML = "<div class='empty-state'>All settled! 💰</div>"; return; }
+    let debt = 0;
+    unS.forEach(o => { debt += ((o.totalPrice || 0) - (o.deliveryFee || 0)); });
+    document.getElementById("eDebt").textContent = fmt(debt) + " DH";
 
-  el.innerHTML = unS.map(o => `
-    <div class="earn-list-item">
-      <div>
-        <div style="font-weight:700;font-size:14px;margin-bottom:4px">#TSC${o.id.slice(-4).toUpperCase()}</div>
-        <div style="font-size:12px;color:var(--text-muted)">Paid to restaurant: <span style="color:var(--green);font-weight:600">${fmt((o.totalPrice||0)-(o.deliveryFee||0))} DH</span></div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-size:11px;color:var(--text-muted);margin-bottom:2px">You earn</div>
-        <div style="font-weight:800;color:var(--green)">+${fmt(o.deliveryFee||0)} DH</div>
-      </div>
-    </div>
-  `).join("");
+    const el = document.getElementById("earnList");
+    if(!unS.length) { el.innerHTML = "<div class='empty-state'>All historical data accounts settled! 💰</div>"; return; }
+
+    el.innerHTML = unS.map(o => `<div class="earn-list-item"> 
+        <div> 
+            <div style="font-weight:700; font-size:14px; margin-bottom:4px;">#TSC${o.id.slice(-4).toUpperCase()}</div>
+            <div style="font-size:12px; color:var(--text-muted)">Forward to Admin: <span style="color:var(--danger); font-weight:700;">${fmt(safeNum(o.totalPrice) - safeNum(o.deliveryFee))} DH</span></div>
+        </div>
+        <div style="text-align:right; font-weight:700; color:var(--green);">+ ${fmt(o.deliveryFee)} DH</div>
+    </div>`).join("");
 }
 
-// LIVE FIRESTORE ACTIONS
-window.viewOrder = async id => {
-  if (!S.driver) return;
-  try {
-    await updateDoc(doc(db, "orders", id), { 
-        status: "confirmed",
-        claimedBy: S.driver.phone,
-        driverEmail: S.driver.phone, // Ensure rules dont block write
-        acceptedAt: new Date().toISOString()
-    });
-    S.activeId = id;
-    go('sActive');
-  } catch (e) { alert("Error claiming order: " + e.message); }
+// LIVE DISPATCH POOL MANAGEMENT ACTION
+window.claimOrder = async id => {
+    if (!S.driver) return;
+    try {
+        await updateDoc(doc(db, "orders", id), {
+            status: "Driver Assigned",
+            driverId: S.driver.phone,
+            driverName: S.driver.name,
+            driverPhone: S.driver.phone,
+            driverPhoto: S.driver.photoUrl || null,
+            acceptedAt: new Date().toISOString()
+        });
+        S.activeId = id;
+        go('sActive');
+    } catch (e) { alert("Error claiming order document item: " + e.message); }
 };
 
 window.releaseOrder = async id => {
-  if (!confirm("Are you sure you want to release this order back to the pool?")) return;
-  try {
-    await updateDoc(doc(db, "orders", id), { 
-        claimedBy: "", 
-        driverEmail: "",
-        status: "pending" 
-    });
-    S.activeId = null;
-    go('sHome');
-  } catch (e) { alert("Error releasing order: " + e.message); }
+    if (!confirm("Are you sure you want to release this delivery back to the available pool?")) return;
+    try {
+        await updateDoc(doc(db, "orders", id), {
+            driverId: "",
+            driverName: "",
+            driverPhone: "",
+            driverPhoto: null,
+            status: "Preparing"
+        });
+        S.activeId = null;
+        go('sHome');
+    } catch (e) { alert("Error releasing execution sequence: " + e.message); }
 };
 
 window.updateNextStep = async (id, nextStatus) => {
-  try {
-    const payload = { status: nextStatus };
-    if (nextStatus === "delivered") payload.deliveredAt = new Date().toISOString();
-    await updateDoc(doc(db, "orders", id), payload);
-    if (nextStatus === "delivered") { S.activeId = null; go('sHome'); }
-  } catch (e) { alert("Error updating status: " + e.message); }
-};
-
-window.markSettled = async () => {
-  if (!S.driver) return;
-  const unS = S.orders.filter(o => (o.claimedBy === S.driver.phone || o.driverEmail === S.driver.phone) && (o.status || '').toLowerCase() === "delivered" && !o.driverSettled);
-  if (!unS.length) return alert("Nothing to settle.");
-  if (!confirm(`Settle ${unS.length} order(s)?`)) return;
-
-  try {
-    for (const o of unS) {
-      await updateDoc(doc(db, "orders", o.id), { driverSettled: true });
-    }
-    alert("Settled successfully! ✅");
-  } catch (e) { alert("Error settling: " + e.message); }
+    try {
+        const payload = { status: nextStatus };
+        if (nextStatus === "Delivered") payload.deliveredAt = new Date().toISOString();
+        await updateDoc(doc(db, "orders", id), payload);
+        if (nextStatus === "Delivered") { S.activeId = null; go('sHome'); }
+    } catch (e) { alert("Error updating status metrics: " + e.message); }
 };
 
 window.logout = async () => {
-  if(!confirm("Log out of Tasco Driver?")) return;
-  localStorage.removeItem("drv");
-  await signOut(auth);
-  window.location.href = "login.html";
+    if(!confirm("Log out of Tasco Driver ecosystem?")) return;
+    localStorage.removeItem("drv");
+    await signOut(auth);
 };
 
-// COUNTDOWN TIMER LOGIC
+// COUNTDOWN TIMER DISPATCH LOOPS
 if(window.orderTimer) clearInterval(window.orderTimer);
 window.orderTimer = setInterval(() => {
-  document.querySelectorAll('.countdown-timer').forEach(el => {
-    let sec = parseInt(el.dataset.time);
-    if(sec > 0) {
-      sec--;
-      el.dataset.time = sec;
-      const m = Math.floor(sec / 60);
-      const s = sec % 60;
-      el.textContent = `${m}:${s.toString().padStart(2, '0')}`;
-    } else {
-      el.textContent = "0:00";
-    }
-  });
+    document.querySelectorAll('.countdown-timer').forEach(el => {
+        let sec = parseInt(el.dataset.time);
+        if(sec > 0) {
+            sec--;
+            el.dataset.time = sec;
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            el.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+        } else {
+            el.textContent = "0:00";
+        }
+    });
 }, 1000);
 
 </script>
