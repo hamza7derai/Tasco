@@ -6,31 +6,30 @@
 <title>TASCO | Admin Command Center</title>
 
 <link rel="manifest" href="manifest-admin.json">
-
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 /* =========================================
 TASCO PREMIUM LIGHT (ADMIN)
-========================================= /
+========================================= */
 :root {
---bg-main: #F8F4EE; / TASCO Warm Cream /
---surface: #FFFFFF; / Pure White Cards /
---primary: #FF5A00; / TASCO Orange /
+--bg-main: #F8F4EE; /* TASCO Warm Cream */
+--surface: #FFFFFF; /* Pure White Cards */
+--primary: #FF5A00; /* TASCO Orange */
 --primary-light: rgba(255, 90, 0, 0.1);
---accent: #16A34A; / Success Green /
+--accent: #16A34A; /* Success Green */
 --accent-light: #DCFCE7;
---warning: #F59E0B; / Yellow /
+--warning: #F59E0B; /* Yellow */
 --warning-light: #FEF3C7;
---danger: #EF4444; / Red /
+--danger: #EF4444; /* Red */
 --danger-light: #FEE2E2;
 --purple: #8B5CF6;
 --purple-light: #EDE9FE;
 --blue: #3B82F6;
 --blue-light: #DBEAFE;
---text-main: #171717; / TASCO Deep Charcoal /
+--text-main: #171717; /* TASCO Deep Charcoal */
 --text-muted: #6B7280;
---border: #E6E2DC; / Warm Border */
+--border: #E6E2DC; /* Warm Border */
 --border-dark: #D1D5DB;
 --radius-card: 20px;
 --radius-btn: 12px;
@@ -864,7 +863,9 @@ window.optionGroups = [];
 window.switchTab = (tabId) => {
 document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-document.getElementById(view-${tabId}).classList.add('active'); let navTarget = tabId === 'order-detail' ? 'commandes' : tabId; const navItem = document.getElementById(nav-${navTarget});
+document.getElementById(`view-${tabId}`).classList.add('active'); 
+let navTarget = tabId === 'order-detail' ? 'commandes' : tabId; 
+const navItem = document.getElementById(`nav-${navTarget}`);
 if(navItem) navItem.classList.add('active');
 
 if(tabId === 'produits') {
@@ -931,13 +932,14 @@ renderZones();
 
 function renderZones() {
 const container = document.getElementById('zoneListContainer');
+if(!container) return; // Prevent error if element is missing
 if(allZones.length === 0) {
-container.innerHTML = <div style="font-size:12px; color:var(--text-muted); font-weight:600;"&gt;No zones configured. Delivery fee will be 0 DH.&lt;/div>;
+container.innerHTML = `<div style="font-size:12px; color:var(--text-muted); font-weight:600;">No zones configured. Delivery fee will be 0 DH.</div>`;
 return;
 }
-container.innerHTML = allZones.map(z => &lt;div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface); padding:12px 16px; border-radius:12px; border:1px solid var(--border-dark);"&gt; &lt;div style="font-size:13px; font-weight:800; text-transform:uppercase;"&gt;${z.name}</div>
+container.innerHTML = allZones.map(z => `<div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface); padding:12px 16px; border-radius:12px; border:1px solid var(--border-dark);"> <div style="font-size:13px; font-weight:800; text-transform:uppercase;">${z.name}</div>
 <div style="display:flex; align-items:center; gap:12px;">
-<span style="font-size:14px; font-weight:800; color:var(--primary);">${formatPrice(z.fee)} DH&lt;/span&gt; &lt;svg viewBox="0 0 24 24" style="width:16px; color:var(--danger); cursor:pointer;" onclick="deleteZone('${z.id}')"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+<span style="font-size:14px; font-weight:800; color:var(--primary);">${formatPrice(z.fee)} DH</span> <svg viewBox="0 0 24 24" style="width:16px; color:var(--danger); cursor:pointer;" onclick="deleteZone('${z.id}')"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
 </div>
 </div>
 `).join('');
@@ -976,24 +978,22 @@ activeCats.sort((a,b) => (b.sortWeight || 0) - (a.sortWeight || 0) || a.name.loc
 
 let html = '';
 if(activeCats.length === 0) {
-html = <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;"&gt;No categories found for this mode.&lt;/div>;
+html = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">No categories found for this mode.</div>`;
 } else {
 activeCats.forEach(c => {
-let subsHtml = (c.subcategories || []).map((sub) => &lt;div style="display:inline-flex; align-items:center; gap:4px; background:var(--surface); border:1px solid var(--border); padding:4px 8px; border-radius:8px; font-size:11px; margin-top:6px; margin-right:4px;"&gt;${sub} <span style="color:var(--danger); cursor:pointer; font-weight:800; padding: 0 4px;" onclick="deleteSubcatManager('{sub.replace(/'/g, "\'")}')">×</span>
-</div>
-`).join('');
+let subsHtml = (c.subcategories || []).map((sub) => `<div style="display:inline-flex; align-items:center; gap:4px; background:var(--surface); border:1px solid var(--border); padding:4px 8px; border-radius:8px; font-size:11px; margin-top:6px; margin-right:4px;">${sub} <span style="color:var(--danger); cursor:pointer; font-weight:800; padding: 0 4px;" onclick="deleteSubcatManager('${c.id}', '${sub.replace(/'/g, "\\'")}')">×</span></div>`).join('');
 
-html += &lt;div style="background:var(--bg-main); padding:10px; border-radius:12px; border:1px solid var(--border-dark); margin-bottom: 8px;"&gt; &lt;div style="display:flex; gap:8px; align-items:center;"&gt; &lt;input type="text" id="catIcon_${c.id}" class="form-control" style="width:48px; padding:10px; font-size:16px; text-align:center;" placeholder="🍔" value="${c.icon || ''}"&gt; &lt;input type="text" id="catName_${c.id}" class="form-control" style="padding:10px; font-size:13px; font-weight:700;" value="${c.name}"&gt; &lt;input type="number" id="catWeight_${c.id}" class="form-control" style="width:60px; padding:10px; font-size:13px; text-align:center;" placeholder="Wgt" value="${c.sortWeight || 0}"&gt; &lt;button class="btn-action edit" onclick="saveCategoryChanges('${c.id}', '${c.name.replace(/'/g, "\\'")}')"&gt;&lt;svg viewBox="0 0 24 24" style="width:16px;"&gt;&lt;polyline points="20 6 9 17 4 12"&gt;&lt;/polyline&gt;&lt;/svg&gt;&lt;/button&gt; &lt;button class="btn-action del" onclick="deleteCategoryDb('${c.id}')"><svg viewBox="0 0 24 24" style="width:16px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+html += `<div style="background:var(--bg-main); padding:10px; border-radius:12px; border:1px solid var(--border-dark); margin-bottom: 8px;"> <div style="display:flex; gap:8px; align-items:center;"> <input type="text" id="catIcon_${c.id}" class="form-control" style="width:48px; padding:10px; font-size:16px; text-align:center;" placeholder="🍔" value="${c.icon || ''}"> <input type="text" id="catName_${c.id}" class="form-control" style="padding:10px; font-size:13px; font-weight:700;" value="${c.name}"> <input type="number" id="catWeight_${c.id}" class="form-control" style="width:60px; padding:10px; font-size:13px; text-align:center;" placeholder="Wgt" value="${c.sortWeight || 0}"> <button class="btn-action edit" onclick="saveCategoryChanges('${c.id}', '${c.name.replace(/'/g, "\\'")}')"><svg viewBox="0 0 24 24" style="width:16px;"><polyline points="20 6 9 17 4 12"></polyline></svg></button> <button class="btn-action del" onclick="deleteCategoryDb('${c.id}')"><svg viewBox="0 0 24 24" style="width:16px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
 </div>
 <div style="margin-top: 4px;">
-${subsHtml} &lt;/div&gt; &lt;/div>;
+${subsHtml} </div> </div>`;
 });
 }
 document.getElementById('catManagerList').innerHTML = html;
 };
 
 window.deleteSubcatManager = async (id, subName) => {
-if(confirm(Remove subcategory '${subName}'?`)) {
+if(confirm(`Remove subcategory '${subName}'?`)) {
 try {
 const cat = globalCategoriesData.find(c => c.id === id);
 if(cat) {
@@ -1006,10 +1006,9 @@ renderCatManagerList();
 };
 
 window.saveCategoryChanges = async (id, oldName) => {
-const newNameInput = document.getElementById(catName_${id}); const newWeightInput = document.getElementById(catWeight_latex
-{id}`); const newIconInput = document.getElementById(`catIcon_
-
-{id}`);
+const newNameInput = document.getElementById(`catName_${id}`); 
+const newWeightInput = document.getElementById(`catWeight_${id}`); 
+const newIconInput = document.getElementById(`catIcon_${id}`);
 
 const newName = newNameInput.value.trim();
 const newWeight = parseInt(newWeightInput.value) || 0;
@@ -1028,7 +1027,7 @@ let count = 0;
 snap.forEach(d => { batch.update(d.ref, { category: newName }); count++; });
 if(count > 0) {
 await batch.commit();
-showToast(Updated category and moved ${count} items!`);
+showToast(`Updated category and moved ${count} items!`);
 } else { showToast("Category updated!"); }
 } else { showToast("Category updated!"); }
 
@@ -1048,7 +1047,7 @@ window.selectProductType = (type) => {
 selectedProductType = type;
 document.getElementById('typeCardResto').classList.remove('active');
 document.getElementById('typeCardGrocery').classList.remove('active');
-document.getElementById(typeCard${type}`).classList.add('active');
+document.getElementById(`typeCard${type}`).classList.add('active');
 loadMainCats();
 validateStep1();
 };
@@ -1074,9 +1073,9 @@ if(sell !== "") { btn.disabled = false; } else { btn.disabled = true; }
 
 window.goToStep = (step) => {
 document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
-document.getElementById(wizard-${step}`).classList.add('active');
+document.getElementById(`wizard-${step}`).classList.add('active');
 
-document.getElementById('step-nav-1').innerText = Step${step} of 3`;
+document.getElementById('step-nav-1').innerText = `Step ${step} of 3`;
 document.querySelectorAll('.s-dot').forEach((el, index) => {
 el.classList.remove('active');
 if(index + 1 <= step) el.classList.add('active');
@@ -1099,33 +1098,33 @@ renderOptionGroups();
 
 window.renderOptionGroups = () => {
 const container = document.getElementById('optionGroupsContainer');
-container.innerHTML = window.optionGroups.map(g => &lt;div class="group-builder-card"&gt; &lt;div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"&gt; &lt;input type="text" placeholder="Group Name (e.g. Choose 1st Pizza)" class="form-control" style="width:80%; font-weight:800;" value="${g.name}"
-oninput="updateGroupName(${g.id}, this.value)"&gt; &lt;button onclick="removeGroup(${g.id})" style="color:var(--danger); background:var(--surface); border:1px solid var(--danger-light); width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center;"><svg viewBox="0 0 24 24" style="width:18px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+container.innerHTML = window.optionGroups.map(g => `<div class="group-builder-card"> <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"> <input type="text" placeholder="Group Name (e.g. Choose 1st Pizza)" class="form-control" style="width:80%; font-weight:800;" value="${g.name}"
+oninput="updateGroupName(${g.id}, this.value)"> <button onclick="removeGroup(${g.id})" style="color:var(--danger); background:var(--surface); border:1px solid var(--danger-light); width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center;"><svg viewBox="0 0 24 24" style="width:18px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
 </div>
 
 <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:12px; background:var(--surface); padding:12px; border-radius:12px; border:1px solid var(--border-dark);">
 <div style="display:flex; flex-direction:column; gap:8px;">
 <label style="font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; cursor:pointer;">
-<input type="radio" name="sel_${g.id}" ${g.selection==='single'?'checked':''} onchange="updateGroupSel(${g.id}, 'single')" style="accent-color:var(--primary);"&gt; Pick Only 1 (Radio) &lt;/label&gt; &lt;label style="font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; cursor:pointer;"&gt; &lt;input type="radio" name="sel_${g.id}" ${g.selection==='multiple'?'checked':''} onchange="updateGroupSel(${g.id}, 'multiple')" style="accent-color:var(--primary);"> Pick Multiple (Checkbox)
+<input type="radio" name="sel_${g.id}" ${g.selection==='single'?'checked':''} onchange="updateGroupSel(${g.id}, 'single')" style="accent-color:var(--primary);"> Pick Only 1 (Radio) </label> <label style="font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; cursor:pointer;"> <input type="radio" name="sel_${g.id}" ${g.selection==='multiple'?'checked':''} onchange="updateGroupSel(${g.id}, 'multiple')" style="accent-color:var(--primary);"> Pick Multiple (Checkbox)
 </label>
 ${g.selection === 'multiple' ?
-<div style="padding-left: 24px;">
-<input type="number" placeholder="Max limit (0 = none)" class="form-control" style="font-size:12px; padding:8px; height:auto;" value="{g.id}, this.value)">
-</div>
-: ''} &lt;/div&gt; &lt;select class="form-control" style="width: 140px; font-size:12px; padding:10px;" onchange="updateGroupLayout(${g.id}, this.value)">
-<option value="text" ${g.layout==='text' || !g.layout ? 'selected' : ''}&gt;Pills (Text)&lt;/option&gt; &lt;option value="grid" ${g.layout==='grid' ? 'selected' : ''}>Grid (Images)</option>
-<option value="list" `${g.layout==='list' ? 'selected' : ''}>List (Images)</option>
+`<div style="padding-left: 24px;">
+<input type="number" placeholder="Max limit (0 = none)" class="form-control" style="font-size:12px; padding:8px; height:auto;" value="${g.maxLimit}" oninput="updateGroupLimit(${g.id}, this.value)">
+</div>`
+: ''} </div> <select class="form-control" style="width: 140px; font-size:12px; padding:10px;" onchange="updateGroupLayout(${g.id}, this.value)">
+<option value="text" ${g.layout==='text' || !g.layout ? 'selected' : ''}>Pills (Text)</option> <option value="grid" ${g.layout==='grid' ? 'selected' : ''}>Grid (Images)</option>
+<option value="list" ${g.layout==='list' ? 'selected' : ''}>List (Images)</option>
 </select>
 </div>
 
-<div id="items_{g.items.map((item, idx) => &lt;div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; margin-bottom: 8px;"&gt; &lt;div style="display: grid; grid-template-columns: 2fr 1fr 1fr 40px; gap: 8px; align-items: center; margin-bottom: 8px;"&gt; &lt;input type="text" placeholder="Choice Name" class="form-control" style="font-size:12px; padding:10px;" value="${item.name}" oninput="updateItemField(${g.id}, ${idx}, 'name', this.value)">
-<input type="number" placeholder="+DH Sell" class="form-control" style="font-size:12px; padding:10px;" value="${item.price}" oninput="updateItemField(${g.id}, ${idx}, 'price', this.value)"&gt; &lt;input type="number" placeholder="+DH Cost" class="form-control" style="font-size:12px; padding:10px;" value="${item.cost}" oninput="updateItemField(${g.id}, ${idx}, 'cost', this.value)">
+<div id="items_${g.id}">` + g.items.map((item, idx) => `<div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; margin-bottom: 8px;"> <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 40px; gap: 8px; align-items: center; margin-bottom: 8px;"> <input type="text" placeholder="Choice Name" class="form-control" style="font-size:12px; padding:10px;" value="${item.name}" oninput="updateItemField(${g.id}, ${idx}, 'name', this.value)">
+<input type="number" placeholder="+DH Sell" class="form-control" style="font-size:12px; padding:10px;" value="${item.price}" oninput="updateItemField(${g.id}, ${idx}, 'price', this.value)"> <input type="number" placeholder="+DH Cost" class="form-control" style="font-size:12px; padding:10px;" value="${item.cost}" oninput="updateItemField(${g.id}, ${idx}, 'cost', this.value)">
 <button onclick="removeItem(${g.id}, ${idx})" style="color:var(--text-muted); background:var(--bg-main); border:1px solid var(--border-dark); border-radius:8px; height:38px; display:flex; align-items:center; justify-content:center;">×</button>
 </div>
-<input type="text" placeholder="Image URL (optional for grid/list layouts)" class="form-control" style="font-size:12px; padding:10px; width: 100%;" value="${item.imageUrl || ''}" oninput="updateItemField(${g.id}, ${idx}, 'imageUrl', this.value)"&gt; &lt;/div&gt;).join('')}
+<input type="text" placeholder="Image URL (optional for grid/list layouts)" class="form-control" style="font-size:12px; padding:10px; width: 100%;" value="${item.imageUrl || ''}" oninput="updateItemField(${g.id}, ${idx}, 'imageUrl', this.value)"> </div>`).join('') + `
 </div>
 
-<button class="btn btn-outline" style="margin-top:12px; font-size:12px; padding:10px 16px; width:auto; border-radius:10px;" onclick="addGroupItem(${g.id})"&gt;+ ADD OPTION&lt;/button&gt; &lt;/div&gt;).join('');
+<button class="btn btn-outline" style="margin-top:12px; font-size:12px; padding:10px 16px; width:auto; border-radius:10px;" onclick="addGroupItem(${g.id})">+ ADD OPTION</button> </div>`).join('');
 };
 
 window.updateGroupName = (id, val) => { window.optionGroups.find(g => g.id === id).name = val; };
@@ -1144,7 +1143,7 @@ function loadMainCats() {
 const filteredCats = globalCategoriesData.filter(c => c.type === selectedProductType || !c.type);
 const currentSelected = document.getElementById('pCat').value;
 
-document.getElementById('pCat').innerHTML = '<option value="">Select category</option>' + filteredCats.map(c => <option value="${c.name}">${c.name}&lt;/option>).join('');
+document.getElementById('pCat').innerHTML = '<option value="">Select category</option>' + filteredCats.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
 if(currentSelected && filteredCats.find(c => c.name === currentSelected)) { document.getElementById('pCat').value = currentSelected; }
 else { document.getElementById('pCat').value = ''; }
 loadSubCats();
@@ -1155,7 +1154,7 @@ const main = document.getElementById('pCat').value;
 const subEl = document.getElementById('pSubCat');
 const catDoc = globalCategoriesData.find(c => c.name === main);
 if(catDoc && catDoc.subcategories && catDoc.subcategories.length > 0) {
-subEl.innerHTML = '<option value="">Select subcategory</option>' + catDoc.subcategories.map(s => <option value="${s}">${s}&lt;/option>).join('');
+subEl.innerHTML = '<option value="">Select subcategory</option>' + catDoc.subcategories.map(s => `<option value="${s}">${s}</option>`).join('');
 }
 else { subEl.innerHTML = '<option value="">No subcategories</option>'; }
 };
@@ -1163,7 +1162,11 @@ else { subEl.innerHTML = '<option value="">No subcategories</option>'; }
 window.openAddCategoryModal = (type) => {
 currentCatAddingType = type;
 if(type === 'main') {
-document.getElementById('catModalTitle').innerText = New${selectedProductType} Category; } else { const mainCat = document.getElementById('pCat').value; if(!mainCat) return showToast("Select a main category first."); document.getElementById('catModalTitle').innerText =New Subcategory for '${mainCat}';
+document.getElementById('catModalTitle').innerText = `New ${selectedProductType} Category`; 
+} else { 
+const mainCat = document.getElementById('pCat').value; 
+if(!mainCat) return showToast("Select a main category first."); 
+document.getElementById('catModalTitle').innerText =`New Subcategory for '${mainCat}'`;
 }
 document.getElementById('newCatInput').value = '';
 document.getElementById('newCatIcon').value = '';
@@ -1202,7 +1205,7 @@ if(!subs.includes(val)) {
 subs.push(val);
 await updateDoc(doc(db, "categories", catDoc.id), { subcategories: subs });
 showToast("Subcategory added!");
-document.getElementById('pSubCat').innerHTML += <option value="${val}">${val}&lt;/option>;
+document.getElementById('pSubCat').innerHTML += `<option value="${val}">${val}</option>`;
 document.getElementById('pSubCat').value = val;
 } else { showToast("Subcategory already exists!"); }
 }
@@ -1231,7 +1234,7 @@ renderCustomTraits();
 
 window.renderCustomTraits = () => {
 const container = document.getElementById('customTraitsContainer');
-container.innerHTML = window.currentProductTraits.map(t => &lt;div style="background:var(--surface); border:1px solid var(--border-dark); padding:6px 12px; border-radius:50px; font-size:12px; font-weight:700; color:var(--text-muted); display:flex; align-items:center; gap:6px;"&gt;${t} <span style="cursor:pointer; color:var(--danger); font-size:14px; line-height:1;" onclick="removeCustomTrait('${t}')"&gt;×&lt;/span&gt; &lt;/div&gt;).join('');
+container.innerHTML = window.currentProductTraits.map(t => `<div style="background:var(--surface); border:1px solid var(--border-dark); padding:6px 12px; border-radius:50px; font-size:12px; font-weight:700; color:var(--text-muted); display:flex; align-items:center; gap:6px;">${t} <span style="cursor:pointer; color:var(--danger); font-size:14px; line-height:1;" onclick="removeCustomTrait('${t}')">×</span> </div>`).join('');
 };
 
 // ---------------- DEEP LINK COPY LOGIC ----------------
@@ -1239,7 +1242,7 @@ window.copyDeepLink = (id, type) => {
 event.stopPropagation();
 const domain = window.location.origin + window.location.pathname.replace('/admin.html', '/').replace('admin.html', '');
 const param = type === 'Grocery' ? 'add' : 'open';
-const link = ``${domain}?{id}`;
+const link = `${domain}?id=${id}`;
 
 navigator.clipboard.writeText(link).then(() => {
 showToast("🔗 Ad Link Copied!");
@@ -1257,7 +1260,7 @@ document.getElementById('catSearch').value = '';
 
 document.getElementById('catBtnResto').classList.remove('active');
 document.getElementById('catBtnGrocery').classList.remove('active');
-document.getElementById(catBtn${mode}`).classList.add('active');
+document.getElementById(`catBtn${mode}`).classList.add('active');
 
 if(mode === 'Resto') { document.getElementById('catTabBg').style.transform = 'translateX(0)'; }
 else { document.getElementById('catTabBg').style.transform = 'translateX(100%)'; }
@@ -1289,7 +1292,10 @@ if(!container) return;
 const activeCats = globalCategoriesData.filter(c => c.type === currentCatalogMode || !c.type);
 activeCats.sort((a,b) => (b.sortWeight || 0) - (a.sortWeight || 0) || a.name.localeCompare(b.name));
 
-let html = <div class="tab-pill${currentCatalogCategory === 'All' ? 'active' : ''}" onclick="filterCatalog('All', this)">All</div>; activeCats.forEach(cat =&gt; { const isActive = currentCatalogCategory === cat.name ? 'active' : ''; html +=<div class="tab-pill {cat.name}', this)">${cat.name}&lt;/div>;
+let html = `<div class="tab-pill ${currentCatalogCategory === 'All' ? 'active' : ''}" onclick="filterCatalog('All', this)">All</div>`; 
+activeCats.forEach(cat => { 
+const isActive = currentCatalogCategory === cat.name ? 'active' : ''; 
+html += `<div class="tab-pill ${isActive}" onclick="filterCatalog('${cat.name}', this)">${cat.name}</div>`;
 });
 container.innerHTML = html;
 }
@@ -1317,16 +1323,16 @@ if (weightB !== weightA) return weightB - weightA;
 return (a.name || "").localeCompare(b.name || "");
 });
 
-document.getElementById('prodCountText').innerText = ``${filteredProducts.length} items • Updated just now`;
+document.getElementById('prodCountText').innerText = `${filteredProducts.length} items • Updated just now`;
 
 if(filteredProducts.length === 0) {
-container.innerHTML = <div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:14px; font-weight:700; text-transform:uppercase;"&gt;No items found.&lt;/div>;
+container.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:14px; font-weight:700; text-transform:uppercase;">No items found.</div>`;
 return;
 }
 
 const cardsHtml = filteredProducts.map(p => {
 const price = p.promoPrice ? p.promoPrice : p.sellPrice;
-const imgTag = p.imageUrl ? <img src="${p.imageUrl}">: ``${p.name.charAt(0)};
+const imgTag = p.imageUrl ? `<img src="${p.imageUrl}">` : p.name.charAt(0);
 const isAvail = p.isAvailable !== false;
 
 let badgeHtml = '';
@@ -1335,24 +1341,23 @@ let bColor = 'var(--primary)'; let bBg = 'var(--primary-light)';
 if(p.badge === 'Vedette') { bColor = 'var(--danger)'; bBg = 'var(--danger-light)'; }
 if(p.badge === 'Nouveau') { bColor = 'var(--purple)'; bBg = 'var(--purple-light)'; }
 if(p.badge === 'Populaire') { bColor = 'var(--warning)'; bBg = 'var(--warning-light)'; }
-badgeHtml = <span style="background:${bBg}; color:${bColor}; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; margin-bottom:4px; display:inline-block; text-transform:uppercase;"&gt;${p.badge}</span>`;
+badgeHtml = `<span style="background:${bBg}; color:${bColor}; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px; margin-bottom:4px; display:inline-block; text-transform:uppercase;">${p.badge}</span>`;
 }
 
-return &lt;div class="cat-list-item"&gt; &lt;div class="cat-list-top"&gt; &lt;div class="cat-list-img"&gt;${imgTag}</div>
+return `<div class="cat-list-item"> <div class="cat-list-top"> <div class="cat-list-img">${imgTag}</div>
 <div class="cat-list-info">
-{p.name}</h4>
-<p>{formatPrice(price)} DH</div>
-</div>
+<h4>${p.name}</h4>
+<p>${formatPrice(price)} DH</p></div>
 </div>
 <div class="cat-list-bottom">
-<label class="switch" style="transform: scale(0.85); transform-origin: left;"><input type="checkbox" {p.id}', this.checked)"><span class="slider"></span></label>
+<label class="switch" style="transform: scale(0.85); transform-origin: left;"><input type="checkbox" ${isAvail ? 'checked' : ''} onchange="toggleProductAvailability('${p.id}', this.checked)"><span class="slider"></span></label>
 <div class="cat-list-actions">
-<button class="btn-action link" onclick="copyDeepLink('{p.productType}')" title="Copy Ad Link"><svg viewBox="0 0 24 24" style="width:14px;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button>
-<button class="btn-action copy" onclick="duplicateProduct('{p.id}')" title="Edit"><svg viewBox="0 0 24 24" style="width:14px;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></button>
-<button class="btn-action del" onclick="promptDeleteProduct('${p.id}')" title="Delete"&gt;&lt;svg viewBox="0 0 24 24" style="width:14px;"&gt;&lt;polyline points="3 6 5 6 21 6"&gt;&lt;/polyline&gt;&lt;path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/button&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div>;
+<button class="btn-action link" onclick="copyDeepLink('${p.id}','${p.productType}')" title="Copy Ad Link"><svg viewBox="0 0 24 24" style="width:14px;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button>
+<button class="btn-action copy" onclick="duplicateProduct('${p.id}')" title="Edit"><svg viewBox="0 0 24 24" style="width:14px;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></button>
+<button class="btn-action del" onclick="promptDeleteProduct('${p.id}')" title="Delete"><svg viewBox="0 0 24 24" style="width:14px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button> </div> </div> </div>`;
 }).join('');
 
-container.innerHTML = <div class="catalog-list"&gt;${cardsHtml}</div>`;
+container.innerHTML = `<div class="catalog-list">${cardsHtml}</div>`;
 }
 
 // ---------------- LISTENERS ----------------
@@ -1392,7 +1397,7 @@ if(stillExists) window.viewOrder(stillExists.id); else switchTab('commandes');
 });
 
 // ---------------- GLOBAL EMPTY STATE HTML ----------------
-const getEmptyOrdersHTML = () => &lt;div style="text-align:center; padding:24px 20px; color:var(--text-muted); font-size:13px; font-weight:700; background:var(--surface); border-radius:var(--radius-card); border:1px solid var(--border); box-shadow:var(--shadow-sm); margin-top:12px; text-transform:uppercase; letter-spacing:0.5px;"&gt; Waiting for your first order. &lt;/div&gt;;
+const getEmptyOrdersHTML = () => `<div style="text-align:center; padding:24px 20px; color:var(--text-muted); font-size:13px; font-weight:700; background:var(--surface); border-radius:var(--radius-card); border:1px solid var(--border); box-shadow:var(--shadow-sm); margin-top:12px; text-transform:uppercase; letter-spacing:0.5px;"> Waiting for your first order. </div>`;
 
 // ---------------- DASHBOARD & ANALYTICS ----------------
 function calculateDashboard() {
@@ -1489,7 +1494,7 @@ document.getElementById('dashStatRevenue').innerText = formatPrice(grossToday) +
 document.getElementById('dashStatItems').innerText = itemsToday;
 
 document.getElementById('statGrossRevenue').innerText = formatPrice(grossToday) + ' DH';
-document.getElementById('statNetProfit').innerHTML = <svg viewBox="0 0 24 24" style="width:16px;"&gt;&lt;polyline points="23 6 13.5 15.5 8.5 10.5 1 18"&gt;&lt;/polyline&gt;&lt;polyline points="17 6 23 6 23 12"&gt;&lt;/polyline&gt;&lt;/svg&gt; Profit: ${formatPrice(profitToday)} DH`;
+document.getElementById('statNetProfit').innerHTML = `<svg viewBox="0 0 24 24" style="width:16px;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> Profit: ${formatPrice(profitToday)} DH`;
 document.getElementById('yestProfit').innerText = formatPrice(profitYest) + ' DH';
 
 document.getElementById('statOrdersTotal').innerText = ordersToday;
@@ -1516,7 +1521,7 @@ else { dashRecentContainer.innerHTML = generateOrdersHTML(recentOrders); }
 
 // ---------------- ADMIN SETTLES THE DRIVER ----------------
 window.settleDriver = async (email) => {
-if(!confirm(Did you collect all the cash from${email}?`)) return;
+if(!confirm(`Did you collect all the cash from ${email}?`)) return;
 try {
 const unsettled = allOrders.filter(o => o.driverEmail === email && o.status === 'Delivered' && o.driverSettled !== true);
 for(let o of unsettled) {
@@ -1587,16 +1592,16 @@ if (adminProfit > 0) debt += adminProfit;
 
 if(debt > 0) {
 totalDriversOwe += debt;
-html += &lt;div class="driver-row"&gt; &lt;div style="display:flex; align-items:center; gap:12px;"&gt; &lt;div style="width:44px;height:44px; border-radius:12px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; border: 1px solid var(--border);"&gt; &lt;svg viewBox="0 0 24 24" style="width:20px;"&gt;&lt;path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"&gt;&lt;/path&gt;&lt;circle cx="12" cy="7" r="4"&gt;&lt;/circle&gt;&lt;/svg&gt; &lt;/div&gt; &lt;div class="d-info"&gt; &lt;h4&gt;${driver.name || driver.email.split('@')[0]}</h4>
-<p style="color:var(--danger); font-weight:800;">OWES: ${formatPrice(debt)} DH&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;button class="btn btn-outline" style="width:auto; padding:10px 16px; font-size:12px; font-weight:800;" onclick="settleDriver('${driver.email}')">SETTLE</button>
+html += `<div class="driver-row"> <div style="display:flex; align-items:center; gap:12px;"> <div style="width:44px;height:44px; border-radius:12px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; border: 1px solid var(--border);"> <svg viewBox="0 0 24 24" style="width:20px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> </div> <div class="d-info"> <h4>${driver.name || driver.email.split('@')[0]}</h4>
+<p style="color:var(--danger); font-weight:800;">OWES: ${formatPrice(debt)} DH</p> </div> </div> <button class="btn btn-outline" style="width:auto; padding:10px 16px; font-size:12px; font-weight:800;" onclick="settleDriver('${driver.email}')">SETTLE</button>
 </div>`;
 }
 });
 
 if(html === '') {
-container.innerHTML = <div style="text-align:center; padding:12px; color:var(--text-muted); font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;"&gt;No pending settlements.&lt;/div>;
+container.innerHTML = `<div style="text-align:center; padding:12px; color:var(--text-muted); font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">No pending settlements.</div>`;
 } else {
-container.innerHTML = html + <div style="padding-top:16px; margin-top:12px; border-top:1px dashed var(--border-dark); display:flex; justify-content:space-between; font-weight:800; font-size:15px; color:var(--text-main); text-transform:uppercase; letter-spacing:0.5px;"&gt;&lt;span&gt;Cash to Collect&lt;/span&gt;&lt;span style="color:var(--primary);"&gt;${formatPrice(totalDriversOwe)} DH</span></div>`;
+container.innerHTML = html + `<div style="padding-top:16px; margin-top:12px; border-top:1px dashed var(--border-dark); display:flex; justify-content:space-between; font-weight:800; font-size:15px; color:var(--text-main); text-transform:uppercase; letter-spacing:0.5px;"><span>Cash to Collect</span><span style="color:var(--primary);">${formatPrice(totalDriversOwe)} DH</span></div>`;
 }
 }
 
@@ -1612,17 +1617,17 @@ const sortedOrders = [...allOrders].sort((a,b) => getTime(b.timestamp) - getTime
 sortedOrders.forEach(o => {
 let orderDate = "";
 if (o.timestamp) { const parsed = new Date(o.timestamp); if (!isNaN(parsed.getTime())) orderDate = parsed.toLocaleString('en-US'); }
-const sanitize = (text) => "${(text || '').toString().replace(/"/g, '""')}"`;
+const sanitize = (text) => `"${(text || '').toString().replace(/"/g, '""')}"`;
 const subtotal = safeNum(o.totalPrice) - safeNum(o.deliveryFee);
 
-csv += ``${o.id.substring(0,6).toUpperCase()},{o.status},{sanitize(o.customerPhone)},{o.totalItems || 0},{safeNum(o.deliveryFee)},${safeNum(o.totalPrice)}\n;
+csv += `${o.id.substring(0,6).toUpperCase()},${o.status},${sanitize(o.customerPhone)},${o.totalItems || 0},${safeNum(o.deliveryFee)},${safeNum(o.totalPrice)}\n`;
 });
 
 const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
 const link = document.createElement("a");
 const url = URL.createObjectURL(blob);
 link.setAttribute("href", url);
-link.setAttribute("download", tasco_orders_${new Date().toISOString().split('T')[0]}.csv`);
+link.setAttribute("download", `tasco_orders_${new Date().toISOString().split('T')[0]}.csv`);
 link.style.visibility = 'hidden';
 document.body.appendChild(link);
 link.click();
@@ -1656,16 +1661,16 @@ const price = formatPrice(safeNum(o.totalPrice));
 const items = parseInt(o.totalItems) || 0;
 const cName = o.customerName || 'Customer';
 
-return &lt;div class="order-card" onclick="window.viewOrder('${o.id}')">
+return `<div class="order-card" onclick="window.viewOrder('${o.id}')">
 <div class="order-header">
 <div>
-<div class="o-id">#${o.id.substring(0,6).toUpperCase()}&lt;/div&gt; &lt;div class="o-date"&gt;${date}</div>
+<div class="o-id">#${o.id.substring(0,6).toUpperCase()}</div> <div class="o-date">${date}</div>
 </div>
-<div class="badge ${statusClass}"&gt;${o.status}</div>
+<div class="badge ${statusClass}">${o.status}</div>
 </div>
 <div style="display: flex; justify-content: space-between; align-items: flex-end;">
 <div>
-<div class="o-client"><svg viewBox="0 0 24 24" style="width:14px; color:var(--text-muted);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> ${cName}&lt;/div&gt; &lt;div class="o-items"&gt;${items} item${items&gt;1?'s':''}&lt;/div&gt; &lt;/div&gt; &lt;div class="o-price"&gt;${price} DH</div>
+<div class="o-client"><svg viewBox="0 0 24 24" style="width:14px; color:var(--text-muted);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> ${cName}</div> <div class="o-items">${items} item${items>1?'s':''}</div> </div> <div class="o-price">${price} DH</div>
 </div>
 </div>`;
 }).join('');
@@ -1682,23 +1687,22 @@ let itemsHtml = (o.cart || []).map(item => {
 const p = item.product || {};
 let metaHtml = "";
 
-if(item.variantName) metaHtml += <div&gt;- Size:${item.variantName}</div>; if(item.extras && item.extras.length &gt; 0) metaHtml +=<div>- + ${item.extras.join(', ')}&lt;/div>;
+if(item.variantName) metaHtml += `<div>- Size:${item.variantName}</div>`; 
+if(item.extras && item.extras.length > 0) metaHtml += `<div>- + ${item.extras.join(', ')}</div>`;
 
 if(item.modularChoices && item.modularChoices.length > 0) {
 item.modularChoices.forEach(choice => {
-metaHtml += <div&gt;-${choice.groupName}: ${choice.itemName}&lt;/div>;
+metaHtml += `<div>-${choice.groupName}: ${choice.itemName}</div>`;
 });
 }
 
-if(item.note) metaHtml += <div&gt;** NOTE:${item.note} **</div>`;
+if(item.note) metaHtml += `<div>** NOTE:${item.note} **</div>`;
 
 const price = safeNum(item.unitPrice) || safeNum(p.sellPrice);
-return &lt;div style="display:flex; justify-content:space-between; margin-top:10px; font-weight:bold;"&gt; &lt;div&gt;${item.qty}x ${p.name || 'Item'}&lt;/div&gt; &lt;div&gt;${formatPrice(price * item.qty)}</div>
-</div>
-<div style="font-size:12px; margin-left:15px; margin-bottom:5px;">${metaHtml}&lt;/div&gt;;
+return `<div style="display:flex; justify-content:space-between; margin-top:10px; font-weight:bold;"> <div>${item.qty}x ${p.name || 'Item'}</div> <div>${formatPrice(price * item.qty)}</div></div><div style="font-size:12px; margin-left:15px; margin-bottom:5px;">${metaHtml}</div>`;
 }).join('');
 
-const receiptHtml = &lt;html&gt; &lt;head&gt; &lt;title&gt;Print Receipt - #${o.id.substring(0,6).toUpperCase()}</title>
+const receiptHtml = `<html> <head> <title>Print Receipt - #${o.id.substring(0,6).toUpperCase()}</title>
 <style>
 body { font-family: monospace; color: #000; width: 300px; margin: 0 auto; padding: 10px; font-size:14px; line-height: 1.2;}
 .center { text-align: center; }
@@ -1709,108 +1713,22 @@ body { font-family: monospace; color: #000; width: 300px; margin: 0 auto; paddin
 </head>
 <body>
 <div class="center bold" style="font-size: 24px; margin-bottom:10px;">TASCO</div>
-<div class="center">Order #${o.id.substring(0,6).toUpperCase()}&lt;/div&gt; &lt;div class="center"&gt;${orderDate}</div>
+<div class="center">Order #${o.id.substring(0,6).toUpperCase()}</div> <div class="center">${orderDate}</div>
 
 <div class="line"></div>
-<div><span class="bold">Name:</span> ${o.customerName || 'Unknown'}&lt;/div&gt; &lt;div&gt;&lt;span class="bold"&gt;Phone:&lt;/span&gt; ${o.customerPhone || 'Not provided'}</div>
-<div><span class="bold">Zone:</span> `${o.neighborhood || 'Not specified'}</div>
+<div><span class="bold">Name:</span> ${o.customerName || 'Unknown'}</div> <div><span class="bold">Phone:</span> ${o.customerPhone || 'Not provided'}</div>
+<div><span class="bold">Zone:</span> ${o.neighborhood || 'Not specified'}</div>
 
 <div class="line"></div>
-$`{itemsHtml}
+${itemsHtml}
 
 <div class="line"></div>
-<div class="flex"><span>Subtotal:</span><span>${formatPrice(safeNum(o.totalPrice) - safeNum(o.deliveryFee))} DH&lt;/span&gt;&lt;/div&gt; &lt;div class="flex"&gt;&lt;span&gt;Delivery:&lt;/span&gt;&lt;span&gt;${formatPrice(safeNum(o.deliveryFee))} DH</span></div>
-<div class="flex bold" style="font-size: 16px; margin-top:5px;"><span>TOTAL:</span><span>`${formatPrice(safeNum(o.totalPrice))} DH</span></div>
+<div class="flex"><span>Subtotal:</span><span>${formatPrice(safeNum(o.totalPrice) - safeNum(o.deliveryFee))} DH</span></div> <div class="flex"><span>Delivery:</span><span>${formatPrice(safeNum(o.deliveryFee))} DH</span></div>
+<div class="flex bold" style="font-size: 16px; margin-top:5px;"><span>TOTAL:</span><span>${formatPrice(safeNum(o.totalPrice))} DH</span></div>
 
 <div class="line"></div>
 <div class="center" style="font-size:12px; margin-top:10px;">Thank you for ordering!</div>
-<div class="center" style="font-size:12px;">Powered by TASCO</div>
-
-    <!-- DRIVER MANAGEMENT FORM -->
-    <div class="overlay" id="drvFormOverlay" onclick="if(event.target===this)closeDrvForm()"></div>
-    <div class="bottom-sheet" id="drvFormSheet" style="max-height:88vh;overflow-y:auto;">
-        <div class="sheet-handle"></div>
-        <h2 style="font-size:18px;font-weight:800;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px" id="drvFormTitle">Nouveau livreur</h2>
-        <p style="font-size:12px;color:var(--text-muted);margin-bottom:20px;font-weight:600">Ces identifiants permettent la connexion à l'app livreur.</p>
-        <div class="form-group">
-            <label>Nom complet *</label>
-            <input type="text" id="drvFName" class="form-control" placeholder="Ex: Mohamed Alami">
-        </div>
-        <div class="form-group">
-            <label>Téléphone * <span style="color:var(--text-muted);text-transform:none;font-weight:500">(identifiant de connexion)</span></label>
-            <input type="tel" id="drvFPhone" class="form-control" placeholder="+212612345678">
-        </div>
-        <div class="form-group">
-            <label>Mot de passe *</label>
-            <input type="text" id="drvFPwd" class="form-control" placeholder="Ex: tasco2024">
-        </div>
-        <div class="form-group">
-            <label>Photo <span style="color:var(--text-muted);text-transform:none;font-weight:500">(optionnel)</span></label>
-            <div style="display:flex;gap:8px;align-items:center;">
-                <input type="text" id="drvFPhoto" class="form-control" placeholder="URL de la photo">
-                <button class="btn-action edit" onclick="document.getElementById('drvPhotoFile').click()" title="Upload"><svg viewBox="0 0 24 24" style="width:16px"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></button>
-                <input type="file" id="drvPhotoFile" accept="image/*" style="display:none" onchange="uploadDriverPhoto(this)">
-            </div>
-            <img id="drvFPhotoPreview" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-top:8px;display:none;border:2px solid var(--border)">
-        </div>
-        <button class="btn btn-primary" onclick="saveDriver()">SAUVEGARDER</button>
-        <button class="btn btn-outline" style="margin-top:10px" onclick="closeDrvForm()">Annuler</button>
-    </div>
-
-    <!-- PROMO CODES VIEW -->
-    <div id="view-promos" class="app-view container">
-        <div class="header-top">
-            <div>
-                <h1 style="font-size:24px;font-weight:800;letter-spacing:-1px;">PROMO CODES</h1>
-                <p>Créez et gérez les codes de réduction</p>
-            </div>
-            <button class="btn btn-primary" style="width:auto;padding:10px 20px;font-size:13px;" onclick="openPromoForm()">+ Créer</button>
-        </div>
-
-        <div id="promoListContainer"></div>
-
-        <div class="card" style="margin-top:24px;padding:16px;background:var(--blue-light);border-color:rgba(59,130,246,0.2);">
-            <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--blue);margin-bottom:6px;">Comment ça marche</div>
-            <p style="font-size:12px;color:var(--blue);font-weight:500;line-height:1.6;">Créez un code (ex: TASCO20), définissez le pourcentage de réduction et activez-le. Les clients saisissent le code dans leur panier et la réduction s'applique automatiquement.</p>
-        </div>
-    </div>
-
-    <!-- PROMO FORM SHEET -->
-    <div class="overlay" id="promoFormOverlay" onclick="if(event.target===this)closePromoForm()"></div>
-    <div class="bottom-sheet" id="promoFormSheet">
-        <div class="sheet-handle"></div>
-        <h2 style="font-size:18px;font-weight:800;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px" id="promoFormTitle">Nouveau code promo</h2>
-        <p style="font-size:12px;color:var(--text-muted);margin-bottom:20px;font-weight:600">Les codes sont insensibles à la casse.</p>
-        <div class="form-group">
-            <label>Code *</label>
-            <input type="text" id="promoCode" class="form-control" placeholder="Ex: TASCO20" style="text-transform:uppercase;font-weight:800;letter-spacing:1px;" oninput="this.value=this.value.toUpperCase()">
-        </div>
-        <div class="form-group">
-            <label>Réduction (%) *</label>
-            <input type="number" id="promoPercent" class="form-control" placeholder="Ex: 20" min="1" max="100">
-        </div>
-        <div class="form-group">
-            <label>Description <span style="color:var(--text-muted);text-transform:none;font-weight:500">(optionnel)</span></label>
-            <input type="text" id="promoDesc" class="form-control" placeholder="Ex: Offre de bienvenue">
-        </div>
-        <div class="form-group">
-            <label>Nombre d'utilisations max <span style="color:var(--text-muted);text-transform:none;font-weight:500">(0 = illimité)</span></label>
-            <input type="number" id="promoMaxUses" class="form-control" placeholder="0" min="0" value="0">
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg-main);padding:14px 16px;border-radius:12px;border:1px solid var(--border-dark);margin-bottom:20px;">
-            <div>
-                <span style="display:block;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;">Actif</span>
-                <span style="font-size:11px;color:var(--text-muted);font-weight:600;">Les clients peuvent utiliser ce code</span>
-            </div>
-            <label class="switch"><input type="checkbox" id="promoActive" checked><span class="slider"></span></label>
-        </div>
-        <button class="btn btn-primary" onclick="savePromo()">SAUVEGARDER</button>
-        <button class="btn btn-outline" style="margin-top:10px" onclick="closePromoForm()">Annuler</button>
-    </div>
-
-</body>
-</html>
-`;
+<div class="center" style="font-size:12px;">Powered by TASCO</div></body></html>`;
 
 const printWindow = window.open('', '', 'width=400,height=600');
 printWindow.document.write(receiptHtml);
@@ -1838,65 +1756,81 @@ if(order.status === 'Out for Delivery') statusClass = 'b-transit';
 if(order.status === 'Delivered') statusClass = 'b-delivered';
 if(order.status === 'Cancelled') statusClass = 'b-cancelled';
 
-const badge = document.getElementById('det-badge'); badge.className = badge ${statusClass}`; badge.innerText = (order.status || 'Unknown').toUpperCase();
+const badge = document.getElementById('det-badge'); 
+badge.className = `badge ${statusClass}`; 
+badge.innerText = (order.status || 'Unknown').toUpperCase();
 
-document.getElementById('det-items-count').innerText = ITEMS (${order.totalItems || 0}); document.getElementById('det-items-list').innerHTML = (order.cart || []).map(item =&gt; { const p = item.product || {}; const img = p.imageUrl ?` : '';
+document.getElementById('det-items-count').innerText = `ITEMS (${order.totalItems || 0})`; 
+document.getElementById('det-items-list').innerHTML = (order.cart || []).map(item => { 
+const p = item.product || {}; 
+const img = p.imageUrl ? `<img src="${p.imageUrl}" style="width:100%;height:100%;object-fit:cover">` : '';
 
 let metaText = [];
 
-if(item.variantName) metaText.push(<span style="color:var(--primary);"&gt;${item.variantName}</span>); if(item.extras && item.extras.length &gt; 0) metaText.push(+ ${item.extras.join(', ')});
+if(item.variantName) metaText.push(`<span style="color:var(--primary);">${item.variantName}</span>`); 
+if(item.extras && item.extras.length > 0) metaText.push(`+ ${item.extras.join(', ')}`);
 
 if(item.modularChoices && item.modularChoices.length > 0) {
 item.modularChoices.forEach(choice => {
-metaText.push(<span style="color:var(--primary); font-weight:700;"&gt;${choice.groupName}:</span> ${choice.itemName});
+metaText.push(`<span style="color:var(--primary); font-weight:700;">${choice.groupName}:</span> ${choice.itemName}`);
 });
 }
 
-if(item.note) metaText.push(Note: &lt;span style="color:var(--danger); font-weight:700;"&gt;${item.note}</span>`);
+if(item.note) metaText.push(`Note: <span style="color:var(--danger); font-weight:700;">${item.note}</span>`);
 
-const metaHtml = metaText.length > 0 ? <div class="item-meta" style="margin-top:4px;"&gt;${metaText.join('<br>')}</div>` : '';
+const metaHtml = metaText.length > 0 ? `<div class="item-meta" style="margin-top:4px;">${metaText.join('<br>')}</div>` : '';
 const price = safeNum(item.unitPrice) || safeNum(p.sellPrice);
 
-return <div class="item-row"&gt; &lt;div class="item-img"&gt;${img}</div>
+return `<div class="item-row"> <div class="item-img">${img}</div>
 <div class="item-details">
-<div class="item-name">{item.qty}</div>
-{formatPrice(price * item.qty)} DH</div>
+<div class="item-name">${item.qty}x ${p.name || 'Item'}</div>
+${formatPrice(price * item.qty)} DH</div>
+${metaHtml}
 </div>`;
 }).join('');
 
 const deliveryFee = safeNum(order.deliveryFee); const total = safeNum(order.totalPrice); const subTotal = total - deliveryFee;
-document.getElementById('det-subtotal').innerText = ${formatPrice(subTotal)} DH; document.getElementById('det-shipping').innerText = ``${formatPrice(deliveryFee)} DH;
-document.getElementById('det-total').innerText = ${formatPrice(total)} DH`;
+document.getElementById('det-subtotal').innerText = `${formatPrice(subTotal)} DH`; 
+document.getElementById('det-shipping').innerText = `${formatPrice(deliveryFee)} DH`;
+document.getElementById('det-total').innerText = `${formatPrice(total)} DH`;
 
 let actionsHTML = '';
 
-actionsHTML += <button class="btn btn-outline" style="margin-bottom:12px; background:var(--surface);" onclick="printReceipt('${order.id}')"><svg viewBox="0 0 24 24" style="width:18px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1-2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> PRINT RECEIPT</button>`;
+actionsHTML += `<button class="btn btn-outline" style="margin-bottom:12px; background:var(--surface);" onclick="printReceipt('${order.id}')"><svg viewBox="0 0 24 24" style="width:18px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1-2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> PRINT RECEIPT</button>`;
 
 if (order.driverEmail && order.driverEmail !== "") {
 const d = allDrivers.find(x => x.email === order.driverEmail);
 const dName = d ? (d.name || d.email.split('@')[0]) : order.driverEmail.split('@')[0];
-actionsHTML += <div style="text-align:center; padding:16px; background:var(--blue-light); color:var(--blue); border-radius:16px; font-weight:800; font-size:14px; margin-bottom:12px; border: 1px dashed rgba(59, 130, 246, 0.3); text-transform:uppercase; letter-spacing:0.5px;"&gt;Assigned Driver: &lt;span&gt;${dName}</span></div>; } else if (order.status === 'Pending') { actionsHTML +=<div style="text-align:center; padding:16px; background:var(--warning-light); color:var(--warning); border-radius:16px; font-weight:800; font-size:14px; margin-bottom:12px; border: 1px dashed rgba(245, 158, 11, 0.3); text-transform:uppercase; letter-spacing:0.5px;">Waiting for a driver...</div>`;
+actionsHTML += `<div style="text-align:center; padding:16px; background:var(--blue-light); color:var(--blue); border-radius:16px; font-weight:800; font-size:14px; margin-bottom:12px; border: 1px dashed rgba(59, 130, 246, 0.3); text-transform:uppercase; letter-spacing:0.5px;">Assigned Driver: <span>${dName}</span></div>`; 
+} else if (order.status === 'Pending') { 
+actionsHTML +=`<div style="text-align:center; padding:16px; background:var(--warning-light); color:var(--warning); border-radius:16px; font-weight:800; font-size:14px; margin-bottom:12px; border: 1px dashed rgba(245, 158, 11, 0.3); text-transform:uppercase; letter-spacing:0.5px;">Waiting for a driver...</div>`;
 }
 
 if(order.status !== 'Cancelled' && order.status !== 'Delivered') {
-actionsHTML += <button class="btn btn-danger-outline" onclick="promptOrderStatus('${order.id}', 'Cancelled')">CANCEL ORDER</button>; if(order.status === 'Out for Delivery') { actionsHTML +=<button class="btn btn-success" style="margin-top:12px;" onclick="promptOrderStatus('${order.id}', 'Delivered')"&gt;FORCE DELIVERED&lt;/button>;
+actionsHTML += `<button class="btn btn-danger-outline" onclick="promptOrderStatus('${order.id}', 'Cancelled')">CANCEL ORDER</button>`; 
+if(order.status === 'Out for Delivery') { 
+actionsHTML +=`<button class="btn btn-success" style="margin-top:12px;" onclick="promptOrderStatus('${order.id}', 'Delivered')">FORCE DELIVERED</button>`;
 }
 } else if (order.status === 'Cancelled') {
-actionsHTML += <div style="text-align:center; color:var(--danger); font-weight:800; padding:16px; background:var(--danger-light); border-radius:16px; text-transform:uppercase; letter-spacing:0.5px;"&gt;Order Cancelled&lt;/div>;
+actionsHTML += `<div style="text-align:center; color:var(--danger); font-weight:800; padding:16px; background:var(--danger-light); border-radius:16px; text-transform:uppercase; letter-spacing:0.5px;">Order Cancelled</div>`;
 } else {
-actionsHTML += <div style="text-align:center; color:var(--accent); font-weight:800; padding:16px; background:var(--accent-light); border-radius:16px; text-transform:uppercase; letter-spacing:0.5px;"&gt;Order Delivered&lt;/div>;
+actionsHTML += `<div style="text-align:center; color:var(--accent); font-weight:800; padding:16px; background:var(--accent-light); border-radius:16px; text-transform:uppercase; letter-spacing:0.5px;">Order Delivered</div>`;
 }
 
-actionsHTML += <button class="btn btn-outline" style="color:var(--danger); border-color:var(--danger-light); margin-top: 12px; background: transparent;" onclick="promptDeleteOrder('${order.id}')">DELETE RECORD</button>`;
+actionsHTML += `<button class="btn btn-outline" style="color:var(--danger); border-color:var(--danger-light); margin-top: 12px; background: transparent;" onclick="promptDeleteOrder('${order.id}')">DELETE RECORD</button>`;
 
 document.getElementById('det-actions').innerHTML = actionsHTML; switchTab('order-detail');
 };
 
 window.promptOrderStatus = (orderId, newStatus) => {
-document.getElementById('modalTitle').innerText = "Update Status"; document.getElementById('modalMsg').innerText = Mark this order as ${newStatus}?;
+document.getElementById('modalTitle').innerText = "Update Status"; 
+document.getElementById('modalMsg').innerText = `Mark this order as ${newStatus}?`;
 const btn = document.getElementById('modalConfirmBtn'); btn.className = 'btn btn-primary'; btn.style.border = 'none';
-if(newStatus === 'Cancelled') btn.style.background = 'var(--danger)'; else if(newStatus === 'Out for Delivery') btn.style.background = 'var(--warning)'; else if(newStatus === 'Delivered') btn.style.background = 'var(--accent)'; else btn.style.background = 'var(--blue)';
-window.confirmActionCallback = async () => { closeModals(); try { await updateDoc(doc(db, "orders", orderId), { status: newStatus }); showToast(Status updated); } catch(e) { alert("Network error"); } }; document.getElementById('confirmOverlay').classList.add('active');
+if(newStatus === 'Cancelled') btn.style.background = 'var(--danger)'; 
+else if(newStatus === 'Out for Delivery') btn.style.background = 'var(--warning)'; 
+else if(newStatus === 'Delivered') btn.style.background = 'var(--accent)'; 
+else btn.style.background = 'var(--blue)';
+window.confirmActionCallback = async () => { closeModals(); try { await updateDoc(doc(db, "orders", orderId), { status: newStatus }); showToast("Status updated"); } catch(e) { alert("Network error"); } }; document.getElementById('confirmOverlay').classList.add('active');
 };
 
 window.promptDeleteOrder = (orderId) => {
@@ -2210,8 +2144,8 @@ document.getElementById('modalConfirmBtn').addEventListener('click', () => { if(
                 html += '<div style="font-size:11px;color:var(--primary);font-weight:700;margin-top:1px;">Mdp: ' + (d.password||"---") + '</div>';
                 html += '</div>';
                 html += '<div style="display:flex;gap:6px;flex-shrink:0;">';
-                html += '<button class="btn-action edit" onclick="openDriverForm('' + d.id + '')"><svg viewBox="0 0 24 24" style="width:14px"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></button>';
-                html += '<button class="btn-action del" onclick="confirmDeleteDriver('' + d.id + '')"><svg viewBox="0 0 24 24" style="width:14px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>';
+                html += '<button class="btn-action edit" onclick="openDriverForm(\'' + d.id + '\')"><svg viewBox="0 0 24 24" style="width:14px"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></button>';
+                html += '<button class="btn-action del" onclick="confirmDeleteDriver(\'' + d.id + '\')"><svg viewBox="0 0 24 24" style="width:14px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>';
                 html += '</div>';
                 html += '</div>';
             });
@@ -2291,10 +2225,6 @@ document.getElementById('modalConfirmBtn').addEventListener('click', () => { if(
             }
             if(navigator.vibrate) navigator.vibrate([300,100,300]);
         }
-
-        // Patch orders listener to add notifications
-        // (done inside the existing onSnapshot via override)
-
 </script>
 </body>
 </html>
