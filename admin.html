@@ -45,17 +45,25 @@ body {
     background: var(--bg-main); 
     color: var(--text-main); 
     padding-bottom: 90px; 
-    display: none; /* Hidden until auth */
+    display: none; /* Hidden until auth state resolves */
 }
 
 .container { padding: 20px; max-width: 600px; margin: 0 auto; position: relative; min-height: 100vh;}
 svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 button { font-family: inherit; cursor: pointer; outline: none; border: none; background: none; }
+input { font-family: inherit; }
 
 /* SPA VIEWS */
 .app-view { display: none; animation: fadeIn 0.3s ease; }
 .app-view.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ADMIN AUTH GATE */
+#adminAuthGate { position: fixed; inset: 0; background: var(--bg-main); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; transition: 0.3s; }
+#adminAuthGate.hide { opacity: 0; pointer-events: none; display: none; }
+.auth-card { background: var(--surface); border: 1px solid var(--border-dark); border-radius: 24px; padding: 32px 24px; width: 100%; max-width: 360px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); text-align: center; }
+.auth-logo { font-size: 24px; font-weight: 900; color: var(--primary); letter-spacing: -1px; margin-bottom: 8px; }
+.auth-title { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.5px; }
 
 /* HEADERS */
 .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
@@ -89,6 +97,11 @@ input:checked + .slider:before { transform: translateX(18px); }
 .d-info h4 { font-size: 14px; font-weight: 800; color: var(--text-main); text-transform: capitalize; margin-bottom: 2px;}
 .d-info p { font-size: 12px; color: var(--text-muted); font-weight: 600; }
 .d-debt { font-size: 15px; font-weight: 800; color: var(--primary); }
+.driver-avatar { border-radius: 50%; background: var(--bg-main); display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; overflow: hidden; border: 1px solid var(--border);}
+.driver-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.status-dot { position: absolute; bottom: 0; right: 0; border-radius: 50%; border: 2px solid var(--surface); }
+.dot-online { background: var(--accent); }
+.dot-offline { background: var(--text-muted); }
 
 /* ORDER CARDS */
 .order-card { padding: 16px; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; background: var(--surface); border-radius: var(--radius-card); margin-bottom: 12px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 12px;}
@@ -141,14 +154,21 @@ input:checked + .slider:before { transform: translateX(18px); }
 .summary-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 12px; color: var(--text-muted); font-weight: 600;}
 .summary-row.total { font-size: 18px; font-weight: 800; color: var(--primary); margin-bottom: 0; padding-top: 16px; border-top: 1px dashed var(--border-dark); }
 
-/* MAIN OPERATIONAL CTA BUTTONS */
+/* FORMS */
+.form-group { margin-bottom: 16px; text-align: left;}
+.form-group label { display: block; font-size: 11px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;}
+.form-control { width: 100%; padding: 14px 16px; border: 1px solid var(--border-dark); border-radius: var(--radius-btn); background: var(--bg-main); outline: none; font-size: 14px; font-weight: 600; color: var(--text-main); transition: 0.2s;}
+.form-control:focus { border-color: var(--primary); background: var(--surface);}
+
+/* MAIN CTA BUTTONS */
 .btn { width: 100%; padding: 16px; border-radius: var(--radius-btn); font-size: 14px; font-weight: 800; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; border: none; text-transform: uppercase; letter-spacing: 0.5px;}
 .btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none;}
 .btn-primary { background: var(--primary); color: white; }
 .btn-success { background: var(--accent); color: white; }
 .btn-outline { background: var(--surface); color: var(--text-main); border: 1px solid var(--border-dark); }
 
-/* PREMIUM METRIC CARDS (ANALYTICS) */
+/* ANALYTICS (PREMIUM METRICS) */
 .analytics-hero { background: var(--surface); border-radius: 24px; padding: 24px; margin-bottom: 24px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 12px;}
 .hero-title { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
 .hero-val { font-size: 36px; font-weight: 800; color: var(--text-main); letter-spacing: -2px;}
@@ -162,7 +182,7 @@ input:checked + .slider:before { transform: translateX(18px); }
 .compare-label { font-size: 13px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 12px; text-transform: uppercase; letter-spacing: 0.5px;}
 .compare-val { font-size: 16px; font-weight: 800; color: var(--text-main); }
 
-/* FIXED BOTTOM NAV */
+/* BOTTOM NAV */
 .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 12px 20px 24px; z-index: 100; box-shadow: var(--shadow-nav); max-width: 600px; margin: 0 auto; transition: bottom 0.3s ease;}
 .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #94A3B8; font-size: 10px; font-weight: 800; cursor: pointer; transition: 0.2s; width: 33%; text-transform: uppercase; letter-spacing: 0.5px;}
 .nav-item.active { color: var(--primary); }
@@ -179,6 +199,24 @@ input:checked + .slider:before { transform: translateX(18px); }
 </style>
 </head>
 <body>
+
+<div id="adminAuthGate">
+    <div class="auth-card">
+        <div class="auth-logo">TASCO ADMIN</div>
+        <div class="auth-title">Secure Command Center</div>
+        
+        <div class="form-group">
+            <label>Admin Email</label>
+            <input type="email" id="adminEmail" class="form-control" placeholder="admin@tasco.ma">
+        </div>
+        <div class="form-group" style="margin-bottom: 24px;">
+            <label>Password</label>
+            <input type="password" id="adminPass" class="form-control" placeholder="••••••••">
+        </div>
+        
+        <button class="btn btn-primary" id="btnAdminLogin" onclick="executeAdminLogin()">ACCESS SYSTEM</button>
+    </div>
+</div>
 
 <div id="view-dashboard" class="app-view active container">
     <div class="header-top">
@@ -407,7 +445,7 @@ input:checked + .slider:before { transform: translateX(18px); }
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, onSnapshot, updateDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAaaR52bvyQfkxmZL16lcg4Bd4M76OtbI4",
@@ -421,18 +459,47 @@ const auth = getAuth(app);
 
 const ADMIN_EMAILS = ["admin@tasco.ma"];
 
+// SECURE AUTHENTICATION STATE WATCHDOG
 onAuthStateChanged(auth, async (user) => {
+    const gate = document.getElementById('adminAuthGate');
+    document.body.style.display = "block"; // Always display body so gate is visible
+
     if (!user) {
-        document.body.style.display = "block"; // Dev bypass fallback
+        // Not logged in: Show the gate
+        gate.classList.remove('hide');
     } else {
-        if (ADMIN_EMAILS.includes(user.email.toLowerCase())) {
-            document.body.style.display = "block";
+        // Safely check if the user has an email BEFORE checking if they are an admin
+        if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+            gate.classList.add('hide'); // Hide gate, reveal dashboard!
         } else {
-            alert("Security Alert: Unauthorized allocation profile.");
+            // A driver or customer accidentally loaded the admin page
+            alert("Security Alert: Unauthorized credentials. Signing out to protect system integrity...");
             await signOut(auth);
+            gate.classList.remove('hide');
         }
     }
 });
+
+// ADMIN LOGIN EXECUTION
+window.executeAdminLogin = async () => {
+    const email = document.getElementById('adminEmail').value.trim();
+    const pass = document.getElementById('adminPass').value.trim();
+    const btn = document.getElementById('btnAdminLogin');
+
+    if(!email || !pass) return showToast("Enter email and password");
+
+    btn.innerText = "AUTHENTICATING...";
+    btn.disabled = true;
+
+    try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        // The onAuthStateChanged listener above will automatically detect success and hide the gate
+    } catch(e) {
+        alert("Access Denied: Invalid email or password.");
+        btn.innerText = "ACCESS SYSTEM";
+        btn.disabled = false;
+    }
+};
 
 window.logoutAdmin = async () => { try { await signOut(auth); } catch(e) { console.error(e); } };
 
@@ -753,9 +820,9 @@ window.viewOrder = (orderId) => {
     
     const mapLink = document.getElementById('btnNavCustomer');
     if (order.deliveryCoords && order.deliveryCoords.lat) {
-        mapLink.href = `https://www.google.com/maps/search/?api=1&query=${order.deliveryCoords.lat},${order.deliveryCoords.lng}`;
+        mapLink.href = `https://maps.google.com/?q=${order.deliveryCoords.lat},${order.deliveryCoords.lng}`;
     } else {
-        mapLink.href = order.deliveryAddress ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.deliveryAddress)}` : '#';
+        mapLink.href = order.deliveryAddress ? `https://maps.google.com/?q=${encodeURIComponent(order.deliveryAddress)}` : '#';
     }
 
     let statusClass = 'b-pending';
