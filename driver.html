@@ -6,6 +6,7 @@
 <title>TASCO Driver</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
+/* PRESERVED EXISTING STYLES */
 :root {
   --orange: #FF5A00;
   --orange-light: #FFF0E5;
@@ -47,7 +48,7 @@ img { display: block; }
 .card { background: var(--surface); border-radius: 16px; border: 1px solid var(--border-dark); box-shadow: 0 4px 12px rgba(0,0,0,0.02); overflow: hidden; }
 .section-title { font-size: 15px; font-weight: 700; margin: 24px 24px 12px; display: flex; justify-content: space-between; align-items: center; }
 
-/* HOME SCREEN */
+/* HOME SCREEN UPDATES */
 .home-profile-row { display: flex; align-items: center; gap: 12px; }
 .avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; background: var(--orange-light); border: 2px solid var(--surface); box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--orange); font-size: 20px;}
 .greeting { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
@@ -63,7 +64,7 @@ img { display: block; }
 .dash-ic.blue { background: #EEF2FF; color: #4F46E5; }
 .dash-ic svg { width: 16px; height: 16px; stroke-width: 2; }
 
-/* AVAILABLE ORDER CARD */
+/* AVAILABLE ORDER CARD UPDATES */
 .order-card { margin: 0 24px 16px; padding: 16px; position: relative; }
 .oc-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .oc-id { font-size: 16px; font-weight: 700; letter-spacing: -0.5px; }
@@ -76,11 +77,10 @@ img { display: block; }
 .oc-price { position: absolute; right: 16px; top: 48px; text-align: right; }
 .oc-price-val { font-size: 18px; font-weight: 700; color: var(--green); }
 .oc-price-lbl { font-size: 11px; color: var(--text-muted); }
-.oc-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
-.btn-outline { padding: 14px; border: 1.5px solid var(--border-dark); border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--text-main); text-align: center; }
+.oc-actions { display: grid; grid-template-columns: 1fr; margin-top: 16px; } /* Updated to 1fr for single button */
 .btn-solid { padding: 14px; background: var(--orange); border-radius: 12px; font-size: 14px; font-weight: 700; color: white; text-align: center; }
 
-/* ACTIVE ORDER SCREEN */
+/* ACTIVE ORDER SCREEN (Preserved) */
 .active-hdr { padding: 16px 24px; background: var(--surface); display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-dark); }
 .btn-help { display: flex; align-items: center; gap: 6px; color: var(--orange); font-size: 14px; font-weight: 600; }
 .btn-help svg { width: 18px; }
@@ -91,22 +91,18 @@ img { display: block; }
 .cust-addr { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
 .cust-actions { display: flex; gap: 8px; }
 .c-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-dark); display: flex; align-items: center; justify-content: center; color: var(--green); }
-
 .del-to-bar { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-top: 1px solid var(--border); }
 .btn-nav { display: flex; align-items: center; gap: 6px; background: var(--orange-light); color: var(--orange); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; }
-
 .item-list { margin: 24px 24px 0; }
 .item-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
 .item-row:last-child { border-bottom: none; }
 .item-qty { background: var(--border-dark); padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; }
 .item-name { flex: 1; font-size: 14px; font-weight: 600; }
 .item-price { font-size: 14px; font-weight: 700; }
-
 .pay-sum { margin: 24px 24px 0; padding: 16px; }
 .pay-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: var(--text-muted); }
 .pay-row.bold { font-weight: 700; color: var(--text-main); margin-bottom: 0; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border-dark); }
 .val-green { color: var(--green); font-weight: 700; }
-
 .prog-box { margin: 24px 24px 0; }
 .step { display: flex; gap: 16px; margin-bottom: 20px; position: relative; }
 .step:last-child { margin-bottom: 0; }
@@ -121,16 +117,14 @@ img { display: block; }
 .step-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
 .step.active .step-title { color: var(--orange); }
 .step-desc { font-size: 12px; color: var(--text-muted); }
-
 .action-stack { margin: 24px; display: flex; flex-direction: column; gap: 12px; }
 .btn-primary-outline { padding: 16px; border: 1.5px solid var(--danger); color: var(--danger); border-radius: 12px; font-size: 14px; font-weight: 600; text-align: center; }
 
-/* EARNINGS & PROFILE */
+/* EARNINGS & PROFILE (Preserved) */
 .earn-card { margin: 0 24px 16px; background: var(--orange-light); border: none; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
 .earn-card-left { display: flex; align-items: center; gap: 12px; }
 .btn-settle { background: var(--orange); color: white; padding: 12px 24px; border-radius: 10px; font-weight: 700; }
 .earn-list-item { padding: 16px 24px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-dark); }
-
 .prof-header { padding: 32px 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .prof-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--orange); color: white; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; }
 .prof-name { font-size: 20px; font-weight: 700; }
@@ -138,7 +132,6 @@ img { display: block; }
 .prof-row { padding: 16px; border-bottom: 1px solid var(--border-dark); display: flex; align-items: center; gap: 16px; }
 .prof-row:last-child { border-bottom: none; }
 .btn-logout { margin: 32px 24px; padding: 16px; background: var(--danger-light); color: var(--danger); font-weight: 700; text-align: center; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-
 .empty-state { text-align: center; padding: 60px 24px; color: var(--text-muted); font-weight: 500;}
 </style>
 </head>
@@ -156,7 +149,13 @@ img { display: block; }
             <div class="status-badge"><div class="status-dot"></div>Online</div>
           </div>
         </div>
-        <div style="color:var(--text-main)"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
+        <div style="position: relative; color: var(--text-main); cursor: pointer; padding: 4px;">
+          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <div style="position: absolute; top: 2px; right: 4px; width: 10px; height: 10px; background: var(--orange); border-radius: 50%; border: 2px solid var(--bg);"></div>
+        </div>
       </div>
 
       <div class="dash-grid">
@@ -172,7 +171,7 @@ img { display: block; }
 
       <div class="section-title">
         <span>Available orders</span>
-        <span style="font-size:11px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:4px"><div class="status-dot"></div>Real-time updates</span>
+        <span style="font-size:12px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:4px"><div class="status-dot"></div>Real-time updates</span>
       </div>
 
       <div id="poolList"></div>
@@ -191,7 +190,6 @@ img { display: block; }
 
     <div class="screen" id="sEarnings">
       <div class="header"><div class="screen-title" style="text-align:center;width:100%">Earnings</div></div>
-      
       <div class="dash-grid">
         <div class="card dash-card">
           <div><div class="dash-lbl">Today's earnings</div><div class="dash-val green" id="eEarn">0.00 DH</div></div>
@@ -200,7 +198,6 @@ img { display: block; }
           <div><div class="dash-lbl">Orders completed</div><div class="dash-val" id="eOrders">0</div></div>
         </div>
       </div>
-
       <div class="card earn-card" style="margin-top:24px">
         <div class="earn-card-left">
           <div class="dash-ic" style="background:#fff;color:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
@@ -212,14 +209,12 @@ img { display: block; }
         </div>
         <button class="btn-settle" onclick="markSettled()">Settle</button>
       </div>
-
       <div class="section-title">Today's orders</div>
       <div class="card" style="margin:0 24px;border-radius:16px" id="earnList"></div>
     </div>
 
     <div class="screen" id="sProfile">
       <div class="header"><div class="screen-title" style="text-align:center;width:100%">Profile</div></div>
-      
       <div class="prof-header">
         <div class="prof-avatar" id="pAv"></div>
         <div style="text-align:center">
@@ -228,7 +223,6 @@ img { display: block; }
           <div class="status-badge" style="background:var(--green-light);padding:4px 10px;border-radius:99px"><div class="status-dot"></div>Online</div>
         </div>
       </div>
-
       <div class="prof-menu">
         <div class="prof-row">
           <div class="dash-ic" style="background:#FFF1F2;color:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
@@ -238,7 +232,6 @@ img { display: block; }
           </div>
         </div>
       </div>
-
       <button class="btn-logout" onclick="logout()">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         Log out
@@ -268,7 +261,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, collection, onSnapshot, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-// 1. FIREBASE INITIALIZATION
 const firebaseConfig = {
   apiKey: "AIzaSyAaaR52bvyQfkxmZL16lcg4Bd4M76OtbI4",
   authDomain: "lesgo-cd7f9.firebaseapp.com",
@@ -290,7 +282,7 @@ const S = {
 
 const fmt = n => Number(n).toFixed(2);
 
-// 2. AUTHENTICATION & SECURITY GUARD
+// AUTHENTICATION
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     const localDrv = localStorage.getItem("drv");
@@ -316,7 +308,6 @@ onAuthStateChanged(auth, async (user) => {
       }
     }
   } else {
-    // SECURITY KICK: Send unauthorized users back to login
     window.location.href = "login.html";
   }
 });
@@ -330,13 +321,16 @@ function updateProfileUI() {
   document.getElementById("pPhone").textContent = S.driver.phone;
 }
 
-// 3. FIRESTORE REAL-TIME LISTENER
+// REALTIME LISTENER
 function startOrderListener() {
   onSnapshot(collection(db, "orders"), snap => {
     S.orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     
-    // Auto-detect active order
-    const active = S.orders.find(o => o.driverEmail === S.driver.phone && ["Preparing", "OnTheWay"].includes(o.status));
+    // Auto-detect active order (mapped to correctly interpret the new "claimed" status)
+    const active = S.orders.find(o => 
+      o.driverEmail === S.driver.phone && 
+      ["Preparing", "OnTheWay", "claimed", "Claimed"].includes(o.status)
+    );
     S.activeId = active ? active.id : null;
 
     renderAll();
@@ -345,7 +339,7 @@ function startOrderListener() {
   });
 }
 
-// 4. ROUTING & RENDERING
+// ROUTING
 window.go = s => {
   document.querySelectorAll(".screen").forEach(x => x.classList.remove("active"));
   document.querySelectorAll(".ni").forEach(x => x.classList.remove("active"));
@@ -364,18 +358,24 @@ function renderAll() {
 function getTodayStats() {
   if (!S.driver) return { count: 0, fees: 0 };
   const today = new Date().toDateString();
-  const mineToday = S.orders.filter(o => o.driverEmail === S.driver.phone && o.status === "Delivered" && new Date(o.timestamp || 0).toDateString() === today);
+  const mineToday = S.orders.filter(o => 
+    o.driverEmail === S.driver.phone && 
+    o.status === "Delivered" && 
+    new Date(o.timestamp || 0).toDateString() === today
+  );
   let todayFees = 0;
   mineToday.forEach(o => todayFees += (o.deliveryFee || 0));
   return { count: mineToday.length, fees: todayFees };
 }
 
+// UPDATED HOME RENDERER
 function renderHome() {
   const stats = getTodayStats();
   document.getElementById("hEarn").textContent = fmt(stats.fees) + " DH";
   document.getElementById("hOrders").textContent = stats.count;
 
-  const pool = S.orders.filter(o => o.status === "Pending" && (!o.driverEmail || o.driverEmail === "")).sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
+  // Show only strict "pending" statuses
+  const pool = S.orders.filter(o => o.status.toLowerCase() === "pending").sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
   const el = document.getElementById("poolList");
   
   if(!pool.length) {
@@ -385,16 +385,25 @@ function renderHome() {
 
   el.innerHTML = pool.map(o => {
     const id = "#TSC" + o.id.slice(-4).toUpperCase();
-    const dt = o.timestamp ? new Date(o.timestamp).toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}) : "Now";
     
+    // Calculate 5-minute countdown based on timestamp
+    const timeDiff = Math.floor((Date.now() - new Date(o.timestamp || Date.now()).getTime()) / 1000);
+    const secondsLeft = Math.max(0, 300 - timeDiff); 
+    const mins = Math.floor(secondsLeft / 60);
+    const secs = secondsLeft % 60;
+    const timerText = `${mins}:${secs.toString().padStart(2, '0')}`;
+    
+    // Add "New" badge if less than 60 seconds old
+    const isNew = timeDiff < 60;
+
     return `
       <div class="card order-card">
         <div class="oc-head">
           <div class="oc-id">${id}</div>
-          <div class="oc-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${dt}</div>
+          <div class="oc-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span class="countdown-timer" data-time="${secondsLeft}">${timerText}</span></div>
         </div>
         <div class="oc-loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${o.neighborhood || "Marrakech"}</div>
-        <div class="oc-meta">${o.totalItems || 1} items <span class="badge-new" style="margin-left:8px">New</span></div>
+        <div class="oc-meta">${o.totalItems || 1} items ${isNew ? '<span class="badge-new" style="margin-left:8px">New</span>' : ''}</div>
         
         <div class="oc-price">
           <div class="oc-price-val">${fmt(o.totalPrice || 0)} DH</div>
@@ -402,14 +411,14 @@ function renderHome() {
         </div>
 
         <div class="oc-actions">
-          <button class="btn-outline">Ignore</button>
-          <button class="btn-solid" onclick="claim('${o.id}')">Accept Order</button>
+          <button class="btn-solid" onclick="viewOrder('${o.id}')">View Order</button>
         </div>
       </div>
     `;
   }).join("");
 }
 
+// ACTIVE ORDER RENDERER (PRESERVED, WITH STATUS MAPPER)
 function renderActive() {
   const o = S.orders.find(x => x.id === S.activeId);
   const el = document.getElementById("activeContent");
@@ -423,7 +432,10 @@ function renderActive() {
   const sid = "#TSC" + o.id.slice(-4).toUpperCase();
   document.getElementById("detId").textContent = sid;
 
-  const si = ["Pending", "Preparing", "OnTheWay", "Delivered"].indexOf(o.status);
+  // Mapped "claimed" backwards to "Preparing" strictly for the progress bar logic so it doesn't break
+  let normStatus = o.status.toLowerCase() === 'claimed' ? 'Preparing' : o.status;
+  normStatus = o.status.toLowerCase() === 'pending' ? 'Pending' : normStatus;
+  const si = ["Pending", "Preparing", "OnTheWay", "Delivered"].indexOf(normStatus);
   
   let cp = (o.customerPhone || "").replace(/^0/, "");
   if (!cp.startsWith("+") && !cp.startsWith("212")) cp = "212" + cp;
@@ -452,7 +464,6 @@ function renderActive() {
          <a href="${navUrl}" target="_blank" class="btn-nav"><svg viewBox="0 0 24 24" width="14" fill="none" stroke="currentColor"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg> Navigate</a>
        </div>
     </div>
-
     <div class="card item-list">
       <div style="padding:16px;border-bottom:1px solid var(--border);font-weight:700;font-size:14px">Order items (${o.totalItems||0})</div>
       ${(o.cart||[]).map(i => `
@@ -463,14 +474,12 @@ function renderActive() {
         </div>
       `).join('') || '<div style="padding:16px;text-align:center;color:var(--text-muted)">No items</div>'}
     </div>
-
     <div class="card pay-sum">
       <div style="font-weight:700;font-size:14px;margin-bottom:16px">Payment summary</div>
       <div class="pay-row"><span>Cash to collect</span><span class="val-green">${fmt(o.totalPrice || 0)} DH</span></div>
       <div class="pay-row"><span>Delivery fee</span><span>${fmt(o.deliveryFee||0)} DH</span></div>
       <div class="pay-row bold"><span>Total amount</span><span>${fmt(o.totalPrice || 0)} DH</span></div>
     </div>
-
     <div class="card prog-box">
       <div style="padding:16px;border-bottom:1px solid var(--border);font-weight:700;font-size:14px;margin-bottom:16px">Delivery progress</div>
       <div style="padding:0 16px 16px">
@@ -491,7 +500,6 @@ function renderActive() {
         `).join('')}
       </div>
     </div>
-
     <div class="action-stack">
       ${si === 1 ? `<button class="btn-solid" onclick="update('${o.id}','OnTheWay')">✓ Mark order as picked up</button><button class="btn-primary-outline" onclick="release('${o.id}')">Release order</button>` : ''}
       ${si === 2 ? `<button class="btn-solid" onclick="update('${o.id}','Delivered')">✓ Mark as delivered</button>` : ''}
@@ -499,6 +507,7 @@ function renderActive() {
   `;
 }
 
+// EARNINGS RENDERER (PRESERVED)
 function renderEarnings() {
   if (!S.driver) return;
   const mineAll = S.orders.filter(o => o.driverEmail === S.driver.phone && o.status === "Delivered");
@@ -529,14 +538,35 @@ function renderEarnings() {
   `).join("");
 }
 
-// 5. LIVE FIRESTORE ACTIONS
-window.claim = async id => {
+// 5. LIVE FIRESTORE ACTIONS (UPDATED FOR CLAIM)
+window.viewOrder = async id => {
   if (!S.driver) return;
   try {
-    await updateDoc(doc(db, "orders", id), { driverEmail: S.driver.phone, status: "Preparing" });
+    const uid = auth.currentUser ? auth.currentUser.uid : S.driver.phone;
+    
+    // Updates to claimed and sets claimedBy as requested
+    await updateDoc(doc(db, "orders", id), { 
+        status: "claimed", 
+        claimedBy: uid,
+        driverEmail: S.driver.phone // Preserved to protect active page mapping
+    });
+    
     S.activeId = id;
     go('sActive');
   } catch (e) { alert("Error claiming order: " + e.message); }
+};
+
+window.release = async id => {
+  if (!confirm("Are you sure you want to release this order?")) return;
+  try {
+    await updateDoc(doc(db, "orders", id), { 
+        driverEmail: "", 
+        claimedBy: "", 
+        status: "pending" 
+    });
+    S.activeId = null;
+    go('sHome');
+  } catch (e) { alert("Error releasing order: " + e.message); }
 };
 
 window.update = async (id, st) => {
@@ -546,15 +576,6 @@ window.update = async (id, st) => {
     await updateDoc(doc(db, "orders", id), payload);
     if (st === "Delivered") { S.activeId = null; go('sHome'); }
   } catch (e) { alert("Error updating status: " + e.message); }
-};
-
-window.release = async id => {
-  if (!confirm("Are you sure you want to release this order?")) return;
-  try {
-    await updateDoc(doc(db, "orders", id), { driverEmail: "", status: "Pending" });
-    S.activeId = null;
-    go('sHome');
-  } catch (e) { alert("Error releasing order: " + e.message); }
 };
 
 window.markSettled = async () => {
@@ -577,6 +598,24 @@ window.logout = async () => {
   await signOut(auth);
   window.location.href = "login.html";
 };
+
+// COUNTDOWN TIMER LOGIC
+if(window.orderTimer) clearInterval(window.orderTimer);
+window.orderTimer = setInterval(() => {
+  document.querySelectorAll('.countdown-timer').forEach(el => {
+    let sec = parseInt(el.dataset.time);
+    if(sec > 0) {
+      sec--;
+      el.dataset.time = sec;
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      el.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+    } else {
+      el.textContent = "0:00";
+    }
+  });
+}, 1000);
+
 </script>
 </body>
 </html>
