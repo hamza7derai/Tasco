@@ -7,21 +7,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root {
---orange: #FF5A00;
---orange-light: #FFF0E5;
---orange-mid: rgba(255,90,0,0.15);
---green: #10B981;
---green-light: #E0F2FE;
---bg: #F9FAFB;
---surface: #FFFFFF;
---text-main: #111827;
---text-muted: #6B7280;
---border: #F3F4F6;
---border-dark: #E5E7EB;
---danger: #EF4444;
---danger-light: #FEF2F2;
---font: "Inter", sans-serif;
---nav-height: 80px;
+    --orange: #FF5A00;
+    --orange-light: #FFF0E5;
+    --green: #10B981;
+    --green-light: #E0F2FE;
+    --bg: #F9FAFB;
+    --surface: #FFFFFF;
+    --text-main: #111827;
+    --text-muted: #6B7280;
+    --border: #F3F4F6;
+    --border-dark: #E5E7EB;
+    --danger: #EF4444;
+    --danger-light: #FEF2F2;
+    --font: "Inter", sans-serif;
+    --nav-height: 80px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -45,7 +44,8 @@ img { display: block; }
 .otp-box:focus { border-color: var(--orange); background: var(--surface); }
 .auth-back { font-size: 13px; color: var(--orange); font-weight: 600; margin-top: 16px; display: inline-block; }
 
-#app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; }
+#app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; opacity: 0; transition: opacity 0.3s ease;}
+#app.ready { opacity: 1; }
 #screens { flex: 1; position: relative; overflow: hidden; }
 .screen { position: absolute; inset: 0; overflow-y: auto; background: var(--bg); opacity: 0; pointer-events: none; transition: opacity 0.2s ease; padding-bottom: 32px; }
 .screen.active { opacity: 1; pointer-events: auto; }
@@ -85,9 +85,9 @@ img { display: block; }
 .oc-id { font-size: 16px; font-weight: 700; letter-spacing: -0.5px; }
 .oc-time { font-size: 13px; color: var(--orange); font-weight: 600; display: flex; align-items: center; gap: 4px; }
 .oc-time svg { width: 14px; }
-.oc-loc { font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 6px; color: var(--text-muted); margin-bottom: 4px; }
-.oc-loc svg { width: 14px; }
-.badge-new { background: var(--orange-light); color: var(--orange); padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+.oc-loc { font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 6px; color: var(--text-muted); margin-bottom: 4px; line-height: 1.3;}
+.badge-new { background: var(--orange-light); color: var(--orange); padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; animation: pulse 2s infinite;}
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
 .oc-price { position: absolute; right: 16px; top: 48px; text-align: right; }
 .oc-price-val { font-size: 18px; font-weight: 700; color: var(--green); }
 .oc-price-lbl { font-size: 11px; color: var(--text-muted); }
@@ -152,7 +152,6 @@ img { display: block; }
 /* EARNINGS & PROFILE */
 .earn-card { margin: 0 24px 16px; background: var(--orange-light); border: none; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
 .earn-card-left { display: flex; align-items: center; gap: 12px; }
-.btn-settle { background: var(--orange); color: white; padding: 12px 24px; border-radius: 10px; font-weight: 700; }
 .earn-list-item { padding: 16px 24px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-dark); }
 .prof-header { padding: 32px 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .prof-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--orange); color: white; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; overflow: hidden;}
@@ -303,6 +302,10 @@ img { display: block; }
 </nav>
 </div>
 
+<audio id="notificationSound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+</audio>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, onSnapshot, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -324,12 +327,35 @@ const auth = getAuth(app);
 const S = {
     orders: [],
     driver: null,
-    activeId: null
+    activeId: null,
+    initialLoadDone: false // prevents push notification loop on first load
 };
 
 const fmt = n => Number(n).toFixed(2);
+const safeNum = (val) => isNaN(parseFloat(val)) ? 0 : parseFloat(val);
 
-// MOROCCAN LOCAL PHONE NUMBER NORMALIZATION UTILITY
+// SESSION INITIALIZATION PIPELINE
+function initializeSession() {
+    const localDrv = localStorage.getItem("drv");
+    if (localDrv) {
+        S.driver = JSON.parse(localDrv);
+        document.getElementById('authGate').classList.add('hide');
+        document.getElementById('app').classList.add('ready');
+        
+        // Request notification permission if they haven't explicitly blocked it
+        if ("Notification" in window && Notification.permission !== "denied") {
+            Notification.requestPermission();
+        }
+
+        updateProfileUI();
+        startOrderListener();
+    } else {
+        document.getElementById('authGate').classList.remove('hide');
+    }
+}
+
+initializeSession(); // Run instantly to bypass loading flash
+
 function normalizeMoroccanPhone(inputPhone) {
     let cleaned = inputPhone.trim().replace(/[\s\-\(\)]/g, '');
     if (cleaned.startsWith('06') || cleaned.startsWith('07')) {
@@ -341,21 +367,16 @@ function normalizeMoroccanPhone(inputPhone) {
     return cleaned;
 }
 
-// INTENT INITIALIZER FOR CAPTCHA OBJECT
 function initRecaptchaBouncer() {
     if (window._recaptchaVerifier) return;
-    window._recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-        size: 'invisible'
-    });
+    window._recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { size: 'invisible' });
 }
 
-// STATE REVERSION FLOW
 window.revertToPhoneEntry = () => {
     document.getElementById('authStepOtp').style.display = 'none';
     document.getElementById('authStepPhone').style.display = 'block';
 };
 
-// INITIALIZE ENTRY OF OTP INPUT BOX PIPELINE
 function buildOtpInputBoxes() {
     const wrapper = document.getElementById('otpBoxWrapper');
     wrapper.innerHTML = '';
@@ -378,7 +399,6 @@ function buildOtpInputBoxes() {
     setTimeout(() => document.getElementById('otp_' + 0).focus(), 100);
 }
 
-// CORE INTERFACE EXECUTION: REQ SIGN-IN OTP
 window.executeSmsRequest = async () => {
     const rawInput = document.getElementById('inputPhone').value.trim();
     if (rawInput.length < 9) {
@@ -388,14 +408,13 @@ window.executeSmsRequest = async () => {
     
     const validFirestoreId = normalizeMoroccanPhone(rawInput);
     const btn = document.getElementById('btnSendOtp');
-    btn.innerText = "CHECKING LEDGER...";
+    btn.innerText = "CHECKING SYSTEM...";
     btn.disabled = true;
 
     try {
-        // Validation Layer: Confirm profile existence before dispatching real text allocations
         const driverDocSnap = await getDoc(doc(db, "drivers", validFirestoreId));
         if (!driverDocSnap.exists() || !driverDocSnap.data().isActive) {
-            alert("Authorization denied. Active driver document profile not registered.");
+            alert("Authorization denied. Active driver profile not registered.");
             btn.innerText = "GET VERIFICATION CODE";
             btn.disabled = false;
             return;
@@ -418,7 +437,6 @@ window.executeSmsRequest = async () => {
     }
 };
 
-// CORE INTERFACE EXECUTION: LOG IN CONFIRMATION
 window.executeOtpVerification = async () => {
     let verificationCode = '';
     for(let i = 0; i < 6; i++) {
@@ -435,7 +453,7 @@ window.executeOtpVerification = async () => {
 
     try {
         await window._confirmationResult.confirm(verificationCode);
-        // Step authorization passed: App reloaded via standard Auth State Change context loop handler
+        // Auth state change will handle the rest
     } catch(e) {
         alert("Invalid authorization response code.");
         btn.disabled = false;
@@ -443,7 +461,6 @@ window.executeOtpVerification = async () => {
     }
 };
 
-// AUTHENTICATION STATE WATCHDOG PIPELINE
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         try {
@@ -456,9 +473,13 @@ onAuthStateChanged(auth, async (user) => {
                 };
                 localStorage.setItem("drv", JSON.stringify(S.driver));
                 
-                // Hide Auth Screen overlay layer container seamlessly
                 document.getElementById('authGate').classList.add('hide');
+                document.getElementById('app').classList.add('ready');
                 
+                if ("Notification" in window && Notification.permission !== "denied") {
+                    Notification.requestPermission();
+                }
+
                 updateProfileUI();
                 startOrderListener();
             } else {
@@ -470,9 +491,6 @@ onAuthStateChanged(auth, async (user) => {
             localStorage.removeItem("drv");
             document.getElementById('authGate').classList.remove('hide');
         }
-    } else {
-        localStorage.removeItem("drv");
-        document.getElementById('authGate').classList.remove('hide');
     }
 });
 
@@ -487,19 +505,41 @@ function updateProfileUI() {
     document.getElementById("pAv").innerHTML = avatarContent;
 }
 
-// REALTIME LISTENER
+// REALTIME LISTENER & PUSH NOTIFICATIONS
 function startOrderListener() {
     onSnapshot(collection(db, "orders"), snap => {
+        
+        // PUSH NOTIFICATION WATCHDOG
+        if (S.initialLoadDone) {
+            snap.docChanges().forEach(change => {
+                if (change.type === "added" || change.type === "modified") {
+                    const orderData = change.doc.data();
+                    if (orderData.status === "Preparing") {
+                        // Play alert chime
+                        document.getElementById('notificationSound').play().catch(e => console.log("Audio blocked by browser policy"));
+                        
+                        // Push Notification
+                        if ("Notification" in window && Notification.permission === "granted") {
+                            new Notification("New TASCO Order!", {
+                                body: `Delivery to ${orderData.neighborhood || 'Marrakech'} is available.`,
+                                icon: "https://i.postimg.cc/rmmnn3XM/file-000000007624720ab6ae4d2993693772.png"
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
         S.orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-        // Auto-detect active order running globally on driver profile
         const active = S.orders.find(o =>
             (o.driverId === S.driver.phone || o.claimedBy === S.driver.phone) &&
-            !['pending', 'delivered', 'cancelled'].includes(o.status)
+            !['pending', 'delivered', 'cancelled'].includes((o.status||'').toLowerCase())
         );
         S.activeId = active ? active.id : null;
 
         renderAll();
+        S.initialLoadDone = true;
     }, err => {
         console.error("Firestore Error:", err);
     });
@@ -526,11 +566,11 @@ function getTodayStats() {
     const today = new Date().toDateString();
     const mineToday = S.orders.filter(o =>
         (o.driverId === S.driver.phone || o.claimedBy === S.driver.phone) &&
-        o.status === "Delivered" &&
+        (o.status||'').toLowerCase() === "delivered" &&
         new Date(o.timestamp || 0).toDateString() === today
     );
     let todayFees = 0;
-    mineToday.forEach(o => todayFees += (o.deliveryFee || 0));
+    mineToday.forEach(o => todayFees += safeNum(o.deliveryFee));
     return { count: mineToday.length, fees: todayFees };
 }
 
@@ -540,12 +580,16 @@ function renderHome() {
     document.getElementById("hEarn").textContent = fmt(stats.fees) + " DH";
     document.getElementById("hOrders").textContent = stats.count;
 
-    // Filter down strictly to Preparing order state—this matches manual workspace pool logic
     const pool = S.orders.filter(o => o.status === "Preparing").sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
     const el = document.getElementById("poolList");
 
     if(!pool.length) {
-        el.innerHTML = `<div class="empty-state">No orders available right now.</div>`;
+        el.innerHTML = `<div class="empty-state" style="padding-top:80px;">
+            <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="1.5" fill="none" style="color:var(--border-dark); margin-bottom:16px;">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <br>No orders available in the pool right now.
+        </div>`;
         return;
     }
 
@@ -565,7 +609,7 @@ function renderHome() {
             <div style="font-size:12px; font-weight:600; color:var(--text-muted); margin-bottom:8px; display:flex; align-items:center; gap:4px;">📍 ${o.neighborhood || "Marrakech"}</div>
 
             <div class="oc-price">
-                <div class="oc-price-val">${fmt(o.totalPrice || 0)} DH</div>
+                <div class="oc-price-val">${fmt(safeNum(o.totalPrice))} DH</div>
                 <div class="oc-price-lbl">Cash to collect</div>
             </div>
 
@@ -582,7 +626,7 @@ function renderActive() {
     const el = document.getElementById("activeContent");
 
     if(!o) {
-        el.innerHTML = `<div class="empty-state">No active order. Claim one from the workspace stream dashboard.</div>`;
+        el.innerHTML = `<div class="empty-state" style="padding-top:120px;">No active order.<br>Claim one from the home screen.</div>`;
         return;
     }
 
@@ -606,9 +650,13 @@ function renderActive() {
     let cp = (o.customerPhone || "").replace(/^0/, "");
     if (!cp.startsWith("+") && !cp.startsWith("212")) cp = "212" + cp;
 
-    const navUrl = (o.deliveryCoords && o.deliveryCoords.lat)
-        ? `https://maps.google.com/?q=${o.deliveryCoords.lat},${o.deliveryCoords.lng}`
-        : `https://maps.google.com/?q=${encodeURIComponent(o.deliveryAddress || o.neighborhood || "Marrakech")}`;
+    // Fixed Google Maps Navigation URL Format
+    let navUrl = "#";
+    if (o.deliveryCoords && o.deliveryCoords.lat) {
+        navUrl = `https://www.google.com/maps/dir/?api=1&destination=${o.deliveryCoords.lat},${o.deliveryCoords.lng}`;
+    } else if (o.deliveryAddress) {
+        navUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(o.deliveryAddress)}`;
+    }
 
     const acceptedTime = o.timestamp ? new Date(o.timestamp).toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"}) : '';
 
@@ -621,7 +669,7 @@ function renderActive() {
             </div> 
         </div> 
         <div style="text-align:right"> 
-            <div style="font-size:20px;font-weight:800;color:var(--green)">${fmt(o.totalPrice || 0)} DH</div>
+            <div style="font-size:20px;font-weight:800;color:var(--green)">${fmt(safeNum(o.totalPrice))} DH</div>
             <div style="font-size:11px;color:var(--text-muted);font-weight:500">Total collection value</div>
         </div>
     </div>
@@ -655,7 +703,7 @@ function renderActive() {
                 <div class="item-details">
                     <div class="item-name">
                         <div><span class="item-qty">${i.qty||1}x</span> ${i.product?.name || "Item"}</div>
-                        <div class="item-price">${fmt((i.unitPrice||0) * (i.qty||1))} DH</div> 
+                        <div class="item-price">${fmt((safeNum(i.unitPrice)) * (i.qty||1))} DH</div> 
                     </div> 
                     ${optionsText ? `<div class="item-meta">${optionsText}</div>`: ''} 
                 </div> 
@@ -665,9 +713,9 @@ function renderActive() {
 
     <div class="card pay-sum">
         <div style="font-weight:700; font-size:14px; margin-bottom:16px;">Payment summary mapping</div>
-        <div class="pay-row"><span>Your Delivery Fee Profit</span><span class="val-green">+ ${fmt(o.deliveryFee||0)} DH</span></div>
-        <div class="pay-row"><span>Wholesale Product Cost (Paid to Merchant)</span><span>${fmt(safeNum(o.totalPrice) - safeNum(o.deliveryFee))} DH</span></div>
-        <div class="pay-row bold"><span>Total Amount collected from Client</span><span>${fmt(o.totalPrice || 0)} DH</span></div>
+        <div class="pay-row"><span>Your Delivery Profit</span><span class="val-green">+ ${fmt(safeNum(o.deliveryFee))} DH</span></div>
+        <div class="pay-row"><span>Product Wholesale Cost</span><span>${fmt(safeNum(o.totalPrice) - safeNum(o.deliveryFee))} DH</span></div>
+        <div class="pay-row bold"><span>Total Cash to Collect</span><span>${fmt(safeNum(o.totalPrice))} DH</span></div>
     </div>
 
     <div class="card prog-box">
@@ -701,7 +749,7 @@ function renderEarnings() {
     if (!S.driver) return;
     const mineAll = S.orders.filter(o =>
         (o.driverId === S.driver.phone || o.claimedBy === S.driver.phone) &&
-        o.status === "Delivered"
+        (o.status||'').toLowerCase() === "delivered"
     );
     const unS = mineAll.filter(o => !o.driverSettled);
 
@@ -710,7 +758,7 @@ function renderEarnings() {
     document.getElementById("eOrders").textContent = stats.count;
 
     let debt = 0;
-    unS.forEach(o => { debt += ((o.totalPrice || 0) - (o.deliveryFee || 0)); });
+    unS.forEach(o => { debt += (safeNum(o.totalPrice) - safeNum(o.deliveryFee)); });
     document.getElementById("eDebt").textContent = fmt(debt) + " DH";
 
     const el = document.getElementById("earnList");
@@ -721,7 +769,7 @@ function renderEarnings() {
             <div style="font-weight:700; font-size:14px; margin-bottom:4px;">#TSC${o.id.slice(-4).toUpperCase()}</div>
             <div style="font-size:12px; color:var(--text-muted)">Forward to Admin: <span style="color:var(--danger); font-weight:700;">${fmt(safeNum(o.totalPrice) - safeNum(o.deliveryFee))} DH</span></div>
         </div>
-        <div style="text-align:right; font-weight:700; color:var(--green);">+ ${fmt(o.deliveryFee)} DH</div>
+        <div style="text-align:right; font-weight:700; color:var(--green);">+ ${fmt(safeNum(o.deliveryFee))} DH</div>
     </div>`).join("");
 }
 
@@ -770,6 +818,7 @@ window.logout = async () => {
     if(!confirm("Log out of Tasco Driver ecosystem?")) return;
     localStorage.removeItem("drv");
     await signOut(auth);
+    window.location.reload();
 };
 
 // COUNTDOWN TIMER DISPATCH LOOPS
