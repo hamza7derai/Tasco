@@ -332,6 +332,158 @@ function renderHome() {
 function renderActive() {
   const o = S.orders.find(x => x.driverEmail === S.driver.phone && ["Preparing", "OnTheWay"].includes(x.status));
   const el = document.getElementById("activeContent");
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, onSnapshot, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+// 1. FIREBASE INITIALIZATION
+const firebaseConfig = {
+  apiKey: "AIzaSyAaaR52bvyQfkxmZL16lcg4Bd4M76OtbI4",
+  authDomain: "lesgo-cd7f9.firebaseapp.com",
+  projectId: "lesgo-cd7f9",
+  storageBucket: "lesgo-cd7f9.firebasestorage.app",
+  messagingSenderId: "618932234525",
+  appId: "1:618932234525:web:8eb0b934b1bfd1060059f4"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+const S = {
+  orders: [],
+  driver: null,
+  activeId: null
+};
+
+const fmt = n => Number(n).toFixed(2);
+
+// 2. AUTHENTICATION & SECURITY GUARD
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    // Check local storage first for speed
+    const localDrv = localStorage.getItem("drv");
+    if (localDrv) {
+      S.driver = JSON.parse(localDrv);
+    } else {
+      // Fallback: Fetch from Firestore if local storage is cleared
+      try {
+        const dDoc = await getDoc(doc(db, "drivers", user.phoneNumber));
+        if (dDoc.exists() && dDoc.data().isActive) {
+          S.driver = { name: dDoc.data().name, phone: dDoc.data().phone };
+          localStorage.setItem("drv", JSON.stringify(S.driver));
+        } else {
+          throw new Error("Driver account not active");
+        }
+      } catch (err) {
+        await signOut(auth);
+        window.location.href = "login.html";
+        return;
+      }
+    }
+    
+    // Set UI Profiles
+    document.getElementById("drvName").textContent = S.driver.name;
+    document.getElementById("homeAv").textContent = S.driver.name.charAt(0).toUpperCase();
+    document.getElementById("pAv").textContent = S.driver.name.charAt(0).toUpperCase();
+    document.getElementById("pName").textContent = S.driver.name;
+    document.getElementById("pPhone").textContent = S.driver.phone;
+
+    // Start listening to real orders
+    startOrderListener();
+  } else {
+    // Not logged in -> Kick to login
+    window.location.href = "login.html";
+  }
+});
+
+// 3. FIRESTORE REAL-TIME LISTENER
+function startOrderListener() {
+  onSnapshot(collection(db, "orders"), snap => {
+    S.orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    
+    // Check if we have an active order
+    const active = S.orders.find(o => o.driverEmail === S.driver.phone && ["Preparing", "OnTheWay"].includes(o.status));
+    S.activeId = active ? active.id : null;
+
+    // Update all screens with fresh data
+    renderAll();
+  }, err => {
+    console.error("Firestore Error:", err);
+    alert("Connection error. Check your internet.");
+  });
+}
+
+// 4. ROUTING & RENDERING
+window.go = s => {
+  document.querySelectorAll(".screen").forEach(x => x.classList.remove("active"));
+  document.querySelectorAll(".ni").forEach(x => x.classList.remove("active"));
+  document.getElementById(s).classList.add("active");
+  document.querySelector(`.ni[data-s="${s}"]`).classList.add("active");
+  renderAll();
+};
+window.goHome = () => go('sHome');
+
+function renderAll() {
+  renderHome();
+  renderActive();
+  renderEarnings();
+}
+
+function getTodayStats() {
+  const today = new Date().toDateString();
+  const mineToday = S.orders.filter(o => o.driverEmail === S.driver.phone && o.status === "Delivered" && new Date(o.timestamp || 0).toDateString() === today);
+  let todayFees = 0;
+  mineToday.forEach(o => todayFees += (o.deliveryFee || 0));
+  return { count: mineToday.length, fees: todayFees };
+}
+
+function renderHome() {
+  // Stats
+  const stats = getTodayStats();
+  document.getElementById("hEarn").textContent = fmt(stats.fees) + " DH";
+  document.getElementById("hOrders").textContent = stats.count;
+
+  // Available Pool
+  const pool = S.orders.filter(o => o.status === "Pending" && (!o.driverEmail || o.driverEmail === "")).sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
+  const el = document.getElementById("poolList");
+  
+  if(!pool.length) {
+    el.innerHTML = `<div class="empty-state">No orders available right now. Take a break! ☕</div>`;
+    return;
+  }
+
+  el.innerHTML = pool.map(o => {
+    const id = "#TSC" + o.id.slice(-4).toUpperCase();
+    const dt = o.timestamp ? new Date(o.timestamp).toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}) : "Now";
+    
+    return `
+      <div class="card order-card">
+        <div class="oc-head">
+          <div class="oc-id">${id}</div>
+          <div class="oc-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${dt}</div>
+        </div>
+        <div class="oc-loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${o.neighborhood || "Marrakech"}</div>
+        <div class="oc-meta">${o.totalItems || 1} items <span class="badge-new" style="margin-left:8px">New</span></div>
+        
+        <div class="oc-price">
+          <div class="oc-price-val">${fmt(o.totalPrice || 0)} DH</div>
+          <div class="oc-price-lbl">Cash to collect</div>
+        </div>
+
+        <div class="oc-actions">
+          <button class="btn-outline">Ignore</button>
+          <button class="btn-solid" onclick="claim('${o.id}')">Accept Order</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderActive() {
+  const o = S.orders.find(x => x.id === S.activeId);
+  const el = document.getElementById("activeContent");
   
   if(!o) {
     el.innerHTML = `<div class="empty-state">No active order. Accept one from the home screen.</div>`;
@@ -344,6 +496,14 @@ function renderActive() {
 
   const subtotal = (o.totalPrice || 0) - (o.deliveryFee || 0);
   const si = ["Pending", "Preparing", "OnTheWay", "Delivered"].indexOf(o.status);
+  
+  let cp = (o.customerPhone || "").replace(/^0/, "");
+  if (!cp.startsWith("+") && !cp.startsWith("212")) cp = "212" + cp;
+  const wamsg = encodeURIComponent(`Bonjour ${o.customerName || ""}! Je suis votre livreur TASCO 🛵 Je serai là bientôt.`);
+
+  const navUrl = o.deliveryCoords?.lat && o.deliveryCoords?.lng 
+    ? \`http://maps.google.com/maps?daddr=\${o.deliveryCoords.lat},\${o.deliveryCoords.lng}\`
+    : \`http://maps.google.com/maps?daddr=\${encodeURIComponent(o.deliveryAddress || o.neighborhood || "Marrakech")}\`;
 
   el.innerHTML = `
     <div class="card cust-card">
@@ -355,13 +515,13 @@ function renderActive() {
       </div>
       <div class="cust-actions">
         <a href="tel:${o.customerPhone||''}" class="c-btn"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.38 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
-        <a href="#" class="c-btn" style="color:#25D366;border-color:#25D366"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></a>
+        <a href="https://wa.me/${cp}?text=${wamsg}" target="_blank" class="c-btn" style="color:#25D366;border-color:#25D366"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></a>
       </div>
     </div>
     <div class="card" style="margin:0 24px;border-top-left-radius:0;border-top-right-radius:0;border-top:none">
        <div class="del-to-bar">
          <div style="font-size:13px;font-weight:600;color:var(--text-muted)">Deliver to <span style="color:var(--orange)">Destination</span></div>
-         <a href="#" class="btn-nav"><svg viewBox="0 0 24 24" width="14" fill="none" stroke="currentColor"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg> Navigate</a>
+         <a href="${navUrl}" target="_blank" class="btn-nav"><svg viewBox="0 0 24 24" width="14" fill="none" stroke="currentColor"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg> Navigate</a>
        </div>
     </div>
 
@@ -369,9 +529,9 @@ function renderActive() {
       <div style="padding:16px;border-bottom:1px solid var(--border);font-weight:700;font-size:14px">Order items (${o.totalItems||0})</div>
       ${(o.cart||[]).map(i => `
         <div class="item-row">
-          <div class="item-qty">1x</div>
+          <div class="item-qty">${i.qty||1}x</div>
           <div class="item-name">${i.product?.name || "Item"}</div>
-          <div class="item-price">${fmt(i.unitPrice||0)} DH</div>
+          <div class="item-price">${fmt((i.unitPrice||0) * (i.qty||1))} DH</div>
         </div>
       `).join('') || '<div style="padding:16px;text-align:center;color:var(--text-muted)">No items</div>'}
     </div>
@@ -387,7 +547,7 @@ function renderActive() {
       <div style="padding:16px;border-bottom:1px solid var(--border);font-weight:700;font-size:14px;margin-bottom:16px">Delivery progress</div>
       <div style="padding:0 16px 16px">
         ${[
-          {t: "Head to restaurant", d: "Let the restaurant know you're on the way"},
+          {t: "Head to restaurant", d: "Inform the restaurant you arrive"},
           {t: "Order picked up", d: "Confirm when you have the order"},
           {t: "Start delivery", d: "You're on your way to the customer"},
           {t: "Order delivered", d: "Confirm when the order is delivered"}
@@ -412,18 +572,19 @@ function renderActive() {
 }
 
 function renderEarnings() {
-  const mineD = S.orders.filter(o => o.driverEmail === S.driver.phone && o.status === "Delivered");
-  const unS = mineD.filter(o => !o.driverSettled);
+  const mineAll = S.orders.filter(o => o.driverEmail === S.driver.phone && o.status === "Delivered");
+  const unS = mineAll.filter(o => !o.driverSettled);
   
-  let fees = 0, debt = 0;
-  unS.forEach(o => { fees += (o.deliveryFee || 0); debt += ((o.totalPrice || 0) - (o.deliveryFee || 0)); });
-  
-  document.getElementById("eEarn").textContent = fmt(fees) + " DH";
-  document.getElementById("eOrders").textContent = mineD.length;
+  const stats = getTodayStats();
+  document.getElementById("eEarn").textContent = fmt(stats.fees) + " DH";
+  document.getElementById("eOrders").textContent = stats.count;
+
+  let debt = 0;
+  unS.forEach(o => { debt += ((o.totalPrice || 0) - (o.deliveryFee || 0)); });
   document.getElementById("eDebt").textContent = fmt(debt) + " DH";
 
   const el = document.getElementById("earnList");
-  if(!unS.length) { el.innerHTML = "<div class='empty-state'>All settled!</div>"; return; }
+  if(!unS.length) { el.innerHTML = "<div class='empty-state'>All settled! 💰</div>"; return; }
 
   el.innerHTML = unS.map(o => `
     <div class="earn-list-item">
@@ -439,20 +600,52 @@ function renderEarnings() {
   `).join("");
 }
 
-// FIREBASE MOCKS (Replace with your actual firestore calls)
-window.claim = id => { S.orders.find(o=>o.id===id).status="Preparing"; S.orders.find(o=>o.id===id).driverEmail=S.driver.phone; go('sActive'); };
-window.update = (id, st) => { S.orders.find(o=>o.id===id).status=st; if(st==="Delivered") go('sHome'); else go('sActive'); };
-window.release = id => { S.orders.find(o=>o.id===id).status="Pending"; S.orders.find(o=>o.id===id).driverEmail=""; go('sHome'); };
-window.markSettled = () => { alert("Settled!"); go('sHome'); };
+// 5. LIVE FIRESTORE ACTIONS
+window.claim = async id => {
+  try {
+    await updateDoc(doc(db, "orders", id), { driverEmail: S.driver.phone, status: "Preparing" });
+    S.activeId = id;
+    go('sActive');
+  } catch (e) { alert("Error claiming order: " + e.message); }
+};
 
-// TEST DATA MOUNT
-setTimeout(() => {
-  S.orders = [
-    { id: "4821", status: "Pending", neighborhood: "Gueliz", totalPrice: 83, deliveryFee: 7, totalItems: 4, cart: [{unitPrice: 45, product:{name:"Shawarma"}}] },
-    { id: "4822", status: "Pending", neighborhood: "Hivernage", totalPrice: 105, deliveryFee: 10, totalItems: 2 },
-  ];
-  renderHome();
-}, 500);
+window.update = async (id, st) => {
+  try {
+    const payload = { status: st };
+    if (st === "Delivered") payload.deliveredAt = new Date().toISOString();
+    await updateDoc(doc(db, "orders", id), payload);
+    if (st === "Delivered") { S.activeId = null; go('sHome'); }
+  } catch (e) { alert("Error updating status: " + e.message); }
+};
+
+window.release = async id => {
+  if (!confirm("Are you sure you want to release this order?")) return;
+  try {
+    await updateDoc(doc(db, "orders", id), { driverEmail: "", status: "Pending" });
+    S.activeId = null;
+    go('sHome');
+  } catch (e) { alert("Error releasing order: " + e.message); }
+};
+
+window.markSettled = async () => {
+  const unS = S.orders.filter(o => o.driverEmail === S.driver.phone && o.status === "Delivered" && !o.driverSettled);
+  if (!unS.length) return alert("Nothing to settle.");
+  if (!confirm(`Settle ${unS.length} order(s)?`)) return;
+
+  try {
+    for (const o of unS) {
+      await updateDoc(doc(db, "orders", o.id), { driverSettled: true });
+    }
+    alert("Settled successfully! ✅");
+  } catch (e) { alert("Error settling: " + e.message); }
+};
+
+window.logout = async () => {
+  if(!confirm("Log out of Tasco Driver?")) return;
+  localStorage.removeItem("drv");
+  await signOut(auth);
+  window.location.href = "login.html";
+};
 
 </script>
 </body>
