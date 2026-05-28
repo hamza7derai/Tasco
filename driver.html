@@ -49,7 +49,7 @@ img { display: block; }
 
 /* HOME SCREEN */
 .home-profile-row { display: flex; align-items: center; gap: 12px; }
-.avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; background: var(--orange-light); border: 2px solid var(--surface); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; background: var(--orange-light); border: 2px solid var(--surface); box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--orange); font-size: 20px;}
 .greeting { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
 .status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--green); margin-top: 2px; }
 .status-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
@@ -125,7 +125,7 @@ img { display: block; }
 .action-stack { margin: 24px; display: flex; flex-direction: column; gap: 12px; }
 .btn-primary-outline { padding: 16px; border: 1.5px solid var(--danger); color: var(--danger); border-radius: 12px; font-size: 14px; font-weight: 600; text-align: center; }
 
-/* EARNINGS & PROFILE (Simplified for layout) */
+/* EARNINGS & PROFILE */
 .earn-card { margin: 0 24px 16px; background: var(--orange-light); border: none; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
 .earn-card-left { display: flex; align-items: center; gap: 12px; }
 .btn-settle { background: var(--orange); color: white; padding: 12px 24px; border-radius: 10px; font-weight: 700; }
@@ -139,7 +139,7 @@ img { display: block; }
 .prof-row:last-child { border-bottom: none; }
 .btn-logout { margin: 32px 24px; padding: 16px; background: var(--danger-light); color: var(--danger); font-weight: 700; text-align: center; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-.empty-state { text-align: center; padding: 60px 24px; color: var(--text-muted); }
+.empty-state { text-align: center; padding: 60px 24px; color: var(--text-muted); font-weight: 500;}
 </style>
 </head>
 <body>
@@ -150,9 +150,9 @@ img { display: block; }
     <div class="screen active" id="sHome">
       <div class="header">
         <div class="home-profile-row">
-          <div class="avatar" id="homeAv">D</div>
+          <div class="avatar" id="homeAv"></div>
           <div>
-            <div class="greeting">Hi, <span id="drvName">Driver</span> 👋</div>
+            <div class="greeting">Hi, <span id="drvName">...</span> 👋</div>
             <div class="status-badge"><div class="status-dot"></div>Online</div>
           </div>
         </div>
@@ -221,9 +221,9 @@ img { display: block; }
       <div class="header"><div class="screen-title" style="text-align:center;width:100%">Profile</div></div>
       
       <div class="prof-header">
-        <div class="prof-avatar" id="pAv">D</div>
+        <div class="prof-avatar" id="pAv"></div>
         <div style="text-align:center">
-          <div class="prof-name" id="pName">Driver Name</div>
+          <div class="prof-name" id="pName">...</div>
           <div style="color:var(--text-muted);font-size:14px;margin-bottom:8px">Driver</div>
           <div class="status-badge" style="background:var(--green-light);padding:4px 10px;border-radius:99px"><div class="status-dot"></div>Online</div>
         </div>
@@ -234,7 +234,7 @@ img { display: block; }
           <div class="dash-ic" style="background:#FFF1F2;color:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
           <div style="flex:1">
             <div style="font-size:12px;color:var(--text-muted);margin-bottom:2px">Phone number</div>
-            <div style="font-size:14px;font-weight:600" id="pPhone">+212 000 000 000</div>
+            <div style="font-size:14px;font-weight:600" id="pPhone">...</div>
           </div>
         </div>
       </div>
@@ -265,75 +265,6 @@ img { display: block; }
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-// PLACEHOLDER: Firebase Initialization (Replace with your keys)
-const app = initializeApp({ projectId: "lesgo-cd7f9" /* Add full config back here */ });
-const db = getFirestore(app);
-
-const S = { orders: [], activeId: null, driver: { name: "Hamza", phone: "+212600000000" } };
-const fmt = n => Number(n).toFixed(2);
-
-// INIT UI
-document.getElementById("drvName").textContent = S.driver.name;
-document.getElementById("homeAv").textContent = S.driver.name.charAt(0);
-document.getElementById("pAv").textContent = S.driver.name.charAt(0);
-document.getElementById("pName").textContent = S.driver.name;
-document.getElementById("pPhone").textContent = S.driver.phone;
-
-// ROUTER
-window.go = s => {
-  document.querySelectorAll(".screen").forEach(x => x.classList.remove("active"));
-  document.querySelectorAll(".ni").forEach(x => x.classList.remove("active"));
-  document.getElementById(s).classList.add("active");
-  document.querySelector(`.ni[data-s="${s}"]`).classList.add("active");
-  if(s === 'sHome') renderHome();
-  if(s === 'sActive') renderActive();
-  if(s === 'sEarnings') renderEarnings();
-};
-
-window.goHome = () => go('sHome');
-
-// RENDERING LOGIC
-function renderHome() {
-  const pool = S.orders.filter(o => o.status === "Pending" && !o.driverEmail);
-  const el = document.getElementById("poolList");
-  
-  if(!pool.length) {
-    el.innerHTML = `<div class="empty-state">No orders available right now.</div>`;
-    return;
-  }
-
-  el.innerHTML = pool.map(o => {
-    const id = "#TSC" + o.id.slice(-4).toUpperCase();
-    return `
-      <div class="card order-card">
-        <div class="oc-head">
-          <div class="oc-id">${id}</div>
-          <div class="oc-time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Just now</div>
-        </div>
-        <div class="oc-loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${o.neighborhood || "Marrakech"}</div>
-        <div class="oc-meta">${o.totalItems || 1} items <span class="badge-new" style="margin-left:8px">New</span></div>
-        
-        <div class="oc-price">
-          <div class="oc-price-val">${fmt(o.totalPrice)} DH</div>
-          <div class="oc-price-lbl">Cash to collect</div>
-        </div>
-
-        <div class="oc-actions">
-          <button class="btn-outline">Ignore</button>
-          <button class="btn-solid" onclick="claim('${o.id}')">Accept</button>
-        </div>
-      </div>
-    `;
-  }).join("");
-}
-
-function renderActive() {
-  const o = S.orders.find(x => x.driverEmail === S.driver.phone && ["Preparing", "OnTheWay"].includes(x.status));
-  const el = document.getElementById("activeContent");
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, onSnapshot, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
@@ -362,17 +293,19 @@ const fmt = n => Number(n).toFixed(2);
 // 2. AUTHENTICATION & SECURITY GUARD
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    // Check local storage first for speed
     const localDrv = localStorage.getItem("drv");
     if (localDrv) {
       S.driver = JSON.parse(localDrv);
+      updateProfileUI();
+      startOrderListener();
     } else {
-      // Fallback: Fetch from Firestore if local storage is cleared
       try {
         const dDoc = await getDoc(doc(db, "drivers", user.phoneNumber));
         if (dDoc.exists() && dDoc.data().isActive) {
           S.driver = { name: dDoc.data().name, phone: dDoc.data().phone };
           localStorage.setItem("drv", JSON.stringify(S.driver));
+          updateProfileUI();
+          startOrderListener();
         } else {
           throw new Error("Driver account not active");
         }
@@ -382,36 +315,33 @@ onAuthStateChanged(auth, async (user) => {
         return;
       }
     }
-    
-    // Set UI Profiles
-    document.getElementById("drvName").textContent = S.driver.name;
-    document.getElementById("homeAv").textContent = S.driver.name.charAt(0).toUpperCase();
-    document.getElementById("pAv").textContent = S.driver.name.charAt(0).toUpperCase();
-    document.getElementById("pName").textContent = S.driver.name;
-    document.getElementById("pPhone").textContent = S.driver.phone;
-
-    // Start listening to real orders
-    startOrderListener();
   } else {
-    // Not logged in -> Kick to login
+    // SECURITY KICK: Send unauthorized users back to login
     window.location.href = "login.html";
   }
 });
+
+function updateProfileUI() {
+  if (!S.driver) return;
+  document.getElementById("drvName").textContent = S.driver.name;
+  document.getElementById("homeAv").textContent = S.driver.name.charAt(0).toUpperCase();
+  document.getElementById("pAv").textContent = S.driver.name.charAt(0).toUpperCase();
+  document.getElementById("pName").textContent = S.driver.name;
+  document.getElementById("pPhone").textContent = S.driver.phone;
+}
 
 // 3. FIRESTORE REAL-TIME LISTENER
 function startOrderListener() {
   onSnapshot(collection(db, "orders"), snap => {
     S.orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     
-    // Check if we have an active order
+    // Auto-detect active order
     const active = S.orders.find(o => o.driverEmail === S.driver.phone && ["Preparing", "OnTheWay"].includes(o.status));
     S.activeId = active ? active.id : null;
 
-    // Update all screens with fresh data
     renderAll();
   }, err => {
     console.error("Firestore Error:", err);
-    alert("Connection error. Check your internet.");
   });
 }
 
@@ -432,6 +362,7 @@ function renderAll() {
 }
 
 function getTodayStats() {
+  if (!S.driver) return { count: 0, fees: 0 };
   const today = new Date().toDateString();
   const mineToday = S.orders.filter(o => o.driverEmail === S.driver.phone && o.status === "Delivered" && new Date(o.timestamp || 0).toDateString() === today);
   let todayFees = 0;
@@ -440,17 +371,15 @@ function getTodayStats() {
 }
 
 function renderHome() {
-  // Stats
   const stats = getTodayStats();
   document.getElementById("hEarn").textContent = fmt(stats.fees) + " DH";
   document.getElementById("hOrders").textContent = stats.count;
 
-  // Available Pool
   const pool = S.orders.filter(o => o.status === "Pending" && (!o.driverEmail || o.driverEmail === "")).sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
   const el = document.getElementById("poolList");
   
   if(!pool.length) {
-    el.innerHTML = `<div class="empty-state">No orders available right now. Take a break! ☕</div>`;
+    el.innerHTML = `<div class="empty-state">No orders available right now.</div>`;
     return;
   }
 
@@ -494,16 +423,15 @@ function renderActive() {
   const sid = "#TSC" + o.id.slice(-4).toUpperCase();
   document.getElementById("detId").textContent = sid;
 
-  const subtotal = (o.totalPrice || 0) - (o.deliveryFee || 0);
   const si = ["Pending", "Preparing", "OnTheWay", "Delivered"].indexOf(o.status);
   
   let cp = (o.customerPhone || "").replace(/^0/, "");
   if (!cp.startsWith("+") && !cp.startsWith("212")) cp = "212" + cp;
-  const wamsg = encodeURIComponent(`Bonjour ${o.customerName || ""}! Je suis votre livreur TASCO 🛵 Je serai là bientôt.`);
+  const wamsg = encodeURIComponent(`Bonjour ${o.customerName || ""}! Je suis votre livreur TASCO 🛵 Je serai là bientôt avec votre commande ${sid}.`);
 
   const navUrl = o.deliveryCoords?.lat && o.deliveryCoords?.lng 
-    ? \`http://maps.google.com/maps?daddr=\${o.deliveryCoords.lat},\${o.deliveryCoords.lng}\`
-    : \`http://maps.google.com/maps?daddr=\${encodeURIComponent(o.deliveryAddress || o.neighborhood || "Marrakech")}\`;
+    ? `https://www.google.com/maps/search/$${o.deliveryCoords.lat},${o.deliveryCoords.lng}`
+    : `http://maps.google.com/maps?daddr=\$${encodeURIComponent(o.deliveryAddress || o.neighborhood || "Marrakech")}`;
 
   el.innerHTML = `
     <div class="card cust-card">
@@ -511,7 +439,7 @@ function renderActive() {
       <div class="cust-info">
         <div style="font-size:11px;color:var(--text-muted);font-weight:600">Customer</div>
         <div class="cust-name">${o.customerName || "Client"}</div>
-        <div class="cust-addr">${o.neighborhood || "Marrakech"}</div>
+        <div class="cust-addr">${o.deliveryAddress || o.neighborhood || "Marrakech"}</div>
       </div>
       <div class="cust-actions">
         <a href="tel:${o.customerPhone||''}" class="c-btn"><svg viewBox="0 0 24 24" width="18" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.38 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
@@ -538,9 +466,9 @@ function renderActive() {
 
     <div class="card pay-sum">
       <div style="font-weight:700;font-size:14px;margin-bottom:16px">Payment summary</div>
-      <div class="pay-row"><span>Cash to collect</span><span class="val-green">${fmt(o.totalPrice)} DH</span></div>
+      <div class="pay-row"><span>Cash to collect</span><span class="val-green">${fmt(o.totalPrice || 0)} DH</span></div>
       <div class="pay-row"><span>Delivery fee</span><span>${fmt(o.deliveryFee||0)} DH</span></div>
-      <div class="pay-row bold"><span>Total amount</span><span>${fmt(o.totalPrice)} DH</span></div>
+      <div class="pay-row bold"><span>Total amount</span><span>${fmt(o.totalPrice || 0)} DH</span></div>
     </div>
 
     <div class="card prog-box">
@@ -572,6 +500,7 @@ function renderActive() {
 }
 
 function renderEarnings() {
+  if (!S.driver) return;
   const mineAll = S.orders.filter(o => o.driverEmail === S.driver.phone && o.status === "Delivered");
   const unS = mineAll.filter(o => !o.driverSettled);
   
@@ -602,6 +531,7 @@ function renderEarnings() {
 
 // 5. LIVE FIRESTORE ACTIONS
 window.claim = async id => {
+  if (!S.driver) return;
   try {
     await updateDoc(doc(db, "orders", id), { driverEmail: S.driver.phone, status: "Preparing" });
     S.activeId = id;
@@ -628,6 +558,7 @@ window.release = async id => {
 };
 
 window.markSettled = async () => {
+  if (!S.driver) return;
   const unS = S.orders.filter(o => o.driverEmail === S.driver.phone && o.status === "Delivered" && !o.driverSettled);
   if (!unS.length) return alert("Nothing to settle.");
   if (!confirm(`Settle ${unS.length} order(s)?`)) return;
@@ -646,7 +577,6 @@ window.logout = async () => {
   await signOut(auth);
   window.location.href = "login.html";
 };
-
 </script>
 </body>
 </html>
