@@ -94,7 +94,6 @@ input:checked + .slider:before { transform: translateX(18px); }
 .driver-info { flex: 1; }
 .driver-info h4 { font-size: 15px; font-weight: 800; color: var(--text-main); margin-bottom: 2px;}
 .driver-meta { font-size: 12px; color: var(--text-muted); font-weight: 600; display: flex; flex-direction: column; gap: 2px;}
-.driver-meta span { display: flex; align-items: center; gap: 4px; }
 .btn-view { padding: 8px 16px; background: var(--bg-main); border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 800; color: var(--text-main); cursor: pointer; transition: 0.2s;}
 .btn-view:active { transform: scale(0.95); }
 
@@ -136,11 +135,10 @@ input:checked + .slider:before { transform: translateX(18px); }
 .action-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 16px; border-top: 1px solid var(--border); padding-top: 16px;}
 .action-btn-sm { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--text-main); background: var(--bg-main); border: 1px solid var(--border); padding: 12px 8px; border-radius: 12px; text-decoration: none;}
 
-/* ITEMS LIST */
-.item-row { display: flex; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--border); }
-.item-row:last-child { border-bottom: none; padding-bottom: 0;}
-.item-img { width: 56px; height: 56px; background: var(--bg-main); border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid var(--border); flex-shrink: 0;}
-.item-img img { width: 100%; height: 100%; object-fit: cover; }
+/* ITEMS LIST (FIXED MARGINS) */
+.item-card { background: var(--surface); border-radius: var(--radius-card); border: 1px solid var(--border); margin-bottom: 12px; padding: 12px; display: flex; gap: 12px; align-items: center; box-shadow: var(--shadow-sm);}
+.item-img { width: 56px; height: 56px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; background: transparent; }
+.item-img img { width: 100%; height: 100%; object-fit: contain; }
 .item-details { flex: 1; }
 .item-name { font-size: 14px; font-weight: 800; margin-bottom: 4px; display: flex; gap: 8px; align-items: flex-start; justify-content: space-between;}
 .item-meta { font-size: 12px; color: var(--text-muted); line-height: 1.4; font-weight: 600;}
@@ -156,7 +154,6 @@ input:checked + .slider:before { transform: translateX(18px); }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none;}
 .btn-primary { background: var(--primary); color: white; }
 .btn-success { background: var(--accent); color: white; }
-.btn-warning { background: var(--warning); color: white; }
 .btn-danger { background: var(--danger); color: white; }
 .btn-outline { background: var(--surface); color: var(--text-main); border: 1px solid var(--border-dark); }
 
@@ -260,7 +257,8 @@ input:checked + .slider:before { transform: translateX(18px); }
         <div class="tab-pill active" onclick="filterOrdersList('All', this)">All</div>
         <div class="tab-pill" onclick="filterOrdersList('Pending', this)">Pending</div>
         <div class="tab-pill" onclick="filterOrdersList('Preparing', this)">Preparing</div>
-        <div class="tab-pill" onclick="filterOrdersList('Driver Assigned', this)">Driver Assigned</div>
+        <div class="tab-pill" onclick="filterOrdersList('Driver Assigned', this)">Assigned</div>
+        <div class="tab-pill" onclick="filterOrdersList('Out for Delivery', this)">Transit</div>
         <div class="tab-pill" onclick="filterOrdersList('Delivered', this)">Delivered</div>
         <div class="tab-pill" onclick="filterOrdersList('Cancelled', this)">Cancelled</div>
     </div>
@@ -296,7 +294,7 @@ input:checked + .slider:before { transform: translateX(18px); }
             <svg class="info-icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
             <div class="info-text">
                 <h5>Address</h5>
-                <p id="det-address">-</p>
+                <p id="det-address" style="line-height: 1.4; font-size: 12px; font-weight: 600;">-</p>
             </div>
         </div>
         <div class="info-row" style="margin-bottom:0;">
@@ -314,9 +312,7 @@ input:checked + .slider:before { transform: translateX(18px); }
         </div>
     </div>
 
-    <div class="card" style="padding: 0 16px;">
-        <div id="det-items-list"></div>
-    </div>
+    <div id="det-items-list"></div>
 
     <div class="summary-box">
         <div class="summary-row"><span>Subtotal</span><span id="det-subtotal">0.00 DH</span></div>
@@ -324,7 +320,12 @@ input:checked + .slider:before { transform: translateX(18px); }
         <div class="summary-row total"><span>TOTAL</span><span id="det-total">0.00 DH</span></div>
     </div>
 
-    <div id="det-actions" style="margin-top: 32px; display: flex; flex-direction: column; gap: 12px;"></div>
+    <div id="det-status-actions" style="margin-top: 24px; margin-bottom: 12px;"></div>
+
+    <div style="display: flex; gap: 12px; margin-top: 12px;">
+        <button class="btn btn-outline" style="flex:1;" id="btnPrintReceipt"><svg viewBox="0 0 24 24" style="width:16px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1-2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Print</button>
+        <button class="btn btn-outline" style="flex:1; color:var(--danger); border-color:var(--danger-light);" id="btnCancelOrder">Cancel Order</button>
+    </div>
 </div>
 
 <div id="view-drivers" class="app-view container">
@@ -379,7 +380,7 @@ input:checked + .slider:before { transform: translateX(18px); }
 <div class="overlay" id="addDriverOverlay" onclick="if(event.target===this) closeModals()"></div>
 <div class="bottom-sheet" id="addDriverModal">
     <div class="sheet-handle"></div>
-    <h2 style="font-size: 18px; font-weight:800; margin-bottom:20px; text-transform:uppercase; letter-spacing:0.5px;">Add New Driver</h2>
+    <h2 style="font-size: 18px; font-weight:800; margin-bottom:24px; text-transform:uppercase; letter-spacing:0.5px; text-align:center;">Add New Driver</h2>
     
     <div class="form-group" style="text-align: center;">
         <label>Driver Photo</label>
@@ -394,33 +395,12 @@ input:checked + .slider:before { transform: translateX(18px); }
         <label>Full Name</label>
         <input type="text" id="drvName" class="form-control" placeholder="e.g. Hamza K.">
     </div>
-    <div class="form-group">
+    <div class="form-group" style="margin-bottom: 32px;">
         <label>Phone Number (Login ID)</label>
         <input type="tel" id="drvPhone" class="form-control" placeholder="+212 600 000 000">
     </div>
-    <div class="form-group">
-        <label>Password</label>
-        <input type="text" id="drvPass" class="form-control" placeholder="Set driver password">
-    </div>
-    <div class="form-group" style="margin-bottom: 32px;">
-        <label>Vehicle Type</label>
-        <select id="drvVehicle" class="form-control">
-            <option value="Motorcycle">Motorcycle</option>
-            <option value="Bicycle">Bicycle</option>
-            <option value="Car">Car</option>
-        </select>
-    </div>
 
     <button class="btn btn-primary" id="btnCreateDriver" onclick="createDriver()">CREATE DRIVER</button>
-</div>
-
-<div class="overlay" id="assignDriverOverlay" onclick="if(event.target===this) closeModals()"></div>
-<div class="bottom-sheet" id="assignDriverModal">
-    <div class="sheet-handle"></div>
-    <h2 style="font-size: 18px; font-weight:800; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px;">Assign Driver</h2>
-    <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px; font-weight:600;">Select an online driver to assign to this order.</p>
-    <div id="assignDriverList" style="display: flex; flex-direction: column; gap: 8px; max-height: 50vh; overflow-y: auto;">
-        </div>
 </div>
 
 <div class="toast" id="toastBox">
@@ -430,7 +410,7 @@ input:checked + .slider:before { transform: translateX(18px); }
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, onSnapshot, updateDoc, doc, setDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, updateDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
@@ -449,7 +429,7 @@ const ADMIN_EMAILS = ["admin@tasco.ma"];
 
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
-        document.body.style.display = "block"; // Dev bypass (remove in prod)
+        document.body.style.display = "block"; // Dev bypass
     } else {
         if (ADMIN_EMAILS.includes(user.email.toLowerCase())) {
             document.body.style.display = "block";
@@ -464,7 +444,6 @@ window.logoutAdmin = async () => { try { await signOut(auth); } catch(e) { conso
 
 let allOrders = [], allDrivers = [];
 let currentOrderFilter = 'All';
-let orderToAssign = null; // Temp holder for order ID being assigned
 
 const safeNum = (val) => isNaN(parseFloat(val)) ? 0 : parseFloat(val);
 const formatPrice = (num) => { const p = Number(num); return p % 1 === 0 ? p.toString() : p.toFixed(2); };
@@ -496,7 +475,13 @@ window.toggleStoreStatus = async (isOnline) => {
     try {
         await setDoc(doc(db, "settings", "store_status"), { isOnline: isOnline }, { merge: true });
         showToast(isOnline ? "Store is now Open!" : "Store is Closed!");
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+        // Show Firebase error explicitly so user knows if it's a Firestore Rules issue
+        alert("Firebase Error: " + e.message); 
+        // Revert toggle visually if it failed
+        document.getElementById('storeStatusToggle').checked = !isOnline;
+    }
 };
 
 onSnapshot(doc(db, "settings", "store_status"), (docSnap) => {
@@ -560,7 +545,7 @@ function calculateDashboard() {
     document.getElementById('dashStatPending').innerText = pendingCount;
 
     const getTime = (ts) => { if (!ts) return 0; const t = new Date(ts).getTime(); return isNaN(t) ? 0 : t; };
-    const recentOrders = [...allOrders].sort((a,b) => getTime(b.timestamp) - getTime(a.timestamp)).slice(0, 2); // Max 2 for Home
+    const recentOrders = [...allOrders].sort((a,b) => getTime(b.timestamp) - getTime(a.timestamp)).slice(0, 2); 
     const dashRecentContainer = document.getElementById('dashRecentOrdersContainer');
     if(dashRecentContainer) dashRecentContainer.innerHTML = recentOrders.length === 0 ? getEmptyOrdersHTML() : generateOrdersHTML(recentOrders);
 }
@@ -598,7 +583,7 @@ function renderDriversList() {
         let statusClass = 'dot-offline';
         let statusText = 'Offline';
         
-        if(driver.isOnline) {
+        if(driver.isActive) { // Based on your screenshot, active = online
             if(metrics.activeOrder) { onDeliv++; statusClass = 'dot-online'; statusText = 'On Delivery'; }
             else { online++; statusClass = 'dot-online'; statusText = 'Online'; }
         } else { offline++; }
@@ -621,14 +606,12 @@ function renderDriversList() {
         </div>`;
     };
 
-    // Home Page (Max 2)
     const homeContainer = document.getElementById('dashDriversContainer');
     if(homeContainer) {
-        const activeOnly = allDrivers.filter(d => d.isOnline).slice(0, 2);
+        const activeOnly = allDrivers.filter(d => d.isActive).slice(0, 2);
         homeContainer.innerHTML = activeOnly.length ? activeOnly.map(renderCard).join('') : `<div style="text-align:center; padding:20px; font-size:13px; color:var(--text-muted); font-weight:700;">No active drivers.</div>`;
     }
 
-    // Drivers Page
     document.getElementById('ds-total').innerText = total;
     document.getElementById('ds-online').innerText = online;
     document.getElementById('ds-delivery').innerText = onDeliv;
@@ -640,12 +623,10 @@ function renderDriversList() {
     }
 }
 
-// ---------------- ADD DRIVER SYSTEM ----------------
+// ---------------- ADD DRIVER SYSTEM (SMS Login Flow) ----------------
 window.openAddDriverModal = () => {
     document.getElementById('drvName').value = '';
     document.getElementById('drvPhone').value = '';
-    document.getElementById('drvPass').value = '';
-    document.getElementById('drvVehicle').value = 'Motorcycle';
     document.getElementById('drvPhotoPreview').style.display = 'none';
     document.getElementById('drvPhotoIcon').style.display = 'block';
     document.getElementById('drvPhoto').value = '';
@@ -671,11 +652,9 @@ window.previewDriverPhoto = (e) => {
 window.createDriver = async () => {
     const name = document.getElementById('drvName').value.trim();
     const phone = document.getElementById('drvPhone').value.trim();
-    const pass = document.getElementById('drvPass').value.trim();
-    const vehicle = document.getElementById('drvVehicle').value;
     const btn = document.getElementById('btnCreateDriver');
 
-    if(!name || !phone || !pass) return showToast("Please fill all fields");
+    if(!name || !phone) return showToast("Please fill all fields");
     
     btn.innerText = "CREATING...";
     btn.disabled = true;
@@ -688,24 +667,23 @@ window.createDriver = async () => {
             photoUrl = await getDownloadURL(storageRef);
         }
 
-        // We save directly to Firestore collection "drivers". 
-        // For true Auth, you'd use a Cloud Function or secondary App instance to create the Auth user without logging out Admin.
+        // As per your screenshot, document ID is the phone number
+        const driverId = phone.replace(/[^0-9+]/g, ''); 
+        
         const driverData = {
             name: name,
-            phone: phone,
-            password: pass, // In production, never store plaintext. Used here for operational simplicity per requirements.
-            vehicleType: vehicle,
+            phone: driverId,
             photoUrl: photoUrl,
-            isOnline: false,
+            isActive: true, // Auto active based on schema
             createdAt: new Date().toISOString()
         };
 
-        await addDoc(collection(db, "drivers"), driverData);
+        await setDoc(doc(db, "drivers", driverId), driverData);
         showToast("Driver account created!");
         closeModals();
     } catch(e) {
         console.error(e);
-        showToast("Error creating driver");
+        alert("Firebase Error: " + e.message);
     } finally {
         btn.innerText = "CREATE DRIVER";
         btn.disabled = false;
@@ -770,11 +748,18 @@ window.viewOrder = (orderId) => {
     
     document.getElementById('det-client').innerText = order.customerName || 'Unknown';
     document.getElementById('det-phone').innerText = order.customerPhone || 'Not provided';
-    document.getElementById('det-address').innerText = order.neighborhood || 'Not specified';
+    document.getElementById('det-address').innerText = order.deliveryAddress || order.neighborhood || 'Not specified';
 
     document.getElementById('btnCallCustomer').href = order.customerPhone ? `tel:${order.customerPhone}` : '#';
     document.getElementById('btnWaCustomer').href = order.customerPhone ? `https://wa.me/${order.customerPhone.replace(/\+/g, '')}` : '#';
-    document.getElementById('btnNavCustomer').href = order.neighborhood ? `http://googleusercontent.com/maps.google.com/?q=${encodeURIComponent(order.neighborhood)}` : '#';
+    
+    // GPS Navigation Setup
+    const mapLink = document.getElementById('btnNavCustomer');
+    if (order.deliveryCoords && order.deliveryCoords.lat) {
+        mapLink.href = `https://www.google.com/maps/dir/?api=1&destination=${order.deliveryCoords.lat},${order.deliveryCoords.lng}`;
+    } else {
+        mapLink.href = order.deliveryAddress ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.deliveryAddress)}` : '#';
+    }
 
     let statusClass = 'b-pending';
     if(order.status === 'Preparing') statusClass = 'b-preparing';
@@ -789,15 +774,15 @@ window.viewOrder = (orderId) => {
     document.getElementById('det-items-list').innerHTML = (order.cart || []).map(item => {
         const p = item.product || {}; 
         const price = safeNum(item.unitPrice) || safeNum(p.sellPrice);
-        const img = p.imageUrl ? `<img src="${p.imageUrl}">` : `<svg viewBox="0 0 24 24" style="width:24px;color:var(--border-dark);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>`;
+        const img = p.imageUrl ? `<img src="${p.imageUrl}">` : ``;
         
         let metaHtml = '';
-        if(item.variantName) metaHtml += `<div><span style="color:var(--primary);">Size:</span> ${item.variantName}</div>`;
-        if(item.extras && item.extras.length > 0) metaHtml += `<div>+ ${item.extras.join(', ')}</div>`;
-        if(item.modularChoices) item.modularChoices.forEach(c => metaHtml += `<div><span style="color:var(--primary);">${c.groupName}:</span> ${c.itemName}</div>`);
-        if(item.note) metaHtml += `<div style="color:var(--danger); font-weight:700;">Note: ${item.note}</div>`;
+        if(item.variantName) metaHtml += `<span style="color:var(--primary);">Size:</span> ${item.variantName}<br>`;
+        if(item.extras && item.extras.length > 0) metaHtml += `+ ${item.extras.join(', ')}<br>`;
+        if(item.modularChoices) item.modularChoices.forEach(c => metaHtml += `<span style="color:var(--primary);">${c.groupName}:</span> ${c.itemName}<br>`);
+        if(item.note) metaHtml += `<span style="color:var(--danger); font-weight:700;">Note: ${item.note}</span>`;
 
-        return `<div class="item-row">
+        return `<div class="item-card">
             <div class="item-img">${img}</div>
             <div class="item-details">
                 <div class="item-name"><span>${item.qty}x ${p.name || 'Item'}</span> <span>${formatPrice(price * item.qty)} DH</span></div>
@@ -810,73 +795,95 @@ window.viewOrder = (orderId) => {
     document.getElementById('det-shipping').innerText = `${formatPrice(safeNum(order.deliveryFee))} DH`;
     document.getElementById('det-total').innerText = `${formatPrice(safeNum(order.totalPrice))} DH`;
 
-    let actionsHTML = '';
-    
+    // Operational Action Buttons logic
+    let actionTop = '';
+    const btnCancel = document.getElementById('btnCancelOrder');
+    const btnPrint = document.getElementById('btnPrintReceipt');
+
     if (order.status === 'Pending') {
-        actionsHTML += `<button class="btn btn-primary" onclick="promptOrderStatus('${order.id}', 'Preparing')">ACCEPT ORDER</button>`;
-        actionsHTML += `<button class="btn btn-outline" style="color:var(--danger); border-color:var(--danger-light);" onclick="promptOrderStatus('${order.id}', 'Cancelled')">CANCEL ORDER</button>`;
+        actionTop = `<button class="btn btn-primary" onclick="promptOrderStatus('${order.id}', 'Preparing')">ACCEPT ORDER</button>`;
+        btnCancel.style.display = 'block';
     } else if (order.status === 'Preparing') {
-        actionsHTML += `<button class="btn btn-primary" onclick="openAssignDriverModal('${order.id}')">ASSIGN DRIVER</button>`;
+        actionTop = `<div style="text-align:center; padding:16px; background:var(--bg-main); border-radius:12px; font-weight:800; font-size:14px; text-transform:uppercase; border: 1px dashed var(--border-dark);">WAITING FOR DRIVER (POOL)</div>`;
+        btnCancel.style.display = 'block';
     } else if (order.status === 'Driver Assigned' || order.status === 'Out for Delivery') {
         const dName = order.driverName || 'Assigned Driver';
-        actionsHTML += `<div style="text-align:center; padding:16px; background:var(--blue-light); color:var(--blue); border-radius:12px; font-weight:800; font-size:14px; text-transform:uppercase;">Driver: ${dName}</div>`;
-        actionsHTML += `<button class="btn btn-success" onclick="promptOrderStatus('${order.id}', 'Delivered')">FORCE DELIVERED</button>`;
+        actionTop = `<div style="text-align:center; padding:16px; background:var(--blue-light); color:var(--blue); border-radius:12px; font-weight:800; font-size:14px; text-transform:uppercase;">Driver: ${dName}</div>`;
+        btnCancel.style.display = 'none'; // Usually don't cancel once out for delivery
     } else if (order.status === 'Delivered') {
-        actionsHTML += `<div style="text-align:center; color:var(--accent); font-weight:800; padding:16px; background:var(--accent-light); border-radius:12px;">ORDER DELIVERED</div>`;
+        actionTop = `<div style="text-align:center; color:var(--accent); font-weight:800; padding:16px; background:var(--accent-light); border-radius:12px;">ORDER DELIVERED</div>`;
+        btnCancel.style.display = 'none';
     } else if (order.status === 'Cancelled') {
-        actionsHTML += `<div style="text-align:center; color:var(--danger); font-weight:800; padding:16px; background:var(--danger-light); border-radius:12px;">ORDER CANCELLED</div>`;
+        actionTop = `<div style="text-align:center; color:var(--danger); font-weight:800; padding:16px; background:var(--danger-light); border-radius:12px;">ORDER CANCELLED</div>`;
+        btnCancel.style.display = 'none';
     }
 
-    document.getElementById('det-actions').innerHTML = actionsHTML; 
+    document.getElementById('det-status-actions').innerHTML = actionTop; 
+    
+    // Wire up Print & Cancel
+    btnPrint.onclick = () => printReceipt(order.id);
+    btnCancel.onclick = () => promptOrderStatus(order.id, 'Cancelled');
+
     switchTab('order-detail');
 };
 
-window.openAssignDriverModal = (orderId) => {
-    orderToAssign = orderId;
-    const list = document.getElementById('assignDriverList');
-    const onlineDrivers = allDrivers.filter(d => d.isOnline);
-    
-    if(onlineDrivers.length === 0) {
-        list.innerHTML = `<div style="text-align:center; padding:20px; font-size:13px; color:var(--text-muted); font-weight:700;">No drivers currently online.</div>`;
-    } else {
-        list.innerHTML = onlineDrivers.map(d => {
-            const imgTag = d.photoUrl ? `<img src="${d.photoUrl}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">` : `<div style="width:40px; height:40px; border-radius:50%; background:var(--border); display:flex; align-items:center; justify-content:center;"><svg viewBox="0 0 24 24" style="width:20px; color:var(--text-muted);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>`;
-            return `<div style="display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--bg-main); border:1px solid var(--border); border-radius:12px;">
-                <div style="display:flex; align-items:center; gap:12px;">
-                    ${imgTag}
-                    <div>
-                        <div style="font-size:14px; font-weight:800; color:var(--text-main);">${d.name}</div>
-                        <div style="font-size:11px; font-weight:600; color:var(--text-muted);">${d.vehicleType}</div>
-                    </div>
-                </div>
-                <button class="btn btn-outline" style="width:auto; padding:8px 16px; font-size:12px;" onclick="assignDriverToOrder('${d.id}')">Select</button>
-            </div>`;
-        }).join('');
-    }
-    
-    document.getElementById('assignDriverOverlay').classList.add('active');
-    document.getElementById('assignDriverModal').classList.add('active');
-};
+// ---------------- THERMAL RECEIPT PRINTER ----------------
+window.printReceipt = (orderId) => {
+    const o = allOrders.find(x => x.id === orderId); if(!o) return;
 
-window.assignDriverToOrder = async (driverId) => {
-    if(!orderToAssign) return;
-    const driver = allDrivers.find(d => d.id === driverId);
-    if(!driver) return;
-    
-    try {
-        // We write the driver details into the order so the client app (index.html) can read it instantly
-        await updateDoc(doc(db, "orders", orderToAssign), { 
-            status: 'Driver Assigned',
-            driverId: driver.id,
-            driverName: driver.name,
-            driverPhone: driver.phone,
-            driverPhoto: driver.photoUrl || null
-        });
-        showToast(`Assigned to ${driver.name}`);
-        closeModals();
-    } catch(e) {
-        alert("Error assigning driver");
-    }
+    let orderDate = "Date not found";
+    if (o.timestamp) { const parsed = new Date(o.timestamp); if (!isNaN(parsed.getTime())) orderDate = parsed.toLocaleString('en-US', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}); }
+
+    let itemsHtml = (o.cart || []).map(item => {
+        const p = item.product || {};
+        let metaHtml = "";
+
+        if(item.variantName) metaHtml += `<div>- Size: ${item.variantName}</div>`; 
+        if(item.extras && item.extras.length > 0) metaHtml += `<div>- + ${item.extras.join(', ')}</div>`;
+        if(item.modularChoices && item.modularChoices.length > 0) {
+            item.modularChoices.forEach(choice => { metaHtml += `<div>- ${choice.groupName}: ${choice.itemName}</div>`; });
+        }
+        if(item.note) metaHtml += `<div>** NOTE: ${item.note} **</div>`;
+
+        const price = safeNum(item.unitPrice) || safeNum(p.sellPrice);
+        return `<div style="display:flex; justify-content:space-between; margin-top:10px; font-weight:bold;">
+            <div>${item.qty}x ${p.name || 'Item'}</div>
+            <div>${formatPrice(price * item.qty)}</div>
+        </div>
+        <div style="font-size:12px; margin-left:15px; margin-bottom:5px;">${metaHtml}</div>`;
+    }).join('');
+
+    const receiptHtml = `<html><head><title>Print Receipt - #${o.id.substring(0,6).toUpperCase()}</title>
+    <style>
+        body { font-family: monospace; color: #000; width: 300px; margin: 0 auto; padding: 10px; font-size:14px; line-height: 1.2;}
+        .center { text-align: center; }
+        .line { border-bottom: 1px dashed #000; margin: 10px 0; }
+        .bold { font-weight: bold; }
+        .flex { display: flex; justify-content: space-between; }
+    </style>
+    </head><body>
+        <div class="center bold" style="font-size: 24px; margin-bottom:10px;">TASCO</div>
+        <div class="center">Order #${o.id.substring(0,6).toUpperCase()}</div>
+        <div class="center">${orderDate}</div>
+        <div class="line"></div>
+        <div><span class="bold">Name:</span> ${o.customerName || 'Unknown'}</div>
+        <div><span class="bold">Phone:</span> ${o.customerPhone || 'Not provided'}</div>
+        <div><span class="bold">Zone:</span> ${o.neighborhood || 'Not specified'}</div>
+        <div class="line"></div>
+        ${itemsHtml}
+        <div class="line"></div>
+        <div class="flex"><span>Subtotal:</span><span>${formatPrice(safeNum(o.totalPrice) - safeNum(o.deliveryFee))} DH</span></div>
+        <div class="flex"><span>Delivery:</span><span>${formatPrice(safeNum(o.deliveryFee))} DH</span></div>
+        <div class="flex bold" style="font-size: 16px; margin-top:5px;"><span>TOTAL:</span><span>${formatPrice(safeNum(o.totalPrice))} DH</span></div>
+        <div class="line"></div>
+        <div class="center" style="font-size:12px; margin-top:10px;">Thank you for ordering!</div>
+    </body></html>`;
+
+    const printWindow = window.open('', '', 'width=400,height=600');
+    printWindow.document.write(receiptHtml);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => { printWindow.print(); printWindow.close(); }, 250);
 };
 
 window.promptOrderStatus = (orderId, newStatus) => {
@@ -890,7 +897,7 @@ window.promptOrderStatus = (orderId, newStatus) => {
         try { 
             await updateDoc(doc(db, "orders", orderId), { status: newStatus }); 
             showToast("Status updated"); 
-        } catch(e) { alert("Network error"); } 
+        } catch(e) { alert("Network error: " + e.message); } 
     }; 
     document.getElementById('confirmOverlay').classList.add('active');
 };
@@ -899,8 +906,6 @@ window.closeModals = () => {
     document.getElementById('confirmOverlay').classList.remove('active');
     document.getElementById('addDriverOverlay').classList.remove('active');
     document.getElementById('addDriverModal').classList.remove('active');
-    document.getElementById('assignDriverOverlay').classList.remove('active');
-    document.getElementById('assignDriverModal').classList.remove('active');
 };
 
 document.getElementById('modalConfirmBtn').addEventListener('click', () => { 
