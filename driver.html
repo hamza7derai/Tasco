@@ -79,7 +79,7 @@ img { display: block; }
 .oc-actions { display: grid; grid-template-columns: 1fr; margin-top: 16px; }
 .btn-solid { padding: 14px; background: var(--orange); border-radius: 12px; font-size: 14px; font-weight: 700; color: white; text-align: center; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;}
 
-/* ACTIVE ORDER SCREEN UPDATES */
+/* ACTIVE ORDER SCREEN */
 .active-hdr { padding: 16px 24px; background: rgba(249,250,251,0.9); backdrop-filter: blur(10px); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 50; }
 .back-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-main); }
 .btn-help { display: flex; align-items: center; gap: 6px; color: var(--orange); font-size: 14px; font-weight: 600; }
@@ -135,7 +135,7 @@ img { display: block; }
 .action-stack { margin: 24px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .btn-release { color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; padding: 8px; text-decoration: underline; }
 
-/* EARNINGS & PROFILE (Preserved) */
+/* EARNINGS & PROFILE */
 .earn-card { margin: 0 24px 16px; background: var(--orange-light); border: none; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
 .earn-card-left { display: flex; align-items: center; gap: 12px; }
 .btn-settle { background: var(--orange); color: white; padding: 12px 24px; border-radius: 10px; font-weight: 700; }
@@ -343,10 +343,10 @@ function startOrderListener() {
   onSnapshot(collection(db, "orders"), snap => {
     S.orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     
-    // Auto-detect active order
+    // Auto-detect active order (handling both claimedBy and legacy driverEmail)
     const active = S.orders.find(o => 
-      o.claimedBy === (auth.currentUser ? auth.currentUser.uid : S.driver.phone) && 
-      !['pending', 'delivered', 'cancelled'].includes(o.status.toLowerCase())
+      (o.claimedBy === S.driver.phone || o.driverEmail === S.driver.phone) && 
+      !['pending', 'delivered', 'cancelled'].includes((o.status || '').toLowerCase())
     );
     S.activeId = active ? active.id : null;
 
@@ -376,8 +376,8 @@ function getTodayStats() {
   if (!S.driver) return { count: 0, fees: 0 };
   const today = new Date().toDateString();
   const mineToday = S.orders.filter(o => 
-    o.claimedBy === (auth.currentUser ? auth.currentUser.uid : S.driver.phone) && 
-    o.status.toLowerCase() === "delivered" && 
+    (o.claimedBy === S.driver.phone || o.driverEmail === S.driver.phone) && 
+    (o.status || '').toLowerCase() === "delivered" && 
     new Date(o.timestamp || 0).toDateString() === today
   );
   let todayFees = 0;
@@ -391,8 +391,7 @@ function renderHome() {
   document.getElementById("hEarn").textContent = fmt(stats.fees) + " DH";
   document.getElementById("hOrders").textContent = stats.count;
 
-  // Show only pending orders
-  const pool = S.orders.filter(o => o.status.toLowerCase() === "pending").sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
+  const pool = S.orders.filter(o => (o.status || '').toLowerCase() === "pending").sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
   const el = document.getElementById("poolList");
   
   if(!pool.length) {
@@ -432,7 +431,7 @@ function renderHome() {
   }).join("");
 }
 
-// ACTIVE ORDER RENDERER (UPDATED)
+// ACTIVE ORDER RENDERER
 function renderActive() {
   const o = S.orders.find(x => x.id === S.activeId);
   const el = document.getElementById("activeContent");
@@ -447,10 +446,11 @@ function renderActive() {
   document.getElementById("detId").textContent = sid;
 
   // Map Delivery Progress Steps
-  let s = o.status.toLowerCase();
-  // Backward compatibility normalization
+  let s = (o.status || '').toLowerCase();
+  
   if (s === 'claimed') s = 'confirmed';
   if (s === 'preparing') s = 'ready';
+  if (s === 'ontheway') s = 'on_the_way';
   
   let btnText = "Mark as Ready for Pickup";
   let nextStatus = "ready";
@@ -489,10 +489,10 @@ function renderActive() {
   let cp = (o.customerPhone || "").replace(/^0/, "");
   if (!cp.startsWith("+") && !cp.startsWith("212")) cp = "212" + cp;
   
-  // Navigation mapping explicitly mapped to customerLat and customerLng
+  // Navigation mapping
   const navUrl = (o.customerLat && o.customerLng) 
-    ? `https://www.google.com/maps/dir/?api=1&destination=${o.customerLat},${o.customerLng}&travelmode=driving`
-    : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(o.customerAddress || o.neighborhood || "Marrakech")}&travelmode=driving`;
+    ? `https://www.google.com/maps/dir/?api=1&destination=$${o.customerLat},${o.customerLng}`
+    : `https://www.google.com/maps/dir/?api=1&destination=$${encodeURIComponent(o.customerAddress || o.neighborhood || "Marrakech")}`;
 
   const acceptedTime = o.acceptedAt ? new Date(o.acceptedAt).toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"}) : new Date().toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"});
 
@@ -592,8 +592,8 @@ function renderActive() {
 function renderEarnings() {
   if (!S.driver) return;
   const mineAll = S.orders.filter(o => 
-    o.claimedBy === (auth.currentUser ? auth.currentUser.uid : S.driver.phone) && 
-    o.status.toLowerCase() === "delivered"
+    (o.claimedBy === S.driver.phone || o.driverEmail === S.driver.phone) && 
+    (o.status || '').toLowerCase() === "delivered"
   );
   const unS = mineAll.filter(o => !o.driverSettled);
   
@@ -626,10 +626,10 @@ function renderEarnings() {
 window.viewOrder = async id => {
   if (!S.driver) return;
   try {
-    const uid = auth.currentUser ? auth.currentUser.uid : S.driver.phone;
     await updateDoc(doc(db, "orders", id), { 
-        status: "confirmed", // Temporary claim pushes it to confirmed step
-        claimedBy: uid,
+        status: "confirmed",
+        claimedBy: S.driver.phone,
+        driverEmail: S.driver.phone, // Ensure rules dont block write
         acceptedAt: new Date().toISOString()
     });
     S.activeId = id;
@@ -642,6 +642,7 @@ window.releaseOrder = async id => {
   try {
     await updateDoc(doc(db, "orders", id), { 
         claimedBy: "", 
+        driverEmail: "",
         status: "pending" 
     });
     S.activeId = null;
@@ -660,7 +661,7 @@ window.updateNextStep = async (id, nextStatus) => {
 
 window.markSettled = async () => {
   if (!S.driver) return;
-  const unS = S.orders.filter(o => o.claimedBy === (auth.currentUser ? auth.currentUser.uid : S.driver.phone) && o.status.toLowerCase() === "delivered" && !o.driverSettled);
+  const unS = S.orders.filter(o => (o.claimedBy === S.driver.phone || o.driverEmail === S.driver.phone) && (o.status || '').toLowerCase() === "delivered" && !o.driverSettled);
   if (!unS.length) return alert("Nothing to settle.");
   if (!confirm(`Settle ${unS.length} order(s)?`)) return;
 
@@ -699,4 +700,3 @@ window.orderTimer = setInterval(() => {
 </script>
 </body>
 </html>
-
