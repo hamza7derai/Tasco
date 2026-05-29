@@ -174,32 +174,53 @@ input:checked + .slider:before { transform: translateX(18px); }
 
     <div class="section-title">App Configuration</div>
     <div class="card" style="padding:0; overflow:hidden; margin-bottom: 24px;">
-        <div style="padding:16px;">
+        <div style="padding:16px; border-bottom:1px solid var(--border);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div style="font-size:13px; font-weight:800; text-transform:uppercase; display:flex; align-items:center; gap:6px;">
+                    <svg viewBox="0 0 24 24" style="width:16px; color:var(--primary);"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    Live Announcement
+                </div>
+                <label class="switch"><input type="checkbox" id="tglAnnounce"><span class="slider"></span></label>
+            </div>
+            <div style="display:flex; gap:8px;">
+                <input type="text" id="announceText" class="form-control" placeholder="E.g. Free delivery tonight!" style="font-size:13px;">
+                <button class="btn btn-primary" style="width:auto; padding:0 20px; font-size:13px;" onclick="saveAnnouncement()">Save</button>
+            </div>
+        </div>
+
+        <div style="padding:16px; background:var(--bg-main);">
             <div style="font-size:13px; font-weight:800; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
                 <svg viewBox="0 0 24 24" style="width:16px; color:var(--primary);"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                Distance-Based Delivery Fees
+                Distance-Based Tiers
             </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
-                <div class="form-group" style="margin-bottom:0;">
-                    <label>Base Fee (DH)</label>
-                    <input type="number" id="inpBaseFee" class="form-control" placeholder="Ex: 10" style="font-size:13px;">
-                </div>
-                <div class="form-group" style="margin-bottom:0;">
-                    <label>Per KM (DH)</label>
-                    <input type="number" id="inpPerKm" class="form-control" placeholder="Ex: 3" style="font-size:13px;">
-                </div>
-            </div>
+            
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:16px;">
                 <div class="form-group" style="margin-bottom:0;">
-                    <label>Max Radius (KM)</label>
-                    <input type="number" id="inpMaxRadius" class="form-control" placeholder="Ex: 15" style="font-size:13px;">
-                </div>
-                 <div class="form-group" style="margin-bottom:0;">
-                    <label>Origin (Lat, Lng)</label>
+                    <label>Store Origin (Lat, Lng)</label>
                     <input type="text" id="inpOrigin" class="form-control" placeholder="Ex: 31.62, -7.98" style="font-size:13px;">
                 </div>
+                 <div class="form-group" style="margin-bottom:0; background: var(--accent-light); padding: 8px 12px; border-radius: 12px; border: 1px dashed var(--accent);">
+                    <label style="color: var(--accent); margin-bottom: 4px;">Free Delivery Min.</label>
+                    <input type="number" id="inpFreeDelThreshold" class="form-control" placeholder="Ex: 250 (0=none)" style="font-size:13px; padding: 6px; border:none;">
+                </div>
             </div>
-            <button class="btn btn-outline" style="width:100%; padding:14px; font-size:13px;" onclick="saveDeliverySettings()">Save Settings</button>
+
+            <div style="background:var(--surface); padding:12px; border-radius:12px; border:1px solid var(--border-dark); margin-bottom:16px;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
+                    <div class="form-group" style="margin-bottom:0;"><label>Tier 1 Max KM</label><input type="number" id="inpT1Km" class="form-control" placeholder="Ex: 5" style="font-size:13px;"></div>
+                    <div class="form-group" style="margin-bottom:0;"><label>Tier 1 Fee (DH)</label><input type="number" id="inpT1Fee" class="form-control" placeholder="Ex: 15" style="font-size:13px;"></div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
+                    <div class="form-group" style="margin-bottom:0;"><label>Tier 2 Max KM</label><input type="number" id="inpT2Km" class="form-control" placeholder="Ex: 10" style="font-size:13px;"></div>
+                    <div class="form-group" style="margin-bottom:0;"><label>Tier 2 Fee (DH)</label><input type="number" id="inpT2Fee" class="form-control" placeholder="Ex: 25" style="font-size:13px;"></div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                    <div class="form-group" style="margin-bottom:0;"><label>Tier 3 Max KM</label><input type="number" id="inpT3Km" class="form-control" placeholder="Ex: 15" style="font-size:13px;"></div>
+                    <div class="form-group" style="margin-bottom:0;"><label>Tier 3 Fee (DH)</label><input type="number" id="inpT3Fee" class="form-control" placeholder="Ex: 40" style="font-size:13px;"></div>
+                </div>
+            </div>
+
+            <button class="btn btn-outline" style="width:100%; padding:14px; font-size:13px; background:var(--surface);" onclick="saveDeliverySettings()">Save Settings</button>
         </div>
     </div>
 
@@ -572,20 +593,28 @@ document.addEventListener('DOMContentLoaded', () => {
 onSnapshot(doc(db, "settings", "delivery"), snap => {
     if(snap.exists()) {
         const d = snap.data();
-        document.getElementById('inpBaseFee').value = d.baseFee || '';
-        document.getElementById('inpPerKm').value = d.perKmFee || '';
-        document.getElementById('inpMaxRadius').value = d.maxRadius || '';
         document.getElementById('inpOrigin').value = d.origin || '';
+        document.getElementById('inpFreeDelThreshold').value = d.freeDeliveryThreshold || '';
+        document.getElementById('inpT1Km').value = d.tier1Km || '';
+        document.getElementById('inpT1Fee').value = d.tier1Fee || '';
+        document.getElementById('inpT2Km').value = d.tier2Km || '';
+        document.getElementById('inpT2Fee').value = d.tier2Fee || '';
+        document.getElementById('inpT3Km').value = d.tier3Km || '';
+        document.getElementById('inpT3Fee').value = d.tier3Fee || '';
     }
 });
 
 window.saveDeliverySettings = async () => {
     try {
         await setDoc(doc(db, "settings", "delivery"), {
-            baseFee: parseFloat(document.getElementById('inpBaseFee').value) || 0,
-            perKmFee: parseFloat(document.getElementById('inpPerKm').value) || 0,
-            maxRadius: parseFloat(document.getElementById('inpMaxRadius').value) || 0,
-            origin: document.getElementById('inpOrigin').value.trim()
+            origin: document.getElementById('inpOrigin').value.trim(),
+            freeDeliveryThreshold: parseFloat(document.getElementById('inpFreeDelThreshold').value) || 0,
+            tier1Km: parseFloat(document.getElementById('inpT1Km').value) || 0,
+            tier1Fee: parseFloat(document.getElementById('inpT1Fee').value) || 0,
+            tier2Km: parseFloat(document.getElementById('inpT2Km').value) || 0,
+            tier2Fee: parseFloat(document.getElementById('inpT2Fee').value) || 0,
+            tier3Km: parseFloat(document.getElementById('inpT3Km').value) || 0,
+            tier3Fee: parseFloat(document.getElementById('inpT3Fee').value) || 0
         }, { merge: true });
         showToast("Delivery configuration saved!");
     } catch(e) { console.error(e); }
@@ -680,6 +709,7 @@ window.openCatManager = () => {
 };
 
 window.renderCatManagerList = () => {
+    // Only display Resto or generic categories
     const activeCats = globalCategoriesData.filter(c => c.type === 'Resto' || !c.type);
     activeCats.sort((a,b) => (b.sortWeight || 0) - (a.sortWeight || 0) || a.name.localeCompare(b.name));
     let html = '';
@@ -765,6 +795,7 @@ window.renderCatalog = () => {
     const container = document.getElementById('adminProductListContainer'); if(!container) return;
     const searchQuery = document.getElementById('catSearch').value.toLowerCase().trim();
     
+    // Only fetch Resto products
     let filteredProducts = allProducts.filter(p => p.productType === 'Resto' || !p.productType);
     
     if (currentCatalogCategory !== 'All' && !searchQuery) { filteredProducts = filteredProducts.filter(p => (p.category || "Uncategorized") === currentCatalogCategory); }
@@ -889,7 +920,7 @@ window.prepareAddProduct = () => {
     document.getElementById('tglDayLimit').checked = false; document.getElementById('cfgDayLimit').style.display = 'none'; document.querySelectorAll('.day-check').forEach(cb => cb.checked = false);
     document.getElementById('tglPromo').checked = false; document.getElementById('cfgPromo').style.display = 'none'; window.optionGroups = []; renderOptionGroups(); document.getElementById('tglAvailable').checked = true;
     
-    loadMainCats(); // This triggers the dropdown to load the categories
+    loadMainCats(); // Triggers the dropdown to load the categories
     switchTab('ajouter'); goToStep(1); window.validateStep1(); window.validateStep2();
 };
 
@@ -898,7 +929,7 @@ window.editProduct = (id) => {
     currentEditProductId = id; document.getElementById('wizardTitle').innerText = "Edit Item";
     document.getElementById('pName').value = p.name || ''; document.getElementById('pSubtitle').value = p.subtitle || ''; 
     
-    loadMainCats(); // This triggers the dropdown to load the categories
+    loadMainCats(); // Triggers the dropdown to load the categories
     setTimeout(() => { document.getElementById('pCat').value = p.category || ''; window.loadSubCats(); setTimeout(() => document.getElementById('pSubCat').value = p.subCategory || '', 50); }, 50);
     document.getElementById('pImg').value = p.imageUrl || ''; if(p.imageUrl) { document.getElementById('previewImg').src = p.imageUrl; document.getElementById('previewImg').style.display = 'block'; } else { document.getElementById('previewImg').style.display = 'none'; }
     document.getElementById('pSell').value = p.sellPrice || ''; document.getElementById('pCost').value = p.costPrice || ''; document.getElementById('pBadge').value = p.badge || 'Standard'; document.getElementById('pSortWeight').value = p.sortWeight || '';
