@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>TASCO | Store Manager</title>
 
-<link rel="manifest" href="manifest-admin.json">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
@@ -52,7 +51,7 @@ input, select, textarea { font-family: inherit; }
 .app-view.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-/* HEADERS */
+/* HEADERS & CARDS */
 .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
 .header-top h1 { font-size: 24px; font-weight: 800; color: var(--text-main); line-height: 1.2; letter-spacing: -1px;}
 .header-top p { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px;}
@@ -60,7 +59,6 @@ input, select, textarea { font-family: inherit; }
 .icon-btn { width: 44px; height: 44px; background: var(--surface); border-radius: var(--radius-btn); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); border: 1px solid var(--border); color: var(--text-main); cursor: pointer;}
 .section-title { font-size: 15px; font-weight: 800; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);}
 
-/* CARDS & TOGGLES */
 .card { background: var(--surface); border-radius: var(--radius-card); padding: 16px; box-shadow: var(--shadow-sm); margin-bottom: 16px; border: 1px solid rgba(23,23,23,0.03);}
 .toggle-wrapper { display: flex; justify-content: space-between; align-items: center; padding: 0; background: transparent; border: none; margin-bottom: 0; width: 100%;}
 .switch { position: relative; display: inline-block; width: 44px; height: 26px; flex-shrink: 0;}
@@ -70,19 +68,17 @@ input, select, textarea { font-family: inherit; }
 input:checked + .slider { background-color: var(--accent); }
 input:checked + .slider:before { transform: translateX(18px); }
 
-/* ANIMATED TABS TOGGLE */
+/* TABS & CATALOG */
 .tabs-toggle { position: relative; display: flex; background: var(--surface); border-radius: 50px; padding: 6px; border: 1px solid var(--border); margin-bottom: 24px; box-shadow: var(--shadow-sm); z-index: 1;}
 .tab-bg { position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc(50% - 6px); background: var(--primary); border-radius: 50px; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); z-index: -1; box-shadow: 0 4px 12px rgba(255, 90, 0, 0.25);}
 .tab-btn { flex: 1; padding: 12px; text-align: center; font-size: 14px; font-weight: 700; border-radius: 50px; color: var(--text-muted); transition: color 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;}
 .tab-btn.active { color: white; font-weight: 800;}
 
-/* SNAP SCROLL TABS */
 .tabs-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -20px 20px; padding: 0 20px; position: relative; z-index: 10; scroll-behavior: smooth; scroll-snap-type: x mandatory;}
 .tabs-scroll::-webkit-scrollbar { display: none; }
 .tab-pill { padding: 10px 18px; border-radius: 50px; font-size: 13px; font-weight: 700; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); white-space: nowrap; cursor: pointer; transition: 0.2s; scroll-snap-align: center; text-transform: uppercase; letter-spacing: 0.5px;}
 .tab-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-/* HORIZONTAL LIST CATALOG */
 .catalog-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px;}
 .cat-list-item { display: flex; flex-direction: column; padding: 12px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); box-shadow: var(--shadow-sm);}
 .cat-list-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px;}
@@ -95,12 +91,11 @@ input:checked + .slider:before { transform: translateX(18px); }
 .cat-list-actions { display: flex; gap: 6px; align-items: center;}
 .btn-action { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: 0.2s; flex-shrink: 0;}
 .btn-action:active { transform: scale(0.9); }
-.btn-action.link { background: var(--bg-main); color: var(--text-main); border: 1px solid var(--border);}
 .btn-action.copy { background: #F1F5F9; color: #475569; }
 .btn-action.edit { background: var(--primary-light); color: var(--primary); }
 .btn-action.del { background: var(--danger-light); color: var(--danger); }
 
-/* WIZARD (SAAS STYLE) */
+/* WIZARD & FORMS */
 .wizard-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
 .stepper-container { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 32px; }
 .step-pill { font-size: 12px; font-weight: 800; color: var(--text-muted); display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px;}
@@ -108,7 +103,6 @@ input:checked + .slider:before { transform: translateX(18px); }
 .step-dots { display: flex; gap: 6px; }
 .s-dot { width: 20px; height: 4px; border-radius: 4px; background: var(--border); }
 .s-dot.active { background: var(--primary); }
-
 .wizard-box { margin-bottom: 30px; }
 .wizard-step { display: none; animation: fadeIn 0.3s; }
 .wizard-step.active { display: block; }
@@ -124,12 +118,10 @@ input:checked + .slider:before { transform: translateX(18px); }
 .type-icon { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
 .type-card h5 { font-size: 15px; font-weight: 800; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px;}
 .radio-dot { position: absolute; top: 12px; right: 12px; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; background: white;}
-
 .type-card.tc-resto.active { border-color: var(--primary); background: var(--primary-light); }
 .type-card.tc-resto.active .type-icon { color: var(--primary); }
 .type-card.tc-resto.active .radio-dot { border-color: var(--primary); background: var(--primary); }
 .type-card.tc-resto.active .radio-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: white; }
-
 .type-card.tc-grocery.active { border-color: var(--accent); background: var(--accent-light); }
 .type-card.tc-grocery.active .type-icon { color: var(--accent); }
 .type-card.tc-grocery.active .radio-dot { border-color: var(--accent); background: var(--accent); }
@@ -148,12 +140,11 @@ input:checked + .slider:before { transform: translateX(18px); }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none;}
 .btn-primary { background: var(--primary); color: white; box-shadow: 0 8px 20px rgba(255, 90, 0, 0.25);}
 .btn-outline { background: var(--surface); color: var(--text-main); border: 1px solid var(--border-dark); }
-
 .wizard-footer { display: flex; gap: 12px; align-items: center; margin-top: 32px;}
 .wizard-footer .btn-outline { width: 30%; }
 .wizard-footer .btn-primary { width: 70%; }
 
-/* MODULAR OPTION SYSTEM */
+/* OPTION GROUPS & CONFIG PANELS */
 .group-builder-card { background: var(--bg-main); border: 1px solid var(--border-dark); border-radius: 16px; padding: 16px; margin-bottom: 16px; }
 .btn-add-group { width: 100%; padding: 16px; border: 2px dashed var(--border-dark); border-radius: 16px; color: var(--text-muted); font-weight: 800; margin: 20px 0; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px;}
 .btn-add-group:active { transform: scale(0.98); background: var(--surface); }
@@ -168,7 +159,7 @@ input:checked + .slider:before { transform: translateX(18px); }
 .nav-item svg { width: 22px; height: 22px; stroke-width: 2.2; }
 .nav-item.active svg { fill: var(--primary-light); }
 
-/* Modals & Toasts */
+/* MODALS */
 .overlay { position: fixed; inset: 0; background: rgba(23, 23, 23, 0.6); backdrop-filter: blur(4px); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; padding: 20px; }
 .overlay.active { opacity: 1; pointer-events: auto; }
 .modal { background: var(--surface); width: 100%; max-width: 340px; border-radius: 24px; padding: 32px 24px; box-shadow: var(--shadow-modal); transform: scale(0.95); transition: 0.3s; text-align: center; display: none; border: 1px solid var(--border);}
@@ -194,21 +185,9 @@ input:checked + .slider:before { transform: translateX(18px); }
         </div>
     </div>
 
-    <div class="card toggle-wrapper" style="padding: 16px; margin-bottom: 24px;">
-        <div style="display:flex; align-items:center; gap:16px;">
-            <div id="statusIconBox" style="width: 44px; height: 44px; border-radius: 12px; background: var(--danger-light); color: var(--danger); display: flex; align-items: center; justify-content: center; transition: 0.3s;">
-                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-            </div>
-            <div>
-                <span id="statusTextMain" style="display:block; font-size:15px; font-weight:800; color:var(--text-main); text-transform:uppercase; letter-spacing:0.5px;">Store Closed</span>
-                <span id="statusTextSub" style="font-size:12px; font-weight: 600; color:var(--text-muted);">You are not receiving orders</span>
-            </div>
-        </div>
-        <label class="switch"><input type="checkbox" id="storeStatusToggle" onchange="toggleStoreStatus(this.checked)"><span class="slider"></span></label>
-    </div>
-
     <div class="section-title">App Configuration</div>
     <div class="card" style="padding:0; overflow:hidden; margin-bottom: 24px;">
+        
         <div style="padding:16px; border-bottom:1px solid var(--border);">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                 <div style="font-size:13px; font-weight:800; text-transform:uppercase; display:flex; align-items:center; gap:6px;">
@@ -226,14 +205,29 @@ input:checked + .slider:before { transform: translateX(18px); }
         <div style="padding:16px;">
             <div style="font-size:13px; font-weight:800; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
                 <svg viewBox="0 0 24 24" style="width:16px; color:var(--primary);"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                Delivery Zones & Fees
+                Distance-Based Delivery Fees
             </div>
-            <div style="display:flex; gap:8px; margin-bottom:16px;">
-                <input type="text" id="inpZoneName" class="form-control" placeholder="Area Name" style="font-size:13px;">
-                <input type="number" id="inpZoneFee" class="form-control" placeholder="Fee (DH)" style="font-size:13px; width:100px;">
-                <button class="btn btn-outline" style="width:auto; padding:0 16px;" onclick="addZone()">Add</button>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Base Fee (DH)</label>
+                    <input type="number" id="inpBaseFee" class="form-control" placeholder="Ex: 10" style="font-size:13px;">
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Per KM (DH)</label>
+                    <input type="number" id="inpPerKm" class="form-control" placeholder="Ex: 3" style="font-size:13px;">
+                </div>
             </div>
-            <div id="zoneListContainer" style="display:flex; flex-direction:column; gap:8px;"></div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:16px;">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Max Radius (KM)</label>
+                    <input type="number" id="inpMaxRadius" class="form-control" placeholder="Ex: 15" style="font-size:13px;">
+                </div>
+                 <div class="form-group" style="margin-bottom:0;">
+                    <label>Store Origin (Lat, Lng)</label>
+                    <input type="text" id="inpOrigin" class="form-control" placeholder="Ex: 31.6295, -7.9811" style="font-size:13px;">
+                </div>
+            </div>
+            <button class="btn btn-outline" style="width:100%; padding:14px; font-size:13px;" onclick="saveDeliverySettings()">Save Settings</button>
         </div>
     </div>
 
@@ -289,14 +283,6 @@ input:checked + .slider:before { transform: translateX(18px); }
     <div id="adminProductListContainer"></div>
 </div>
 
-<div class="overlay" id="catManagerOverlay" onclick="if(event.target===this) closeModals()"></div>
-<div class="bottom-sheet" id="catManagerModal" style="max-height: 80vh; overflow-y:auto;">
-    <div class="sheet-handle"></div>
-    <h2 style="font-size: 18px; font-weight:800; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.5px;">Manage Categories</h2>
-    <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px; line-height:1.4; font-weight:600;">Set emojis and weights to control tab order.</p>
-    <div id="catManagerList" style="display:flex; flex-direction:column; gap:12px;"></div>
-</div>
-
 <div id="view-ajouter" class="app-view container" style="background: var(--surface); min-height: 100vh;">
     <div class="wizard-header-top">
         <div class="icon-btn" onclick="switchTab('produits')" style="width:44px; height:44px; border-radius: 50%; border:1px solid var(--border); box-shadow:none; background: var(--surface);"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
@@ -315,12 +301,27 @@ input:checked + .slider:before { transform: translateX(18px); }
 
     <div class="wizard-box">
         <div id="wizard-1" class="wizard-step active">
+            
             <div class="form-group">
                 <label>Photo *</label>
+                <div class="photo-grid" id="uploadBoxUI">
+                    <div class="upload-card" onclick="document.getElementById('fileInput').click()">
+                        <div class="upload-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>
+                        <h5 style="color:var(--primary);">Upload Photo</h5>
+                        <p>Drag & drop or click</p>
+                        <input type="file" id="fileInput" style="display:none;" accept="image/*">
+                    </div>
+                    <div class="upload-card" style="border-style: solid; border-color: var(--border); background: var(--bg-main);" onclick="document.getElementById('pImg').focus()">
+                        <div class="upload-icon" style="background: var(--surface); color: var(--accent);"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></div>
+                        <h5 style="color:var(--accent);">Paste URL</h5>
+                        <p>Add image from link</p>
+                    </div>
+                </div>
                 <div style="display:flex; align-items:center; background:var(--surface); border:1px solid var(--border-dark); border-radius:12px; padding:0 12px; margin-bottom:8px;">
                     <svg style="width:16px; color:var(--text-muted);"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
                     <input type="text" id="pImg" placeholder="https://example.com/image.jpg" style="border:none; box-shadow:none; padding:14px; width:100%; background:transparent; outline:none; font-size: 14px; font-weight:500;" oninput="previewWizardImg(); validateStep1();">
                 </div>
+                <span class="help-text" style="margin-bottom:24px;">Recommended: 1000x800px (5:4 ratio) · JPG, PNG transparent</span>
                 <img id="previewImg" style="width: 100%; max-width: 200px; aspect-ratio: 5/4; border-radius: 12px; object-fit: contain; margin-bottom: 24px; display: none; border: 1px solid var(--border); background: var(--bg-main);" src="">
             </div>
 
@@ -408,6 +409,7 @@ input:checked + .slider:before { transform: translateX(18px); }
                     <option value="Top Vente">Top Vente</option>
                     <option value="Nouveau">Nouveau</option>
                     <option value="Promo">Promo</option>
+                    <option value="Combo Pack">Combo Pack</option>
                 </select>
             </div>
 
@@ -423,6 +425,50 @@ input:checked + .slider:before { transform: translateX(18px); }
                     <div class="btn btn-outline" style="width:auto; padding:0 20px;" onclick="addCustomTrait()">Add</div>
                 </div>
                 <div id="customTraitsContainer" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+            </div>
+
+            <div class="toggle-card-config">
+                <div class="toggle-wrapper">
+                    <div>
+                        <span style="display:block; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">Time Restricted</span>
+                        <span style="font-size:11px; color:var(--text-muted); font-weight:600;">E.g., Only available 07:00 to 11:30</span>
+                    </div>
+                    <label class="switch"><input type="checkbox" id="tglTimeLimit" onchange="document.getElementById('cfgTimeLimit').style.display = this.checked ? 'block' : 'none'"><span class="slider"></span></label>
+                </div>
+                <div class="config-panel" id="cfgTimeLimit">
+                    <div style="display:flex; gap:12px;">
+                        <div class="form-group" style="margin-bottom:0; flex:1;">
+                            <label>Start Time</label>
+                            <input type="time" id="pStartTime" class="form-control">
+                        </div>
+                        <div class="form-group" style="margin-bottom:0; flex:1;">
+                            <label>End Time</label>
+                            <input type="time" id="pEndTime" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="toggle-card-config">
+                <div class="toggle-wrapper">
+                    <div>
+                        <span style="display:block; font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">Day Restricted</span>
+                        <span style="font-size:11px; color:var(--text-muted); font-weight:600;">E.g., Only available on Fridays</span>
+                    </div>
+                    <label class="switch"><input type="checkbox" id="tglDayLimit" onchange="document.getElementById('cfgDayLimit').style.display = this.checked ? 'block' : 'none'"><span class="slider"></span></label>
+                </div>
+                <div class="config-panel" id="cfgDayLimit">
+                    <label style="font-size:12px; font-weight:800; color:var(--text-main); margin-bottom:8px; display:block; text-transform:uppercase; letter-spacing:0.5px;">Select Available Days:</label>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;" id="dayCheckboxes">
+                        <label style="font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; background:var(--bg-main); padding:8px 12px; border-radius:8px; border:1px solid var(--border); cursor:pointer;"><input type="checkbox" value="1" class="day-check" style="accent-color:var(--primary);"> Mon</label>
+                        <label style="font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; background:var(--bg-main); padding:8px 12px; border-radius:8px; border:1px solid var(--border); cursor:pointer;"><input type="checkbox" value="2" class="day-check" style="accent-color:var(--primary);"> Tue</label>
+                        <label style="font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; background:var(--bg-main); padding:8px 12px; border-radius:8px; border:1px solid var(--border); cursor:pointer;"><input type="checkbox" value="3" class="day-check" style="accent-color:var(--primary);"> Wed</label>
+                        <label style="font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; background:var(--bg-main); padding:8px 12px; border-radius:8px; border:1px solid var(--border); cursor:pointer;"><input type="checkbox" value="4" class="day-check" style="accent-color:var(--primary);"> Thu</label>
+                        <label style="font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; background:var(--bg-main); padding:8px 12px; border-radius:8px; border:1px solid var(--border); cursor:pointer;"><input type="checkbox" value="5" class="day-check" style="accent-color:var(--primary);"> Fri</label>
+                        <label style="font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; background:var(--bg-main); padding:8px 12px; border-radius:8px; border:1px solid var(--border); cursor:pointer;"><input type="checkbox" value="6" class="day-check" style="accent-color:var(--primary);"> Sat</label>
+                        <label style="font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; background:var(--bg-main); padding:8px 12px; border-radius:8px; border:1px solid var(--border); cursor:pointer;"><input type="checkbox" value="0" class="day-check" style="accent-color:var(--primary);"> Sun</label>
+                    </div>
+                </div>
             </div>
 
             <div class="toggle-card-config">
@@ -469,6 +515,14 @@ input:checked + .slider:before { transform: translateX(18px); }
     <div class="nav-item" id="nav-ajouter" onclick="prepareAddProduct()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg> Add Item</div>
     <div class="nav-item" id="nav-produits" onclick="switchTab('produits')"><svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg> Catalog</div>
 </nav>
+
+<div class="overlay" id="catManagerOverlay" onclick="if(event.target===this) closeModals()"></div>
+<div class="bottom-sheet" id="catManagerModal" style="max-height: 80vh; overflow-y:auto;">
+    <div class="sheet-handle"></div>
+    <h2 style="font-size: 18px; font-weight:800; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.5px;">Manage Categories</h2>
+    <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px; line-height:1.4; font-weight:600;">Set emojis and weights to control tab order.</p>
+    <div id="catManagerList" style="display:flex; flex-direction:column; gap:12px;"></div>
+</div>
 
 <div class="overlay" id="confirmOverlay">
     <div class="modal">
@@ -532,7 +586,7 @@ window.logoutAdmin = async () => {
 };
 
 // GLOBAL STATE
-let allProducts = [], globalCategoriesData = [], allZones = [], allPromos = [];
+let allProducts = [], globalCategoriesData = [], allPromos = [];
 let currentCatalogMode = 'Resto', currentCatalogCategory = 'All', currentEditProductId = null;
 let currentCatAddingType = '';
 let selectedProductType = 'Resto';
@@ -558,96 +612,51 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// SETTINGS (STORE, ANNOUNCEMENTS, ZONES, PROMOS)
+// SETTINGS (ANNOUNCEMENTS, DISTANCE, PROMOS)
 // ==========================================
-window.toggleStoreStatus = async (isOnline) => {
-    try {
-        await setDoc(doc(db, "settings", "store_status"), { isOnline: isOnline }, { merge: true });
-        showToast(isOnline ? "Store is now online!" : "Store is offline!");
-    } catch(e) { console.error(e); alert("Error updating store status."); }
-};
 
-onSnapshot(doc(db, "settings", "store_status"), (docSnap) => {
-    const toggle = document.getElementById('storeStatusToggle');
-    const iconBox = document.getElementById('statusIconBox');
-    const textMain = document.getElementById('statusTextMain');
-    const textSub = document.getElementById('statusTextSub');
-    let isOnline = false;
-    if (docSnap.exists()) { isOnline = docSnap.data().isOnline === true; }
-    toggle.checked = isOnline;
-    if(isOnline) {
-        iconBox.style.background = 'var(--accent-light)'; iconBox.style.color = 'var(--accent)';
-        textMain.innerText = 'Store Open'; textSub.innerText = 'You are receiving orders';
-    } else {
-        iconBox.style.background = 'var(--danger-light)'; iconBox.style.color = 'var(--danger)';
-        textMain.innerText = 'Store Closed'; textSub.innerText = 'You are not receiving orders';
-    }
-});
-
+// Announcements
 onSnapshot(doc(db, "settings", "announcement"), snap => {
     if(snap.exists()) {
         document.getElementById('announceText').value = snap.data().text || '';
         document.getElementById('tglAnnounce').checked = snap.data().isVisible === true;
     }
 });
-
 window.saveAnnouncement = async () => {
     try {
-        await setDoc(doc(db, "settings", "announcement"), {
-            text: document.getElementById('announceText').value.trim(),
-            isVisible: document.getElementById('tglAnnounce').checked
-        });
+        await setDoc(doc(db, "settings", "announcement"), { text: document.getElementById('announceText').value.trim(), isVisible: document.getElementById('tglAnnounce').checked }, { merge: true });
         showToast("Announcement saved!");
     } catch(e) { console.error(e); alert("Error saving announcement."); }
 };
 
-onSnapshot(collection(db, "zones"), snap => {
-    allZones = snap.docs.map(d => ({id: d.id, ...d.data()}));
-    renderZones();
+// Distance-Based Delivery Configuration
+onSnapshot(doc(db, "settings", "delivery"), snap => {
+    if(snap.exists()) {
+        const d = snap.data();
+        document.getElementById('inpBaseFee').value = d.baseFee || '';
+        document.getElementById('inpPerKm').value = d.perKmFee || '';
+        document.getElementById('inpMaxRadius').value = d.maxRadius || '';
+        document.getElementById('inpOrigin').value = d.origin || '';
+    }
 });
 
-function renderZones() {
-    const container = document.getElementById('zoneListContainer');
-    if(allZones.length === 0) {
-        container.innerHTML = `<div style="font-size:12px; color:var(--text-muted); font-weight:600;">No zones configured. Delivery fee will be 0 DH.</div>`;
-        return;
-    }
-    container.innerHTML = allZones.map(z => `
-        <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface); padding:12px 16px; border-radius:12px; border:1px solid var(--border-dark);"> 
-            <div style="font-size:13px; font-weight:800; text-transform:uppercase;">${z.name}</div>
-            <div style="display:flex; align-items:center; gap:12px;">
-                <span style="font-size:14px; font-weight:800; color:var(--primary);">${formatPrice(z.fee)} DH</span> 
-                <svg viewBox="0 0 24 24" style="width:16px; color:var(--danger); cursor:pointer;" onclick="deleteZone('${z.id}')"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-            </div>
-        </div>
-    `).join('');
-}
-
-window.addZone = async () => {
-    const name = document.getElementById('inpZoneName').value.trim();
-    const fee = parseFloat(document.getElementById('inpZoneFee').value) || 0;
-    if(!name) return showToast("Enter a zone name.");
+window.saveDeliverySettings = async () => {
     try {
-        await addDoc(collection(db, "zones"), { name, fee });
-        document.getElementById('inpZoneName').value = '';
-        document.getElementById('inpZoneFee').value = '';
-        showToast("Zone added!");
+        await setDoc(doc(db, "settings", "delivery"), {
+            baseFee: parseFloat(document.getElementById('inpBaseFee').value) || 0,
+            perKmFee: parseFloat(document.getElementById('inpPerKm').value) || 0,
+            maxRadius: parseFloat(document.getElementById('inpMaxRadius').value) || 0,
+            origin: document.getElementById('inpOrigin').value.trim()
+        }, { merge: true });
+        showToast("Delivery configuration saved!");
     } catch(e) { console.error(e); }
 };
 
-window.deleteZone = async (id) => {
-    if(confirm("Delete this delivery zone?")) {
-        await deleteDoc(doc(db, "zones", id));
-        showToast("Zone deleted.");
-    }
-};
-
-// --- PROMO CODES ---
+// Promos
 onSnapshot(collection(db, "promos"), snap => {
     allPromos = snap.docs.map(d => ({id: d.id, ...d.data()}));
     renderPromos();
 });
-
 function renderPromos() {
     const container = document.getElementById('promoListContainer');
     if(allPromos.length === 0) {
@@ -664,14 +673,11 @@ function renderPromos() {
         </div>
     `).join('');
 }
-
 window.addPromo = async () => {
     const code = document.getElementById('inpPromoCode').value.trim().toUpperCase();
     const value = parseFloat(document.getElementById('inpPromoValue').value) || 0;
     const type = document.getElementById('inpPromoType').value;
-    
     if(!code || value <= 0) return showToast("Enter a valid code and value.");
-    
     try {
         await addDoc(collection(db, "promos"), { code, value, type, active: true });
         document.getElementById('inpPromoCode').value = '';
@@ -679,7 +685,6 @@ window.addPromo = async () => {
         showToast("Promo Code created!");
     } catch(e) { console.error(e); }
 };
-
 window.deletePromo = async (id) => {
     if(confirm("Delete this promo code?")) {
         await deleteDoc(doc(db, "promos", id));
@@ -699,9 +704,7 @@ onSnapshot(collection(db, "categories"), snap => {
 
 onSnapshot(collection(db, "products"), snap => {
     allProducts = snap.docs.map(d => ({id: d.id, ...d.data()}));
-    if(document.getElementById('view-produits').classList.contains('active')) {
-        renderCatalogTabs(); renderCatalog();
-    }
+    if(document.getElementById('view-produits').classList.contains('active')) { renderCatalogTabs(); renderCatalog(); }
 });
 
 window.openCatManager = () => {
@@ -710,15 +713,13 @@ window.openCatManager = () => {
     document.getElementById('catManagerOverlay').classList.add('active');
     document.getElementById('catManagerModal').classList.add('active');
 };
-
 window.renderCatManagerList = () => {
     const activeCats = globalCategoriesData.filter(c => c.type === currentCatalogMode || !c.type);
     activeCats.sort((a,b) => (b.sortWeight || 0) - (a.sortWeight || 0) || a.name.localeCompare(b.name));
 
     let html = '';
-    if(activeCats.length === 0) {
-        html = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">No categories found.</div>`;
-    } else {
+    if(activeCats.length === 0) { html = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">No categories found.</div>`; } 
+    else {
         activeCats.forEach(c => {
             let subsHtml = (c.subcategories || []).map((sub) => `<div style="display:inline-flex; align-items:center; gap:4px; background:var(--surface); border:1px solid var(--border); padding:4px 8px; border-radius:8px; font-size:11px; margin-top:6px; margin-right:4px;">${sub} <span style="color:var(--danger); cursor:pointer; font-weight:800; padding: 0 4px;" onclick="deleteSubcatManager('${c.id}', '${sub.replace(/'/g, "\\'")}')">×</span></div>`).join('');
             html += `
@@ -786,8 +787,7 @@ window.selectProductType = (type) => {
     document.getElementById('typeCardResto').classList.remove('active');
     document.getElementById('typeCardGrocery').classList.remove('active');
     document.getElementById(`typeCard${type}`).classList.add('active');
-    loadMainCats();
-    validateStep1();
+    loadMainCats(); validateStep1();
 };
 
 window.previewWizardImg = () => {
@@ -819,19 +819,15 @@ window.goToStep = (step) => {
     window.scrollTo(0,0);
 };
 
-// OPTION GROUP BUILDER
+// FIXED: Option Group Builder with Layout and Image URL
 window.addOptionGroup = () => {
     const group = { id: Date.now(), name: "", selection: "single", layout: "text", maxLimit: 0, items: [] };
-    window.optionGroups.push(group);
-    renderOptionGroups();
+    window.optionGroups.push(group); renderOptionGroups();
 };
-
 window.addGroupItem = (groupId) => {
     const group = window.optionGroups.find(g => g.id === groupId);
-    group.items.push({ name: "", price: 0, cost: 0, imageUrl: "" });
-    renderOptionGroups();
+    group.items.push({ name: "", price: 0, cost: 0, imageUrl: "" }); renderOptionGroups();
 };
-
 window.renderOptionGroups = () => {
     const container = document.getElementById('optionGroupsContainer');
     container.innerHTML = window.optionGroups.map(g => `
@@ -850,6 +846,11 @@ window.renderOptionGroups = () => {
                     </label>
                     ${g.selection === 'multiple' ? `<div style="padding-left: 24px;"><input type="number" placeholder="Max limit (0 = none)" class="form-control" style="font-size:12px; padding:8px; height:auto;" value="${g.maxLimit || ''}" oninput="updateGroupLimit(${g.id}, this.value)"></div>` : ''}
                 </div>
+                <select class="form-control" style="width: 140px; font-size:12px; padding:10px;" onchange="updateGroupLayout(${g.id}, this.value)">
+                    <option value="text" ${g.layout==='text' || !g.layout ? 'selected' : ''}>Pills (Text)</option>
+                    <option value="grid" ${g.layout==='grid' ? 'selected' : ''}>Grid (Images)</option>
+                    <option value="list" ${g.layout==='list' ? 'selected' : ''}>List (Images)</option>
+                </select>
             </div>
             <div id="items_${g.id}">
                 ${g.items.map((item, idx) => `
@@ -860,15 +861,16 @@ window.renderOptionGroups = () => {
                         <input type="number" placeholder="+DH Cost" class="form-control" style="font-size:12px; padding:10px;" value="${item.cost}" oninput="updateItemField(${g.id}, ${idx}, 'cost', this.value)">
                         <button onclick="removeItem(${g.id}, ${idx})" style="color:var(--text-muted); background:var(--bg-main); border:1px solid var(--border-dark); border-radius:8px; height:38px; display:flex; align-items:center; justify-content:center;">×</button>
                     </div>
+                    <input type="text" placeholder="Image URL (optional for grid/list layouts)" class="form-control" style="font-size:12px; padding:10px; width: 100%;" value="${item.imageUrl || ''}" oninput="updateItemField(${g.id}, ${idx}, 'imageUrl', this.value)">
                 </div>`).join('')}
             </div>
             <button class="btn btn-outline" style="margin-top:12px; font-size:12px; padding:10px 16px; width:auto; border-radius:10px;" onclick="addGroupItem(${g.id})">+ ADD OPTION</button>
         </div>`).join('');
 };
-
 window.updateGroupName = (id, val) => { window.optionGroups.find(g => g.id === id).name = val; };
 window.updateGroupSel = (id, val) => { window.optionGroups.find(g => g.id === id).selection = val; renderOptionGroups(); };
 window.updateGroupLimit = (id, val) => { window.optionGroups.find(g => g.id === id).maxLimit = parseInt(val) || 0; };
+window.updateGroupLayout = (id, val) => { window.optionGroups.find(g => g.id === id).layout = val; };
 window.updateItemField = (gid, idx, field, val) => {
     const item = window.optionGroups.find(g => g.id === gid).items[idx];
     item[field] = (field === 'name' || field === 'imageUrl') ? val : parseFloat(val) || 0;
@@ -885,7 +887,6 @@ window.loadMainCats = () => {
     else { document.getElementById('pCat').value = ''; }
     loadSubCats();
 };
-
 window.loadSubCats = () => {
     const main = document.getElementById('pCat').value;
     const subEl = document.getElementById('pSubCat');
@@ -894,54 +895,35 @@ window.loadSubCats = () => {
         subEl.innerHTML = '<option value="">Select subcategory</option>' + catDoc.subcategories.map(s => `<option value="${s}">${s}</option>`).join('');
     } else { subEl.innerHTML = '<option value="">No subcategories</option>'; }
 };
-
 window.openAddCategoryModal = (type) => {
     currentCatAddingType = type;
-    if(type === 'main') {
-        document.getElementById('catModalTitle').innerText = `New ${selectedProductType} Category`; 
-    } else { 
-        const mainCat = document.getElementById('pCat').value; 
-        if(!mainCat) return showToast("Select a main category first."); 
-        document.getElementById('catModalTitle').innerText = `New Subcategory for '${mainCat}'`;
-    }
-    document.getElementById('newCatInput').value = '';
-    document.getElementById('newCatIcon').value = '';
-    document.getElementById('addCatOverlay').classList.add('active');
-    document.getElementById('addCatModal').classList.add('active');
+    if(type === 'main') { document.getElementById('catModalTitle').innerText = `New ${selectedProductType} Category`; } 
+    else { const mainCat = document.getElementById('pCat').value; if(!mainCat) return showToast("Select a main category first."); document.getElementById('catModalTitle').innerText = `New Subcategory for '${mainCat}'`; }
+    document.getElementById('newCatInput').value = ''; document.getElementById('newCatIcon').value = '';
+    document.getElementById('addCatOverlay').classList.add('active'); document.getElementById('addCatModal').classList.add('active');
     setTimeout(() => document.getElementById('newCatInput').focus(), 100);
 };
-
 window.closeModals = () => {
-    document.body.classList.remove('modal-open');
-    document.getElementById('confirmOverlay').classList.remove('active');
-    document.getElementById('addCatOverlay').classList.remove('active');
-    document.getElementById('addCatModal').classList.remove('active');
-    document.getElementById('catManagerOverlay').classList.remove('active');
-    document.getElementById('catManagerModal').classList.remove('active');
+    document.body.classList.remove('modal-open'); document.getElementById('confirmOverlay').classList.remove('active');
+    document.getElementById('addCatOverlay').classList.remove('active'); document.getElementById('addCatModal').classList.remove('active');
+    document.getElementById('catManagerOverlay').classList.remove('active'); document.getElementById('catManagerModal').classList.remove('active');
 };
-
 document.getElementById('btnSaveCategory').addEventListener('click', async () => {
-    const val = document.getElementById('newCatInput').value.trim();
-    const iconVal = document.getElementById('newCatIcon').value.trim();
+    const val = document.getElementById('newCatInput').value.trim(); const iconVal = document.getElementById('newCatIcon').value.trim();
     if(!val) return;
     const btn = document.getElementById('btnSaveCategory'); btn.innerText = '...'; btn.disabled = true;
     try {
         if(currentCatAddingType === 'main') {
             if(!globalCategoriesData.find(c => c.name.toLowerCase() === val.toLowerCase())) {
-                await addDoc(collection(db, "categories"), { name: val, icon: iconVal, subcategories: [], type: selectedProductType, sortWeight: 0 });
-                showToast("Category created!");
+                await addDoc(collection(db, "categories"), { name: val, icon: iconVal, subcategories: [], type: selectedProductType, sortWeight: 0 }); showToast("Category created!");
             } else { showToast("Category already exists!"); }
         } else {
-            const mainCatName = document.getElementById('pCat').value;
-            const catDoc = globalCategoriesData.find(c => c.name === mainCatName);
+            const mainCatName = document.getElementById('pCat').value; const catDoc = globalCategoriesData.find(c => c.name === mainCatName);
             if(catDoc) {
                 let subs = catDoc.subcategories || [];
                 if(!subs.includes(val)) {
-                    subs.push(val);
-                    await updateDoc(doc(db, "categories", catDoc.id), { subcategories: subs });
-                    showToast("Subcategory added!");
-                    document.getElementById('pSubCat').innerHTML += `<option value="${val}">${val}</option>`;
-                    document.getElementById('pSubCat').value = val;
+                    subs.push(val); await updateDoc(doc(db, "categories", catDoc.id), { subcategories: subs }); showToast("Subcategory added!");
+                    document.getElementById('pSubCat').innerHTML += `<option value="${val}">${val}</option>`; document.getElementById('pSubCat').value = val;
                 } else { showToast("Subcategory already exists!"); }
             }
         }
@@ -951,88 +933,40 @@ document.getElementById('btnSaveCategory').addEventListener('click', async () =>
 
 // CUSTOM TRAITS
 window.currentProductTraits = [];
-window.addCustomTrait = () => {
-    const input = document.getElementById('traitInput');
-    const val = input.value.trim();
-    if(val && !window.currentProductTraits.includes(val)) {
-        window.currentProductTraits.push(val); input.value = ''; renderCustomTraits();
-    }
-};
-window.removeCustomTrait = (trait) => {
-    window.currentProductTraits = window.currentProductTraits.filter(t => t !== trait); renderCustomTraits();
-};
-window.renderCustomTraits = () => {
-    const container = document.getElementById('customTraitsContainer');
-    container.innerHTML = window.currentProductTraits.map(t => `<div style="background:var(--surface); border:1px solid var(--border-dark); padding:6px 12px; border-radius:50px; font-size:12px; font-weight:700; color:var(--text-muted); display:flex; align-items:center; gap:6px;">${t} <span style="cursor:pointer; color:var(--danger); font-size:14px; line-height:1;" onclick="removeCustomTrait('${t}')">×</span> </div>`).join('');
-};
+window.addCustomTrait = () => { const input = document.getElementById('traitInput'); const val = input.value.trim(); if(val && !window.currentProductTraits.includes(val)) { window.currentProductTraits.push(val); input.value = ''; renderCustomTraits(); } };
+window.removeCustomTrait = (trait) => { window.currentProductTraits = window.currentProductTraits.filter(t => t !== trait); renderCustomTraits(); };
+window.renderCustomTraits = () => { const container = document.getElementById('customTraitsContainer'); container.innerHTML = window.currentProductTraits.map(t => `<div style="background:var(--surface); border:1px solid var(--border-dark); padding:6px 12px; border-radius:50px; font-size:12px; font-weight:700; color:var(--text-muted); display:flex; align-items:center; gap:6px;">${t} <span style="cursor:pointer; color:var(--danger); font-size:14px; line-height:1;" onclick="removeCustomTrait('${t}')">×</span> </div>`).join(''); };
 
 // CATALOG LISTING
 window.setCatalogMode = (mode) => {
-    currentCatalogMode = mode;
-    currentCatalogCategory = 'All';
-    document.getElementById('catSearch').value = '';
-    document.getElementById('catBtnResto').classList.remove('active');
-    document.getElementById('catBtnGrocery').classList.remove('active');
+    currentCatalogMode = mode; currentCatalogCategory = 'All'; document.getElementById('catSearch').value = '';
+    document.getElementById('catBtnResto').classList.remove('active'); document.getElementById('catBtnGrocery').classList.remove('active');
     document.getElementById(`catBtn${mode}`).classList.add('active');
-    if(mode === 'Resto') { document.getElementById('catTabBg').style.transform = 'translateX(0)'; }
-    else { document.getElementById('catTabBg').style.transform = 'translateX(100%)'; }
-    renderCatalogTabs();
-    renderCatalog();
+    if(mode === 'Resto') { document.getElementById('catTabBg').style.transform = 'translateX(0)'; } else { document.getElementById('catTabBg').style.transform = 'translateX(100%)'; }
+    renderCatalogTabs(); renderCatalog();
 };
-
 window.filterCatalog = (catName, element) => {
-    currentCatalogCategory = catName;
-    document.querySelectorAll('#catalogCategoryTabs .tab-pill').forEach(t => t.classList.remove('active'));
-    element.classList.add('active');
-    document.getElementById('catSearch').value = '';
-    renderCatalog();
+    currentCatalogCategory = catName; document.querySelectorAll('#catalogCategoryTabs .tab-pill').forEach(t => t.classList.remove('active'));
+    element.classList.add('active'); document.getElementById('catSearch').value = ''; renderCatalog();
     element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 };
-
-window.toggleProductAvailability = async (id, isAvailable) => {
-    try {
-        await updateDoc(doc(db, "products", id), { isAvailable: isAvailable });
-        showToast(isAvailable ? "Item Available" : "Item Hidden");
-    } catch(e) { console.error(e); alert("Network error"); }
-};
-
+window.toggleProductAvailability = async (id, isAvailable) => { try { await updateDoc(doc(db, "products", id), { isAvailable: isAvailable }); showToast(isAvailable ? "Item Available" : "Item Hidden"); } catch(e) { console.error(e); alert("Network error"); } };
 window.renderCatalogTabs = () => {
-    const container = document.getElementById('catalogCategoryTabs');
-    if(!container) return;
-    const activeCats = globalCategoriesData.filter(c => c.type === currentCatalogMode || !c.type);
-    activeCats.sort((a,b) => (b.sortWeight || 0) - (a.sortWeight || 0) || a.name.localeCompare(b.name));
+    const container = document.getElementById('catalogCategoryTabs'); if(!container) return;
+    const activeCats = globalCategoriesData.filter(c => c.type === currentCatalogMode || !c.type); activeCats.sort((a,b) => (b.sortWeight || 0) - (a.sortWeight || 0) || a.name.localeCompare(b.name));
     let html = `<div class="tab-pill ${currentCatalogCategory === 'All' ? 'active' : ''}" onclick="filterCatalog('All', this)">All</div>`; 
-    activeCats.forEach(cat => { 
-        const isActive = currentCatalogCategory === cat.name ? 'active' : ''; 
-        html += `<div class="tab-pill ${isActive}" onclick="filterCatalog('${cat.name}', this)">${cat.name}</div>`;
-    });
+    activeCats.forEach(cat => { const isActive = currentCatalogCategory === cat.name ? 'active' : ''; html += `<div class="tab-pill ${isActive}" onclick="filterCatalog('${cat.name}', this)">${cat.name}</div>`; });
     container.innerHTML = html;
 };
-
 window.renderCatalog = () => {
-    const container = document.getElementById('adminProductListContainer');
-    if(!container) return;
+    const container = document.getElementById('adminProductListContainer'); if(!container) return;
     const searchQuery = document.getElementById('catSearch').value.toLowerCase().trim();
     let filteredProducts = allProducts.filter(p => p.productType === currentCatalogMode);
-    
-    if (currentCatalogCategory !== 'All' && !searchQuery) {
-        filteredProducts = filteredProducts.filter(p => (p.category || "Uncategorized") === currentCatalogCategory);
-    }
-    if (searchQuery) {
-        filteredProducts = filteredProducts.filter(p => p.name.toLowerCase().includes(searchQuery));
-    }
-    filteredProducts.sort((a, b) => {
-        const weightA = a.sortWeight || 0; const weightB = b.sortWeight || 0;
-        if (weightB !== weightA) return weightB - weightA;
-        return (a.name || "").localeCompare(b.name || "");
-    });
-
+    if (currentCatalogCategory !== 'All' && !searchQuery) { filteredProducts = filteredProducts.filter(p => (p.category || "Uncategorized") === currentCatalogCategory); }
+    if (searchQuery) { filteredProducts = filteredProducts.filter(p => p.name.toLowerCase().includes(searchQuery)); }
+    filteredProducts.sort((a, b) => { const weightA = a.sortWeight || 0; const weightB = b.sortWeight || 0; if (weightB !== weightA) return weightB - weightA; return (a.name || "").localeCompare(b.name || ""); });
     document.getElementById('prodCountText').innerText = `${filteredProducts.length} items • Updated just now`;
-
-    if(filteredProducts.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:14px; font-weight:700; text-transform:uppercase;">No items found.</div>`;
-        return;
-    }
+    if(filteredProducts.length === 0) { container.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:14px; font-weight:700; text-transform:uppercase;">No items found.</div>`; return; }
 
     const cardsHtml = filteredProducts.map(p => {
         const price = p.promoPrice ? p.promoPrice : p.sellPrice;
@@ -1041,10 +975,7 @@ window.renderCatalog = () => {
         <div class="cat-list-item"> 
             <div class="cat-list-top"> 
                 <div class="cat-list-img">${imgTag}</div>
-                <div class="cat-list-info">
-                    <h4>${p.name}</h4>
-                    <p>${formatPrice(price)} DH</p>
-                </div>
+                <div class="cat-list-info"><h4>${p.name}</h4><p>${formatPrice(price)} DH</p></div>
             </div>
             <div class="cat-list-bottom">
                 <label class="switch" style="transform: scale(0.85); transform-origin: left;"><input type="checkbox" ${p.isAvailable !== false ? 'checked' : ''} onchange="toggleProductAvailability('${p.id}', this.checked)"><span class="slider"></span></label>
@@ -1059,15 +990,22 @@ window.renderCatalog = () => {
     container.innerHTML = `<div class="catalog-list">${cardsHtml}</div>`;
 };
 
+// ==========================================
+// ADD / EDIT / DUPLICATE ITEM
+// ==========================================
 window.prepareAddProduct = () => {
     currentEditProductId = null; document.getElementById('wizardTitle').innerText = "Add Item";
     document.querySelectorAll('#view-ajouter input').forEach(i => { if(i.type !== 'checkbox' && i.type !== 'radio') i.value = '' });
-    document.getElementById('previewImg').style.display = 'none';
-    document.getElementById('pDesc').value = '';
-    selectProductType('Resto');
-    document.getElementById('pBadge').value = 'Standard';
-    document.getElementById('pSortWeight').value = '';
+    document.getElementById('previewImg').style.display = 'none'; document.getElementById('pDesc').value = '';
+    selectProductType('Resto'); document.getElementById('pBadge').value = 'Standard'; document.getElementById('pSortWeight').value = '';
     window.currentProductTraits = []; renderCustomTraits();
+    
+    // Reset Toggles
+    document.getElementById('tglTimeLimit').checked = false; document.getElementById('cfgTimeLimit').style.display = 'none';
+    document.getElementById('pStartTime').value = ''; document.getElementById('pEndTime').value = '';
+    document.getElementById('tglDayLimit').checked = false; document.getElementById('cfgDayLimit').style.display = 'none';
+    document.querySelectorAll('.day-check').forEach(cb => cb.checked = false);
+    
     document.getElementById('tglPromo').checked = false; document.getElementById('cfgPromo').style.display = 'none';
     window.optionGroups = []; renderOptionGroups();
     document.getElementById('tglAvailable').checked = true;
@@ -1078,38 +1016,37 @@ window.editProduct = (id) => {
     event.stopPropagation();
     const p = allProducts.find(x => x.id === id); if(!p) return;
     currentEditProductId = id; document.getElementById('wizardTitle').innerText = "Edit Item";
-    document.getElementById('pName').value = p.name || '';
-    document.getElementById('pSubtitle').value = p.subtitle || '';
+    document.getElementById('pName').value = p.name || ''; document.getElementById('pSubtitle').value = p.subtitle || '';
     selectProductType(p.productType || 'Resto');
-    
     setTimeout(() => { document.getElementById('pCat').value = p.category || ''; window.loadSubCats(); setTimeout(() => document.getElementById('pSubCat').value = p.subCategory || '', 50); }, 50);
     
     document.getElementById('pImg').value = p.imageUrl || '';
-    if(p.imageUrl) { document.getElementById('previewImg').src = p.imageUrl; document.getElementById('previewImg').style.display = 'block'; }
-    else { document.getElementById('previewImg').style.display = 'none'; }
+    if(p.imageUrl) { document.getElementById('previewImg').src = p.imageUrl; document.getElementById('previewImg').style.display = 'block'; } else { document.getElementById('previewImg').style.display = 'none'; }
     
-    document.getElementById('pSell').value = p.sellPrice || '';
-    document.getElementById('pCost').value = p.costPrice || '';
-    document.getElementById('pBadge').value = p.badge || 'Standard';
-    document.getElementById('pSortWeight').value = p.sortWeight || '';
-    
+    document.getElementById('pSell').value = p.sellPrice || ''; document.getElementById('pCost').value = p.costPrice || '';
+    document.getElementById('pBadge').value = p.badge || 'Standard'; document.getElementById('pSortWeight').value = p.sortWeight || '';
     window.currentProductTraits = p.traits ? JSON.parse(JSON.stringify(p.traits)) : []; renderCustomTraits();
     
+    // Load Toggles
+    const hasTime = !!(p.startTime && p.endTime);
+    document.getElementById('tglTimeLimit').checked = hasTime; document.getElementById('cfgTimeLimit').style.display = hasTime ? 'block' : 'none';
+    document.getElementById('pStartTime').value = hasTime ? p.startTime : ''; document.getElementById('pEndTime').value = hasTime ? p.endTime : '';
+    
+    const hasDays = p.daysAvailable && p.daysAvailable.length > 0;
+    document.getElementById('tglDayLimit').checked = hasDays; document.getElementById('cfgDayLimit').style.display = hasDays ? 'block' : 'none';
+    document.querySelectorAll('.day-check').forEach(cb => { cb.checked = hasDays ? p.daysAvailable.includes(parseInt(cb.value)) : false; });
+
     document.getElementById('tglPromo').checked = (p.promoPrice !== null && p.promoPrice !== undefined);
     document.getElementById('cfgPromo').style.display = document.getElementById('tglPromo').checked ? 'block' : 'none';
     document.getElementById('vPromoPrice').value = p.promoPrice || '';
     
     window.optionGroups = p.optionGroups ? JSON.parse(JSON.stringify(p.optionGroups)) : []; renderOptionGroups();
-    document.getElementById('tglAvailable').checked = p.isAvailable !== false;
-    document.getElementById('pDesc').value = p.description || '';
-    
+    document.getElementById('tglAvailable').checked = p.isAvailable !== false; document.getElementById('pDesc').value = p.description || '';
     switchTab('ajouter'); goToStep(1); window.validateStep1(); window.validateStep2();
 };
 
 window.duplicateProduct = (id) => {
-    event.stopPropagation();
-    window.editProduct(id);
-    currentEditProductId = null;
+    event.stopPropagation(); window.editProduct(id); currentEditProductId = null;
     document.getElementById('wizardTitle').innerText = "Duplicate Item";
     document.getElementById('pName').value = document.getElementById('pName').value + " (Copy)";
     showToast("Item data copied! Ready to save as new.");
@@ -1118,29 +1055,22 @@ window.duplicateProduct = (id) => {
 window.saveProductData = async () => {
     const badgeType = document.getElementById('pBadge').value;
     let weight = parseInt(document.getElementById('pSortWeight').value);
-    if(isNaN(weight)) {
-        weight = 0;
-        if(badgeType === 'Vedette') weight = 100;
-        else if(badgeType === 'Top Vente') weight = 95;
-        else if(badgeType === 'Nouveau') weight = 90;
-        else if(badgeType === 'Promo') weight = 85;
-    }
+    if(isNaN(weight)) { weight = 0; if(badgeType === 'Vedette') weight = 100; else if(badgeType === 'Top Vente') weight = 95; else if(badgeType === 'Nouveau') weight = 90; else if(badgeType === 'Promo') weight = 85; else if(badgeType === 'Combo Pack') weight = 80; }
+    
+    let sTime = null, eTime = null;
+    if(document.getElementById('tglTimeLimit').checked) { sTime = document.getElementById('pStartTime').value || null; eTime = document.getElementById('pEndTime').value || null; }
+    
+    let dAvail = [];
+    if(document.getElementById('tglDayLimit').checked) { dAvail = Array.from(document.querySelectorAll('.day-check:checked')).map(cb => parseInt(cb.value)); }
+
     const data = {
-        name: document.getElementById('pName').value,
-        subtitle: document.getElementById('pSubtitle').value,
-        productType: selectedProductType,
-        category: document.getElementById('pCat').value || "Uncategorized",
-        subCategory: document.getElementById('pSubCat').value || "",
-        sellPrice: parseFloat(document.getElementById('pSell').value) || 0,
-        costPrice: parseFloat(document.getElementById('pCost').value) || 0,
-        imageUrl: document.getElementById('pImg').value,
-        badge: badgeType,
-        sortWeight: weight,
-        traits: window.currentProductTraits,
+        name: document.getElementById('pName').value, subtitle: document.getElementById('pSubtitle').value, productType: selectedProductType,
+        category: document.getElementById('pCat').value || "Uncategorized", subCategory: document.getElementById('pSubCat').value || "",
+        sellPrice: parseFloat(document.getElementById('pSell').value) || 0, costPrice: parseFloat(document.getElementById('pCost').value) || 0,
+        imageUrl: document.getElementById('pImg').value, badge: badgeType, sortWeight: weight, traits: window.currentProductTraits,
+        startTime: sTime, endTime: eTime, daysAvailable: dAvail,
         promoPrice: document.getElementById('tglPromo').checked ? (parseFloat(document.getElementById('vPromoPrice').value) || null) : null,
-        optionGroups: window.optionGroups,
-        isAvailable: document.getElementById('tglAvailable').checked,
-        description: document.getElementById('pDesc').value
+        optionGroups: window.optionGroups, isAvailable: document.getElementById('tglAvailable').checked, description: document.getElementById('pDesc').value
     };
 
     if(!data.name || !data.category) return showToast("Please fill in basic info.");
@@ -1152,8 +1082,7 @@ window.saveProductData = async () => {
 };
 
 window.promptDeleteProduct = (id) => {
-    event.stopPropagation();
-    document.getElementById('modalTitle').innerText = "Delete Item"; document.getElementById('modalMsg').innerText = "This action is irreversible. Confirm?";
+    event.stopPropagation(); document.getElementById('modalTitle').innerText = "Delete Item"; document.getElementById('modalMsg').innerText = "This action is irreversible. Confirm?";
     const btn = document.getElementById('modalConfirmBtn'); btn.style.background = 'var(--danger)'; btn.style.border = 'none';
     window.confirmActionCallback = async () => { closeModals(); await deleteDoc(doc(db, "products", id)); showToast("Item deleted"); }; 
     document.getElementById('confirmOverlay').classList.add('active');
@@ -1165,4 +1094,3 @@ document.getElementById('modalConfirmBtn').addEventListener('click', () => { if(
 </script>
 </body>
 </html>
-
