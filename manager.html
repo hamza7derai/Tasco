@@ -70,11 +70,6 @@ input:checked + .slider { background-color: var(--accent); }
 input:checked + .slider:before { transform: translateX(18px); }
 
 /* TABS */
-.tabs-toggle { position: relative; display: flex; background: var(--surface); border-radius: 50px; padding: 6px; border: 1px solid var(--border); margin-bottom: 24px; box-shadow: var(--shadow-sm); z-index: 1;}
-.tab-bg { position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc(50% - 6px); background: var(--primary); border-radius: 50px; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); z-index: -1; box-shadow: 0 4px 12px rgba(255, 90, 0, 0.25);}
-.tab-btn { flex: 1; padding: 12px; text-align: center; font-size: 14px; font-weight: 700; border-radius: 50px; color: var(--text-muted); transition: color 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;}
-.tab-btn.active { color: white; font-weight: 800;}
-
 .tabs-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -20px 20px; padding: 0 20px; position: relative; z-index: 10; scroll-behavior: smooth; scroll-snap-type: x mandatory;}
 .tabs-scroll::-webkit-scrollbar { display: none; }
 .tab-pill { padding: 10px 18px; border-radius: 50px; font-size: 13px; font-weight: 700; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); white-space: nowrap; cursor: pointer; transition: 0.2s; scroll-snap-align: center; text-transform: uppercase; letter-spacing: 0.5px;}
@@ -118,20 +113,6 @@ input:checked + .slider:before { transform: translateX(18px); }
 .upload-card:hover { border-color: var(--primary); background: var(--primary-light); }
 .upload-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--primary-light); display: flex; align-items: center; justify-content: center; color: var(--primary); }
 .upload-card h5 { font-size: 13px; font-weight: 800; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px;}
-
-.type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-.type-card { border: 2px solid var(--border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: 0.2s; background: var(--surface); text-align: center; position: relative;}
-.type-icon { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
-.type-card h5 { font-size: 15px; font-weight: 800; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px;}
-.radio-dot { position: absolute; top: 12px; right: 12px; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; background: white;}
-.type-card.tc-resto.active { border-color: var(--primary); background: var(--primary-light); }
-.type-card.tc-resto.active .type-icon { color: var(--primary); }
-.type-card.tc-resto.active .radio-dot { border-color: var(--primary); background: var(--primary); }
-.type-card.tc-resto.active .radio-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: white; }
-.type-card.tc-grocery.active { border-color: var(--accent); background: var(--accent-light); }
-.type-card.tc-grocery.active .type-icon { color: var(--accent); }
-.type-card.tc-grocery.active .radio-dot { border-color: var(--accent); background: var(--accent); }
-.type-card.tc-grocery.active .radio-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: white; }
 
 .form-group { margin-bottom: 20px; }
 .form-group label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
@@ -193,21 +174,6 @@ input:checked + .slider:before { transform: translateX(18px); }
 
     <div class="section-title">App Configuration</div>
     <div class="card" style="padding:0; overflow:hidden; margin-bottom: 24px;">
-        
-        <div style="padding:16px; border-bottom:1px solid var(--border);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <div style="font-size:13px; font-weight:800; text-transform:uppercase; display:flex; align-items:center; gap:6px;">
-                    <svg viewBox="0 0 24 24" style="width:16px; color:var(--primary);"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-                    Live Announcement
-                </div>
-                <label class="switch"><input type="checkbox" id="tglAnnounce"><span class="slider"></span></label>
-            </div>
-            <div style="display:flex; gap:8px;">
-                <input type="text" id="announceText" class="form-control" placeholder="E.g. Free delivery tonight!" style="font-size:13px;">
-                <button class="btn btn-primary" style="width:auto; padding:0 20px; font-size:13px;" onclick="saveAnnouncement()">Save</button>
-            </div>
-        </div>
-
         <div style="padding:16px;">
             <div style="font-size:13px; font-weight:800; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
                 <svg viewBox="0 0 24 24" style="width:16px; color:var(--primary);"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
@@ -223,7 +189,7 @@ input:checked + .slider:before { transform: translateX(18px); }
                     <input type="number" id="inpPerKm" class="form-control" placeholder="Ex: 3" style="font-size:13px;">
                 </div>
             </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:16px;">
                 <div class="form-group" style="margin-bottom:0;">
                     <label>Max Radius (KM)</label>
                     <input type="number" id="inpMaxRadius" class="form-control" placeholder="Ex: 15" style="font-size:13px;">
@@ -231,12 +197,6 @@ input:checked + .slider:before { transform: translateX(18px); }
                  <div class="form-group" style="margin-bottom:0;">
                     <label>Origin (Lat, Lng)</label>
                     <input type="text" id="inpOrigin" class="form-control" placeholder="Ex: 31.62, -7.98" style="font-size:13px;">
-                </div>
-            </div>
-            <div style="display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:16px;">
-                <div class="form-group" style="margin-bottom:0; background: var(--accent-light); padding: 12px; border-radius: 12px; border: 1px dashed var(--accent);">
-                    <label style="color: var(--accent);">Free Delivery Threshold (DH)</label>
-                    <input type="number" id="inpFreeDelThreshold" class="form-control" placeholder="Ex: 250 (Leave 0 for none)" style="font-size:13px; border-color: transparent;">
                 </div>
             </div>
             <button class="btn btn-outline" style="width:100%; padding:14px; font-size:13px;" onclick="saveDeliverySettings()">Save Settings</button>
@@ -259,7 +219,8 @@ input:checked + .slider:before { transform: translateX(18px); }
                 </select>
                 <input type="number" id="inpPromoLimit" class="form-control" placeholder="Uses (0=any)" style="font-size:12px;">
             </div>
-            <button class="btn btn-outline" style="width:100%; padding:14px; font-size:13px;" onclick="addPromo(event)">Create Promo Code</button>
+            <button class="btn btn-outline" style="width:100%; padding:14px; font-size:13px;" onclick="addPromo()">Create Promo Code</button>
+            
             <div id="promoListContainer" style="display:flex; flex-direction:column; gap:10px; margin-top: 24px;"></div>
         </div>
     </div>
@@ -271,12 +232,6 @@ input:checked + .slider:before { transform: translateX(18px); }
             <h1>CATALOG</h1>
             <p id="prodCountText">0 items • Updated just now</p>
         </div>
-    </div>
-
-    <div class="tabs-toggle" style="margin-bottom: 16px;">
-        <div class="tab-bg" id="catTabBg"></div>
-        <div class="tab-btn active" id="catBtnResto" onclick="setCatalogMode('Resto')">Resto (Food)</div>
-        <div class="tab-btn" id="catBtnGrocery" onclick="setCatalogMode('Grocery')">Grocery</div>
     </div>
 
     <div style="margin-bottom: 20px; position: relative;">
@@ -346,20 +301,6 @@ input:checked + .slider:before { transform: translateX(18px); }
             <div class="form-group" style="margin-bottom: 32px;">
                 <label>Short Subtitle <span style="color:var(--text-muted); font-weight:600; text-transform:none;">(optional)</span></label>
                 <input type="text" id="pSubtitle" class="form-control" placeholder="Ex: Spicy · Cheese · Bestseller" maxlength="80">
-            </div>
-
-            <div class="form-group">
-                <label>Product Type *</label>
-                <div class="type-grid">
-                    <div class="type-card tc-resto active" id="typeCardResto" onclick="selectProductType('Resto')">
-                        <div class="type-icon"><svg viewBox="0 0 24 24" style="width:28px; height:28px;"><path d="M17.66 11.2C17.43 10.9 17.15 10.64 16.89 10.38C16.22 9.78 15.46 9.35 14.82 8.72C13.33 7.26 13.07 4.8 14.56 3.11C14.72 2.93 14.57 2.66 14.33 2.7C13.25 2.89 12.06 3.46 11.23 4.29C9.17 6.36 9.07 9.87 10.73 12.06C10.87 12.24 10.64 12.47 10.45 12.33C9.4 11.59 8.87 10.23 9.04 8.93C9.07 8.68 8.77 8.52 8.6 8.7C7.45 9.84 6.75 11.55 7.03 13.33C7.4 15.65 9.02 17.5 11.24 18.23C13.56 18.99 16.27 18.35 17.84 16.39C19.11 14.81 18.9 12.63 17.66 11.2Z"></path></svg></div>
-                        <h5>Resto</h5><div class="radio-dot"></div>
-                    </div>
-                    <div class="type-card tc-grocery" id="typeCardGrocery" onclick="selectProductType('Grocery')">
-                        <div class="type-icon"><svg viewBox="0 0 24 24" style="width:28px; height:28px;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></div>
-                        <h5>Grocery</h5><div class="radio-dot"></div>
-                    </div>
-                </div>
             </div>
 
             <div class="form-group">
@@ -548,7 +489,7 @@ input:checked + .slider:before { transform: translateX(18px); }
 
 <div class="overlay" id="addCatOverlay" onclick="if(event.target===this) closeModals()"></div>
 <div class="bottom-sheet" id="addCatModal">
-    <div class="sheet-handle"></div><h2 style="font-size: 18px; font-weight:800; margin-bottom:20px; text-transform:uppercase; letter-spacing:0.5px;" id="catModalTitle">Add</h2>
+    <div class="sheet-handle"></div><h2 style="font-size: 18px; font-weight:800; margin-bottom:20px; text-transform:uppercase; letter-spacing:0.5px;" id="catModalTitle">Add Category</h2>
     <div class="form-group" style="display:flex; gap:8px;">
         <input type="text" id="newCatIcon" class="form-control" style="width:60px; text-align:center;" placeholder="🍔">
         <input type="text" id="newCatInput" class="form-control" placeholder="Category name..." autofocus>
@@ -600,9 +541,9 @@ window.logoutAdmin = async () => {
 
 // GLOBAL STATE
 let allProducts = [], globalCategoriesData = [], allPromos = [];
-let currentCatalogMode = 'Resto', currentCatalogCategory = 'All', currentEditProductId = null;
+let currentCatalogCategory = 'All', currentEditProductId = null;
 let currentCatAddingType = '';
-let selectedProductType = 'Resto';
+let selectedProductType = 'Resto'; // Hardcoded exclusively to Resto
 const formatPrice = (num) => { const p = Number(num); return p % 1 === 0 ? p.toString() : p.toFixed(2); };
 
 window.optionGroups = [];
@@ -625,22 +566,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// SETTINGS (ANNOUNCEMENTS, DISTANCE, PROMOS)
+// SETTINGS (DISTANCE, PROMOS)
 // ==========================================
-
-// Announcements
-onSnapshot(doc(db, "settings", "announcement"), snap => {
-    if(snap.exists()) {
-        document.getElementById('announceText').value = snap.data().text || '';
-        document.getElementById('tglAnnounce').checked = snap.data().isVisible === true;
-    }
-});
-window.saveAnnouncement = async () => {
-    try {
-        await setDoc(doc(db, "settings", "announcement"), { text: document.getElementById('announceText').value.trim(), isVisible: document.getElementById('tglAnnounce').checked }, { merge: true });
-        showToast("Announcement saved!");
-    } catch(e) { console.error(e); alert("Error saving announcement."); }
-};
 
 // Distance-Based Delivery Configuration
 onSnapshot(doc(db, "settings", "delivery"), snap => {
@@ -650,7 +577,6 @@ onSnapshot(doc(db, "settings", "delivery"), snap => {
         document.getElementById('inpPerKm').value = d.perKmFee || '';
         document.getElementById('inpMaxRadius').value = d.maxRadius || '';
         document.getElementById('inpOrigin').value = d.origin || '';
-        document.getElementById('inpFreeDelThreshold').value = d.freeDeliveryThreshold || '';
     }
 });
 
@@ -660,7 +586,6 @@ window.saveDeliverySettings = async () => {
             baseFee: parseFloat(document.getElementById('inpBaseFee').value) || 0,
             perKmFee: parseFloat(document.getElementById('inpPerKm').value) || 0,
             maxRadius: parseFloat(document.getElementById('inpMaxRadius').value) || 0,
-            freeDeliveryThreshold: parseFloat(document.getElementById('inpFreeDelThreshold').value) || 0,
             origin: document.getElementById('inpOrigin').value.trim()
         }, { merge: true });
         showToast("Delivery configuration saved!");
@@ -672,6 +597,7 @@ onSnapshot(collection(db, "promos"), snap => {
     allPromos = snap.docs.map(d => ({id: d.id, ...d.data()}));
     renderPromos();
 });
+
 function renderPromos() {
     const container = document.getElementById('promoListContainer');
     if(allPromos.length === 0) {
@@ -693,21 +619,38 @@ function renderPromos() {
         </div>`;
     }).join('');
 }
-window.addPromo = async (e) => {
+
+window.addPromo = async () => {
     const code = document.getElementById('inpPromoCode').value.trim().toUpperCase();
     const value = parseFloat(document.getElementById('inpPromoValue').value) || 0;
     const type = document.getElementById('inpPromoType').value;
     const limit = parseInt(document.getElementById('inpPromoLimit').value) || 0;
-    if(!code || value <= 0) return showToast("Enter a valid code and value.");
     
-    const btn = e.currentTarget;
-    btn.innerText = '...'; btn.disabled = true;
+    if(!code || value <= 0) {
+        showToast("Enter a valid code and value.");
+        return;
+    }
+    
     try {
-        await addDoc(collection(db, "promos"), { code, value, type, maxUses: limit, timesUsed: 0, active: true });
-        document.getElementById('inpPromoCode').value = ''; document.getElementById('inpPromoValue').value = ''; document.getElementById('inpPromoLimit').value = '';
+        await addDoc(collection(db, "promos"), { 
+            code: code, 
+            value: value, 
+            type: type, 
+            maxUses: limit, 
+            timesUsed: 0, 
+            active: true 
+        });
+        
+        document.getElementById('inpPromoCode').value = ''; 
+        document.getElementById('inpPromoValue').value = ''; 
+        document.getElementById('inpPromoLimit').value = '';
         showToast("Promo Code created!");
-    } catch(e) { console.error(e); } finally { btn.innerText = 'Create Promo Code'; btn.disabled = false; }
+    } catch(e) { 
+        console.error(e); 
+        showToast("Error creating promo.");
+    } 
 };
+
 window.deletePromo = async (id) => {
     if(confirm("Delete this promo code?")) { await deleteDoc(doc(db, "promos", id)); showToast("Promo code deleted."); }
 };
@@ -731,8 +674,10 @@ window.openCatManager = () => {
     document.body.classList.add('modal-open'); renderCatManagerList();
     document.getElementById('catManagerOverlay').classList.add('active'); document.getElementById('catManagerModal').classList.add('active');
 };
+
 window.renderCatManagerList = () => {
-    const activeCats = globalCategoriesData.filter(c => c.type === currentCatalogMode || !c.type);
+    // Only display Resto or generic categories
+    const activeCats = globalCategoriesData.filter(c => c.type === 'Resto' || !c.type);
     activeCats.sort((a,b) => (b.sortWeight || 0) - (a.sortWeight || 0) || a.name.localeCompare(b.name));
     let html = '';
     if(activeCats.length === 0) { html = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">No categories found.</div>`; } 
@@ -788,13 +733,6 @@ window.deleteCategoryDb = async (id) => {
 };
 
 // CATALOG LISTING & DEEP LINK
-window.setCatalogMode = (mode) => {
-    currentCatalogMode = mode; currentCatalogCategory = 'All'; document.getElementById('catSearch').value = '';
-    document.getElementById('catBtnResto').classList.remove('active'); document.getElementById('catBtnGrocery').classList.remove('active');
-    document.getElementById(`catBtn${mode}`).classList.add('active');
-    if(mode === 'Resto') { document.getElementById('catTabBg').style.transform = 'translateX(0)'; } else { document.getElementById('catTabBg').style.transform = 'translateX(100%)'; }
-    renderCatalogTabs(); renderCatalog();
-};
 window.filterCatalog = (catName, element) => {
     currentCatalogCategory = catName; document.querySelectorAll('#catalogCategoryTabs .tab-pill').forEach(t => t.classList.remove('active'));
     element.classList.add('active'); document.getElementById('catSearch').value = ''; renderCatalog();
@@ -812,7 +750,8 @@ window.copyDeepLink = (id) => {
 
 window.renderCatalogTabs = () => {
     const container = document.getElementById('catalogCategoryTabs'); if(!container) return;
-    const activeCats = globalCategoriesData.filter(c => c.type === currentCatalogMode || !c.type); activeCats.sort((a,b) => (b.sortWeight || 0) - (a.sortWeight || 0) || a.name.localeCompare(b.name));
+    const activeCats = globalCategoriesData.filter(c => c.type === 'Resto' || !c.type); 
+    activeCats.sort((a,b) => (b.sortWeight || 0) - (a.sortWeight || 0) || a.name.localeCompare(b.name));
     let html = `<div class="tab-pill ${currentCatalogCategory === 'All' ? 'active' : ''}" onclick="filterCatalog('All', this)">All</div>`; 
     activeCats.forEach(cat => { const isActive = currentCatalogCategory === cat.name ? 'active' : ''; html += `<div class="tab-pill ${isActive}" onclick="filterCatalog('${cat.name}', this)">${cat.name}</div>`; });
     container.innerHTML = html;
@@ -822,7 +761,10 @@ window.renderCatalogTabs = () => {
 window.renderCatalog = () => {
     const container = document.getElementById('adminProductListContainer'); if(!container) return;
     const searchQuery = document.getElementById('catSearch').value.toLowerCase().trim();
-    let filteredProducts = allProducts.filter(p => p.productType === currentCatalogMode);
+    
+    // Only fetch Resto products
+    let filteredProducts = allProducts.filter(p => p.productType === 'Resto' || !p.productType);
+    
     if (currentCatalogCategory !== 'All' && !searchQuery) { filteredProducts = filteredProducts.filter(p => (p.category || "Uncategorized") === currentCatalogCategory); }
     if (searchQuery) { filteredProducts = filteredProducts.filter(p => p.name.toLowerCase().includes(searchQuery)); }
     filteredProducts.sort((a, b) => { const weightA = a.sortWeight || 0; const weightB = b.sortWeight || 0; if (weightB !== weightA) return weightB - weightA; return (a.name || "").localeCompare(b.name || ""); });
@@ -867,13 +809,6 @@ window.renderCatalog = () => {
 // ==========================================
 // WIZARD LOGIC (ADD/EDIT ITEM)
 // ==========================================
-window.selectProductType = (type) => {
-    selectedProductType = type;
-    const cardR = document.getElementById('typeCardResto'); const cardG = document.getElementById('typeCardGrocery');
-    if(cardR) cardR.classList.remove('active'); if(cardG) cardG.classList.remove('active');
-    const target = document.getElementById(`typeCard${type}`); if(target) target.classList.add('active'); 
-    loadMainCats(); validateStep1();
-};
 window.previewWizardImg = () => { const url = document.getElementById('pImg').value; const imgEl = document.getElementById('previewImg'); if(url) { imgEl.src = url; imgEl.style.display = 'block'; } else { imgEl.style.display = 'none'; } }
 window.validateStep1 = () => { const name = document.getElementById('pName').value.trim(); const cat = document.getElementById('pCat').value; const btn = document.getElementById('btnNext1'); if(name && cat) { btn.disabled = false; } else { btn.disabled = true; } };
 window.validateStep2 = () => { const sell = document.getElementById('pSell').value; const btn = document.getElementById('btnNext2'); if(sell !== "") { btn.disabled = false; } else { btn.disabled = true; } };
@@ -933,11 +868,11 @@ window.updateItemField = (gid, idx, field, val) => { const item = window.optionG
 window.removeGroup = (id) => { window.optionGroups = window.optionGroups.filter(g => g.id !== id); renderOptionGroups(); };
 window.removeItem = (gid, idx) => { window.optionGroups.find(g => g.id === gid).items.splice(idx, 1); renderOptionGroups(); };
 
-window.loadMainCats = () => { const filteredCats = globalCategoriesData.filter(c => c.type === selectedProductType || !c.type); const currentSelected = document.getElementById('pCat').value; document.getElementById('pCat').innerHTML = '<option value="">Select category</option>' + filteredCats.map(c => `<option value="${c.name}">${c.name}</option>`).join(''); if(currentSelected && filteredCats.find(c => c.name === currentSelected)) { document.getElementById('pCat').value = currentSelected; } else { document.getElementById('pCat').value = ''; } loadSubCats(); };
+window.loadMainCats = () => { const filteredCats = globalCategoriesData.filter(c => c.type === 'Resto' || !c.type); const currentSelected = document.getElementById('pCat').value; document.getElementById('pCat').innerHTML = '<option value="">Select category</option>' + filteredCats.map(c => `<option value="${c.name}">${c.name}</option>`).join(''); if(currentSelected && filteredCats.find(c => c.name === currentSelected)) { document.getElementById('pCat').value = currentSelected; } else { document.getElementById('pCat').value = ''; } loadSubCats(); };
 window.loadSubCats = () => { const main = document.getElementById('pCat').value; const subEl = document.getElementById('pSubCat'); const catDoc = globalCategoriesData.find(c => c.name === main); if(catDoc && catDoc.subcategories && catDoc.subcategories.length > 0) { subEl.innerHTML = '<option value="">Select subcategory</option>' + catDoc.subcategories.map(s => `<option value="${s}">${s}</option>`).join(''); } else { subEl.innerHTML = '<option value="">No subcategories</option>'; } };
-window.openAddCategoryModal = (type) => { currentCatAddingType = type; if(type === 'main') { document.getElementById('catModalTitle').innerText = `New ${selectedProductType} Category`; } else { const mainCat = document.getElementById('pCat').value; if(!mainCat) return showToast("Select a main category first."); document.getElementById('catModalTitle').innerText = `New Subcategory for '${mainCat}'`; } document.getElementById('newCatInput').value = ''; document.getElementById('newCatIcon').value = ''; document.getElementById('addCatOverlay').classList.add('active'); document.getElementById('addCatModal').classList.add('active'); setTimeout(() => document.getElementById('newCatInput').focus(), 100); };
+window.openAddCategoryModal = (type) => { currentCatAddingType = type; if(type === 'main') { document.getElementById('catModalTitle').innerText = `New Category`; } else { const mainCat = document.getElementById('pCat').value; if(!mainCat) return showToast("Select a main category first."); document.getElementById('catModalTitle').innerText = `New Subcategory for '${mainCat}'`; } document.getElementById('newCatInput').value = ''; document.getElementById('newCatIcon').value = ''; document.getElementById('addCatOverlay').classList.add('active'); document.getElementById('addCatModal').classList.add('active'); setTimeout(() => document.getElementById('newCatInput').focus(), 100); };
 window.closeModals = () => { document.body.classList.remove('modal-open'); document.getElementById('confirmOverlay').classList.remove('active'); document.getElementById('addCatOverlay').classList.remove('active'); document.getElementById('addCatModal').classList.remove('active'); document.getElementById('catManagerOverlay').classList.remove('active'); document.getElementById('catManagerModal').classList.remove('active'); };
-document.getElementById('btnSaveCategory').addEventListener('click', async () => { const val = document.getElementById('newCatInput').value.trim(); const iconVal = document.getElementById('newCatIcon').value.trim(); if(!val) return; const btn = document.getElementById('btnSaveCategory'); btn.innerText = '...'; btn.disabled = true; try { if(currentCatAddingType === 'main') { if(!globalCategoriesData.find(c => c.name.toLowerCase() === val.toLowerCase())) { await addDoc(collection(db, "categories"), { name: val, icon: iconVal, subcategories: [], type: selectedProductType, sortWeight: 0 }); showToast("Category created!"); } else { showToast("Category already exists!"); } } else { const mainCatName = document.getElementById('pCat').value; const catDoc = globalCategoriesData.find(c => c.name === mainCatName); if(catDoc) { let subs = catDoc.subcategories || []; if(!subs.includes(val)) { subs.push(val); await updateDoc(doc(db, "categories", catDoc.id), { subcategories: subs }); showToast("Subcategory added!"); document.getElementById('pSubCat').innerHTML += `<option value="${val}">${val}</option>`; document.getElementById('pSubCat').value = val; } else { showToast("Subcategory already exists!"); } } } closeModals(); } catch (e) { console.error(e); showToast("Error connecting."); } finally { btn.innerText = 'Add'; btn.disabled = false; } });
+document.getElementById('btnSaveCategory').addEventListener('click', async () => { const val = document.getElementById('newCatInput').value.trim(); const iconVal = document.getElementById('newCatIcon').value.trim(); if(!val) return; const btn = document.getElementById('btnSaveCategory'); btn.innerText = '...'; btn.disabled = true; try { if(currentCatAddingType === 'main') { if(!globalCategoriesData.find(c => c.name.toLowerCase() === val.toLowerCase())) { await addDoc(collection(db, "categories"), { name: val, icon: iconVal, subcategories: [], type: 'Resto', sortWeight: 0 }); showToast("Category created!"); } else { showToast("Category already exists!"); } } else { const mainCatName = document.getElementById('pCat').value; const catDoc = globalCategoriesData.find(c => c.name === mainCatName); if(catDoc) { let subs = catDoc.subcategories || []; if(!subs.includes(val)) { subs.push(val); await updateDoc(doc(db, "categories", catDoc.id), { subcategories: subs }); showToast("Subcategory added!"); document.getElementById('pSubCat').innerHTML += `<option value="${val}">${val}</option>`; document.getElementById('pSubCat').value = val; } else { showToast("Subcategory already exists!"); } } } closeModals(); } catch (e) { console.error(e); showToast("Error connecting."); } finally { btn.innerText = 'Add'; btn.disabled = false; } });
 
 window.currentProductTraits = []; window.addCustomTrait = () => { const input = document.getElementById('traitInput'); const val = input.value.trim(); if(val && !window.currentProductTraits.includes(val)) { window.currentProductTraits.push(val); input.value = ''; renderCustomTraits(); } }; window.removeCustomTrait = (trait) => { window.currentProductTraits = window.currentProductTraits.filter(t => t !== trait); renderCustomTraits(); }; window.renderCustomTraits = () => { const container = document.getElementById('customTraitsContainer'); container.innerHTML = window.currentProductTraits.map(t => `<div style="background:var(--surface); border:1px solid var(--border-dark); padding:6px 12px; border-radius:50px; font-size:12px; font-weight:700; color:var(--text-muted); display:flex; align-items:center; gap:6px;">${t} <span style="cursor:pointer; color:var(--danger); font-size:14px; line-height:1;" onclick="removeCustomTrait('${t}')">×</span> </div>`).join(''); };
 
@@ -946,14 +881,12 @@ window.prepareAddProduct = () => {
     document.querySelectorAll('#view-ajouter input').forEach(i => { if(i.type !== 'checkbox' && i.type !== 'radio') i.value = '' });
     document.getElementById('previewImg').style.display = 'none'; document.getElementById('pDesc').value = '';
     
-    // Default standard values
     document.getElementById('pBadge').value = 'Standard'; document.getElementById('pSortWeight').value = '';
     window.currentProductTraits = []; renderCustomTraits();
     document.getElementById('tglTimeLimit').checked = false; document.getElementById('cfgTimeLimit').style.display = 'none'; document.getElementById('pStartTime').value = ''; document.getElementById('pEndTime').value = '';
     document.getElementById('tglDayLimit').checked = false; document.getElementById('cfgDayLimit').style.display = 'none'; document.querySelectorAll('.day-check').forEach(cb => cb.checked = false);
     document.getElementById('tglPromo').checked = false; document.getElementById('cfgPromo').style.display = 'none'; window.optionGroups = []; renderOptionGroups(); document.getElementById('tglAvailable').checked = true;
     
-    selectProductType('Resto'); 
     switchTab('ajouter'); goToStep(1); window.validateStep1(); window.validateStep2();
 };
 
@@ -962,7 +895,6 @@ window.editProduct = (id) => {
     currentEditProductId = id; document.getElementById('wizardTitle').innerText = "Edit Item";
     document.getElementById('pName').value = p.name || ''; document.getElementById('pSubtitle').value = p.subtitle || ''; 
     
-    selectProductType(p.productType || 'Resto');
     setTimeout(() => { document.getElementById('pCat').value = p.category || ''; window.loadSubCats(); setTimeout(() => document.getElementById('pSubCat').value = p.subCategory || '', 50); }, 50);
     document.getElementById('pImg').value = p.imageUrl || ''; if(p.imageUrl) { document.getElementById('previewImg').src = p.imageUrl; document.getElementById('previewImg').style.display = 'block'; } else { document.getElementById('previewImg').style.display = 'none'; }
     document.getElementById('pSell').value = p.sellPrice || ''; document.getElementById('pCost').value = p.costPrice || ''; document.getElementById('pBadge').value = p.badge || 'Standard'; document.getElementById('pSortWeight').value = p.sortWeight || '';
@@ -983,7 +915,7 @@ window.saveProductData = async () => {
     let dAvail = []; if(document.getElementById('tglDayLimit').checked) { dAvail = Array.from(document.querySelectorAll('.day-check:checked')).map(cb => parseInt(cb.value)); }
 
     const data = {
-        name: document.getElementById('pName').value, subtitle: document.getElementById('pSubtitle').value, productType: selectedProductType,
+        name: document.getElementById('pName').value, subtitle: document.getElementById('pSubtitle').value, productType: 'Resto',
         category: document.getElementById('pCat').value || "Uncategorized", subCategory: document.getElementById('pSubCat').value || "",
         sellPrice: parseFloat(document.getElementById('pSell').value) || 0, costPrice: parseFloat(document.getElementById('pCost').value) || 0,
         imageUrl: document.getElementById('pImg').value, badge: badgeType, sortWeight: weight, traits: window.currentProductTraits,
