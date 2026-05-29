@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
-<title>lasGo | Driver Hub</title>
+<title>TASCO | Driver Hub</title>
 <link rel="manifest" href="manifest-driver.json"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
@@ -46,6 +46,38 @@ img{display:block}
 .screen.active{display:block}
 @keyframes screenIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
+/* AUTH OVERLAY REDESIGN */
+#authOverlay{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;overflow-y:auto;transition:opacity .4s ease}
+#authOverlay.hidden{opacity:0;pointer-events:none}
+.auth-top{background:var(--blue);padding:60px 24px 40px;display:flex;flex-direction:column;align-items:center;text-align:center;flex-shrink:0;border-bottom-left-radius:32px;border-bottom-right-radius:32px;box-shadow:var(--shadow-sm)}
+.auth-logo{font-size:36px;font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:4px}
+.auth-tag{color:rgba(255,255,255,.8);font-size:14px;font-weight:600;letter-spacing:.5px;margin-bottom:24px}
+.auth-scooter{font-size:64px;animation:float 2.8s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.auth-body{padding:40px 24px 48px;max-width:400px;width:100%;margin:0 auto}
+.auth-body h2{font-size:24px;font-weight:900;margin-bottom:6px;letter-spacing:-.4px;color:var(--text)}
+.auth-body p{font-size:14px;color:var(--muted);font-weight:500;margin-bottom:32px;line-height:1.5}
+.auth-step{display:none !important;}
+.auth-step.active{display:block !important; animation:screenIn .3s ease}
+.phone-row{display:flex;background:var(--surface);border:1.5px solid var(--border-dark);border-radius:16px;overflow:hidden;margin-bottom:14px;transition:.2s;box-shadow:var(--shadow-sm)}
+.phone-row:focus-within{border-color:var(--blue);box-shadow:0 0 0 4px var(--blue-light)}
+.phone-prefix{padding:16px;background:var(--surface);font-size:15px;font-weight:800;color:var(--text);border-right:1.5px solid var(--border-dark);display:flex;align-items:center;gap:6px;flex-shrink:0}
+.phone-row input{flex:1;padding:16px;font-size:16px;font-weight:700;background:transparent;color:var(--text);min-width:0}
+.phone-row input::placeholder{color:var(--subtle);font-weight:500}
+.otp-row{display:flex;gap:10px;justify-content:space-between;margin-bottom:24px}
+.otp-row input{width:48px;height:60px;background:var(--surface);border:1.5px solid var(--border-dark);border-radius:14px;text-align:center;font-size:24px;font-weight:800;color:var(--text);transition:.2s;box-shadow:var(--shadow-sm)}
+.otp-row input:focus{border-color:var(--blue);box-shadow:0 0 0 4px var(--blue-light);outline:none}
+.auth-err{font-size:13px;color:var(--red);font-weight:600;margin-bottom:16px;padding:12px 16px;background:var(--red-light);border-radius:12px;border:1px solid rgba(239,68,68,0.2);display:none}
+.auth-link{text-align:center;margin-top:20px;font-size:14px;color:var(--muted)}
+.auth-link b{color:var(--blue);font-weight:800;cursor:pointer}
+
+/* BUTTONS */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;border-radius:12px;font-size:15px;font-weight:700;transition:.15s;cursor:pointer;border:none}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 16px rgba(0,78,235,.25)}
+.btn-outline-red{background:transparent;color:var(--red);border:1.5px solid var(--red-light)}
+
 /* GLOBAL HEADER */
 .global-hdr{padding:20px 20px 16px;display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:100;}
 .hdr-left h1{font-size:24px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:6px;}
@@ -64,13 +96,6 @@ img{display:block}
 .seg-btn.active{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(0,78,235,.25)}
 .seg-badge{background:var(--blue-light);color:var(--blue);font-size:12px;font-weight:800;padding:2px 8px;border-radius:99px;}
 .seg-btn.active .seg-badge{background:#fff;color:var(--blue)}
-
-/* BUTTONS */
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;border-radius:12px;font-size:15px;font-weight:700;transition:.15s;cursor:pointer;border:none}
-.btn:active{transform:scale(.97)}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 16px rgba(0,78,235,.2)}
-.btn-outline-red{background:transparent;color:var(--red);border:1.5px solid var(--red-light)}
 
 /* ORDER CARDS */
 .order-card{background:var(--surface);border-radius:20px;margin:0 20px 20px;padding:20px;box-shadow:var(--shadow);border:1px solid var(--border);transition:.15s}
@@ -244,11 +269,11 @@ img{display:block}
         <input type="tel" id="phoneInput" placeholder="6 31 31 67 94" inputmode="numeric" maxlength="12"/>
       </div>
       <div class="auth-err" id="phoneErr"></div>
-      <button class="btn btn-blue" id="btnSendCode" onclick="handleSendCode()" style="background:var(--orange);box-shadow:0 4px 16px rgba(255,107,0,.25)">
+      <button class="btn btn-blue" id="btnSendCode" onclick="handleSendCode()">
         <svg viewBox="0 0 24 24" style="width:20px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         Send Code
       </button>
-      <div class="auth-link">Having issues? <b onclick="window.open('https://wa.me/212708006088','_blank')" style="color:var(--orange)">Contact Support</b></div>
+      <div class="auth-link">Having issues? <b onclick="window.open('https://wa.me/212708006088','_blank')">Contact Support</b></div>
     </div>
     <div id="stepOTP" class="auth-step">
       <h2>Verify Code</h2>
@@ -262,10 +287,10 @@ img{display:block}
         <input type="tel" maxlength="1" inputmode="numeric" class="otp-digit" data-i="5"/>
       </div>
       <div class="auth-err" id="otpErr"></div>
-      <button class="btn btn-blue" id="btnVerify" onclick="handleVerifyOTP()" style="background:var(--orange);box-shadow:0 4px 16px rgba(255,107,0,.25)">
+      <button class="btn btn-blue" id="btnVerify" onclick="handleVerifyOTP()">
         Verify & Access
       </button>
-      <div class="auth-link" style="margin-top:24px"><b onclick="goBackToPhone()" style="color:var(--orange)">← Change number</b></div>
+      <div class="auth-link" style="margin-top:24px"><b onclick="goBackToPhone()">← Change number</b></div>
     </div>
   </div>
   <div id="recaptcha-container"></div>
@@ -278,7 +303,7 @@ img{display:block}
     <div id="sHome" class="screen active">
       <div class="global-hdr">
         <div class="hdr-left">
-          <h1>Driver Hub 🛵</h1>
+          <h1 id="homeGreeting">Hi, Driver 👋🏻</h1>
           <div class="hdr-sub">Manage your deliveries</div>
         </div>
         <div class="hdr-right">
@@ -602,6 +627,9 @@ function initApp() {
   if (localStorage.getItem('lasgo_dark_mode') === 'true') document.documentElement.classList.add('dark');
   
   const d = S.driver;
+  const firstName = (d.name || 'Driver').split(' ')[0];
+  document.getElementById('homeGreeting').textContent = 'Hi, ' + firstName + ' 👋🏻';
+  
   document.getElementById('profName').textContent = d.name || 'Driver';
   document.getElementById('profPhone').textContent = d.phone || '—';
   const av = document.getElementById('profAv');
@@ -614,7 +642,7 @@ function initApp() {
 
 async function setupFCM() {
   if (!messaging) return;
-  const VAPID_KEY = 'BIA11IYOKDeINtdv7w9WyCUyhPM6Ym7IugYsxQCFFqZmt_8dm0vjnmtThikB শারীরিকBZaSv2aBeXSp5xPptg5oI8MmxtDk';
+  const VAPID_KEY = 'BIA11IYOKDeINtdv7w9WyCUyhPM6Ym7IugYsxQCFFqZmt_8dm0vjnmtThikBZaSv2aBeXSp5xPptg5oI8MmxtDk';
   try {
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') return;
