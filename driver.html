@@ -299,7 +299,6 @@ img{display:block}
 <div id="app">
   <div id="screens">
 
-    <!-- HOME SCREEN (Pool & Active Combined) -->
     <div id="sHome" class="screen active">
       <div class="global-hdr">
         <div class="hdr-left">
@@ -335,7 +334,6 @@ img{display:block}
       <div class="ra-card" id="recentList" style="display:none"></div>
     </div>
 
-    <!-- WALLET SCREEN -->
     <div id="sWallet" class="screen">
       <div class="screen-hdr">
         <div class="sh-back" onclick="closeScreen()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
@@ -387,7 +385,6 @@ img{display:block}
       </div>
     </div>
 
-    <!-- DETAIL SCREEN -->
     <div id="sDetail" class="screen">
       <div class="screen-hdr">
         <div class="sh-back" onclick="closeScreen()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
@@ -418,9 +415,10 @@ img{display:block}
 
       <div class="card-block" style="padding:20px 20px 16px">
         <div class="cb-title"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Order Summary</div>
-        <div class="sum-row"><span class="sum-lbl">Order Price (Cash to collect)</span><span class="sum-val" id="detPrice">0.00 DH</span></div>
-        <div class="sum-row"><span class="sum-lbl">Delivery Fee</span><span class="sum-val" id="detFee">0.00 DH</span></div>
-        <div class="sum-row total"><span class="sum-lbl">Total Earnings</span><span class="sum-val" id="detEarn">0.00 DH</span></div>
+        <div class="sum-row"><span class="sum-lbl">Pay to Kitchen (Upfront)</span><span class="sum-val" id="detCost">0.00 DH</span></div>
+        <div class="sum-row"><span class="sum-lbl">Collect from Client</span><span class="sum-val" id="detPrice">0.00 DH</span></div>
+        <div class="sum-row"><span class="sum-lbl">Your Delivery Profit</span><span class="sum-val" id="detFee" style="color:var(--green)">0.00 DH</span></div>
+        <div class="sum-row total"><span class="sum-lbl">Margin for Shop (Owed)</span><span class="sum-val" id="detOwe">0.00 DH</span></div>
       </div>
 
       <div class="card-block" style="padding:20px">
@@ -436,7 +434,6 @@ img{display:block}
       <div class="bottom-actions" id="detActions"></div>
     </div>
 
-    <!-- PROFILE SCREEN -->
     <div id="sProfile" class="screen">
       <div class="screen-hdr">
         <div class="sh-back" onclick="closeScreen()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
@@ -482,8 +479,8 @@ img{display:block}
 </div>
 
 <script type="module">
+import { getFirestore, collection, doc, getDoc, onSnapshot, updateDoc, query, where, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, doc, getDoc, onSnapshot, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
 
@@ -777,10 +774,12 @@ window.openDetail = function(id) {
   const navUrl = (o.deliveryCoords?.lat && o.deliveryCoords?.lng) ? 'https://www.google.com/maps/dir/?api=1&destination=' + o.deliveryCoords.lat + ',' + o.deliveryCoords.lng : 'https://www.google.com/maps/search/' + encodeURIComponent(o.deliveryAddress || o.neighborhood || 'Marrakech');
   document.getElementById('detNav').href = navUrl;
 
+  // New Transparent Financial Math mapping
   const m = calcOrderMath(o);
+  document.getElementById('detCost').textContent = fmt(m.totalCostPrice) + ' DH';
   document.getElementById('detPrice').textContent = fmt(m.totalPrice) + ' DH';
   document.getElementById('detFee').textContent = fmt(m.deliveryFee) + ' DH';
-  document.getElementById('detEarn').textContent = fmt(m.deliveryFee) + ' DH';
+  document.getElementById('detOwe').textContent = fmt(m.driverOwes) + ' DH';
 
   const itemsCount = o.cart ? o.cart.reduce((s,i)=>s+(parseInt(i.qty)||1),0) : (o.totalItems||0);
   document.getElementById('detItemsTitle').innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Items (' + itemsCount + ')';
@@ -789,7 +788,18 @@ window.openDetail = function(id) {
   (o.cart || []).forEach(item => {
     const p = item.product || {};
     const imgHtml = p.imageUrl ? '<img src="' + p.imageUrl + '" class="item-img" />' : '<div class="item-img" style="display:flex;align-items:center;justify-content:center;font-size:20px">🍔</div>';
-    itemsHtml += '<div class="item-row">' + imgHtml + '<div class="item-name">' + (p.name || 'Item') + '</div><div class="item-qty">x' + (item.qty||1) + '</div></div>';
+    
+    // New Add-ons and Variations Extraction
+    let optionsHtml = '';
+    if (item.options && item.options.length > 0) {
+       optionsHtml = '<ul style="margin-top:4px; padding-left:16px; font-size:12px; color:var(--muted); list-style-type:disc;">';
+       item.options.forEach(opt => {
+          optionsHtml += '<li>' + (opt.groupName ? opt.groupName + ': ' : '') + opt.name + '</li>';
+       });
+       optionsHtml += '</ul>';
+    }
+
+    itemsHtml += '<div class="item-row">' + imgHtml + '<div style="flex:1"><div class="item-name">' + (p.name || 'Item') + '</div>' + optionsHtml + '</div><div class="item-qty">x' + (item.qty||1) + '</div></div>';
   });
   document.getElementById('detItemsList').innerHTML = itemsHtml || '<div style="color:var(--muted);font-size:13px">No items listed.</div>';
 
@@ -809,6 +819,55 @@ window.openDetail = function(id) {
   document.getElementById('detActions').innerHTML = actionsHtml;
 
   openScreen('sDetail');
+};
+
+window.doAction = async function(id, action) {
+  if (!S.driver) return;
+  try {
+    const orderRef = doc(db, 'orders', id);
+
+    if (action === 'claim') {
+      // The Firebase Transaction Lock
+      await runTransaction(db, async (transaction) => {
+        const orderDoc = await transaction.get(orderRef);
+        if (!orderDoc.exists()) throw "Order no longer exists!";
+        
+        const data = orderDoc.data();
+        if ((data.status !== 'Pending' && data.status !== 'Preparing') || (data.driverId && data.driverId !== '')) {
+          throw "Order already claimed by another driver!";
+        }
+
+        transaction.update(orderRef, { 
+          status: 'Driver Assigned', 
+          driverId: S.driver.phone, 
+          driverName: S.driver.name, 
+          driverPhone: S.driver.phone, 
+          driverPhoto: S.driver.photoUrl || null, 
+          claimedAt: new Date().toISOString() 
+        });
+      });
+      
+      showToast('Order claimed! 🎉'); 
+      setHomeTab('active'); 
+      closeScreen();
+    } else if (action === 'pickup') {
+      await updateDoc(orderRef, { status: 'Out for Delivery' });
+      showToast('Order picked up 🛵'); 
+      openDetail(id);
+    } else if (action === 'deliver') {
+      await updateDoc(orderRef, { status: 'Delivered', deliveredAt: new Date().toISOString() });
+      showToast('Delivery completed ✅'); 
+      closeScreen();
+    } else if (action === 'release') {
+      if (!confirm('Release back to pool?')) return;
+      await updateDoc(orderRef, { status: 'Pending', driverId: '', driverName: '', driverPhone: '', driverPhoto: null });
+      showToast('Released to pool'); 
+      setHomeTab('pool'); 
+      closeScreen();
+    }
+  } catch(e) { 
+    showToast(typeof e === 'string' ? e : 'Error: ' + e.message); 
+  }
 };
 
 function renderWallet() {
@@ -840,27 +899,6 @@ function renderWallet() {
   }
   document.getElementById('wPendList').innerHTML = html;
 }
-
-// ── ACTIONS ───────────────────────────────────────────────────────────────
-window.doAction = async function(id, action) {
-  if (!S.driver) return;
-  try {
-    if (action === 'claim') {
-      await updateDoc(doc(db, 'orders', id), { status: 'Driver Assigned', driverId: S.driver.phone, driverName: S.driver.name, driverPhone: S.driver.phone, driverPhoto: S.driver.photoUrl || null, claimedAt: new Date().toISOString() });
-      showToast('Order claimed! 🎉'); setHomeTab('active'); closeScreen();
-    } else if (action === 'pickup') {
-      await updateDoc(doc(db, 'orders', id), { status: 'Out for Delivery' });
-      showToast('Order picked up 🛵'); openDetail(id);
-    } else if (action === 'deliver') {
-      await updateDoc(doc(db, 'orders', id), { status: 'Delivered', deliveredAt: new Date().toISOString() });
-      showToast('Delivery completed ✅'); closeScreen();
-    } else if (action === 'release') {
-      if (!confirm('Release back to pool?')) return;
-      await updateDoc(doc(db, 'orders', id), { status: 'Pending', driverId: '', driverName: '', driverPhone: '', driverPhoto: null });
-      showToast('Released to pool'); setHomeTab('pool'); closeScreen();
-    }
-  } catch(e) { showToast('Error: ' + e.message); }
-};
 
 // ── NAVIGATION & UTILS ────────────────────────────────────────────────────
 window.openScreen = function(id) {
