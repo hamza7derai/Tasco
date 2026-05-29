@@ -219,7 +219,7 @@ input:checked + .slider:before { transform: translateX(18px); }
                 </select>
                 <input type="number" id="inpPromoLimit" class="form-control" placeholder="Uses (0=any)" style="font-size:12px;">
             </div>
-            <button class="btn btn-outline" style="width:100%; padding:14px; font-size:13px;" onclick="addPromo()">Create Promo Code</button>
+            <button id="btnCreatePromo" class="btn btn-outline" style="width:100%; padding:14px; font-size:13px;" onclick="addPromo()">Create Promo Code</button>
             
             <div id="promoListContainer" style="display:flex; flex-direction:column; gap:10px; margin-top: 24px;"></div>
         </div>
@@ -543,7 +543,6 @@ window.logoutAdmin = async () => {
 let allProducts = [], globalCategoriesData = [], allPromos = [];
 let currentCatalogCategory = 'All', currentEditProductId = null;
 let currentCatAddingType = '';
-let selectedProductType = 'Resto'; // Hardcoded exclusively to Resto
 const formatPrice = (num) => { const p = Number(num); return p % 1 === 0 ? p.toString() : p.toFixed(2); };
 
 window.optionGroups = [];
@@ -631,6 +630,9 @@ window.addPromo = async () => {
         return;
     }
     
+    const btn = document.getElementById('btnCreatePromo');
+    if(btn) { btn.innerText = '...'; btn.disabled = true; }
+    
     try {
         await addDoc(collection(db, "promos"), { 
             code: code, 
@@ -648,7 +650,9 @@ window.addPromo = async () => {
     } catch(e) { 
         console.error(e); 
         showToast("Error creating promo.");
-    } 
+    } finally {
+        if(btn) { btn.innerText = 'Create Promo Code'; btn.disabled = false; }
+    }
 };
 
 window.deletePromo = async (id) => {
@@ -676,7 +680,6 @@ window.openCatManager = () => {
 };
 
 window.renderCatManagerList = () => {
-    // Only display Resto or generic categories
     const activeCats = globalCategoriesData.filter(c => c.type === 'Resto' || !c.type);
     activeCats.sort((a,b) => (b.sortWeight || 0) - (a.sortWeight || 0) || a.name.localeCompare(b.name));
     let html = '';
@@ -762,7 +765,6 @@ window.renderCatalog = () => {
     const container = document.getElementById('adminProductListContainer'); if(!container) return;
     const searchQuery = document.getElementById('catSearch').value.toLowerCase().trim();
     
-    // Only fetch Resto products
     let filteredProducts = allProducts.filter(p => p.productType === 'Resto' || !p.productType);
     
     if (currentCatalogCategory !== 'All' && !searchQuery) { filteredProducts = filteredProducts.filter(p => (p.category || "Uncategorized") === currentCatalogCategory); }
@@ -887,6 +889,7 @@ window.prepareAddProduct = () => {
     document.getElementById('tglDayLimit').checked = false; document.getElementById('cfgDayLimit').style.display = 'none'; document.querySelectorAll('.day-check').forEach(cb => cb.checked = false);
     document.getElementById('tglPromo').checked = false; document.getElementById('cfgPromo').style.display = 'none'; window.optionGroups = []; renderOptionGroups(); document.getElementById('tglAvailable').checked = true;
     
+    loadMainCats(); // This triggers the dropdown to load the categories
     switchTab('ajouter'); goToStep(1); window.validateStep1(); window.validateStep2();
 };
 
@@ -895,6 +898,7 @@ window.editProduct = (id) => {
     currentEditProductId = id; document.getElementById('wizardTitle').innerText = "Edit Item";
     document.getElementById('pName').value = p.name || ''; document.getElementById('pSubtitle').value = p.subtitle || ''; 
     
+    loadMainCats(); // This triggers the dropdown to load the categories
     setTimeout(() => { document.getElementById('pCat').value = p.category || ''; window.loadSubCats(); setTimeout(() => document.getElementById('pSubCat').value = p.subCategory || '', 50); }, 50);
     document.getElementById('pImg').value = p.imageUrl || ''; if(p.imageUrl) { document.getElementById('previewImg').src = p.imageUrl; document.getElementById('previewImg').style.display = 'block'; } else { document.getElementById('previewImg').style.display = 'none'; }
     document.getElementById('pSell').value = p.sellPrice || ''; document.getElementById('pCost').value = p.costPrice || ''; document.getElementById('pBadge').value = p.badge || 'Standard'; document.getElementById('pSortWeight').value = p.sortWeight || '';
