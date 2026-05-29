@@ -350,7 +350,8 @@ input:checked + .slider:before { transform: translateX(18px); }
 
     <div style="display: flex; gap: 12px; margin-top: 12px;">
         <button class="btn btn-outline" style="flex:1;" id="btnPrintReceipt"><svg viewBox="0 0 24 24" style="width:16px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1-2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Print</button>
-        <button class="btn btn-outline" style="flex:1; color:var(--danger); border-color:var(--danger-light);" id="btnCancelOrder">Cancel Order</button>
+        <button class="btn btn-outline" style="flex:1; color:var(--warning); border-color:var(--warning-light);" id="btnCancelOrder">Cancel</button>
+        <button class="btn btn-outline" style="flex:1; background:var(--danger-light); color:var(--danger); border-color:var(--danger);" id="btnDeleteOrder">Delete</button>
     </div>
 </div>
 
@@ -444,7 +445,7 @@ input:checked + .slider:before { transform: translateX(18px); }
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, onSnapshot, updateDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, updateDoc, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
@@ -462,17 +463,14 @@ const ADMIN_EMAILS = ["admin@tasco.ma"];
 // SECURE AUTHENTICATION STATE WATCHDOG
 onAuthStateChanged(auth, async (user) => {
     const gate = document.getElementById('adminAuthGate');
-    document.body.style.display = "block"; // Always display body so gate is visible
+    document.body.style.display = "block"; 
 
     if (!user) {
-        // Not logged in: Show the gate
         gate.classList.remove('hide');
     } else {
-        // Safely check if the user has an email BEFORE checking if they are an admin
         if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
-            gate.classList.add('hide'); // Hide gate, reveal dashboard!
+            gate.classList.add('hide'); 
         } else {
-            // A driver or customer accidentally loaded the admin page
             alert("Security Alert: Unauthorized credentials. Signing out to protect system integrity...");
             await signOut(auth);
             gate.classList.remove('hide');
@@ -493,7 +491,6 @@ window.executeAdminLogin = async () => {
 
     try {
         await signInWithEmailAndPassword(auth, email, pass);
-        // The onAuthStateChanged listener above will automatically detect success and hide the gate
     } catch(e) {
         alert("Access Denied: Invalid email or password.");
         btn.innerText = "ACCESS SYSTEM";
@@ -508,6 +505,38 @@ let currentOrderFilter = 'All';
 
 const safeNum = (val) => isNaN(parseFloat(val)) ? 0 : parseFloat(val);
 const formatPrice = (num) => { const p = Number(num); return p % 1 === 0 ? p.toString() : p.toFixed(2); };
+
+// ---------------- DEEP PROFIT MATH ENGINE ----------------
+// Extracts true cost including base products, variants, and modular add-ons
+function calcOrderCostAndProfit(order) {
+    let totalCost = 0;
+    if (order.cart && Array.isArray(order.cart)) {
+        order.cart.forEach(item => {
+            const qty = parseInt(item.qty) || 1;
+            const catProd = allProducts.find(p => p.id === item.product?.id);
+            
+            // Base Cost
+            let baseCost = safeNum(item.product?.costPrice) || safeNum(item.costPrice) || (catProd ? safeNum(catProd.costPrice) : 0);
+            
+            // Options / Addons Cost
+            let optionsCost = 0;
+            if (item.options && Array.isArray(item.options)) {
+                item.options.forEach(opt => { optionsCost += safeNum(opt.costPrice) || 0; });
+            }
+            if (item.modularChoices && Array.isArray(item.modularChoices)) {
+                item.modularChoices.forEach(opt => { optionsCost += safeNum(opt.costPrice) || 0; });
+            }
+            if (item.extras && Array.isArray(item.extras)) {
+                 item.extras.forEach(ext => { optionsCost += safeNum(ext.costPrice) || 0; });
+            }
+
+            totalCost += (baseCost + optionsCost) * qty;
+        });
+    }
+    const revenue = safeNum(order.totalPrice) - safeNum(order.deliveryFee);
+    const profit = revenue - totalCost;
+    return { totalCost, revenue, profit };
+}
 
 window.switchTab = (tabId) => {
     document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
@@ -564,7 +593,7 @@ onSnapshot(doc(db, "settings", "store_status"), (docSnap) => {
 // ---------------- REAL-TIME ENGINE SYNCHRONIZATIONS ----------------
 onSnapshot(collection(db, "products"), snap => {
     allProducts = snap.docs.map(d => ({id: d.id, ...d.data()}));
-    calculateDashboard(); // Refresh arithmetic analytics matrices once item cost profiles exist
+    calculateDashboard(); 
 });
 
 onSnapshot(collection(db, "drivers"), snap => {
@@ -595,7 +624,6 @@ function calculateDashboard() {
     let grossToday = 0;
     let pendingCount = 0;
 
-    // Universal Cumulative Totals Metrics
     let totalDeliveredOrdersCount = 0;
     let cumulativeGrossRevenue = 0;
     let cumulativeNetProfit = 0;
@@ -614,7 +642,6 @@ function calculateDashboard() {
         }
         if (order.status === 'Pending') pendingCount++;
 
-        // Process global valuation variables strictly based on Delivered pipeline metrics
         if (order.status === 'Delivered') {
             totalDeliveredOrdersCount++;
             cumulativeGrossRevenue += safeNum(order.totalPrice);
@@ -622,33 +649,16 @@ function calculateDashboard() {
             cumulativeItemsSold += parseInt(order.totalItems) || 0;
             if (order.customerId) uniqueCustomersSet.add(order.customerId);
 
-            // Arbitrage Profit Core Parsing Routine: Selling Price - Wholesale Cost Price
-            let totalCostBasisForOrder = 0;
-            if (order.cart && Array.isArray(order.cart)) {
-                order.cart.forEach(cartItem => {
-                    const qty = parseInt(cartItem.qty) || 0;
-                    const catalogProductRef = allProducts.find(p => p.id === cartItem.product?.id);
-                    
-                    if (catalogProductRef) {
-                        let singleItemWholesaleCostBasis = safeNum(catalogProductRef.costPrice);
-                        totalCostBasisForOrder += (singleItemWholesaleCostBasis * qty);
-                    }
-                });
-            }
-            
-            // Total pricing minus delivery allocation leaves gross merchant receipts
-            let orderMerchantRevenue = safeNum(order.totalPrice) - safeNum(order.deliveryFee);
-            let orderNetArbitrageProfit = orderMerchantRevenue - totalCostBasisForOrder;
-            cumulativeNetProfit += orderNetArbitrageProfit;
+            // Execute Deep Profit Math Engine
+            const math = calcOrderCostAndProfit(order);
+            cumulativeNetProfit += math.profit;
         }
     });
 
-    // Populate Daily Dashboard Operations Counters
     document.getElementById('dashStatOrders').innerText = ordersTodayCount;
     document.getElementById('dashStatRevenue').innerText = formatPrice(grossToday) + ' DH';
     document.getElementById('dashStatPending').innerText = pendingCount;
 
-    // Populate Dedicated Core Analytics View Data Fields
     document.getElementById('statGrossRevenue').innerText = formatPrice(cumulativeGrossRevenue) + ' DH';
     document.getElementById('statNetProfit').innerHTML = `<svg viewBox="0 0 24 24" style="width:16px;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> Profit: ${formatPrice(cumulativeNetProfit)} DH`;
     
@@ -657,7 +667,6 @@ function calculateDashboard() {
     document.getElementById('statCustomersTotal').innerText = uniqueCustomersSet.size;
     document.getElementById('statDeliveryTotal').innerText = formatPrice(cumulativeDriverFeesAllocation) + ' DH';
 
-    // Build Recent Operations Stream Card elements
     const getTime = (ts) => { if (!ts) return 0; const t = new Date(ts).getTime(); return isNaN(t) ? 0 : t; };
     const recentOrders = [...allOrders].sort((a,b) => getTime(b.timestamp) - getTime(a.timestamp)).slice(0, 2); 
     const dashRecentContainer = document.getElementById('dashRecentOrdersContainer');
@@ -675,8 +684,8 @@ function calculateDriverMetrics(driverPhoneId) {
         if (o.status === 'Driver Assigned' || o.status === 'Out for Delivery') activeOrder = o;
         
         if (o.status === 'Delivered' && o.driverSettled !== true) {
-            // Driver paid merchant's cost + profit in advance, so they return total value minus their execution delivery fee allocation
-            cashToCollectFromDriver += (safeNum(o.totalPrice) - safeNum(o.deliveryFee)); 
+            // Updated calculation utilizing the Deep Profit Engine
+            cashToCollectFromDriver += calcOrderCostAndProfit(o).profit; 
         }
     });
     return { activeOrder, cashToCollectFromDriver };
@@ -730,7 +739,6 @@ function renderDriversAllocationEngine() {
         </div>`;
     });
 
-    // Populate Home Dashboard Driver Card Component (Strictly restricted visibility limit: 2 maximum)
     const homeContainer = document.getElementById('dashDriversContainer');
     if(homeContainer) {
         const homeDriversList = allDrivers.slice(0, 2);
@@ -746,7 +754,6 @@ function renderDriversAllocationEngine() {
         }).join('') : `<div style="text-align:center; padding:8px; color:var(--text-muted); font-size:12px;">No drivers listed.</div>`;
     }
 
-    // Populate Master Dedicated Drivers Ledger Screen
     const masterLedgerTarget = document.getElementById('adminDriversListContainer');
     if(masterLedgerTarget) {
         if(layoutHtml === '') {
@@ -811,6 +818,7 @@ window.viewOrder = (orderId) => {
     const order = allOrders.find(o => o.id === orderId); if(!order) return;
     document.getElementById('det-id').innerText = "#" + order.id.substring(0,6).toUpperCase();
     
+    // Binding Customer Native Authenticated Data
     document.getElementById('det-client').innerText = order.customerName || 'Unknown';
     document.getElementById('det-phone').innerText = order.customerPhone || 'Not provided';
     document.getElementById('det-address').innerText = order.deliveryAddress || order.neighborhood || 'Not specified';
@@ -862,30 +870,33 @@ window.viewOrder = (orderId) => {
 
     let actionContextHtml = '';
     const btnCancel = document.getElementById('btnCancelOrder');
+    const btnDelete = document.getElementById('btnDeleteOrder');
     const btnPrint = document.getElementById('btnPrintReceipt');
 
     if (order.status === 'Pending') {
         actionContextHtml = `<button class="btn btn-primary" onclick="promptOrderStatus('${order.id}', 'Preparing')">ACCEPT & MARK PREPARING</button>`;
-        btnCancel.style.display = 'block';
     } else if (order.status === 'Preparing') {
         actionContextHtml = `<div style="text-align:center; padding:16px; background:var(--bg-main); border-radius:12px; font-weight:800; font-size:13px; text-transform:uppercase; border: 1px dashed var(--border-dark);">WAITING FOR DRIVER POOL DISPATCH</div>`;
-        btnCancel.style.display = 'block';
     } else if (order.status === 'Driver Assigned' || order.status === 'Out for Delivery') {
         const dName = order.driverName || 'Assigned Courier';
         actionContextHtml = `<div style="text-align:center; padding:16px; background:var(--blue-light); color:var(--blue); border-radius:12px; font-weight:800; font-size:13px; text-transform:uppercase;">Dispatched To: ${dName}</div>`;
-        btnCancel.style.display = 'none'; 
     } else if (order.status === 'Delivered') {
         actionContextHtml = `<div style="text-align:center; color:var(--accent); font-weight:800; padding:16px; background:var(--accent-light); border-radius:12px;">ORDER DELIVERED SUCCESSFULLY</div>`;
-        btnCancel.style.display = 'none';
     } else if (order.status === 'Cancelled') {
         actionContextHtml = `<div style="text-align:center; color:var(--danger); font-weight:800; padding:16px; background:var(--danger-light); border-radius:12px;">ORDER CANCELLED</div>`;
+    }
+
+    if (order.status === 'Cancelled') {
         btnCancel.style.display = 'none';
+    } else {
+        btnCancel.style.display = 'block';
     }
 
     document.getElementById('det-status-actions').innerHTML = actionContextHtml; 
     
     btnPrint.onclick = () => printReceipt(order.id);
     btnCancel.onclick = () => promptOrderStatus(order.id, 'Cancelled');
+    btnDelete.onclick = () => promptOrderDelete(order.id);
 
     switchTab('order-detail');
 };
@@ -950,6 +961,8 @@ window.promptOrderStatus = (orderId, newStatus) => {
     document.getElementById('modalMsg').innerText = `Confirm changing order status to ${newStatus}?`;
     const btn = document.getElementById('modalConfirmBtn'); 
     btn.className = 'btn ' + (newStatus === 'Cancelled' ? 'btn-danger' : 'btn-primary');
+    btn.style.background = '';
+    btn.style.color = '';
     
     window.confirmActionCallback = async () => { 
         closeModals(); 
@@ -957,6 +970,25 @@ window.promptOrderStatus = (orderId, newStatus) => {
             await updateDoc(doc(db, "orders", orderId), { status: newStatus }); 
             showToast("Status synchronized successfully."); 
         } catch(e) { alert("Network Sync Exception: " + e.message); } 
+    }; 
+    document.getElementById('confirmOverlay').classList.add('active');
+};
+
+window.promptOrderDelete = (orderId) => {
+    document.getElementById('modalTitle').innerText = "Delete Order"; 
+    document.getElementById('modalMsg').innerText = `Are you sure you want to completely delete order #${orderId.substring(0,6).toUpperCase()}? This cannot be undone.`;
+    const btn = document.getElementById('modalConfirmBtn'); 
+    btn.className = 'btn btn-danger';
+    btn.style.background = 'var(--danger)';
+    btn.style.color = 'white';
+    
+    window.confirmActionCallback = async () => { 
+        closeModals(); 
+        try { 
+            await deleteDoc(doc(db, "orders", orderId)); 
+            showToast("Order deleted permanently."); 
+            switchTab('commandes');
+        } catch(e) { alert("Delete Error: " + e.message); } 
     }; 
     document.getElementById('confirmOverlay').classList.add('active');
 };
