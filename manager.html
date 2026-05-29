@@ -119,6 +119,20 @@ input:checked + .slider:before { transform: translateX(18px); }
 .upload-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--primary-light); display: flex; align-items: center; justify-content: center; color: var(--primary); }
 .upload-card h5 { font-size: 13px; font-weight: 800; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px;}
 
+.type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+.type-card { border: 2px solid var(--border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: 0.2s; background: var(--surface); text-align: center; position: relative;}
+.type-icon { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
+.type-card h5 { font-size: 15px; font-weight: 800; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px;}
+.radio-dot { position: absolute; top: 12px; right: 12px; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; background: white;}
+.type-card.tc-resto.active { border-color: var(--primary); background: var(--primary-light); }
+.type-card.tc-resto.active .type-icon { color: var(--primary); }
+.type-card.tc-resto.active .radio-dot { border-color: var(--primary); background: var(--primary); }
+.type-card.tc-resto.active .radio-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: white; }
+.type-card.tc-grocery.active { border-color: var(--accent); background: var(--accent-light); }
+.type-card.tc-grocery.active .type-icon { color: var(--accent); }
+.type-card.tc-grocery.active .radio-dot { border-color: var(--accent); background: var(--accent); }
+.type-card.tc-grocery.active .radio-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: white; }
+
 .form-group { margin-bottom: 20px; }
 .form-group label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
 .form-control { width: 100%; padding: 14px 16px; border: 1px solid var(--border-dark); border-radius: var(--radius-btn); background: var(--surface); outline: none; font-size: 14px; font-weight: 600; transition: 0.2s; color: var(--text-main); }
@@ -237,16 +251,16 @@ input:checked + .slider:before { transform: translateX(18px); }
                 Generate Code
             </div>
             <div style="display:grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap:8px; margin-bottom:16px;">
-                <input type="text" id="inpPromoCode" class="form-control" placeholder="CODE (e.g. TASCO10)" style="font-size:12px; text-transform: uppercase;">
+                <input type="text" id="inpPromoCode" class="form-control" placeholder="CODE (TASCO10)" style="font-size:12px; text-transform: uppercase;">
                 <input type="number" id="inpPromoValue" class="form-control" placeholder="Value" style="font-size:12px;">
                 <select id="inpPromoType" class="form-control" style="font-size:12px; padding: 0 4px;">
                     <option value="DH">DH</option>
                     <option value="%">%</option>
                 </select>
-                <input type="number" id="inpPromoLimit" class="form-control" placeholder="Uses (0=unlimited)" style="font-size:12px;">
+                <input type="number" id="inpPromoLimit" class="form-control" placeholder="Uses (0=any)" style="font-size:12px;">
             </div>
-            <button class="btn btn-outline" style="width:100%; padding:14px; font-size:13px;" onclick="addPromo()">Create Promo Code</button>
-            <div id="promoListContainer" style="display:flex; flex-direction:column; gap:8px; margin-top: 16px;"></div>
+            <button class="btn btn-outline" style="width:100%; padding:14px; font-size:13px;" onclick="addPromo(event)">Create Promo Code</button>
+            <div id="promoListContainer" style="display:flex; flex-direction:column; gap:10px; margin-top: 24px;"></div>
         </div>
     </div>
 </div>
@@ -334,11 +348,16 @@ input:checked + .slider:before { transform: translateX(18px); }
                 <input type="text" id="pSubtitle" class="form-control" placeholder="Ex: Spicy · Cheese · Bestseller" maxlength="80">
             </div>
 
-            <div class="form-group" style="display: none;">
+            <div class="form-group">
+                <label>Product Type *</label>
                 <div class="type-grid">
                     <div class="type-card tc-resto active" id="typeCardResto" onclick="selectProductType('Resto')">
                         <div class="type-icon"><svg viewBox="0 0 24 24" style="width:28px; height:28px;"><path d="M17.66 11.2C17.43 10.9 17.15 10.64 16.89 10.38C16.22 9.78 15.46 9.35 14.82 8.72C13.33 7.26 13.07 4.8 14.56 3.11C14.72 2.93 14.57 2.66 14.33 2.7C13.25 2.89 12.06 3.46 11.23 4.29C9.17 6.36 9.07 9.87 10.73 12.06C10.87 12.24 10.64 12.47 10.45 12.33C9.4 11.59 8.87 10.23 9.04 8.93C9.07 8.68 8.77 8.52 8.6 8.7C7.45 9.84 6.75 11.55 7.03 13.33C7.4 15.65 9.02 17.5 11.24 18.23C13.56 18.99 16.27 18.35 17.84 16.39C19.11 14.81 18.9 12.63 17.66 11.2Z"></path></svg></div>
                         <h5>Resto</h5><div class="radio-dot"></div>
+                    </div>
+                    <div class="type-card tc-grocery" id="typeCardGrocery" onclick="selectProductType('Grocery')">
+                        <div class="type-icon"><svg viewBox="0 0 24 24" style="width:28px; height:28px;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></div>
+                        <h5>Grocery</h5><div class="radio-dot"></div>
                     </div>
                 </div>
             </div>
@@ -656,35 +675,38 @@ onSnapshot(collection(db, "promos"), snap => {
 function renderPromos() {
     const container = document.getElementById('promoListContainer');
     if(allPromos.length === 0) {
-        container.innerHTML = `<div style="font-size:12px; color:var(--text-muted); font-weight:600;">No active promo codes.</div>`;
+        container.innerHTML = `<div style="font-size:12px; color:var(--text-muted); font-weight:600; text-align:center; padding:12px;">No active promo codes.</div>`;
         return;
     }
     container.innerHTML = allPromos.map(p => {
         const limitText = p.maxUses > 0 ? `${p.timesUsed || 0} / ${p.maxUses} uses` : `Unlimited uses`;
         return `
-        <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface); padding:12px 16px; border-radius:12px; border:1px dashed var(--accent);"> 
+        <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface); padding:16px; border-radius:16px; border:1px dashed var(--accent); box-shadow: var(--shadow-sm);"> 
             <div>
-                <div style="font-size:14px; font-weight:800; text-transform:uppercase; color:var(--text-main);">${p.code}</div>
-                <div style="font-size:11px; color:var(--text-muted); font-weight:600;">${limitText}</div>
+                <div style="font-size:15px; font-weight:800; text-transform:uppercase; color:var(--text-main); margin-bottom:4px;">${p.code}</div>
+                <div style="font-size:12px; color:var(--text-muted); font-weight:600;">${limitText}</div>
             </div>
-            <div style="display:flex; align-items:center; gap:12px;">
-                <span style="font-size:14px; font-weight:800; color:var(--accent);">${p.value}${p.type} OFF</span> 
-                <svg viewBox="0 0 24 24" style="width:16px; color:var(--danger); cursor:pointer;" onclick="deletePromo('${p.id}')"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <div style="display:flex; align-items:center; gap:16px;">
+                <span style="font-size:16px; font-weight:800; color:var(--accent); background:var(--accent-light); padding:4px 8px; border-radius:8px;">${p.value}${p.type} OFF</span> 
+                <svg viewBox="0 0 24 24" style="width:20px; color:var(--danger); cursor:pointer;" onclick="deletePromo('${p.id}')"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </div>
         </div>`;
     }).join('');
 }
-window.addPromo = async () => {
+window.addPromo = async (e) => {
     const code = document.getElementById('inpPromoCode').value.trim().toUpperCase();
     const value = parseFloat(document.getElementById('inpPromoValue').value) || 0;
     const type = document.getElementById('inpPromoType').value;
     const limit = parseInt(document.getElementById('inpPromoLimit').value) || 0;
     if(!code || value <= 0) return showToast("Enter a valid code and value.");
+    
+    const btn = e.currentTarget;
+    btn.innerText = '...'; btn.disabled = true;
     try {
         await addDoc(collection(db, "promos"), { code, value, type, maxUses: limit, timesUsed: 0, active: true });
         document.getElementById('inpPromoCode').value = ''; document.getElementById('inpPromoValue').value = ''; document.getElementById('inpPromoLimit').value = '';
         showToast("Promo Code created!");
-    } catch(e) { console.error(e); }
+    } catch(e) { console.error(e); } finally { btn.innerText = 'Create Promo Code'; btn.disabled = false; }
 };
 window.deletePromo = async (id) => {
     if(confirm("Delete this promo code?")) { await deleteDoc(doc(db, "promos", id)); showToast("Promo code deleted."); }
@@ -796,7 +818,7 @@ window.renderCatalogTabs = () => {
     container.innerHTML = html;
 };
 
-// NEW: Match screenshot design perfectly
+// Render beautifully matched catalog cards
 window.renderCatalog = () => {
     const container = document.getElementById('adminProductListContainer'); if(!container) return;
     const searchQuery = document.getElementById('catSearch').value.toLowerCase().trim();
@@ -847,8 +869,10 @@ window.renderCatalog = () => {
 // ==========================================
 window.selectProductType = (type) => {
     selectedProductType = type;
-    document.getElementById('typeCardResto').classList.remove('active'); document.getElementById('typeCardGrocery').classList.remove('active');
-    document.getElementById(`typeCard${type}`).classList.add('active'); loadMainCats(); validateStep1();
+    const cardR = document.getElementById('typeCardResto'); const cardG = document.getElementById('typeCardGrocery');
+    if(cardR) cardR.classList.remove('active'); if(cardG) cardG.classList.remove('active');
+    const target = document.getElementById(`typeCard${type}`); if(target) target.classList.add('active'); 
+    loadMainCats(); validateStep1();
 };
 window.previewWizardImg = () => { const url = document.getElementById('pImg').value; const imgEl = document.getElementById('previewImg'); if(url) { imgEl.src = url; imgEl.style.display = 'block'; } else { imgEl.style.display = 'none'; } }
 window.validateStep1 = () => { const name = document.getElementById('pName').value.trim(); const cat = document.getElementById('pCat').value; const btn = document.getElementById('btnNext1'); if(name && cat) { btn.disabled = false; } else { btn.disabled = true; } };
@@ -921,18 +945,24 @@ window.prepareAddProduct = () => {
     currentEditProductId = null; document.getElementById('wizardTitle').innerText = "Add Item";
     document.querySelectorAll('#view-ajouter input').forEach(i => { if(i.type !== 'checkbox' && i.type !== 'radio') i.value = '' });
     document.getElementById('previewImg').style.display = 'none'; document.getElementById('pDesc').value = '';
-    selectProductType('Resto'); document.getElementById('pBadge').value = 'Standard'; document.getElementById('pSortWeight').value = '';
+    
+    // Default standard values
+    document.getElementById('pBadge').value = 'Standard'; document.getElementById('pSortWeight').value = '';
     window.currentProductTraits = []; renderCustomTraits();
     document.getElementById('tglTimeLimit').checked = false; document.getElementById('cfgTimeLimit').style.display = 'none'; document.getElementById('pStartTime').value = ''; document.getElementById('pEndTime').value = '';
     document.getElementById('tglDayLimit').checked = false; document.getElementById('cfgDayLimit').style.display = 'none'; document.querySelectorAll('.day-check').forEach(cb => cb.checked = false);
     document.getElementById('tglPromo').checked = false; document.getElementById('cfgPromo').style.display = 'none'; window.optionGroups = []; renderOptionGroups(); document.getElementById('tglAvailable').checked = true;
+    
+    selectProductType('Resto'); 
     switchTab('ajouter'); goToStep(1); window.validateStep1(); window.validateStep2();
 };
 
 window.editProduct = (id) => {
     event.stopPropagation(); const p = allProducts.find(x => x.id === id); if(!p) return;
     currentEditProductId = id; document.getElementById('wizardTitle').innerText = "Edit Item";
-    document.getElementById('pName').value = p.name || ''; document.getElementById('pSubtitle').value = p.subtitle || ''; selectProductType(p.productType || 'Resto');
+    document.getElementById('pName').value = p.name || ''; document.getElementById('pSubtitle').value = p.subtitle || ''; 
+    
+    selectProductType(p.productType || 'Resto');
     setTimeout(() => { document.getElementById('pCat').value = p.category || ''; window.loadSubCats(); setTimeout(() => document.getElementById('pSubCat').value = p.subCategory || '', 50); }, 50);
     document.getElementById('pImg').value = p.imageUrl || ''; if(p.imageUrl) { document.getElementById('previewImg').src = p.imageUrl; document.getElementById('previewImg').style.display = 'block'; } else { document.getElementById('previewImg').style.display = 'none'; }
     document.getElementById('pSell').value = p.sellPrice || ''; document.getElementById('pCost').value = p.costPrice || ''; document.getElementById('pBadge').value = p.badge || 'Standard'; document.getElementById('pSortWeight').value = p.sortWeight || '';
