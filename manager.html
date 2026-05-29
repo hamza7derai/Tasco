@@ -709,7 +709,6 @@ window.openCatManager = () => {
 };
 
 window.renderCatManagerList = () => {
-    // Only display Resto or generic categories
     const activeCats = globalCategoriesData.filter(c => c.type === 'Resto' || !c.type);
     activeCats.sort((a,b) => (b.sortWeight || 0) - (a.sortWeight || 0) || a.name.localeCompare(b.name));
     let html = '';
@@ -795,7 +794,6 @@ window.renderCatalog = () => {
     const container = document.getElementById('adminProductListContainer'); if(!container) return;
     const searchQuery = document.getElementById('catSearch').value.toLowerCase().trim();
     
-    // Only fetch Resto products
     let filteredProducts = allProducts.filter(p => p.productType === 'Resto' || !p.productType);
     
     if (currentCatalogCategory !== 'All' && !searchQuery) { filteredProducts = filteredProducts.filter(p => (p.category || "Uncategorized") === currentCatalogCategory); }
@@ -853,7 +851,7 @@ window.goToStep = (step) => {
 };
 
 window.addOptionGroup = () => { const group = { id: Date.now(), name: "", selection: "single", layout: "text", maxLimit: 0, items: [] }; window.optionGroups.push(group); renderOptionGroups(); };
-window.addGroupItem = (groupId) => { const group = window.optionGroups.find(g => g.id === groupId); group.items.push({ name: "", price: 0, cost: 0, imageUrl: "" }); renderOptionGroups(); };
+window.addGroupItem = (groupId) => { const group = window.optionGroups.find(g => g.id === groupId); group.items.push({ name: "", price: 0, costPrice: 0, imageUrl: "" }); renderOptionGroups(); };
 window.renderOptionGroups = () => {
     const container = document.getElementById('optionGroupsContainer');
     container.innerHTML = window.optionGroups.map(g => `
@@ -883,8 +881,8 @@ window.renderOptionGroups = () => {
                 <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; margin-bottom: 8px;">
                     <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 40px; gap: 8px; align-items: center; margin-bottom: 8px;">
                         <input type="text" placeholder="Choice Name" class="form-control" style="font-size:12px; padding:10px;" value="${item.name}" oninput="updateItemField(${g.id}, ${idx}, 'name', this.value)">
-                        <input type="number" placeholder="+DH Sell" class="form-control" style="font-size:12px; padding:10px;" value="${item.price}" oninput="updateItemField(${g.id}, ${idx}, 'price', this.value)">
-                        <input type="number" placeholder="+DH Cost" class="form-control" style="font-size:12px; padding:10px;" value="${item.cost}" oninput="updateItemField(${g.id}, ${idx}, 'cost', this.value)">
+                        <input type="number" placeholder="+DH Sell" class="form-control" style="font-size:12px; padding:10px;" value="${item.price !== undefined ? item.price : 0}" oninput="updateItemField(${g.id}, ${idx}, 'price', this.value)">
+                        <input type="number" placeholder="+DH Cost" class="form-control" style="font-size:12px; padding:10px;" value="${item.costPrice !== undefined ? item.costPrice : (item.cost || 0)}" oninput="updateItemField(${g.id}, ${idx}, 'costPrice', this.value)">
                         <button onclick="removeItem(${g.id}, ${idx})" style="color:var(--text-muted); background:var(--bg-main); border:1px solid var(--border-dark); border-radius:8px; height:38px; display:flex; align-items:center; justify-content:center;">×</button>
                     </div>
                     <input type="text" placeholder="Image URL (optional)" class="form-control" style="font-size:12px; padding:10px; width: 100%;" value="${item.imageUrl || ''}" oninput="updateItemField(${g.id}, ${idx}, 'imageUrl', this.value)">
@@ -920,7 +918,7 @@ window.prepareAddProduct = () => {
     document.getElementById('tglDayLimit').checked = false; document.getElementById('cfgDayLimit').style.display = 'none'; document.querySelectorAll('.day-check').forEach(cb => cb.checked = false);
     document.getElementById('tglPromo').checked = false; document.getElementById('cfgPromo').style.display = 'none'; window.optionGroups = []; renderOptionGroups(); document.getElementById('tglAvailable').checked = true;
     
-    loadMainCats(); // Triggers the dropdown to load the categories
+    loadMainCats();
     switchTab('ajouter'); goToStep(1); window.validateStep1(); window.validateStep2();
 };
 
@@ -929,7 +927,7 @@ window.editProduct = (id) => {
     currentEditProductId = id; document.getElementById('wizardTitle').innerText = "Edit Item";
     document.getElementById('pName').value = p.name || ''; document.getElementById('pSubtitle').value = p.subtitle || ''; 
     
-    loadMainCats(); // Triggers the dropdown to load the categories
+    loadMainCats();
     setTimeout(() => { document.getElementById('pCat').value = p.category || ''; window.loadSubCats(); setTimeout(() => document.getElementById('pSubCat').value = p.subCategory || '', 50); }, 50);
     document.getElementById('pImg').value = p.imageUrl || ''; if(p.imageUrl) { document.getElementById('previewImg').src = p.imageUrl; document.getElementById('previewImg').style.display = 'block'; } else { document.getElementById('previewImg').style.display = 'none'; }
     document.getElementById('pSell').value = p.sellPrice || ''; document.getElementById('pCost').value = p.costPrice || ''; document.getElementById('pBadge').value = p.badge || 'Standard'; document.getElementById('pSortWeight').value = p.sortWeight || '';
