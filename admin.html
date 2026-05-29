@@ -518,16 +518,16 @@ function calcOrderCostAndProfit(order) {
             // Base Cost
             let baseCost = safeNum(item.product?.costPrice) || safeNum(item.costPrice) || (catProd ? safeNum(catProd.costPrice) : 0);
             
-            // Options / Addons Cost
+            // Options / Addons Cost (Catches both costPrice and old cost labels)
             let optionsCost = 0;
             if (item.options && Array.isArray(item.options)) {
-                item.options.forEach(opt => { optionsCost += safeNum(opt.costPrice) || 0; });
+                item.options.forEach(opt => { optionsCost += safeNum(opt.costPrice) || safeNum(opt.cost) || 0; });
             }
             if (item.modularChoices && Array.isArray(item.modularChoices)) {
-                item.modularChoices.forEach(opt => { optionsCost += safeNum(opt.costPrice) || 0; });
+                item.modularChoices.forEach(opt => { optionsCost += safeNum(opt.costPrice) || safeNum(opt.cost) || 0; });
             }
             if (item.extras && Array.isArray(item.extras)) {
-                 item.extras.forEach(ext => { optionsCost += safeNum(ext.costPrice) || 0; });
+                 item.extras.forEach(ext => { optionsCost += safeNum(ext.costPrice) || safeNum(ext.cost) || 0; });
             }
 
             totalCost += (baseCost + optionsCost) * qty;
