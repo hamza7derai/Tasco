@@ -557,34 +557,68 @@ window.closeAuth = () => {
   S.pendingAuthAction = null;
 };
 
-function initRcv(){ if(window._rcv) return; window._rcv = new RecaptchaVerifier(auth,'recaptcha-container',{size:'invisible'}); }
+// ==========================================
+// BULLETPROOF SMS FORMATTER & RECAPTCHA
+// ==========================================
+
+function initRcv(){ 
+  if(window._rcv) return; 
+  window._rcv = new RecaptchaVerifier(auth, 'recaptcha-container', {
+    size: 'invisible',
+    callback: (response) => {
+      // reCAPTCHA solved, allow signInWithPhoneNumber.
+    }
+  }); 
+}
 
 window.sendOTP = async () => {
-  let phoneVal = document.getElementById('authPhone').value;
-  if(!phoneVal.trim()) { toast('Entrez un numéro'); return; }
+  let phoneVal = document.getElementById('authPhone').value.trim();
+  if(!phoneVal) { toast('Entrez un numéro'); return; }
   
-  // NATIVE MOROCCAN NUMBER FORMATTER
-  // Strips all non-digit and non-plus characters so users can type "06 12 34 56" safely
-  let cleaned = phoneVal.replace(/[^0-9+]/g, '');
+  // The Silent Formatter: Convert 06... or 07... to +212 and strip spaces
+  let cleaned = phoneVal.replace(/\s+/g, '');
   if (cleaned.startsWith('0')) {
-      cleaned = '+212' + cleaned.substring(1);
+    cleaned = '+212' + cleaned.substring(1);
   } else if (!cleaned.startsWith('+')) {
-      cleaned = '+212' + cleaned;
+    cleaned = '+212' + cleaned;
   }
   const finalPhone = cleaned;
 
-  const btn = document.getElementById('btnOtp'); btn.textContent = 'Envoi...'; btn.disabled = true;
+  const btn = document.getElementById('btnOtp'); 
+  btn.textContent = 'Envoi...'; 
+  btn.disabled = true;
+  
   try {
     initRcv();
     window._cr = await signInWithPhoneNumber(auth, finalPhone, window._rcv);
+    
+    // SMS Sent Successfully!
     document.getElementById('stepPhone').style.display = 'none';
     document.getElementById('stepOtp').style.display = 'block';
     document.getElementById('authTitle').textContent = 'Code envoyé 📱';
     document.getElementById('authSub').textContent = 'Entrez le code reçu par SMS';
     buildOtp();
-  } catch(e) { toast('Erreur SMS. Vérifiez le numéro.'); console.error(e); }
-  btn.textContent = 'Recevoir le code SMS'; btn.disabled = false;
+  } catch(error) {
+    // SMS Failed (Usually due to formatting, domain whitelist, or region policy)
+    console.error("SMS Error:", error);
+    toast("Erreur d'envoi. Vérifiez le numéro.");
+    
+    // CRITICAL: Reset the reCAPTCHA so the user can try again!
+    if(window._rcv) {
+      window._rcv.render().then(function(widgetId) {
+        grecaptcha.reset(widgetId);
+      });
+    }
+  }
+  
+  btn.textContent = 'Recevoir le code SMS'; 
+  btn.disabled = false;
 };
+
+// ==========================================
+// END SMS FORMATTER UPDATE
+// ==========================================
+
 
 function buildOtp() {
   const row = document.getElementById('otpRow'); row.innerHTML = '';
