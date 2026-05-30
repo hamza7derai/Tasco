@@ -460,7 +460,7 @@ img { display:block }
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, onSnapshot, addDoc, doc, getDoc, setDoc, updateDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-// NEW: Import signInAnonymously instead of SMS logic
+// Using signInAnonymously for frictionless "Ghost Checkout"
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const fbApp = initializeApp({
@@ -522,10 +522,11 @@ onAuthStateChanged(auth, async user => {
   }
 });
 
+// FIX 1: JavaScript Native Sorting to bypass Firestore Index crash!
 function listenOrders() {
   if(!S.user) return;
-  onSnapshot(query(collection(db,'orders'), where('customerId','==',S.user.uid), orderBy('timestamp','desc')), snap => {
-    S.userOrders = snap.docs.map(d => ({id:d.id, ...d.data()}));
+  onSnapshot(query(collection(db,'orders'), where('customerId','==',S.user.uid)), snap => {
+    S.userOrders = snap.docs.map(d => ({id:d.id, ...d.data()})).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
     if(S.currentTab === 'orders') renderOrdersList();
   });
 }
@@ -979,7 +980,7 @@ function renderConfirmed(orderId) {
   document.getElementById('confirmedContent').innerHTML = `<div class="confirmed-anim"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div class="confirmed-title">Commande reçue ! 🎉</div><div class="confirmed-sub">Merci ${S.userDoc?.name || 'Client'}. Nous préparons votre commande.</div><div class="confirmed-oid"><p>Numéro de commande</p><h3>${shortId}</h3></div><button class="main-btn" style="width: 100%; justify-content:center; text-transform:uppercase; letter-spacing:0.5px;" onclick="switchTab('orders')">Suivre ma commande</button>`;
 }
 
-// --- ORDERS & EMPTY STATES ---
+// FIX 2: Restored SVG Tracking Icons!
 const ST_STEPS = [
   {key:'Pending', lb:'Confirmée', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'},
   {key:'Preparing', lb:'Préparation', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/></svg>'},
