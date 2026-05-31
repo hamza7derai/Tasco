@@ -6,6 +6,7 @@
 <title>TASCO | Fast Cravings. Real Satisfaction.</title>
 
 <link rel="manifest" href="manifest.json"/>
+<!-- Typography Upgrade: Barlow & Barlow Condensed -->
 <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,700&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet"/>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbpE2C-Lq4wIpQCMF8k5xh6lh0Wk9qYNo&libraries=places"></script>
 
@@ -99,7 +100,7 @@ h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confi
 .home-banner { margin:16px; background:var(--surface); border-radius:20px; overflow:hidden; border:1px solid rgba(23,23,23,0.03); box-shadow:var(--shadow); display:flex; align-items:center; min-height:128px; position:relative }
 .banner-content { padding:20px; flex:1; max-width:calc(100% - 105px); position:relative; z-index:2 }
 .banner-hello { font-size:13px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:5px; font-family: var(--font-display); }
-.banner-title { font-size:32px; line-height:1; letter-spacing:1px; margin-bottom:12px }
+.banner-title { font-size:32px; line-height:1; letter-spacing:1px; margin-bottom:8px }
 .banner-title span { color:var(--orange) }
 .banner-illus { position:absolute; right:0; top:0; bottom:0; width:105px; display:flex; align-items:center; justify-content:center; background:var(--orange-light); border-radius:0 18px 18px 0 }
 .banner-illus-emoji { font-size:58px; opacity:.9 }
@@ -112,14 +113,14 @@ h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confi
 .si { position:absolute; left:16px; width:18px; color:var(--muted); fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round }
 
 /* CATEGORY TABS (Snapping Update) */
-.cats-scroll { display:flex; gap:10px; overflow-x:auto; padding:2px 16px 8px; scroll-snap-type: x mandatory;}
+.cats-scroll { display:flex; gap:10px; overflow-x:auto; padding:2px 16px 8px; scroll-snap-type: x mandatory; scroll-padding-left: 16px;}
 .cat-chip { flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:12px 14px 10px; cursor:pointer; transition:.18s; min-width:76px; box-shadow:var(--shadow); scroll-snap-align: start;}
 .cc-ic { font-size:26px; line-height:1 }
 .cc-lb { font-family: var(--font-display); font-size:12px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; text-align:center; line-height:1.2 }
 .cat-chip.active { border-color:var(--orange); background:var(--orange-light); box-shadow: 0 4px 12px rgba(255,90,0,0.15);}
 .cat-chip.active .cc-lb { color:var(--orange) }
 
-.sub-scroll { display:flex; gap:8px; overflow-x:auto; padding:2px 16px 8px; margin-top:8px; scroll-snap-type: x mandatory;}
+.sub-scroll { display:flex; gap:8px; overflow-x:auto; padding:2px 16px 8px; margin-top:8px; scroll-snap-type: x mandatory; scroll-padding-left: 16px;}
 .sub-pill { flex-shrink:0; padding:8px 16px; border-radius:99px; font-size:13px; font-family: var(--font-display); text-transform: uppercase; font-weight:800; background:var(--surface); border:1px solid var(--border); color:var(--muted); cursor:pointer; transition:.18s; white-space:nowrap; box-shadow:var(--shadow); scroll-snap-align: start; letter-spacing: 0.5px;}
 .sub-pill.active { background:var(--orange); color:#fff; border-color:var(--orange) }
 
@@ -339,6 +340,7 @@ h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confi
         <div class="banner-content">
           <div class="banner-hello" id="bannerHello">BONJOUR 👋</div>
           <div class="banner-title" id="bannerTitle">NOUS SOMMES<br><span>EN LIGNE !</span></div>
+          <div style="display:inline-flex;align-items:center;gap:6px;background:var(--surface);color:var(--text);padding:6px 12px;border-radius:99px;font-size:11px;font-weight:800;font-family:var(--font-display);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;">⚡ Livraison rapide</div>
         </div>
         <div class="banner-illus"><div class="banner-illus-emoji">🍔</div><div class="banner-illus-fade"></div></div>
       </div>
@@ -523,9 +525,6 @@ const greet = () => { const h = new Date().getHours(); return h < 12 ? 'BONJOUR'
 function toast(m, d=2600) { const el = document.getElementById('toast'); el.textContent = m; el.classList.add('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), d); }
 window.toast = toast;
 
-// ==========================================
-// SILENT ANONYMOUS AUTHENTICATION
-// ==========================================
 onAuthStateChanged(auth, async user => {
   if (!user) {
     try {
@@ -560,7 +559,6 @@ function listenOrders() {
   });
 }
 
-// --- DATA LISTENERS ---
 onSnapshot(collection(db,'products'), snap => { S.products = snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.isAvailable!==false); if(S.currentTab==='home') renderHomeGrid(); });
 onSnapshot(collection(db,'categories'), snap => { S.catsDB = snap.docs.map(d=>({id:d.id,...d.data()})); if(S.currentTab==='home') renderHomeCats(); });
 onSnapshot(collection(db,'promos'), snap => { S.promosDB = snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.active); });
@@ -574,7 +572,6 @@ function updateStoreUI() {
   else { t.innerHTML = 'NOUS SOMMES<br><span style="color:var(--danger)">FERMÉS</span>'; }
 }
 
-// --- TAB NAVIGATION ---
 window.switchTab = tab => {
   const hideNav = ['checkout', 'confirmed'];
   document.getElementById('bottomNav').style.display = hideNav.includes(tab) ? 'none' : 'flex';
@@ -591,14 +588,12 @@ window.switchTab = tab => {
 };
 
 function renderCurrentTab() {
-  // Update Dynamic Banner Name
   if(S.userDoc && S.userDoc.name && S.userDoc.name !== 'Client Invité') {
     document.getElementById('bannerHello').textContent = greet() + ' ' + S.userDoc.name.split(' ')[0] + ' 👋';
   } else {
     document.getElementById('bannerHello').textContent = greet() + ' 👋';
   }
 
-  // Update Tasco Club Points on Home
   const ptsEl = document.getElementById('homeClubPts');
   if(ptsEl) {
     const pts = S.userDoc?.points || 0;
@@ -615,25 +610,47 @@ function renderCurrentTab() {
 const ICONS = {"Top ventes":"🔥","Burgers":"🍔","Tacos":"🌮","Pizzas":"🍕","Fast Food":"🍔","Petit-déjeuner":"🥐","Desserts":"🍦","Boissons":"🥤","Snacks":"🍿","Fruits":"🍎","Viande":"🥩"};
 function getIcon(n) { const db2 = S.catsDB.find(c=>c.name===n); if(db2?.icon) return db2.icon; for(const k in ICONS) if(n.toLowerCase().includes(k.toLowerCase())) return ICONS[k]; return '🍽️'; }
 
-// --- HOME RENDERING ---
 function getMainCats() { const cats = [...new Set(S.products.map(p=>p.category).filter(Boolean))]; cats.sort((a,b) => (S.catsDB.find(c=>c.name===b)?.sortWeight||0) - (S.catsDB.find(c=>c.name===a)?.sortWeight||0) || a.localeCompare(b)); return cats; }
 function getSubCats(main) { return [...new Set(S.products.filter(p=>p.category===main).map(p=>p.subCategory).filter(Boolean))].sort(); }
 
 function renderHomeCats() {
   const cats = getMainCats();
   const all = [{id:'__pop__', lb:'Top ventes', ic:'🔥'}, ...cats.map(c=>({id:c, lb:c, ic:getIcon(c)}))];
-  document.getElementById('homeCats').innerHTML = all.map(c => `<div class="cat-chip ${S.homeActiveCat===c.id?'active':''}" onclick="setHomeCat('${c.id}')"><div class="cc-ic">${c.ic}</div><div class="cc-lb">${c.lb}</div></div>`).join('');
+  const container = document.getElementById('homeCats');
+  const currentScroll = container.scrollLeft;
+  container.innerHTML = all.map(c => `<div class="cat-chip ${S.homeActiveCat===c.id?'active':''}" onclick="setHomeCat('${c.id}')"><div class="cc-ic">${c.ic}</div><div class="cc-lb">${c.lb}</div></div>`).join('');
+  container.scrollLeft = currentScroll;
 }
+
 function renderHomeSubs() {
   const row = document.getElementById('homeSubs');
   if(S.homeActiveCat==='__pop__') { row.style.display='none'; return; }
   const subs = getSubCats(S.homeActiveCat);
   if(!subs.length) { row.style.display='none'; return; }
   row.style.display='flex';
+  const currentScroll = row.scrollLeft;
   row.innerHTML = [{id:'__all__', lb:'Tous'}, ...subs.map(s=>({id:s, lb:s}))].map(s => `<div class="sub-pill ${S.homeActiveSub===s.id?'active':''}" onclick="setHomeSub('${s.id}')">${s.lb}</div>`).join('');
+  row.scrollLeft = currentScroll;
 }
-window.setHomeCat = id => { S.homeActiveCat = id; S.homeActiveSub = '__all__'; renderHomeGrid(); };
-window.setHomeSub = id => { S.homeActiveSub = id; renderHomeGrid(); };
+
+window.setHomeCat = id => { 
+  S.homeActiveCat = id; S.homeActiveSub = '__all__'; 
+  renderHomeGrid(); 
+  setTimeout(() => {
+    const activeEl = document.querySelector('#homeCats .cat-chip.active');
+    if (activeEl) activeEl.parentElement.scrollTo({ left: activeEl.offsetLeft - 16, behavior: 'smooth' });
+  }, 10);
+};
+
+window.setHomeSub = id => { 
+  S.homeActiveSub = id; 
+  renderHomeGrid(); 
+  setTimeout(() => {
+    const activeEl = document.querySelector('#homeSubs .sub-pill.active');
+    if (activeEl) activeEl.parentElement.scrollTo({ left: activeEl.offsetLeft - 16, behavior: 'smooth' });
+  }, 10);
+};
+
 document.getElementById('homeSearch').addEventListener('input', () => renderHomeGrid());
 
 function renderHomeGrid() {
@@ -676,7 +693,6 @@ function pcHTML(p) {
   return `<div class="pc fade-up" onclick="openProd('${p.id}')">${tag}<div class="pc-img">${img}</div><div class="pc-body"><div class="pc-name">${p.name}</div><div class="pc-sub">${p.subtitle||p.category||''}</div>${traits ? `<div style="display:flex;gap:4px;margin-bottom:6px">${traits}</div>` : ''}<div class="pc-bottom"><div>${ph}</div><div class="add-btn" onclick="event.stopPropagation();quickAdd('${p.id}')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div></div></div>`;
 }
 
-// --- COMPLEX PRODUCT MODAL ---
 window.openProd = id => {
   const p = S.products.find(x => x.id === id); if(!p) return;
   S.pmState = { qty: 1, base: p.promoPrice > 0 ? p.promoPrice : p.sellPrice, sels: {}, prod: p };
@@ -767,7 +783,6 @@ function saveCart() { localStorage.setItem('tasco_cart', JSON.stringify(S.cart))
 function updateBadge() { const t = S.cart.reduce((s,i) => s + i.qty, 0); const b = document.getElementById('cartBadge'); if(t > 0) { b.textContent = t; b.style.display = 'flex'; } else b.style.display = 'none'; }
 updateBadge();
 
-// --- CART RENDERING ---
 window.clearCart = () => { if(!confirm('Vider le panier ?')) return; S.cart = []; S.promo = null; saveCart(); updateBadge(); renderCartScreen(); toast('Panier vidé'); };
 
 function renderCartScreen() {
@@ -786,7 +801,6 @@ function renderCartScreen() {
   });
   html += `</div>`;
   
-  // Promos
   html += `<div class="promo-card" style="margin-top:12px"><div class="promo-row" onclick="togglePromo()"><div class="promo-icon"><svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div><div class="promo-txt" style="flex:1;"><strong>Vous avez un code promo ?</strong><span>${S.promo ? 'Appliqué: ' + S.promo.code : 'Saisissez votre code'}</span></div><svg class="promo-chevron" style="width:16px; stroke:var(--muted); fill:none; stroke-width:2.5; transition:0.2s; transform:${S.promoOpen?'rotate(180deg)':'rotate(0)'}" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>${S.promoOpen ? `<div class="promo-inp-row"><input type="text" id="promoInp" class="promo-inp" placeholder="CODE PROMO" value="${S.promo?.code||''}"><button class="promo-apply" onclick="applyPromo()">Appliquer</button></div>` : ''}</div>`;
   
   const sub = S.cart.reduce((s,i) => s + i.qty * i.unitPrice, 0);
@@ -816,7 +830,6 @@ window.goToCheckout = () => {
   switchTab('checkout'); 
 };
 
-// --- CHECKOUT & DELIVERY MATH ---
 function getDistKm(lat1, lng1, lat2, lng2) {
   const R = 6371, dLat = (lat2-lat1)*Math.PI/180, dLng = (lng2-lng1)*Math.PI/180;
   const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
@@ -916,10 +929,12 @@ function renderCheckout() {
     content.innerHTML = `
     <div class="checkout-section">
       <span class="cs-label">Vos informations</span>
-      <input type="text" id="guestName" class="auth-input" placeholder="Ton prénom" value="${S.userDoc?.name || ''}">
-      <input type="tel" id="guestPhone" class="auth-input" placeholder="06 XX XX XX XX" value="${S.userDoc?.phone || ''}">
+      <div style="background:var(--surface); border-radius:14px; border:1px solid var(--border); padding:16px; margin-bottom:24px; box-shadow:var(--shadow);">
+        <div style="font-size:15px; font-weight:800; color:var(--text); margin-bottom:4px;">${S.userDoc?.name || 'Client Invité'}</div>
+        <div style="font-size:13px; color:var(--muted); font-weight:600;">${S.userDoc?.phone || 'Non renseigné'}</div>
+      </div>
       
-      <span class="cs-label" style="margin-top:24px;">Comment souhaitez-vous être livré ?</span>
+      <span class="cs-label">Comment souhaitez-vous être livré ?</span>
       <div style="background:var(--surface); border-radius:var(--r-lg); border:1px solid var(--border); overflow:hidden; box-shadow:var(--shadow);">
         <div class="acc-item" onclick="useGPS()" style="border-bottom:1px solid var(--border);">
           <div class="acc-ic" style="background:var(--orange-light); color:var(--orange);"><svg viewBox="0 0 24 24" style="width:16px;stroke:currentColor;fill:none;stroke-width:2.5;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div>
@@ -952,18 +967,7 @@ function renderCheckout() {
 
 window.checkoutNext = async () => {
   if(S.checkoutStep === 1) {
-    const gName = document.getElementById('guestName').value.trim();
-    const gPhone = document.getElementById('guestPhone').value.trim();
-    
-    if(!gName || !gPhone) { toast('Entrez votre nom et numéro'); return; }
     if(!S.selectedLoc) { toast('📍 Sélectionnez votre adresse'); return; }
-    
-    // Save to local session variables
-    S.userDoc = { ...S.userDoc, name: gName, phone: gPhone };
-    
-    // Optionally update their silent profile in Firebase
-    if(S.user) await updateDoc(doc(db, 'tasco_users', S.user.uid), { name: gName, phone: gPhone });
-    
     S.checkoutStep = 2; renderCheckout();
   } else if(S.checkoutStep === 2) {
     await placeOrder();
