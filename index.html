@@ -6,7 +6,7 @@
 <title>TASCO | Fast Cravings. Real Satisfaction.</title>
 
 <link rel="manifest" href="manifest.json"/>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,700&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet"/>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbpE2C-Lq4wIpQCMF8k5xh6lh0Wk9qYNo&libraries=places"></script>
 
 <style>
@@ -23,7 +23,8 @@
   --blue:#3B82F6; --blue-light:#F0F4FA;
   --pink:#DB2777; --pink-light:#FCE7F3;
   --amber:#F59E0B; --amber-light:#FEF3C7;
-  --font:'Space Grotesk', sans-serif;
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font: 'Barlow', sans-serif;
   --r:16px; --r-sm:10px; --r-lg:20px; --r-xl:24px;
   --shadow:0 4px 16px rgba(23, 23, 23, 0.04); --shadow-md:0 10px 40px rgba(23, 23, 23, 0.1);
   --nav-h:65px;
@@ -37,11 +38,18 @@ img { display:block }
 ::-webkit-scrollbar { display:none } 
 * { scrollbar-width:none }
 
+/* Global Headline Font Rules */
+h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confirmed-title, .cb-text h4, .pm-price, .ci-price, .sum-row.total .sv {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-weight: 900;
+}
+
 /* SPLASH */
 #splash { position:fixed; inset:0; background:var(--orange); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; transition:opacity .5s ease,transform .6s ease }
 #splash.hide { opacity:0; pointer-events:none; transform:scale(1.04) }
 #splash img { width:150px; margin-bottom:12px; filter:brightness(0) invert(1) }
-#splash p { color:rgba(255,255,255,0.8); font-size:11px; letter-spacing:2px; text-transform:uppercase; font-weight:700; margin-bottom:60px }
+#splash p { color:rgba(255,255,255,0.8); font-size:13px; font-family: var(--font-display); letter-spacing:2px; text-transform:uppercase; font-weight:700; margin-bottom:60px }
 #splash .bw { width:48px; height:4px; background:rgba(255,255,255,0.2); border-radius:99px; overflow:hidden }
 #splash .bf { height:100%; background:#fff; border-radius:99px; animation:sl 2s ease forwards }
 @keyframes sl { from{width:0} to{width:100%} }
@@ -55,17 +63,17 @@ img { display:block }
 
 /* BOTTOM NAV */
 #bottomNav { flex-shrink:0; height:var(--nav-h); background:var(--surface); border-top:1px solid var(--border); display:flex; align-items:stretch; z-index:100; padding-bottom:env(safe-area-inset-bottom,0px) }
-.nav-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; color:#9CA3AF; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; transition:.18s; position:relative; cursor:pointer }
+.nav-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; color:#9CA3AF; font-size:11px; font-family: var(--font-display); font-weight:800; text-transform:uppercase; letter-spacing:.5px; transition:.18s; position:relative; cursor:pointer }
 .nav-item svg { width:22px; height:22px; stroke-width:2.2; fill:none; stroke:currentColor; stroke-linecap:round; stroke-linejoin:round; transition:.18s }
 .nav-item.active { color:var(--orange) } 
 .nav-item.active svg { fill: var(--orange-light); }
 .nav-badge { position:absolute; top:6px; right:calc(50% - 22px); background:var(--danger); color:#fff; font-size:10px; font-weight:800; min-width:18px; height:18px; border-radius:99px; display:flex; align-items:center; justify-content:center; padding:0 4px; border:2px solid var(--surface) }
 
 /* SHARED */
-.section-title { font-size:16px; font-weight:800; letter-spacing:-.4px; color:var(--text); text-transform: uppercase; }
+.section-title { font-size:20px; letter-spacing:0.5px; color:var(--text); }
 .icon-btn { width:40px; height:40px; border-radius:12px; background:var(--surface); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text); box-shadow:var(--shadow); flex-shrink:0; cursor:pointer }
 .icon-btn svg { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round }
-.auth-input { width:100%; padding:16px; border-radius:14px; border:2px solid var(--border); background:var(--bg); font-size:15px; font-weight:800; color:var(--text); transition:.2s; font-family:var(--font); margin-bottom:14px; text-align: left; letter-spacing: 1px;}
+.auth-input { width:100%; padding:16px; border-radius:14px; border:2px solid var(--border); background:var(--bg); font-size:15px; font-weight:700; color:var(--text); transition:.2s; font-family:var(--font); margin-bottom:14px; text-align: left; letter-spacing: 0.5px;}
 .auth-input:focus { border-color:var(--orange); box-shadow:0 0 0 4px var(--orange-light); outline:none; background: var(--surface);}
 
 /* ACCOUNT MENU STYLES */
@@ -84,14 +92,14 @@ img { display:block }
 #homeHeader { padding:16px; display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,.96); backdrop-filter:blur(12px); position:sticky; top:0; z-index:50; border-bottom:1px solid var(--border) }
 .logo-img { height:36px; width:auto; object-fit:contain }
 .header-right { display:flex; align-items:center; gap:8px }
-.location-pill { display:flex; align-items:center; gap:6px; background:var(--surface); border:1.5px solid var(--border); border-radius:99px; padding:8px 14px; font-size:12px; font-weight:800; color:var(--text); cursor:pointer; box-shadow:var(--shadow) }
+.location-pill { display:flex; align-items:center; gap:6px; background:var(--surface); border:1.5px solid var(--border); border-radius:99px; padding:8px 14px; font-size:13px; font-family: var(--font-display); font-weight:700; text-transform: uppercase; color:var(--text); cursor:pointer; box-shadow:var(--shadow) }
 .location-pill svg { width:14px; height:14px; stroke:var(--orange); fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0 }
 .location-pill span { max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
 
 .home-banner { margin:16px; background:var(--surface); border-radius:20px; overflow:hidden; border:1px solid rgba(23,23,23,0.03); box-shadow:var(--shadow); display:flex; align-items:center; min-height:128px; position:relative }
 .banner-content { padding:20px; flex:1; max-width:calc(100% - 105px); position:relative; z-index:2 }
-.banner-hello { font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin-bottom:5px }
-.banner-title { font-size:22px; font-weight:900; line-height:1.1; letter-spacing:-.5px; margin-bottom:12px }
+.banner-hello { font-size:13px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:5px; font-family: var(--font-display); }
+.banner-title { font-size:32px; line-height:1; letter-spacing:1px; margin-bottom:12px }
 .banner-title span { color:var(--orange) }
 .banner-illus { position:absolute; right:0; top:0; bottom:0; width:105px; display:flex; align-items:center; justify-content:center; background:var(--orange-light); border-radius:0 18px 18px 0 }
 .banner-illus-emoji { font-size:58px; opacity:.9 }
@@ -99,21 +107,32 @@ img { display:block }
 
 .search-wrap { padding:0 16px; margin:12px 0 16px }
 .search-box { position:relative; background:var(--surface); border-radius:16px; border:1px solid var(--border); box-shadow:var(--shadow); display:flex; align-items:center }
-.search-box input { flex:1; padding:15px 14px 15px 46px; font-size:14px; font-weight:600; color:var(--text); background:transparent; font-family:var(--font) }
-.search-box input::placeholder { color:var(--muted); font-weight:600 }
+.search-box input { flex:1; padding:15px 14px 15px 46px; font-size:15px; font-weight:600; color:var(--text); background:transparent; font-family:var(--font) }
+.search-box input::placeholder { color:var(--muted); font-weight:500 }
 .si { position:absolute; left:16px; width:18px; color:var(--muted); fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round }
 
-/* CATEGORY TABS */
+/* CATEGORY TABS (Snapping Update) */
 .cats-scroll { display:flex; gap:10px; overflow-x:auto; padding:2px 16px 8px; scroll-snap-type: x mandatory;}
-.cat-chip { flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:12px 14px 10px; cursor:pointer; transition:.18s; min-width:76px; box-shadow:var(--shadow); scroll-snap-align: center;}
+.cat-chip { flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:12px 14px 10px; cursor:pointer; transition:.18s; min-width:76px; box-shadow:var(--shadow); scroll-snap-align: start;}
 .cc-ic { font-size:26px; line-height:1 }
-.cc-lb { font-size:10px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; text-align:center; line-height:1.2 }
+.cc-lb { font-family: var(--font-display); font-size:12px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; text-align:center; line-height:1.2 }
 .cat-chip.active { border-color:var(--orange); background:var(--orange-light); box-shadow: 0 4px 12px rgba(255,90,0,0.15);}
 .cat-chip.active .cc-lb { color:var(--orange) }
 
 .sub-scroll { display:flex; gap:8px; overflow-x:auto; padding:2px 16px 8px; margin-top:8px; scroll-snap-type: x mandatory;}
-.sub-pill { flex-shrink:0; padding:8px 16px; border-radius:99px; font-size:12px; font-weight:700; background:var(--surface); border:1px solid var(--border); color:var(--muted); cursor:pointer; transition:.18s; white-space:nowrap; box-shadow:var(--shadow); scroll-snap-align: center;}
+.sub-pill { flex-shrink:0; padding:8px 16px; border-radius:99px; font-size:13px; font-family: var(--font-display); text-transform: uppercase; font-weight:800; background:var(--surface); border:1px solid var(--border); color:var(--muted); cursor:pointer; transition:.18s; white-space:nowrap; box-shadow:var(--shadow); scroll-snap-align: start; letter-spacing: 0.5px;}
 .sub-pill.active { background:var(--orange); color:#fff; border-color:var(--orange) }
+
+/* TASCO CLUB BANNER */
+.club-banner { background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); border-radius: 16px; margin: 0 16px 24px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.15s; }
+.club-banner:active { transform: scale(0.98); }
+.cb-left { display: flex; align-items: center; gap: 12px; }
+.cb-icon-wrap { width: 42px; height: 42px; background: var(--orange); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 12px rgba(255,90,0,0.25);}
+.cb-text h4 { font-family: var(--font-display); font-size: 18px; font-weight: 900; color: var(--text); margin-bottom: 2px; line-height: 1; letter-spacing: 0.5px;}
+.cb-text p { font-size: 12px; color: var(--muted); font-weight: 500; margin: 0;}
+.cb-right { background: var(--bg); padding: 8px 12px; border-radius: 12px; text-align: right; border: 1px solid var(--border);}
+.cb-right span { display: block; font-size: 10px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; font-family: var(--font-display);}
+.cb-right strong { color: var(--orange); font-size: 18px; font-weight: 900; font-family: var(--font-display); display: flex; align-items: center; gap: 4px; line-height: 1;}
 
 /* PRODUCT GRID */
 .prod-section { padding:0 16px; margin-top:16px }
@@ -125,17 +144,17 @@ img { display:block }
 .pc-img { aspect-ratio:5/4; overflow:hidden; background:var(--bg); display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--border) }
 .pc-img img { width:100%; height:100%; object-fit:cover }
 .pc-emoji { font-size:42px }
-.pc-tag { position:absolute; top:10px; left:10px; font-size:10px; font-weight:800; padding:4px 8px; border-radius:8px; text-transform:uppercase; letter-spacing:.3px; box-shadow: var(--shadow); }
+.pc-tag { position:absolute; top:10px; left:10px; font-size:11px; font-family: var(--font-display); font-weight:800; padding:4px 8px; border-radius:8px; text-transform:uppercase; letter-spacing:0.5px; box-shadow: var(--shadow); }
 .t-promo { background:var(--pink-light); color:var(--pink) }
 .t-top { background:var(--amber-light); color:var(--amber) }
 .t-new { background:var(--purple-light); color:var(--purple) }
 .t-vedette { background:var(--danger-light); color:var(--danger) }
 .pc-body { padding:12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;}
-.pc-name { font-size:14px; font-weight:800; line-height:1.25; margin-bottom:4px; letter-spacing:-.2px; color: var(--text); }
-.pc-sub { font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.2px; margin-bottom:8px }
+.pc-name { font-size:20px; font-weight:900; line-height:1; margin-bottom:4px; letter-spacing:0.5px; color: var(--text); }
+.pc-sub { font-size:12px; color:var(--muted); font-family: var(--font-display); font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px }
 .pc-bottom { display:flex; align-items:center; justify-content:space-between; margin-top: auto;}
-.pc-old { font-size:11px; color:var(--muted); text-decoration:line-through; font-weight:700; display:block; line-height:1; margin-bottom:2px }
-.pc-price { font-size:16px; font-weight:900; color:var(--text); letter-spacing:-.5px; line-height:1 }
+.pc-old { font-size:12px; color:var(--muted); text-decoration:line-through; font-weight:600; display:block; line-height:1; margin-bottom:2px }
+.pc-price { font-size:22px; font-weight:900; color:var(--orange); letter-spacing:0.5px; line-height:1 }
 .add-btn { width:38px; height:38px; border-radius:12px; background:var(--orange); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 4px 12px rgba(255,90,0,.25); transition:.15s }
 .add-btn:active { transform:scale(.86) }
 .add-btn svg { width:18px; height:18px; stroke-width:2.5; fill:none; stroke:#fff; stroke-linecap:round; stroke-linejoin:round }
@@ -144,43 +163,43 @@ img { display:block }
 .cart-hdr, .checkout-hdr { padding:16px; background:rgba(255,255,255,.96); backdrop-filter:blur(12px); position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border) }
 .cart-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60vh; padding:48px 32px; text-align:center; gap:12px }
 .cart-empty .ce-ic { font-size:64px }
-.cart-empty h3 { font-size:20px; font-weight:900; letter-spacing:-.3px }
-.cart-empty p { font-size:14px; color:var(--muted); line-height:1.6; font-weight:600 }
+.cart-empty h3 { font-size:24px; font-weight:900; letter-spacing:0.5px; font-family: var(--font-display); text-transform: uppercase;}
+.cart-empty p { font-size:14px; color:var(--muted); line-height:1.6; font-weight:500 }
 .cart-items-card { background:var(--surface); border-radius:var(--r-xl); border:1px solid var(--border); margin:16px; overflow:hidden; box-shadow:var(--shadow) }
 .cart-item { display:flex; gap:14px; padding:16px; align-items:center; border-bottom:1px solid var(--border) }
 .cart-item:last-child { border-bottom:none }
 .ci-img { width:70px; height:70px; border-radius:14px; object-fit:cover; background:var(--bg); border:1px solid rgba(0,0,0,0.05); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:24px }
 .ci-body { flex:1; min-width:0 }
-.ci-name { font-size:15px; font-weight:800; margin-bottom:4px; line-height:1.2; letter-spacing:-.2px }
-.ci-meta { font-size:12px; color:var(--muted); line-height:1.4; margin-bottom:8px; font-weight:600; text-transform: uppercase; letter-spacing: 0.5px;}
-.ci-price { font-size:15px; font-weight:900; color:var(--text) }
+.ci-name { font-size:20px; font-weight:900; margin-bottom:4px; line-height:1; letter-spacing:0.5px }
+.ci-meta { font-size:12px; color:var(--muted); line-height:1.4; margin-bottom:8px; font-family: var(--font-display); font-weight:700; text-transform: uppercase; letter-spacing: 0.5px;}
+.ci-price { font-size:18px; font-weight:900; color:var(--orange) }
 .ci-ctrl { display:flex; flex-direction:column; align-items:flex-end; gap:8px; flex-shrink:0 }
 .qty-ctrl { display:flex; align-items:center; gap:6px; background:var(--bg); border-radius:99px; padding:4px 8px; border:1px solid var(--border) }
 .qty-ctrl button { width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--text); font-weight:600; line-height:1 }
-.qty-ctrl span { font-size:14px; font-weight:800; min-width:16px; text-align:center }
-.ci-del { font-size:10px; color:var(--danger); font-weight:800; background:var(--danger-light); padding:6px 10px; border-radius:8px; text-transform:uppercase; letter-spacing:.2px }
+.qty-ctrl span { font-size:16px; font-weight:800; min-width:16px; text-align:center; font-family: var(--font-display); }
+.ci-del { font-size:11px; color:var(--danger); font-family: var(--font-display); font-weight:800; background:var(--danger-light); padding:6px 10px; border-radius:8px; text-transform:uppercase; letter-spacing:.5px }
 
 .promo-card { background:var(--surface); border-radius:var(--r-xl); border:1.5px dashed var(--border-strong); margin:0 16px; overflow:hidden; box-shadow:var(--shadow) }
 .promo-row { display:flex; align-items:center; gap:14px; padding:16px; cursor:pointer }
 .promo-icon { width:38px; height:38px; border-radius:12px; background:var(--orange-light); color:var(--orange); display:flex; align-items:center; justify-content:center; flex-shrink:0 }
 .promo-icon svg { width:18px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round }
 .promo-txt strong { font-size:14px; font-weight:800; display:block; margin-bottom:2px }
-.promo-txt span { font-size:12px; color:var(--muted); font-weight:600 }
+.promo-txt span { font-size:12px; color:var(--muted); font-weight:500 }
 .promo-inp-row { display:flex; gap:10px; padding:0 16px 16px }
-.promo-inp { flex:1; padding:14px; border-radius:12px; border:1.5px solid var(--border); background:var(--bg); font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:1px; font-family:var(--font); color:var(--text) }
-.promo-apply { padding:14px 20px; background:var(--text); color:#fff; border-radius:12px; font-size:13px; font-weight:800 }
+.promo-inp { flex:1; padding:14px; border-radius:12px; border:1.5px solid var(--border); background:var(--bg); font-size:15px; font-weight:800; text-transform:uppercase; letter-spacing:1px; font-family:var(--font); color:var(--text) }
+.promo-apply { padding:14px 20px; background:var(--text); color:#fff; border-radius:12px; font-size:14px; font-family: var(--font-display); text-transform: uppercase; font-weight:800; letter-spacing: 0.5px;}
 
 .summary-card { background:var(--surface); border-radius:var(--r-xl); border:1px solid var(--border); margin:16px; padding:16px; box-shadow:var(--shadow) }
-.sum-row { display:flex; justify-content:space-between; align-items:center; font-size:14px; padding:6px 0; color:var(--muted); font-weight:600 }
-.sum-row .sv { font-weight:800; color:var(--text) }
-.sum-row.discount { color:var(--green); font-weight:800 } .sum-row.discount .sv { color:var(--green) }
-.sum-row.total { font-size:18px; font-weight:900; color:var(--text); padding-top:16px; margin-top:12px; border-top:1.5px dashed var(--border) }
+.sum-row { display:flex; justify-content:space-between; align-items:center; font-size:14px; padding:6px 0; color:var(--muted); font-weight:500 }
+.sum-row .sv { font-weight:700; color:var(--text); font-size: 15px;}
+.sum-row.discount { color:var(--green); font-weight:700 } .sum-row.discount .sv { color:var(--green) }
+.sum-row.total { font-size:22px; font-weight:900; color:var(--text); padding-top:16px; margin-top:12px; border-top:1.5px dashed var(--border) }
 .sum-row.total .sv { color:var(--orange) }
 
 .cart-cta, .checkout-cta { position:sticky; bottom:0; background:rgba(255,255,255,.97); backdrop-filter:blur(12px); border-top:1px solid var(--border); z-index:100; padding:16px; margin-top:auto;}
-.main-btn { width:100%; padding:18px; background:var(--orange); color:#fff; border-radius:16px; font-size:16px; font-weight:800; letter-spacing:.3px; box-shadow:0 6px 20px rgba(255,90,0,.25); transition:.15s; display:flex; align-items:center; justify-content:space-between; cursor: pointer; border: none;}
+.main-btn { width:100%; padding:18px; background:var(--orange); color:#fff; border-radius:16px; font-size:20px; font-family: var(--font-display); font-weight:900; letter-spacing:1px; text-transform: uppercase; box-shadow:0 6px 20px rgba(255,90,0,.25); transition:.15s; display:flex; align-items:center; justify-content:space-between; cursor: pointer; border: none;}
 .main-btn:active { transform:scale(.98) } .main-btn:disabled { background:#D5D5D5; box-shadow:none; cursor:not-allowed }
-.secure-note { display:flex; align-items:center; justify-content:center; gap:6px; font-size:11px; color:var(--muted); font-weight:800; margin-top:12px; text-transform:uppercase; letter-spacing:.3px }
+.secure-note { display:flex; align-items:center; justify-content:center; gap:6px; font-size:12px; color:var(--muted); font-family: var(--font-display); font-weight:800; margin-top:12px; text-transform:uppercase; letter-spacing:0.5px }
 
 /* CHECKOUT SPECIFIC */
 .back-btn { width:40px; height:40px; border-radius:12px; background:var(--surface); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer }
@@ -189,22 +208,22 @@ img { display:block }
 .step-item { display:flex; flex-direction:column; align-items:center; gap:6px; flex:1; position:relative }
 .step-item::after { content:''; position:absolute; top:16px; left:calc(50% + 16px); right:calc(-50% + 16px); height:2px; background:var(--border); z-index:0 }
 .step-item:last-child::after { display:none }
-.step-dot { width:32px; height:32px; border-radius:50%; background:var(--bg); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:var(--muted); position:relative; z-index:1; transition:.3s }
-.step-lbl { font-size:10px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.3px }
+.step-dot { width:32px; height:32px; border-radius:50%; background:var(--bg); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:900; font-family: var(--font-display); color:var(--muted); position:relative; z-index:1; transition:.3s }
+.step-lbl { font-size:12px; font-family: var(--font-display); font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px }
 .step-item.done .step-dot { background:var(--green-light); border-color:var(--green); color:var(--green) }
 .step-item.done::after { background:var(--green) }
 .step-item.active .step-dot { background:var(--orange); border-color:var(--orange); color:#fff; box-shadow:0 0 0 4px var(--orange-light) }
 .step-item.active .step-lbl { color:var(--orange) }
 
 .checkout-section { margin:20px 16px }
-.cs-label { font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); margin-bottom:12px; display:block }
+.cs-label { font-size:13px; font-family: var(--font-display); font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); margin-bottom:12px; display:block }
 
 .loc-confirmed { background:var(--surface); border-radius:16px; border:1px solid var(--border); padding:16px; display:none; align-items:flex-start; gap:12px; margin-top:16px; box-shadow:var(--shadow) }
 .loc-confirmed.show { display:flex }
 .lc-icon { font-size:22px; margin-top:2px; flex-shrink:0 }
 .lc-body { flex:1 }
-.lc-addr { font-size:14px; font-weight:700; color:var(--text); line-height:1.4; margin-bottom:6px }
-.lc-change { font-size:12px; color:var(--muted); cursor:pointer; text-decoration:underline; display:block; font-weight:700 }
+.lc-addr { font-size:14px; font-weight:600; color:var(--text); line-height:1.4; margin-bottom:6px }
+.lc-change { font-size:12px; color:var(--muted); cursor:pointer; text-decoration:underline; display:block; font-weight:600 }
 
 /* PRODUCT MODAL & MAP MODAL */
 .prod-modal { position:fixed; bottom:0; left:0; right:0; max-width:600px; margin:0 auto; background:#fff; border-radius:30px 30px 0 0; z-index:2001; transform:translateY(100%); transition:.38s cubic-bezier(.175,.885,.32,1); max-height:92vh; display:flex; flex-direction:column; overflow:hidden; box-shadow: 0 -10px 40px rgba(0,0,0,0.15);}
@@ -217,24 +236,24 @@ img { display:block }
 .pm-close { position:absolute; top:16px; right:16px; width:36px; height:36px; background:rgba(255,255,255,0.9); backdrop-filter: blur(4px); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text); box-shadow:0 2px 10px rgba(0,0,0,.15); cursor:pointer; z-index:5 }
 .pm-close svg { width:16px; fill:none; stroke:currentColor; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round }
 .pm-body { overflow-y:auto; padding:24px 24px 120px; flex:1 }
-.pm-title { font-size:24px; font-weight:900; letter-spacing:-.5px; margin-bottom:6px }
-.pm-price { font-size:20px; font-weight:900; color:var(--orange); margin-bottom:12px }
-.pm-desc { font-size:14px; color:var(--muted); line-height:1.6; margin-bottom:24px; font-weight:600 }
+.pm-title { font-size:32px; font-weight:900; letter-spacing:0.5px; margin-bottom:6px; line-height: 1; }
+.pm-price { font-size:26px; font-weight:900; color:var(--orange); margin-bottom:12px; letter-spacing: 0.5px; }
+.pm-desc { font-size:14px; color:var(--muted); line-height:1.6; margin-bottom:24px; font-weight:500 }
 .pm-group { margin-bottom:24px }
-.pm-g-title { font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; margin-bottom:12px; display:flex; align-items:center; gap:8px; color:var(--text) }
-.pm-req { background:var(--orange-light); color:var(--orange); font-size:10px; padding:4px 8px; border-radius:99px; font-weight:900 }
-.pm-opt { background:var(--surface2); color:var(--muted); font-size:10px; padding:4px 8px; border-radius:99px; font-weight:900; border:1px solid var(--border) }
+.pm-g-title { font-size:14px; font-family: var(--font-display); font-weight:800; text-transform:uppercase; letter-spacing:.5px; margin-bottom:12px; display:flex; align-items:center; gap:8px; color:var(--text) }
+.pm-req { background:var(--orange-light); color:var(--orange); font-size:11px; padding:4px 8px; border-radius:99px; font-weight:800; font-family: var(--font) }
+.pm-opt { background:var(--surface2); color:var(--muted); font-size:11px; padding:4px 8px; border-radius:99px; font-weight:800; border:1px solid var(--border); font-family: var(--font) }
 
 .opt-scroll { display:flex; gap:10px; overflow-x:auto; margin:0 -24px; padding:0 24px; scroll-snap-type: x mandatory;}
-.opt-pill { flex-shrink:0; border:2px solid var(--border); border-radius:99px; padding:10px 18px; font-size:13px; font-weight:800; color:var(--text); cursor:pointer; transition:.18s; white-space:nowrap; scroll-snap-align: center; background: var(--surface);}
+.opt-pill { flex-shrink:0; border:2px solid var(--border); border-radius:99px; padding:10px 18px; font-size:15px; font-weight:700; color:var(--text); cursor:pointer; transition:.18s; white-space:nowrap; scroll-snap-align: center; background: var(--surface);}
 .opt-pill.sel { border-color:var(--orange); color:var(--orange); background:var(--orange-light) }
 
 .opt-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px }
 .opt-card { border:2px solid var(--border); border-radius:16px; padding:16px 12px; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; cursor:pointer; transition:.18s; position:relative; background:#fff }
 .opt-card.sel { border-color:var(--orange); background:var(--orange-light); box-shadow: 0 4px 12px rgba(255,90,0,0.1);}
 .opt-card img { width:56px; height:56px; object-fit:contain }
-.opt-card-t { font-size:13px; font-weight:800; line-height:1.2 }
-.opt-card-p { font-size:12px; color:var(--muted); font-weight:700 }
+.opt-card-t { font-size:15px; font-weight:700; line-height:1.2 }
+.opt-card-p { font-size:13px; font-family: var(--font-display); color:var(--muted); font-weight:800; letter-spacing: 0.5px; }
 .opt-card.sel .opt-card-p { color:var(--orange) }
 .opt-chk { position:absolute; top:8px; right:8px; width:20px; height:20px; background:var(--orange); border-radius:50%; display:none; align-items:center; justify-content:center }
 .opt-card.sel .opt-chk { display:flex }
@@ -242,32 +261,32 @@ img { display:block }
 
 .opt-li { border:2px solid var(--border); border-radius:14px; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; transition:.18s; margin-bottom:8px; background: var(--surface);}
 .opt-li.sel { border-color:var(--orange); background:var(--orange-light) }
-.oli-l { font-size:14px; font-weight:800 }
-.oli-r { display:flex; align-items:center; gap:12px; font-size:13px; color:var(--muted); font-weight: 700;}
+.oli-l { font-size:15px; font-weight:700 }
+.oli-r { display:flex; align-items:center; gap:12px; font-size:14px; font-family: var(--font-display); color:var(--muted); font-weight: 800; letter-spacing: 0.5px;}
 .oli-chk { width:22px; height:22px; border:2px solid var(--border); border-radius:6px; transition:.2s; flex-shrink:0 }
 .opt-li.sel .oli-chk { background:var(--orange); border-color:var(--orange) }
 
 .pm-footer { position:absolute; bottom:0; left:0; right:0; background:rgba(255,255,255,0.96); backdrop-filter: blur(12px); padding:16px 24px 24px; display:flex; gap:12px; align-items:center; border-top:1px solid var(--border); box-shadow:0 -4px 20px rgba(0,0,0,.08) }
 .pm-qty { display:flex; align-items:center; background:var(--bg); border-radius:99px; padding:4px; border:1px solid var(--border) }
 .pm-qty button { width:38px; height:38px; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:600; color:var(--text); line-height:1 }
-.pm-qty span { font-size:16px; font-weight:900; min-width:24px; text-align:center }
-.pm-add { flex:1; background:var(--orange); color:#fff; border-radius:16px; padding:18px; font-family:var(--font); font-size:15px; font-weight:800; text-align:center; box-shadow:0 6px 20px rgba(255,90,0,.25); text-transform:uppercase; letter-spacing:.3px; cursor:pointer }
+.pm-qty span { font-size:20px; font-family: var(--font-display); font-weight:900; min-width:24px; text-align:center }
+.pm-add { flex:1; background:var(--orange); color:#fff; border-radius:16px; padding:18px; font-family:var(--font-display); font-size:20px; font-weight:900; text-align:center; box-shadow:0 6px 20px rgba(255,90,0,.25); text-transform:uppercase; letter-spacing:1px; cursor:pointer }
 
 /* EMPTY STATES */
 .empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 60px 24px; text-align:center; gap:16px; height: 100%;}
 .empty-state .es-ic { font-size:72px; margin-bottom: 8px;}
-.empty-state h3 { font-size:22px; font-weight:900; letter-spacing:-.5px; color: var(--text); }
-.empty-state p { font-size:14px; color:var(--muted); line-height:1.6; font-weight:600; margin-bottom: 8px; }
+.empty-state h3 { font-size:26px; font-family: var(--font-display); text-transform: uppercase; font-weight:900; letter-spacing:0.5px; color: var(--text); }
+.empty-state p { font-size:14px; color:var(--muted); line-height:1.6; font-weight:500; margin-bottom: 8px; }
 
 /* CONFIRMED SCREEN (LIVE TRACKING) */
 .confirmed-wrap { display:flex; flex-direction:column; align-items:center; padding:40px 24px; text-align:center }
 .confirmed-anim { width:96px; height:96px; border-radius:50%; background:var(--green-light); display:flex; align-items:center; justify-content:center; margin-bottom:24px; box-shadow: 0 10px 30px rgba(22, 163, 74, 0.2);}
 .confirmed-anim svg { width:44px; height:44px; stroke:var(--green); stroke-width:2.5; fill:none; stroke-linecap:round; stroke-linejoin:round }
-.confirmed-title { font-size:26px; font-weight:900; letter-spacing:-.5px; margin-bottom:8px }
-.confirmed-sub { font-size:14px; color:var(--muted); font-weight:600; line-height:1.6; margin-bottom:32px; max-width:300px }
+.confirmed-title { font-size:32px; font-family: var(--font-display); font-weight:900; letter-spacing:0.5px; text-transform: uppercase; margin-bottom:8px }
+.confirmed-sub { font-size:14px; color:var(--muted); font-weight:500; line-height:1.6; margin-bottom:32px; max-width:300px }
 .confirmed-oid { background:var(--surface); border-radius:16px; padding:16px 24px; margin-bottom:32px; border:1px solid var(--border); box-shadow: var(--shadow); width: 100%;}
-.confirmed-oid p { font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); margin-bottom:6px }
-.confirmed-oid h3 { font-size:26px; font-weight:900; color:var(--orange); letter-spacing:1px }
+.confirmed-oid p { font-size:12px; font-family: var(--font-display); font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); margin-bottom:6px }
+.confirmed-oid h3 { font-size:32px; font-family: var(--font-display); font-weight:900; color:var(--orange); letter-spacing:1px }
 
 /* STATUS TIMELINE */
 .track-card { background: var(--surface); border-radius: var(--r-xl); padding: 24px; border: 1px solid var(--border); box-shadow: var(--shadow-md); width: 100%; margin-bottom: 24px;}
@@ -278,7 +297,7 @@ img { display:block }
 .ts-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--bg); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; transition: 0.4s;}
 .ts-icon svg { width: 18px; stroke: var(--muted); stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round;}
 .ts-content { flex: 1; text-align: left; padding-top: 4px;}
-.ts-title { font-size: 15px; font-weight: 800; color: var(--muted); margin-bottom: 4px;}
+.ts-title { font-size: 18px; font-family: var(--font-display); text-transform: uppercase; font-weight: 900; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 4px;}
 
 /* Active/Done States */
 .track-step.done .ts-icon { background: var(--orange); border-color: var(--orange);}
@@ -309,7 +328,7 @@ img { display:block }
       <div id="homeHeader">
         <img src="https://i.postimg.cc/rmmnn3XM/file-000000007624720ab6ae4d2993693772.png" class="logo-img" alt="TASCO"/>
         <div class="header-right">
-          <div class="location-pill" onclick="switchTab('cart')">
+          <div class="location-pill" onclick="openMapPicker()">
             <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             <span id="locationPillText">Marrakech</span>
           </div>
@@ -318,8 +337,8 @@ img { display:block }
       
       <div class="home-banner">
         <div class="banner-content">
-          <div class="banner-hello" id="bannerHello">Bonjour 👋</div>
-          <div class="banner-title" id="bannerTitle">Nous sommes<br><span>en ligne !</span></div>
+          <div class="banner-hello" id="bannerHello">BONJOUR 👋</div>
+          <div class="banner-title" id="bannerTitle">NOUS SOMMES<br><span>EN LIGNE !</span></div>
         </div>
         <div class="banner-illus"><div class="banner-illus-emoji">🍔</div><div class="banner-illus-fade"></div></div>
       </div>
@@ -330,15 +349,29 @@ img { display:block }
           <input type="text" id="homeSearch" placeholder="Quel plat vous fait envie ?"/>
         </div>
       </div>
-
+      
       <div class="cats-scroll" id="homeCats">
         <div class="shimmer sk-cat"></div><div class="shimmer sk-cat"></div><div class="shimmer sk-cat"></div><div class="shimmer sk-cat"></div>
       </div>
       <div class="sub-scroll" id="homeSubs" style="display:none"></div>
 
+      <div class="club-banner" onclick="switchTab('account')">
+        <div class="cb-left">
+          <div class="cb-icon-wrap">👑</div>
+          <div class="cb-text">
+            <h4>TASCO CLUB</h4>
+            <p>Gagnez 1 point pour chaque 1 DH dépensé</p>
+          </div>
+        </div>
+        <div class="cb-right">
+          <span>Vos Points</span>
+          <strong id="homeClubPts">0 pts <svg style="width:14px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></strong>
+        </div>
+      </div>
+
       <div class="prod-section">
         <div class="prod-sec-head">
-          <span class="section-title" id="homeGridTitle">Nos produits populaires</span>
+          <span class="section-title" id="homeGridTitle">NOS PRODUITS POPULAIRES</span>
         </div>
         <div class="prod-grid" id="homeGrid">
           <div class="shimmer sk-card"></div><div class="shimmer sk-card"></div><div class="shimmer sk-card"></div><div class="shimmer sk-card"></div>
@@ -349,8 +382,8 @@ img { display:block }
     <div class="screen" id="screenCart">
       <div style="min-height: calc(100% - 85px); padding-bottom: 24px;">
         <div class="cart-hdr">
-          <span class="section-title">Votre panier</span>
-          <button onclick="clearCart()" style="font-size:11px;color:var(--danger);font-weight:800;display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--danger-light);border-radius:10px;text-transform:uppercase;letter-spacing:.3px">
+          <span class="section-title">VOTRE PANIER</span>
+          <button onclick="clearCart()" style="font-size:12px; font-family: var(--font-display); color:var(--danger);font-weight:800;display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--danger-light);border-radius:10px;text-transform:uppercase;letter-spacing:.5px">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
             Vider
           </button>
@@ -363,7 +396,7 @@ img { display:block }
           <span class="cta-total" id="ctaTotal">0 DH</span>
         </button>
         <div class="secure-note">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           Paiement 100% sécurisé à la livraison
         </div>
       </div>
@@ -373,7 +406,7 @@ img { display:block }
       <div style="min-height: calc(100% - 85px); padding-bottom: 24px;">
         <div class="checkout-hdr">
           <div class="back-btn" onclick="switchTab('cart')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
-          <span class="section-title">Checkout</span>
+          <span class="section-title">CHECKOUT</span>
         </div>
         <div class="step-bar" id="stepBar">
           <div class="step-item active" id="sp1"><div class="step-dot">1</div><div class="step-lbl">Infos & Adresse</div></div>
@@ -391,21 +424,21 @@ img { display:block }
         <div class="back-btn" onclick="switchTab('home')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         </div>
-        <span class="section-title">Suivi de commande</span>
+        <span class="section-title">SUIVI DE COMMANDE</span>
       </div>
       <div class="confirmed-wrap" id="confirmedContent"></div>
     </div>
 
     <div class="screen" id="screenOrders">
       <div class="cart-hdr">
-        <span class="section-title">Mes commandes</span>
+        <span class="section-title">MES COMMANDES</span>
       </div>
       <div id="ordersList" style="padding-bottom: 24px;"></div>
     </div>
 
     <div class="screen" id="screenAccount">
       <div class="cart-hdr">
-        <span class="section-title">Mon compte</span>
+        <span class="section-title">MON COMPTE</span>
       </div>
       <div id="accountContent" style="padding-bottom: 24px;"></div>
     </div>
@@ -435,23 +468,23 @@ img { display:block }
   <div class="pm-body" id="pmBody"></div>
   <div class="pm-footer">
     <div class="pm-qty"><button onclick="pmQ(-1)">−</button><span id="pmQtyVal">1</span><button onclick="pmQ(1)">+</button></div>
-    <div class="pm-add" onclick="addToCart()">Ajouter · <span id="pmBtnP">0 DH</span></div>
+    <div class="pm-add" onclick="addToCart()">AJOUTER · <span id="pmBtnP">0 DH</span></div>
   </div>
 </div>
 
 <div class="modal-ovl" id="mapOvl" onclick="if(event.target===this)closeMapPicker()"></div>
 <div class="prod-modal" id="mapModal" style="padding-bottom: 0;">
   <div style="padding:16px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
-    <h3 style="font-size:16px; font-weight:800; text-transform:uppercase;">Choisir l'adresse</h3>
+    <h3 style="font-size:20px; font-family: var(--font-display); font-weight:900; text-transform:uppercase;">CHOISIR L'ADRESSE</h3>
     <div class="icon-btn" style="width:36px;height:36px;border-radius:50%;" onclick="closeMapPicker()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
   </div>
   <div style="position:relative; margin: 16px;">
     <svg style="position:absolute; left:14px; top:14px; width:18px; color:var(--muted); fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input type="text" id="mapSearchInput" placeholder="Chercher une rue, un quartier..." style="width:100%; padding:14px 14px 14px 42px; border-radius:12px; border:1.5px solid var(--border); background:var(--bg); font-size:14px; font-weight:600; color:var(--text); font-family:var(--font); outline:none;"/>
+    <input type="text" id="mapSearchInput" placeholder="Chercher une rue, un quartier..." style="width:100%; padding:14px 14px 14px 42px; border-radius:12px; border:1.5px solid var(--border); background:var(--bg); font-size:15px; font-weight:600; color:var(--text); font-family:var(--font); outline:none;"/>
   </div>
   <div id="deliveryMap" style="width:100%; height:40vh; background:var(--bg);"></div>
   <div style="padding:16px;">
-    <button class="main-btn" style="padding:16px; justify-content:center; text-transform:uppercase;" onclick="confirmMapLoc()">Confirmer la position</button>
+    <button class="main-btn" style="padding:16px; justify-content:center; text-transform:uppercase;" onclick="confirmMapLoc()">CONFIRMER LA POSITION</button>
   </div>
 </div>
 
@@ -460,7 +493,6 @@ img { display:block }
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, onSnapshot, addDoc, doc, getDoc, setDoc, updateDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-// Using signInAnonymously for frictionless "Ghost Checkout"
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const fbApp = initializeApp({
@@ -487,7 +519,7 @@ const S = {
 try { S.cart = JSON.parse(localStorage.getItem('tasco_cart') || '[]'); } catch(e) {}
 
 const fmt = n => { const p = Number(n); return p % 1 === 0 ? p.toString() : p.toFixed(2); };
-const greet = () => { const h = new Date().getHours(); return h < 12 ? 'Bonjour' : h < 18 ? 'Bonne après-midi' : 'Bonsoir'; };
+const greet = () => { const h = new Date().getHours(); return h < 12 ? 'BONJOUR' : h < 18 ? 'BONNE APRÈS-MIDI' : 'BONSOIR'; };
 function toast(m, d=2600) { const el = document.getElementById('toast'); el.textContent = m; el.classList.add('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), d); }
 window.toast = toast;
 
@@ -496,7 +528,6 @@ window.toast = toast;
 // ==========================================
 onAuthStateChanged(auth, async user => {
   if (!user) {
-    // If they don't have a session, create a silent Guest ID instantly
     try {
       await signInAnonymously(auth);
     } catch (e) {
@@ -508,7 +539,6 @@ onAuthStateChanged(auth, async user => {
     const snap = await getDoc(uRef);
     
     if(!snap.exists()) {
-      // Create their basic profile in the database silently
       await setDoc(uRef, { points: 0, createdAt: new Date().toISOString() });
       S.userDoc = { points: 0 };
     } else {
@@ -522,7 +552,6 @@ onAuthStateChanged(auth, async user => {
   }
 });
 
-// FIX 1: JavaScript Native Sorting to bypass Firestore Index crash!
 function listenOrders() {
   if(!S.user) return;
   onSnapshot(query(collection(db,'orders'), where('customerId','==',S.user.uid)), snap => {
@@ -541,8 +570,8 @@ onSnapshot(doc(db,'settings','delivery'), snap => { if(snap.exists()) S.delivery
 function updateStoreUI() {
   const t = document.getElementById('bannerTitle');
   if(!t) return;
-  if(S.storeOnline) { t.innerHTML = 'Nous sommes<br><span>en ligne !</span>'; } 
-  else { t.innerHTML = 'Nous sommes<br><span style="color:var(--danger)">fermés</span>'; }
+  if(S.storeOnline) { t.innerHTML = 'NOUS SOMMES<br><span>EN LIGNE !</span>'; } 
+  else { t.innerHTML = 'NOUS SOMMES<br><span style="color:var(--danger)">FERMÉS</span>'; }
 }
 
 // --- TAB NAVIGATION ---
@@ -562,10 +591,18 @@ window.switchTab = tab => {
 };
 
 function renderCurrentTab() {
-  if(S.user && S.userDoc?.name) {
+  // Update Dynamic Banner Name
+  if(S.userDoc && S.userDoc.name && S.userDoc.name !== 'Client Invité') {
     document.getElementById('bannerHello').textContent = greet() + ' ' + S.userDoc.name.split(' ')[0] + ' 👋';
   } else {
     document.getElementById('bannerHello').textContent = greet() + ' 👋';
+  }
+
+  // Update Tasco Club Points on Home
+  const ptsEl = document.getElementById('homeClubPts');
+  if(ptsEl) {
+    const pts = S.userDoc?.points || 0;
+    ptsEl.innerHTML = `${pts} pts <svg style="width:14px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>`;
   }
 
   if(S.currentTab === 'home') renderHomeGrid();
@@ -605,7 +642,7 @@ function renderHomeGrid() {
   
   if(S.homeActiveCat === '__pop__') {
     prods = prods.filter(p => p.sortWeight > 0 || (p.badge && p.badge !== 'Standard'));
-    document.getElementById('homeGridTitle').textContent = 'Nos produits populaires';
+    document.getElementById('homeGridTitle').textContent = 'NOS PRODUITS POPULAIRES';
   } else {
     prods = prods.filter(p => p.category === S.homeActiveCat);
     if(S.homeActiveSub !== '__all__') prods = prods.filter(p => p.subCategory === S.homeActiveSub);
@@ -668,7 +705,7 @@ window.openProd = id => {
     });
   }
   
-  html += `<div class="pm-group"><div class="pm-g-title">Note <span class="pm-opt">OPTIONNEL</span></div><textarea class="auth-input" id="pmNotes" rows="2" placeholder="Ex: Sans oignons..." style="text-align:left; font-size:13px;"></textarea></div>`;
+  html += `<div class="pm-group"><div class="pm-g-title">Note <span class="pm-opt">OPTIONNEL</span></div><textarea class="auth-input" id="pmNotes" rows="2" placeholder="Ex: Sans oignons..." style="text-align:left; font-size:15px;"></textarea></div>`;
   
   document.getElementById('pmBody').innerHTML = html;
   updatePmP();
@@ -935,7 +972,7 @@ window.checkoutNext = async () => {
 
 async function placeOrder() {
   if(!S.storeOnline) { toast('La boutique est fermée 😕'); return; }
-  const btn = document.getElementById('checkoutBtn'); btn.textContent = 'Envoi en cours...'; btn.disabled = true;
+  const btn = document.getElementById('checkoutBtn'); btn.textContent = 'ENVOI EN COURS...'; btn.disabled = true;
   
   const sub = S.cart.reduce((s,i) => s + i.qty * i.unitPrice, 0);
   let disc = 0; if(S.promo) disc = S.promo.type === '%' ? Math.round(sub * (S.promo.value / 100)) : S.promo.value;
@@ -972,15 +1009,14 @@ async function placeOrder() {
     S.cart = []; S.promo = null; saveCart(); updateBadge();
     renderConfirmed(ref.id);
     switchTab('confirmed');
-  } catch(e) { console.error(e); toast('Erreur. Réessayez.'); btn.textContent = 'Confirmer la commande'; btn.disabled = false; }
+  } catch(e) { console.error(e); toast('Erreur. Réessayez.'); btn.textContent = 'CONFIRMER LA COMMANDE'; btn.disabled = false; }
 }
 
 function renderConfirmed(orderId) {
   const shortId = '#TSC' + orderId.slice(-4).toUpperCase();
-  document.getElementById('confirmedContent').innerHTML = `<div class="confirmed-anim"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div class="confirmed-title">Commande reçue ! 🎉</div><div class="confirmed-sub">Merci ${S.userDoc?.name || 'Client'}. Nous préparons votre commande.</div><div class="confirmed-oid"><p>Numéro de commande</p><h3>${shortId}</h3></div><button class="main-btn" style="width: 100%; justify-content:center; text-transform:uppercase; letter-spacing:0.5px;" onclick="switchTab('orders')">Suivre ma commande</button>`;
+  document.getElementById('confirmedContent').innerHTML = `<div class="confirmed-anim"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div class="confirmed-title">COMMANDE REÇUE ! 🎉</div><div class="confirmed-sub">Merci ${S.userDoc?.name || 'Client'}. Nous préparons votre commande.</div><div class="confirmed-oid"><p>NUMÉRO DE COMMANDE</p><h3>${shortId}</h3></div><button class="main-btn" style="width: 100%; justify-content:center; text-transform:uppercase; letter-spacing:0.5px;" onclick="switchTab('orders')">SUIVRE MA COMMANDE</button>`;
 }
 
-// FIX 2: Restored SVG Tracking Icons!
 const ST_STEPS = [
   {key:'Pending', lb:'Confirmée', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'},
   {key:'Preparing', lb:'Préparation', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/></svg>'},
@@ -992,7 +1028,7 @@ function renderOrdersList() {
   const content = document.getElementById('ordersList');
   let orders = [...S.userOrders];
   if(!orders.length) {
-    content.innerHTML = `<div class="empty-state"><div class="es-ic">📦</div><h3>Aucune commande</h3><p>Vous n'avez pas encore passé de commande. C'est le moment de vous faire plaisir !</p><button class="main-btn" style="width: auto; padding: 14px 24px;" onclick="switchTab('home')">Voir le menu</button></div>`;
+    content.innerHTML = `<div class="empty-state"><div class="es-ic">📦</div><h3>Aucune commande</h3><p>Vous n'avez pas encore passé de commande. C'est le moment de vous faire plaisir !</p><button class="main-btn" style="width: auto; padding: 14px 24px;" onclick="switchTab('home')">VOIR LE MENU</button></div>`;
     return;
   }
   
@@ -1004,12 +1040,12 @@ function renderOrdersList() {
     let tl = '';
     
     if (order.status === 'Cancelled') {
-      tl = `<div style="text-align:center; color:var(--danger); font-weight:800; padding:12px; background:var(--danger-light); border-radius:12px; text-transform:uppercase; letter-spacing:0.5px;">Commande Annulée</div>`;
+      tl = `<div style="text-align:center; color:var(--danger); font-family: var(--font-display); font-weight:900; padding:12px; background:var(--danger-light); border-radius:12px; text-transform:uppercase; letter-spacing:0.5px;">Commande Annulée</div>`;
     } else {
       tl = ST_STEPS.map((s,i) => `<div class="track-step ${i<activeIdx || order.status==='Delivered' ? 'done':''} ${i===activeIdx ? 'active':''}"><div class="ts-icon">${s.ic}</div><div class="ts-content"><div class="ts-title">${s.lb}</div></div></div>`).join('');
     }
     
-    return `<div class="track-card"><div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 24px;"><div><div style="font-size:16px; font-weight:900; letter-spacing:-0.5px; margin-bottom:2px;">${shortId}</div><div style="font-size:12px; color:var(--muted); font-weight:600;">${date}</div></div><div style="font-size:16px; font-weight:900; color:var(--text);">${fmt(order.totalPrice)} DH</div></div><div style="padding-top:16px; border-top:1px solid var(--border); padding-bottom: 8px;">${tl}</div></div>`;
+    return `<div class="track-card"><div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 24px;"><div><div style="font-size:22px; font-family: var(--font-display); font-weight:900; letter-spacing:0.5px; margin-bottom:2px;">${shortId}</div><div style="font-size:12px; color:var(--muted); font-weight:600;">${date}</div></div><div style="font-size:20px; font-family: var(--font-display); font-weight:900; color:var(--text);">${fmt(order.totalPrice)} DH</div></div><div style="padding-top:16px; border-top:1px solid var(--border); padding-bottom: 8px;">${tl}</div></div>`;
   }).join('') + `</div>`;
 }
 
@@ -1020,28 +1056,30 @@ function renderAccountScreen() {
   
   content.innerHTML = `
     <div class="profile-card" style="margin: 16px; background:var(--surface); border-radius:var(--r-xl); border:1.5px solid var(--border); padding:16px; display:flex; align-items:center; gap:16px; box-shadow:var(--shadow);">
-      <div class="prof-av" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#ff8040);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;">
+      <div class="prof-av" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#ff8040);display:flex;align-items:center;justify-content:center;font-size:28px;font-family:var(--font-display);font-weight:900;color:#fff;">
         ${name.charAt(0).toUpperCase()}
       </div>
       <div style="flex:1">
-        <div class="prof-name" style="font-size:18px;font-weight:900;letter-spacing:-0.5px;margin-bottom:2px;">${name}</div>
+        <div class="prof-name" style="font-size:22px;font-family:var(--font-display);text-transform:uppercase;font-weight:900;letter-spacing:0.5px;margin-bottom:2px;">${name}</div>
         <div class="prof-phone" style="font-size:13px;color:var(--muted);font-weight:600;">${S.userDoc?.phone || 'Non renseigné'}</div>
       </div>
     </div>
-    <div class="club-card" style="margin: 0 16px 24px; background:linear-gradient(135deg, #fffaf7, #ffe8d3); border-radius:var(--r-xl); border:1px solid rgba(255,90,0,0.15); padding:20px; box-shadow:var(--shadow);">
+    
+    <div class="club-card" style="margin: 0 16px 24px; background:var(--orange-light); border-radius:var(--r-xl); border:1px solid var(--orange-mid); padding:20px; box-shadow:var(--shadow);">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <div style="font-size:16px; font-weight:900; letter-spacing:-0.5px;">TASCO Club 👑</div>
-        <div style="font-size:15px; font-weight:900; color:var(--orange);">${pts} Pts</div>
+        <div style="font-size:20px; font-family:var(--font-display); font-weight:900; letter-spacing:0.5px; color:var(--text);">TASCO CLUB 👑</div>
+        <div style="font-size:20px; font-family:var(--font-display); font-weight:900; color:var(--orange);">${pts} PTS</div>
       </div>
-      <p style="font-size:12px; color:var(--text); font-weight:600; line-height:1.5; opacity:0.8;">Vos points se convertissent en cadeaux. Connectez un compte pour les sauvegarder !</p>
+      <p style="font-size:12px; color:var(--text); font-weight:500; line-height:1.5; opacity:0.8;">Vos points se convertissent en cadeaux. Protégez-les en créant un compte !</p>
     </div>
+    
     <div style="margin: 0 16px;">
       <div style="background:var(--surface); border-radius:var(--r-lg); border:1px solid var(--border); overflow:hidden; box-shadow:var(--shadow);">
         <div style="padding:18px 16px; font-weight:800; font-size:14px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; cursor:pointer;" onclick="window.open('https://wa.me/212708006088','_blank')">
-          <span>Support WhatsApp</span><span style="color:var(--muted);"><svg viewBox="0 0 24 24" style="width:18px;stroke:currentColor;fill:none;stroke-width:2.5;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span>
+          <span style="font-family:var(--font-display); font-size:16px; letter-spacing:0.5px;">SUPPORT WHATSAPP</span><span style="color:var(--muted);"><svg viewBox="0 0 24 24" style="width:18px;stroke:currentColor;fill:none;stroke-width:2.5;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span>
         </div>
         <div style="padding:18px 16px; font-weight:800; font-size:14px; border-bottom:none; display:flex; justify-content:space-between; cursor:pointer;" onclick="window.open('https://instagram.com/tasco.ma','_blank')">
-          <span>Suivez-nous sur Instagram</span><span style="color:var(--muted);"><svg viewBox="0 0 24 24" style="width:18px;stroke:currentColor;fill:none;stroke-width:2.5;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span>
+          <span style="font-family:var(--font-display); font-size:16px; letter-spacing:0.5px;">SUIVEZ-NOUS SUR INSTAGRAM</span><span style="color:var(--muted);"><svg viewBox="0 0 24 24" style="width:18px;stroke:currentColor;fill:none;stroke-width:2.5;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span>
         </div>
       </div>
     </div>
