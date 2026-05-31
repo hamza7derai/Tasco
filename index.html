@@ -274,7 +274,7 @@ h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confi
 .empty-state h3 { font-size:26px; font-family: var(--font-display); text-transform: uppercase; font-weight:900; letter-spacing:0.5px; color: var(--text); }
 .empty-state p { font-size:14px; color:var(--muted); line-height:1.6; font-weight:500; margin-bottom: 8px; }
 
-/* CONFIRMED SCREEN (LIVE TRACKING) */
+/* CONFIRMED SCREEN */
 .confirmed-wrap { display:flex; flex-direction:column; align-items:center; padding:40px 24px; text-align:center }
 .confirmed-anim { width:96px; height:96px; border-radius:50%; background:var(--green-light); display:flex; align-items:center; justify-content:center; margin-bottom:24px; box-shadow: 0 10px 30px rgba(22, 163, 74, 0.2);}
 .confirmed-anim svg { width:44px; height:44px; stroke:var(--green); stroke-width:2.5; fill:none; stroke-linecap:round; stroke-linejoin:round }
@@ -284,7 +284,11 @@ h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confi
 .confirmed-oid p { font-size:12px; font-family: var(--font-display); font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); margin-bottom:6px }
 .confirmed-oid h3 { font-size:32px; font-family: var(--font-display); font-weight:900; color:var(--orange); letter-spacing:1px }
 
-/* STATUS TIMELINE */
+/* ORDERS TABS & STATUS TIMELINE (REDESIGNED) */
+.orders-tabs { display: flex; padding: 0 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; gap: 0; background: var(--surface); }
+.o-tab { flex: 1; text-align: center; padding: 12px; font-family: var(--font-display); font-weight: 800; font-size: 15px; text-transform: uppercase; color: var(--muted); border-bottom: 3px solid transparent; transition: 0.2s; cursor: pointer; letter-spacing: 0.5px; }
+.o-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+
 .track-card { background: var(--surface); border-radius: var(--r-xl); padding: 24px; border: 1px solid var(--border); box-shadow: var(--shadow-md); width: 100%; margin-bottom: 24px;}
 .track-step { display: flex; align-items: flex-start; gap: 16px; position: relative; margin-bottom: 24px;}
 .track-step:last-child { margin-bottom: 0;}
@@ -295,33 +299,35 @@ h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confi
 .ts-content { flex: 1; text-align: left; padding-top: 4px;}
 .ts-title { font-size: 18px; font-family: var(--font-display); text-transform: uppercase; font-weight: 900; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 4px;}
 
-/* Active/Done States */
-.track-step.done .ts-icon { background: var(--orange); border-color: var(--orange);}
-.track-step.done .ts-icon svg { stroke: white;}
+/* Timeline States (Redesigned matching image) */
+.track-step.done .ts-icon { background: var(--orange); border-color: var(--orange); }
+.track-step.done .ts-icon svg { display: none; }
+.track-step.done .ts-icon::after { content: ''; width: 12px; height: 7px; border-left: 3px solid white; border-bottom: 3px solid white; transform: rotate(-45deg); margin-top: -3px; }
 .track-step.done::before { background: var(--orange);}
 .track-step.done .ts-title { color: var(--text);}
-.track-step.active .ts-icon { background: var(--orange-light); border-color: var(--orange); box-shadow: 0 0 0 6px rgba(255,90,0,0.1);}
+.track-step.active .ts-icon { background: #fff; border-color: var(--orange); box-shadow: none;}
 .track-step.active .ts-icon svg { stroke: var(--orange);}
 .track-step.active .ts-title { color: var(--orange);}
 
-/* ORDERS TABS & DRIVER CARD (NEW) */
-.orders-tabs { display: flex; padding: 0 16px 12px; gap: 8px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
-.o-tab { flex: 1; text-align: center; padding: 10px; font-family: var(--font-display); font-weight: 800; font-size: 14px; text-transform: uppercase; color: var(--muted); border-radius: 12px; background: var(--surface); border: 1px solid var(--border); transition: 0.2s; cursor: pointer; letter-spacing: 0.5px; box-shadow: var(--shadow); }
-.o-tab.active { background: var(--text); color: #fff; border-color: var(--text); }
+/* DRIVER CARD (MATCHING IMAGE) */
+.driver-card { padding: 16px; border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-top: 16px; display: flex; align-items: center; justify-content: space-between; background: var(--surface); }
+.dc-left { display: flex; align-items: center; gap: 12px; }
+.dc-avatar { width: 50px; height: 50px; border-radius: 50%; overflow: hidden; background: var(--bg); display: flex; align-items: center; justify-content: center; }
+.dc-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.dc-info { display: flex; flex-direction: column; }
+.dc-name { font-family: var(--font-display); font-size: 18px; font-weight: 900; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; }
+.dc-sub { font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.dc-rating { font-size: 12px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 4px; }
+.dc-rating svg { width: 12px; fill: var(--amber); }
 
-.driver-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; margin-top: 16px; box-shadow: var(--shadow-md); }
-.dc-top { display: flex; align-items: center; gap: 12px; }
-.dc-avatar { width: 48px; height: 48px; background: var(--orange-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink:0; }
-.dc-info { flex: 1; }
-.dc-name { font-family: var(--font-display); font-size: 18px; font-weight: 900; color: var(--text); line-height: 1; margin-bottom: 4px; letter-spacing: 0.5px;}
-.dc-rating { font-size: 12px; color: var(--muted); font-weight: 700; display: flex; align-items: center; gap: 4px; }
-.dc-rating svg { width: 14px; fill: var(--amber); color: var(--amber); }
 .dc-actions { display: flex; gap: 8px; }
-.dc-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 12px; border-radius: 12px; font-family: var(--font-display); font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; transition: 0.2s; text-decoration: none;}
-.dc-btn.call { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-.dc-btn.wa { background: #25D366; color: #fff; border: 1px solid #25D366;}
+.dc-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 14px; border: 1px solid var(--border); background: var(--surface); text-decoration: none; gap: 6px; transition: 0.2s; }
+.dc-btn:active { transform: scale(0.95); background: var(--bg); }
+.dc-btn span { font-family: var(--font-display); font-size: 11px; font-weight: 800; color: var(--text); letter-spacing: 0.5px; }
+.dc-btn svg { width: 22px; stroke-width: 2.5; }
 
-.btn-reorder { width: 100%; margin-top: 16px; padding: 14px; background: var(--orange-light); color: var(--orange); border: 1px solid var(--orange-mid); border-radius: 12px; font-family: var(--font-display); font-size: 16px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.15s; cursor: pointer; }
+/* REORDER BUTTON */
+.btn-reorder { width: 100%; padding: 14px; background: var(--orange-light); color: var(--orange); border: 1px solid var(--orange-mid); border-radius: 12px; font-family: var(--font-display); font-size: 16px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.15s; cursor: pointer; }
 .btn-reorder:active { transform: scale(0.98); }
 .btn-reorder svg { width: 18px; stroke: currentColor; stroke-width: 2.5; fill: none; }
 
@@ -448,9 +454,10 @@ h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confi
     </div>
 
     <div class="screen" id="screenOrders">
-      <div class="cart-hdr" style="padding-bottom:12px; border-bottom:none;">
-        <span class="section-title">MES COMMANDES</span>
+      <div class="cart-hdr" style="padding-bottom:0; border-bottom:none;">
+        <span class="section-title" style="padding-bottom:12px;">MES COMMANDES</span>
       </div>
+      <div id="ordersTabContainer" class="orders-tabs" style="position:sticky; top:65px; z-index:49;"></div>
       <div id="ordersList" style="padding-bottom: 24px;"></div>
     </div>
 
@@ -1038,10 +1045,10 @@ function renderConfirmed(orderId) {
 }
 
 const ST_STEPS = [
-  {key:'Pending', lb:'Confirmée', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'},
-  {key:'Preparing', lb:'Préparation', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/></svg>'},
-  {key:'Out for Delivery', lb:'En route', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>'},
-  {key:'Delivered', lb:'Livrée', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'}
+  {key:'Pending', lb:'Confirmée', sub:'', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'},
+  {key:'Preparing', lb:'Préparation', sub:'', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/></svg>'},
+  {key:'Out for Delivery', lb:'En route', sub:'Le livreur est en chemin 🛵', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>'},
+  {key:'Delivered', lb:'Livrée', sub:'', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'}
 ];
 
 window.switchOrderTab = tab => {
@@ -1061,23 +1068,23 @@ window.reorderPast = orderId => {
 
 function renderOrdersList() {
   const content = document.getElementById('ordersList');
-  
-  const hdr = document.querySelector('#screenOrders .cart-hdr');
-  if(hdr && !document.getElementById('ordersTabContainer')) {
-      hdr.insertAdjacentHTML('afterend', `<div id="ordersTabContainer" class="orders-tabs" style="background:rgba(255,255,255,.96); position:sticky; top:65px; z-index:49; margin-bottom:0;"><div class="o-tab ${S.orderTab === 'active' ? 'active' : ''}" onclick="switchOrderTab('active')">En cours</div><div class="o-tab ${S.orderTab === 'history' ? 'active' : ''}" onclick="switchOrderTab('history')">Historique</div></div>`);
-  } else if (document.getElementById('ordersTabContainer')) {
-      document.getElementById('ordersTabContainer').innerHTML = `<div class="o-tab ${S.orderTab === 'active' ? 'active' : ''}" onclick="switchOrderTab('active')">En cours</div><div class="o-tab ${S.orderTab === 'history' ? 'active' : ''}" onclick="switchOrderTab('history')">Historique</div>`;
-  }
-
   let orders = [...S.userOrders];
+
   if(!orders.length) {
+    document.getElementById('ordersTabContainer').style.display = 'none';
     content.innerHTML = `<div class="empty-state" style="padding-top: 100px;"><div class="es-ic">📦</div><h3>Aucune commande</h3><p>Vous n'avez pas encore passé de commande. C'est le moment de vous faire plaisir !</p><button class="main-btn" style="width: auto; padding: 14px 24px;" onclick="switchTab('home')">VOIR LE MENU</button></div>`;
     return;
   }
   
-  const activeOrders = orders.filter(o => ['Pending', 'Preparing', 'Out for Delivery'].includes(o.status));
+  // Inverse logic: ACTIVE catches EVERYTHING not explicitly Delivered or Cancelled
   const historyOrders = orders.filter(o => ['Delivered', 'Cancelled'].includes(o.status));
+  const activeOrders = orders.filter(o => !['Delivered', 'Cancelled'].includes(o.status));
   const displayOrders = S.orderTab === 'active' ? activeOrders : historyOrders;
+
+  // Dynamic Tabs with exact formatting
+  document.getElementById('ordersTabContainer').style.display = 'flex';
+  const activeTabTxt = activeOrders.length ? `EN COURS (${activeOrders.length})` : 'EN COURS';
+  document.getElementById('ordersTabContainer').innerHTML = `<div class="o-tab ${S.orderTab === 'active' ? 'active' : ''}" onclick="switchOrderTab('active')">${activeTabTxt}</div><div class="o-tab ${S.orderTab === 'history' ? 'active' : ''}" onclick="switchOrderTab('history')">HISTORIQUE</div>`;
 
   if(!displayOrders.length) {
       content.innerHTML = `<div class="empty-state" style="padding-top: 100px;"><div class="es-ic">${S.orderTab==='active'?'🛵':'🕰️'}</div><h3>${S.orderTab==='active'?'Aucune commande en cours':'Historique vide'}</h3></div>`;
@@ -1088,49 +1095,98 @@ function renderOrdersList() {
     const shortId = '#TSC' + order.id.slice(-4).toUpperCase();
     const date = new Date(order.timestamp).toLocaleDateString('fr-FR', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
     
+    let topBadge = '';
+    if (order.status === 'Cancelled') {
+        topBadge = `<div style="color:var(--danger); font-size:11px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--danger-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">Annulée</div>`;
+    } else if (order.status === 'Delivered') {
+        topBadge = `<div style="color:var(--green); font-size:11px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--green-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">Livrée</div>`;
+    } else if (order.status === 'Out for Delivery') {
+        topBadge = `<div style="color:var(--orange); font-size:11px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--orange-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">En Livraison</div>`;
+    } else if (order.status === 'Preparing') {
+        topBadge = `<div style="color:var(--amber); font-size:11px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--amber-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">Préparation</div>`;
+    } else {
+        topBadge = `<div style="color:var(--blue); font-size:11px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--blue-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">Confirmée</div>`;
+    }
+
     let innerHtml = '';
     
     if (S.orderTab === 'active') {
-        const activeIdx = ST_STEPS.findIndex(s => s.key === order.status);
-        const tl = ST_STEPS.map((s,i) => `<div class="track-step ${i<activeIdx ? 'done':''} ${i===activeIdx ? 'active':''}"><div class="ts-icon">${s.ic}</div><div class="ts-content"><div class="ts-title">${s.lb}</div></div></div>`).join('');
+        let activeIdx = ST_STEPS.findIndex(s => s.key === order.status);
+        if (activeIdx === -1) {
+             if (order.status === 'Accepted' || order.status === 'In Transit') activeIdx = 1;
+             else activeIdx = 0;
+        }
+
+        const tl = ST_STEPS.map((s,i) => `
+            <div class="track-step ${i<activeIdx ? 'done':''} ${i===activeIdx ? 'active':''}">
+                <div class="ts-icon">${s.ic}</div>
+                <div class="ts-content">
+                    <div class="ts-title">${s.lb}</div>
+                    ${i <= activeIdx ? `<div style="font-size:12px; color:var(--muted); font-weight:600; margin-top:2px;">${date}</div>` : ''}
+                </div>
+            </div>`).join('');
         
         let driverCard = '';
-        if (order.status === 'Out for Delivery') {
+        if (order.status === 'Out for Delivery' || activeIdx === 2) {
             const safePhone = order.driverPhone || '0600000000';
             const waPhone = safePhone.replace(/^0/, '');
+            const dName = order.driverName || 'Youssef';
+            
             driverCard = `
             <div class="driver-card fade-up">
-                <div class="dc-top">
-                    <div class="dc-avatar">🛵</div>
+                <div class="dc-left">
+                    <div class="dc-avatar"><img src="https://ui-avatars.com/api/?name=${dName}&background=FF5A00&color=fff&bold=true" /></div>
                     <div class="dc-info">
-                        <div class="dc-name">Livreur TASCO</div>
-                        <div class="dc-rating"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> 4.8 Évaluation</div>
+                        <div class="dc-name">${dName}</div>
+                        <div class="dc-sub">Livreur TASCO</div>
+                        <div class="dc-rating"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> 4.8</div>
                     </div>
                 </div>
                 <div class="dc-actions">
-                    <a href="tel:${safePhone}" class="dc-btn call"><svg viewBox="0 0 24 24" style="width:16px;fill:none;stroke:currentColor;stroke-width:2.5;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Appeler</a>
-                    <a href="https://wa.me/212${waPhone}" target="_blank" class="dc-btn wa"><svg viewBox="0 0 24 24" style="width:16px;fill:currentColor;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.305-.885-.653-1.482-1.46-1.656-1.758-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.571-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>WhatsApp</a>
+                    <a href="tel:${safePhone}" class="dc-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        <span>APPELER</span>
+                    </a>
+                    <a href="https://wa.me/212${waPhone}" target="_blank" class="dc-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                        <span>MESSAGE</span>
+                    </a>
                 </div>
             </div>`;
         }
         
-        innerHtml = `<div style="padding-top:16px; border-top:1px solid var(--border); padding-bottom: 8px;">${tl}${driverCard}</div>`;
-        
+        innerHtml = `
+            <div style="padding-top:16px; border-top:1px solid var(--border); padding-bottom: 8px;">
+                ${activeIdx === 2 ? `<div style="font-family:var(--font-display); font-size:18px; font-weight:900; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:4px;">Votre commande est en route !</div><div style="font-size:13px; color:var(--muted); font-weight:500; margin-bottom:20px;">Le livreur est en chemin 🛵</div>` : ''}
+                ${tl}
+                ${driverCard}
+            </div>`;
+            
     } else {
-        let badge = order.status === 'Cancelled' 
-          ? `<div style="color:var(--danger); font-size:12px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--danger-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">Annulée</div>` 
-          : `<div style="color:var(--green); font-size:12px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--green-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">Livrée</div>`;
-        
-        innerHtml = `<div style="border-top:1px solid var(--border); padding-top:16px; margin-top:16px;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-size:14px; font-weight:600; color:var(--muted);">${order.totalItems} articles</span>
-                ${badge}
-            </div>
-            ${order.status !== 'Cancelled' ? `<button class="btn-reorder" onclick="reorderPast('${order.id}')"><svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>Commander encore</button>` : ''}
-        </div>`;
+        innerHtml = `
+            <div style="border-top:1px solid var(--border); padding-top:16px; margin-top:16px;">
+                <button class="btn-reorder" onclick="reorderPast('${order.id}')">
+                    <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>
+                    COMMANDER ENCORE
+                </button>
+            </div>`;
     }
     
-    return `<div class="track-card"><div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 16px;"><div><div style="font-size:22px; font-family: var(--font-display); font-weight:900; letter-spacing:0.5px; margin-bottom:2px;">${shortId}</div><div style="font-size:12px; color:var(--muted); font-weight:600;">${date}</div></div><div style="font-size:20px; font-family: var(--font-display); font-weight:900; color:var(--text);">${fmt(order.totalPrice)} DH</div></div>${innerHtml}</div>`;
+    return `
+    <div class="track-card fade-up">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 16px;">
+            <div>
+                <div style="font-size:22px; font-family: var(--font-display); font-weight:900; letter-spacing:0.5px; margin-bottom:2px;">${shortId}</div>
+                <div style="font-size:12px; color:var(--muted); font-weight:600; text-transform:uppercase;">${date}</div>
+                ${S.orderTab === 'history' ? `<div style="font-size:12px; font-family:var(--font-display); font-weight:800; color:var(--muted); text-transform:uppercase; margin-top:8px;">${order.totalItems} Article${order.totalItems>1?'s':''}</div>` : ''}
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+                <div style="font-size:20px; font-family: var(--font-display); font-weight:900; color:var(--text); line-height:1;">${fmt(order.totalPrice)} DH</div>
+                ${topBadge}
+            </div>
+        </div>
+        ${innerHtml}
+    </div>`;
   }).join('') + `</div>`;
 }
 
