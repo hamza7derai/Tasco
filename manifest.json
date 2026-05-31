@@ -29,15 +29,6 @@
       "purpose": "any maskable"
     }
   ],
-  "screenshots": [
-    {
-      "src": "/screenshot-home.png",
-      "sizes": "390x844",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "TASCO Home Screen"
-    }
-  ],
   "categories": ["food", "shopping", "lifestyle"],
   "shortcuts": [
     {
