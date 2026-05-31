@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TASCO | Operations Center</title>
+
+<link rel="manifest" href="manifest-admin.json">
+
+<!-- ✅ PWA meta tags for iOS and Android -->
+<meta name="theme-color" content="#FF5A00"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="TASCO Ops"/>
+<link rel="apple-touch-icon" href="/icon-192.png"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================
+   TASCO OPERATIONS PANEL
+========================================= */
+:root {
+    --bg-main: #F8F4EE;
+    --surface: #FFFFFF;
+    --primary: #FF5A00;
+    --primary-light: rgba(255, 90, 0, 0.1);
+    --accent: #16A34A;
+    --accent-light: #DCFCE7;
+    --warning: #F59E0B;
+    --warning-light: #FEF3C7;
+    --danger: #EF4444;
+    --danger-light: #FEE2E2;
+    --blue: #3B82F6;
+    --blue-light: #DBEAFE;
+    --purple: #8B5CF6;
+    --purple-light: #EDE9FE;
+    --text-main: #171717;
+    --text-muted: #6B7280;
+    --border: #E6E2DC;
+    --border-dark: #D1D5DB;
+    --radius-card: 16px;
+    --radius-btn: 12px;
+    --shadow-sm: 0 4px 16px rgba(23, 23, 23, 0.04);
+    --shadow-nav: 0 -4px 20px rgba(23, 23, 23, 0.05);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body { 
+    font-family: 'Space Grotesk', sans-serif; 
+    background: var(--bg-main); 
+    color: var(--text-main); 
+    padding-bottom: 90px; 
+    display: none;
+}
+
+.container { padding: 20px; max-width: 600px; margin: 0 auto; position: relative; min-height: 100vh;}
+svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+button { font-family: inherit; cursor: pointer; outline: none; border: none; background: none; }
+input { font-family: inherit; }
+
+/* SPA VIEWS */
+.app-view { display: none; animation: fadeIn 0.3s ease; }
+.app-view.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ADMIN AUTH GATE */
+#adminAuthGate { position: fixed; inset: 0; background: var(--bg-main); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; transition: 0.3s; }
+#adminAuthGate.hide { opacity: 0; pointer-events: none; display: none; }
+.auth-card { background: var(--surface); border: 1px solid var(--border-dark); border-radius: 24px; padding: 32px 24px; width: 100%; max-width: 360px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); text-align: center; }
+.auth-logo { font-size: 24px; font-weight: 900; color: var(--primary); letter-spacing: -1px; margin-bottom: 8px; }
+.auth-title { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* HEADERS */
+.header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+.header-top h1 { font-size: 24px; font-weight: 800; color: var(--text-main); line-height: 1.2; letter-spacing: -1px;}
+.header-top p { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 4px; }
+.btn-exit { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: var(--surface); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); color: var(--text-main); font-size: 10px; font-weight: 700; cursor: pointer; text-transform: uppercase;}
+.section-title { font-size: 12px; font-weight: 800; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);}
+.section-link { font-size: 13px; color: var(--primary); font-weight: 700; cursor: pointer; text-transform: none; letter-spacing: 0;}
+
+/* CARDS & TOGGLES */
+.card { background: var(--surface); border-radius: var(--radius-card); padding: 16px; box-shadow: var(--shadow-sm); margin-bottom: 16px; border: 1px solid rgba(23,23,23,0.03);}
+.toggle-wrapper { display: flex; justify-content: space-between; align-items: center; width: 100%;}
+.switch { position: relative; display: inline-block; width: 44px; height: 26px; flex-shrink: 0;}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .3s; border-radius: 34px; }
+.slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 2px; bottom: 2px; background-color: white; transition: .3s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+input:checked + .slider { background-color: var(--accent); }
+input:checked + .slider:before { transform: translateX(18px); }
+
+/* DASHBOARD STATS */
+.dash-stats-row { display: flex; justify-content: space-between; background: var(--surface); border-radius: var(--radius-card); padding: 16px; margin-bottom: 24px; box-shadow: var(--shadow-sm); border: 1px solid rgba(23,23,23,0.03);}
+.dash-stat-col { flex: 1; text-align: center; border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+.dash-stat-col:last-child { border-right: none; }
+.dash-stat-icon { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+.dash-stat-val { font-size: 18px; font-weight: 800; color: var(--text-main); line-height: 1; margin-bottom: 4px; }
+.dash-stat-label { font-size: 11px; color: var(--text-muted); font-weight: 700; line-height: 1.2; text-transform: uppercase;}
+
+/* DRIVER ROW */
+.driver-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--border); }
+.driver-row:last-child { border-bottom: none; padding-bottom: 0;}
+.d-info h4 { font-size: 14px; font-weight: 800; color: var(--text-main); text-transform: capitalize; margin-bottom: 2px;}
+.d-info p { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+.d-debt { font-size: 15px; font-weight: 800; color: var(--primary); }
+.driver-avatar { border-radius: 50%; background: var(--bg-main); display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; overflow: hidden; border: 1px solid var(--border);}
+.driver-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.status-dot { position: absolute; bottom: 0; right: 0; border-radius: 50%; border: 2px solid var(--surface); }
+.dot-online { background: var(--accent); }
+.dot-offline { background: var(--text-muted); }
+
+/* ORDER CARDS */
+.order-card { padding: 16px; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; background: var(--surface); border-radius: var(--radius-card); margin-bottom: 12px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 12px;}
+.order-card:active { transform: scale(0.98); }
+.oc-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.oc-id { font-size: 16px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px;}
+.oc-date { font-size: 12px; color: var(--text-muted); margin-top: 2px; font-weight: 600;}
+.oc-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+.oc-client { font-size: 14px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 6px; margin-bottom: 2px;}
+.oc-items { font-size: 12px; color: var(--text-muted); font-weight: 600;}
+.oc-price { font-size: 18px; font-weight: 800; color: var(--text-main); }
+
+/* BADGES */
+.badge { padding: 6px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;}
+.b-pending { background: var(--warning-light); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.2); }
+.b-preparing { background: var(--blue-light); color: var(--blue); border: 1px solid rgba(59, 130, 246, 0.2);}
+.b-driver { background: var(--purple-light); color: var(--purple); border: 1px solid rgba(139, 92, 246, 0.2);}
+.b-delivered { background: var(--accent-light); color: var(--accent); border: 1px solid rgba(22, 163, 74, 0.2);}
+.b-cancelled { background: var(--danger-light); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2);}
+
+/* TABS */
+.tabs-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -20px 20px; padding: 0 20px; scroll-behavior: smooth; scroll-snap-type: x mandatory;}
+.tabs-scroll::-webkit-scrollbar { display: none; }
+.tab-pill { padding: 10px 18px; border-radius: 50px; font-size: 12px; font-weight: 800; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); white-space: nowrap; cursor: pointer; transition: 0.2s; scroll-snap-align: center; text-transform: uppercase; letter-spacing: 0.5px;}
+.tab-pill.active { background: var(--text-main); color: white; border-color: var(--text-main); }
+
+/* DETAILS */
+.detail-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+.back-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--surface); border-radius: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); cursor: pointer; flex-shrink: 0;}
+
+/* CUSTOMER INFO */
+.info-card { background: var(--surface); border-radius: var(--radius-card); padding: 16px; border: 1px solid var(--border); margin-bottom: 20px;}
+.info-row { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start;}
+.info-icon { color: var(--text-muted); margin-top: 2px;}
+.info-text h5 { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 2px;}
+.info-text p { font-size: 14px; font-weight: 700; color: var(--text-main); }
+.action-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 16px; border-top: 1px solid var(--border); padding-top: 16px;}
+.action-btn-sm { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--text-main); background: var(--bg-main); border: 1px solid var(--border); padding: 12px 8px; border-radius: 12px; text-decoration: none;}
+
+/* ITEMS LIST */
+.item-card { background: var(--surface); border-radius: var(--radius-card); border: 1px solid var(--border); margin-bottom: 12px; padding: 12px; display: flex; gap: 12px; align-items: center; box-shadow: var(--shadow-sm);}
+.item-img { width: 56px; height: 56px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; background: transparent; }
+.item-img img { width: 100%; height: 100%; object-fit: contain; }
+.item-details { flex: 1; }
+.item-name { font-size: 14px; font-weight: 800; margin-bottom: 4px; display: flex; gap: 8px; align-items: flex-start; justify-content: space-between;}
+.item-meta { font-size: 12px; color: var(--text-muted); line-height: 1.4; font-weight: 600;}
+
+/* SUMMARY */
+.summary-box { background: var(--surface); border-radius: var(--radius-card); padding: 20px; margin-top: 24px; border: 1px solid var(--border);}
+.summary-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 12px; color: var(--text-muted); font-weight: 600;}
+.summary-row.total { font-size: 18px; font-weight: 800; color: var(--primary); margin-bottom: 0; padding-top: 16px; border-top: 1px dashed var(--border-dark); }
+
+/* FORMS */
+.form-group { margin-bottom: 16px; text-align: left;}
+.form-group label { display: block; font-size: 11px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;}
+.form-control { width: 100%; padding: 14px 16px; border: 1px solid var(--border-dark); border-radius: var(--radius-btn); background: var(--bg-main); outline: none; font-size: 14px; font-weight: 600; color: var(--text-main); transition: 0.2s;}
+.form-control:focus { border-color: var(--primary); background: var(--surface);}
+
+/* BUTTONS */
+.btn { width: 100%; padding: 16px; border-radius: var(--radius-btn); font-size: 14px; font-weight: 800; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; border: none; text-transform: uppercase; letter-spacing: 0.5px;}
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none;}
+.btn-primary { background: var(--primary); color: white; }
+.btn-success { background: var(--accent); color: white; }
+.btn-outline { background: var(--surface); color: var(--text-main); border: 1px solid var(--border-dark); }
+
+/* ANALYTICS */
+.analytics-hero { background: var(--surface); border-radius: 24px; padding: 24px; margin-bottom: 24px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 12px;}
+.hero-title { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
+.hero-val { font-size: 36px; font-weight: 800; color: var(--text-main); letter-spacing: -2px;}
+.hero-profit { background: var(--accent-light); color: var(--accent); padding: 10px 16px; border-radius: 12px; font-size: 14px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;}
+.analytics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px;}
+.metric-card { background: var(--surface); border-radius: 16px; padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); text-align: center; display: flex; flex-direction: column; align-items: center;}
+.mc-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items:center; justify-content: center; margin-bottom: 12px;}
+.mc-val { font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; line-height: 1;}
+.mc-title { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;}
+.compare-row { background: var(--surface); border-radius: 16px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); box-shadow: var(--shadow-sm); margin-bottom: 12px;}
+.compare-label { font-size: 13px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 12px; text-transform: uppercase; letter-spacing: 0.5px;}
+.compare-val { font-size: 16px; font-weight: 800; color: var(--text-main); }
+
+/* BOTTOM NAV */
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 12px 20px 24px; z-index: 100; box-shadow: var(--shadow-nav); max-width: 600px; margin: 0 auto; transition: bottom 0.3s ease;}
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #94A3B8; font-size: 10px; font-weight: 800; cursor: pointer; transition: 0.2s; width: 33%; text-transform: uppercase; letter-spacing: 0.5px;}
+.nav-item.active { color: var(--primary); }
+.nav-item svg { width: 24px; height: 24px; stroke-width: 2.2; }
+.nav-item.active svg { fill: var(--primary-light); }
+
+/* TOAST & MODAL */
+.toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--text-main); color: white; padding: 14px 24px; border-radius: 50px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 40px rgba(23, 23, 23, 0.2); z-index: 1100; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.toast.show { transform: translateX(-50%) translateY(0); }
+.overlay { position: fixed; inset: 0; background: rgba(23, 23, 23, 0.6); backdrop-filter: blur(4px); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.overlay.active { opacity: 1; pointer-events: auto; }
+.modal { background: var(--surface); width: 100%; max-width: 340px; border-radius: 24px; padding: 32px 24px; box-shadow: 0 10px 40px rgba(23, 23, 23, 0.1); transform: scale(0.95); transition: 0.3s; text-align: center; display: none; border: 1px solid var(--border);}
+.overlay.active .modal { display: block; transform: scale(1); }
+
+/* ✅ IN-APP NOTIFICATION BANNER (new — matches driver style) */
+#adminNotifBanner { position: fixed; top: 16px; left: 16px; right: 16px; z-index: 2000; background: var(--primary); border-radius: 16px; padding: 16px; display: flex; align-items: center; gap: 14px; box-shadow: 0 12px 40px rgba(255,90,0,.35); transform: translateY(-150px); transition: .5s cubic-bezier(.175,.885,.32,1.275); pointer-events: none; max-width: 560px; margin: 0 auto; }
+#adminNotifBanner.show { transform: translateY(0); }
+#adminNotifBanner svg { width: 26px; flex-shrink: 0; fill: none; stroke: #fff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+#adminNotifBanner .nb-body { flex: 1; }
+#adminNotifBanner .nb-title { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+#adminNotifBanner .nb-sub { font-size: 13px; color: rgba(255,255,255,.85); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- ✅ IN-APP NOTIFICATION BANNER -->
+<div id="adminNotifBanner">
+  <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+  <div class="nb-body">
+    <div class="nb-title" id="adminNotifTitle">New Order!</div>
+    <div class="nb-sub" id="adminNotifSub">A new order just came in</div>
+  </div>
+</div>
+
+<div id="adminAuthGate">
+    <div class="auth-card">
+        <div class="auth-logo">TASCO ADMIN</div>
+        <div class="auth-title">Secure Command Center</div>
+        <div class="form-group">
+            <label>Admin Email</label>
+            <input type="email" id="adminEmail" class="form-control" placeholder="admin@tasco.ma">
+        </div>
+        <div class="form-group" style="margin-bottom: 24px;">
+            <label>Password</label>
+            <input type="password" id="adminPass" class="form-control" placeholder="••••••••">
+        </div>
+        <button class="btn btn-primary" id="btnAdminLogin" onclick="executeAdminLogin()">ACCESS SYSTEM</button>
+    </div>
+</div>
+
+<div id="view-dashboard" class="app-view active container">
+    <div class="header-top">
+        <div>
+            <h1>Hello, <span style="color: var(--primary);">TASCO</span> ⚡</h1>
+            <p>Command Center</p>
+        </div>
+        <div class="btn-exit" onclick="logoutAdmin()">
+            <svg viewBox="0 0 24 24" style="width:18px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            Exit
+        </div>
+    </div>
+
+    <div class="card toggle-wrapper">
+        <div style="display:flex; align-items:center; gap:16px;">
+            <div id="statusIconBox" style="width: 44px; height: 44px; border-radius: 12px; background: var(--danger-light); color: var(--danger); display: flex; align-items: center; justify-content: center; transition: 0.3s;">
+                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            </div>
+            <div>
+                <span id="statusTextMain" style="display:block; font-size:15px; font-weight:800; color:var(--text-main); text-transform:uppercase; letter-spacing:0.5px;">Store Closed</span>
+                <span id="statusTextSub" style="font-size:12px; font-weight: 600; color:var(--text-muted);">Not receiving orders</span>
+            </div>
+        </div>
+        <label class="switch"><input type="checkbox" id="storeStatusToggle" onchange="toggleStoreStatus(this.checked)"><span class="slider"></span></label>
+    </div>
+
+    <div class="dash-stats-row">
+        <div class="dash-stat-col">
+            <div class="dash-stat-icon" style="background:var(--warning-light); color:var(--warning);"><svg viewBox="0 0 24 24" style="width:18px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>
+            <div class="dash-stat-val" id="dashStatOrders">0</div>
+            <div class="dash-stat-label">Orders<br>Today</div>
+        </div>
+        <div class="dash-stat-col">
+            <div class="dash-stat-icon" style="background:var(--accent-light); color:var(--accent);"><svg viewBox="0 0 24 24" style="width:18px;"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><line x1="12" y1="18" x2="12" y2="22"></line><line x1="12" y1="2" x2="12" y2="6"></line></svg></div>
+            <div class="dash-stat-val" id="dashStatRevenue" style="font-size:16px;">0 DH</div>
+            <div class="dash-stat-label">Revenue<br>Today</div>
+        </div>
+        <div class="dash-stat-col">
+            <div class="dash-stat-icon" style="background:var(--primary-light); color:var(--primary);"><svg viewBox="0 0 24 24" style="width:18px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+            <div class="dash-stat-val" id="dashStatPending">0</div>
+            <div class="dash-stat-label">Pending<br>Orders</div>
+        </div>
+    </div>
+
+    <div class="section-title">
+        <span>ACTIVE DRIVERS</span>
+        <span class="section-link" onclick="switchTab('drivers')">View all</span>
+    </div>
+    <div class="card" id="dashDriversContainer" style="padding: 12px 16px;"></div>
+
+    <div class="section-title" style="margin-top: 24px;">
+        <span>RECENT ORDERS</span>
+        <span class="section-link" onclick="switchTab('commandes')">View all</span>
+    </div>
+    <div id="dashRecentOrdersContainer"></div>
+</div>
+
+<div id="view-commandes" class="app-view container">
+    <div class="header-top">
+        <h1 style="font-size: 24px; font-weight: 800; letter-spacing: -1px;">ORDERS</h1>
+    </div>
+    <div class="tabs-scroll">
+        <div class="tab-pill active" onclick="filterOrdersList('All', this)">All</div>
+        <div class="tab-pill" onclick="filterOrdersList('Pending', this)">Pending</div>
+        <div class="tab-pill" onclick="filterOrdersList('Preparing', this)">Preparing</div>
+        <div class="tab-pill" onclick="filterOrdersList('Driver Assigned', this)">Assigned</div>
+        <div class="tab-pill" onclick="filterOrdersList('Out for Delivery', this)">Transit</div>
+        <div class="tab-pill" onclick="filterOrdersList('Delivered', this)">Delivered</div>
+        <div class="tab-pill" onclick="filterOrdersList('Cancelled', this)">Cancelled</div>
+    </div>
+    <div id="adminOrderListContainer"></div>
+</div>
+
+<div id="view-order-detail" class="app-view container">
+    <div class="detail-header">
+        <div class="back-btn" onclick="switchTab('commandes')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></div>
+        <div style="flex:1; display: flex; justify-content: space-between; align-items: center;">
+            <h1 style="font-size: 20px; font-weight: 800; letter-spacing:-0.5px;" id="det-id">#ID</h1>
+            <div class="badge" id="det-badge">STATUS</div>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <div class="info-row">
+            <svg class="info-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <div class="info-text"><h5>Customer</h5><p id="det-client">-</p></div>
+        </div>
+        <div class="info-row">
+            <svg class="info-icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <div class="info-text"><h5>Phone</h5><p id="det-phone">-</p></div>
+        </div>
+        <div class="info-row">
+            <svg class="info-icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <div class="info-text"><h5>Address</h5><p id="det-address" style="line-height: 1.4; font-size: 12px; font-weight: 600;">-</p></div>
+        </div>
+        <div class="info-row" style="margin-bottom:0;">
+            <svg class="info-icon" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            <div class="info-text"><h5>Payment</h5><p>Cash on Delivery</p></div>
+        </div>
+        <div class="action-grid">
+            <a href="#" class="action-btn-sm" id="btnCallCustomer"><svg viewBox="0 0 24 24" style="color:var(--text-main);"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> Call</a>
+            <a href="#" target="_blank" class="action-btn-sm" id="btnWaCustomer"><svg viewBox="0 0 24 24" style="color:var(--accent);"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> WhatsApp</a>
+            <a href="#" target="_blank" class="action-btn-sm" id="btnNavCustomer"><svg viewBox="0 0 24 24" style="color:var(--blue);"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg> Navigate</a>
+        </div>
+    </div>
+
+    <div id="det-items-list"></div>
+
+    <div class="summary-box">
+        <div class="summary-row"><span>Subtotal</span><span id="det-subtotal">0.00 DH</span></div>
+        <div class="summary-row"><span>Delivery Fee</span><span id="det-shipping">0.00 DH</span></div>
+        <div class="summary-row total"><span>TOTAL</span><span id="det-total">0.00 DH</span></div>
+    </div>
+
+    <div id="det-status-actions" style="margin-top: 24px; margin-bottom: 12px;"></div>
+
+    <div style="display: flex; gap: 12px; margin-top: 12px;">
+        <button class="btn btn-outline" style="flex:1;" id="btnPrintReceipt"><svg viewBox="0 0 24 24" style="width:16px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Print</button>
+        <button class="btn btn-outline" style="flex:1; color:var(--warning); border-color:var(--warning-light);" id="btnCancelOrder">Cancel</button>
+        <button class="btn btn-outline" style="flex:1; background:var(--danger-light); color:var(--danger); border-color:var(--danger);" id="btnDeleteOrder">Delete</button>
+    </div>
+</div>
+
+<div id="view-drivers" class="app-view container">
+    <div class="header-top">
+        <div>
+            <h1>DRIVERS</h1>
+            <p>Cash Settlements & Live Monitoring</p>
+        </div>
+    </div>
+    <div class="card" id="adminDriversListContainer" style="padding: 12px 16px;"></div>
+</div>
+
+<div id="view-analytics" class="app-view container">
+    <div class="header-top">
+        <div>
+            <h1>ANALYTICS</h1>
+            <p>Track Performance</p>
+        </div>
+    </div>
+
+    <div class="analytics-hero">
+        <div style="display:flex; align-items:center; gap:16px;">
+            <div style="width:48px; height:48px; background:var(--accent-light); color:var(--accent); border-radius:14px; display:flex; align-items:center; justify-content:center;">
+                <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            </div>
+            <div>
+                <div class="hero-val" id="statGrossRevenue">0 DH</div>
+                <div class="hero-title">Gross Revenue (Sales + Delivery)</div>
+            </div>
+        </div>
+        <div class="hero-profit" id="statNetProfit">
+            <svg viewBox="0 0 24 24" style="width:16px;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            Profit: 0 DH
+        </div>
+    </div>
+
+    <div class="analytics-grid">
+        <div class="metric-card">
+            <div class="mc-icon" style="background:var(--primary-light); color:var(--primary);"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+            <div class="mc-val" id="statOrdersTotal">0</div>
+            <div class="mc-title">Orders</div>
+        </div>
+        <div class="metric-card">
+            <div class="mc-icon" style="background:var(--blue-light); color:var(--blue);"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>
+            <div class="mc-val" id="statItemsTotal">0</div>
+            <div class="mc-title">Items Sold</div>
+        </div>
+        <div class="metric-card">
+            <div class="mc-icon" style="background:var(--purple-light); color:var(--purple);"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+            <div class="mc-val" id="statCustomersTotal">0</div>
+            <div class="mc-title">Customers</div>
+        </div>
+    </div>
+
+    <div class="compare-row">
+        <div class="compare-label">
+            <div style="width:36px; height:36px; background:var(--warning-light); color:var(--warning); border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+            </div>
+            Delivery Fees (Driver)
+        </div>
+        <div class="compare-val" id="statDeliveryTotal">0 DH</div>
+    </div>
+</div>
+
+<nav class="bottom-nav" id="mainNav">
+    <div class="nav-item active" id="nav-dashboard" onclick="switchTab('dashboard')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Home</div>
+    <div class="nav-item" id="nav-commandes" onclick="switchTab('commandes')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Orders</div>
+    <div class="nav-item" id="nav-drivers" onclick="switchTab('drivers')"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> Drivers</div>
+    <div class="nav-item" id="nav-analytics" onclick="switchTab('analytics')"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Analytics</div>
+</nav>
+
+<div class="overlay" id="confirmOverlay">
+    <div class="modal">
+        <h3 id="modalTitle" style="font-size:18px; font-weight:800; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">Confirmation</h3>
+        <p id="modalMsg" style="font-size:13px; color:var(--text-muted); margin-bottom:24px; font-weight:600;">Are you sure?</p>
+        <div style="display: flex; gap: 12px;">
+            <button class="btn btn-outline" style="flex:1; padding:14px; font-size:14px;" onclick="closeModals()">Cancel</button>
+            <button class="btn btn-primary" id="modalConfirmBtn" style="flex:1; padding:14px; font-size:14px;">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toastBox">
+    <svg viewBox="0 0 24 24" style="color:var(--primary);"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+    <span id="toastMsg">Action successful</span>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, onSnapshot, updateDoc, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAaaR52bvyQfkxmZL16lcg4Bd4M76OtbI4",
+    authDomain: "lesgo-cd7f9.firebaseapp.com",
+    projectId: "lesgo-cd7f9",
+    storageBucket: "lesgo-cd7f9.appspot.com"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+const auth = getAuth(app);
+
+// ✅ ADDED: FCM messaging instance
+let messaging = null;
+try { messaging = getMessaging(app); } catch(e) { console.warn('FCM not available:', e.message); }
+
+const VAPID_KEY = 'BIA11IYOKDeINtdv7w9WyCUyhPM6Ym7IugYsxQCFFqZmt_8dm0vjnmtThikBZaSv2aBeXSp5xPptg5oI8MmxtDk';
+const ADMIN_EMAILS = ["admin@tasco.ma"];
+const ADMIN_FCM_DOC = "admin_fcm_token"; // Firestore doc where admin token is stored
+
+// ✅ ADDED: FCM setup for admin
+async function setupAdminFCM(userEmail) {
+  if (!messaging) return;
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') {
+      console.warn('Notification permission denied');
+      return;
+    }
+
+    // Register service worker
+    let swReg;
+    if ('serviceWorker' in navigator) {
+      swReg = await navigator.serviceWorker.register('/firebase-messaging-sw.js', { scope: '/' });
+      await navigator.serviceWorker.ready;
+    }
+
+    // Get FCM token
+    const token = await getToken(messaging, {
+      vapidKey: VAPID_KEY,
+      serviceWorkerRegistration: swReg
+    });
+
+    // Save admin token to its own Firestore doc
+    // Cloud Function reads this to know where to send admin notifications
+    if (token) {
+      await setDoc(doc(db, 'admin_tokens', ADMIN_FCM_DOC), {
+        fcmToken: token,
+        email: userEmail,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+      console.log('Admin FCM token saved');
+    }
+
+    // Handle foreground notifications (admin app is open)
+    onMessage(messaging, payload => {
+      const n = payload.notification || {};
+      const d = payload.data || {};
+      document.getElementById('adminNotifTitle').textContent = n.title || '🔔 New Order!';
+      document.getElementById('adminNotifSub').textContent = n.body || 'A new order just came in';
+      const banner = document.getElementById('adminNotifBanner');
+      banner.classList.add('show');
+      setTimeout(() => banner.classList.remove('show'), 5000);
+    });
+
+  } catch(e) {
+    console.warn('Admin FCM setup failed:', e.message);
+  }
+}
+
+// AUTH STATE WATCHDOG
+onAuthStateChanged(auth, async (user) => {
+    const gate = document.getElementById('adminAuthGate');
+    document.body.style.display = "block";
+
+    if (!user) {
+        gate.classList.remove('hide');
+    } else {
+        if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+            gate.classList.add('hide');
+            // ✅ ADDED: start FCM after confirmed admin login
+            setupAdminFCM(user.email);
+        } else {
+            alert("Security Alert: Unauthorized credentials. Signing out...");
+            await signOut(auth);
+            gate.classList.remove('hide');
+        }
+    }
+});
+
+// ADMIN LOGIN
+window.executeAdminLogin = async () => {
+    const email = document.getElementById('adminEmail').value.trim();
+    const pass  = document.getElementById('adminPass').value.trim();
+    const btn   = document.getElementById('btnAdminLogin');
+    if(!email || !pass) return showToast("Enter email and password");
+    btn.innerText = "AUTHENTICATING..."; btn.disabled = true;
+    try {
+        await signInWithEmailAndPassword(auth, email, pass);
+    } catch(e) {
+        alert("Access Denied: Invalid email or password.");
+        btn.innerText = "ACCESS SYSTEM"; btn.disabled = false;
+    }
+};
+
+window.logoutAdmin = async () => { try { await signOut(auth); } catch(e) { console.error(e); } };
+
+let allOrders = [], allDrivers = [], allProducts = [];
+let currentOrderFilter = 'All';
+
+const safeNum = (val) => isNaN(parseFloat(val)) ? 0 : parseFloat(val);
+const formatPrice = (num) => { const p = Number(num); return p % 1 === 0 ? p.toString() : p.toFixed(2); };
+
+// DEEP PROFIT MATH ENGINE
+function calcOrderCostAndProfit(order) {
+    let totalCost = 0;
+    if (order.cart && Array.isArray(order.cart)) {
+        order.cart.forEach(item => {
+            const qty = parseInt(item.qty) || 1;
+            const catProd = allProducts.find(p => p.id === item.product?.id);
+            let baseCost = safeNum(item.product?.costPrice) || safeNum(item.costPrice) || (catProd ? safeNum(catProd.costPrice) : 0);
+            let optionsCost = 0;
+            if (item.options && Array.isArray(item.options)) item.options.forEach(opt => { optionsCost += safeNum(opt.costPrice) || safeNum(opt.cost) || 0; });
+            if (item.modularChoices && Array.isArray(item.modularChoices)) item.modularChoices.forEach(opt => { optionsCost += safeNum(opt.costPrice) || safeNum(opt.cost) || 0; });
+            if (item.extras && Array.isArray(item.extras)) item.extras.forEach(ext => { optionsCost += safeNum(ext.costPrice) || safeNum(ext.cost) || 0; });
+            totalCost += (baseCost + optionsCost) * qty;
+        });
+    }
+    const revenue = safeNum(order.totalPrice) - safeNum(order.deliveryFee);
+    const profit  = revenue - totalCost;
+    return { totalCost, revenue, profit };
+}
+
+window.switchTab = (tabId) => {
+    document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById(`view-${tabId}`).classList.add('active');
+    const navItem = document.getElementById(`nav-${tabId}`);
+    if(navItem) navItem.classList.add('active');
+    if (tabId === 'order-detail') {
+        document.getElementById('mainNav').style.bottom = '-100px';
+    } else {
+        document.getElementById('mainNav').style.bottom = '0';
+        localStorage.setItem('tascoAdminTab', tabId);
+    }
+    window.scrollTo(0,0);
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTab = localStorage.getItem('tascoAdminTab') || 'dashboard';
+    switchTab(savedTab);
+});
+
+// STORE TOGGLE
+window.toggleStoreStatus = async (isOnline) => {
+    try {
+        await setDoc(doc(db, "settings", "store_status"), { isOnline: isOnline }, { merge: true });
+        showToast(isOnline ? "Store is now Open!" : "Store is Closed!");
+    } catch(e) {
+        console.error(e);
+        alert("Firebase Error: " + e.message);
+        document.getElementById('storeStatusToggle').checked = !isOnline;
+    }
+};
+
+onSnapshot(doc(db, "settings", "store_status"), (docSnap) => {
+    const toggle   = document.getElementById('storeStatusToggle');
+    const iconBox  = document.getElementById('statusIconBox');
+    const textMain = document.getElementById('statusTextMain');
+    const textSub  = document.getElementById('statusTextSub');
+    let isOnline = false;
+    if (docSnap.exists()) isOnline = docSnap.data().isOnline === true;
+    toggle.checked = isOnline;
+    if(isOnline) {
+        iconBox.style.background = 'var(--accent-light)'; iconBox.style.color = 'var(--accent)';
+        textMain.innerText = 'Store Open'; textSub.innerText = 'Receiving orders';
+    } else {
+        iconBox.style.background = 'var(--danger-light)'; iconBox.style.color = 'var(--danger)';
+        textMain.innerText = 'Store Closed'; textSub.innerText = 'Not receiving orders';
+    }
+});
+
+// REAL-TIME LISTENERS
+onSnapshot(collection(db, "products"), snap => {
+    allProducts = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    calculateDashboard();
+});
+
+onSnapshot(collection(db, "drivers"), snap => {
+    allDrivers = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    renderDriversAllocationEngine();
+});
+
+onSnapshot(collection(db, "orders"), snap => {
+    allOrders = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    calculateDashboard();
+    renderFullOrdersList();
+    renderDriversAllocationEngine();
+    if (document.getElementById('view-order-detail').classList.contains('active')) {
+        const currentId = document.getElementById('det-id').innerText.replace('#', '').toLowerCase();
+        const stillExists = allOrders.find(o => o.id.toLowerCase() === currentId || o.id.substring(0,6).toLowerCase() === currentId);
+        if(stillExists) window.viewOrder(stillExists.id); else switchTab('commandes');
+    }
+});
+
+const getEmptyOrdersHTML = () => `<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:13px; font-weight:700; text-transform:uppercase;">No orders found.</div>`;
+
+// DASHBOARD ANALYTICS
+function calculateDashboard() {
+    const todayStr = new Date().toDateString();
+    let ordersTodayCount = 0, grossToday = 0, pendingCount = 0;
+    let totalDeliveredOrdersCount = 0, cumulativeGrossRevenue = 0, cumulativeNetProfit = 0;
+    let cumulativeItemsSold = 0, cumulativeDriverFeesAllocation = 0;
+    let uniqueCustomersSet = new Set();
+
+    allOrders.forEach(order => {
+        let orderDate = new Date();
+        if (order.timestamp) { const parsed = new Date(order.timestamp); if (!isNaN(parsed.getTime())) orderDate = parsed; }
+        const isToday = orderDate.toDateString() === todayStr;
+        if (isToday) { ordersTodayCount++; if(order.status !== 'Cancelled') grossToday += safeNum(order.totalPrice); }
+        if (order.status === 'Pending') pendingCount++;
+        if (order.status === 'Delivered') {
+            totalDeliveredOrdersCount++;
+            cumulativeGrossRevenue += safeNum(order.totalPrice);
+            cumulativeDriverFeesAllocation += safeNum(order.deliveryFee);
+            cumulativeItemsSold += parseInt(order.totalItems) || 0;
+            if (order.customerId) uniqueCustomersSet.add(order.customerId);
+            const math = calcOrderCostAndProfit(order);
+            cumulativeNetProfit += math.profit;
+        }
+    });
+
+    document.getElementById('dashStatOrders').innerText = ordersTodayCount;
+    document.getElementById('dashStatRevenue').innerText = formatPrice(grossToday) + ' DH';
+    document.getElementById('dashStatPending').innerText = pendingCount;
+    document.getElementById('statGrossRevenue').innerText = formatPrice(cumulativeGrossRevenue) + ' DH';
+    document.getElementById('statNetProfit').innerHTML = `<svg viewBox="0 0 24 24" style="width:16px;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> Profit: ${formatPrice(cumulativeNetProfit)} DH`;
+    document.getElementById('statOrdersTotal').innerText = totalDeliveredOrdersCount;
+    document.getElementById('statItemsTotal').innerText = cumulativeItemsSold;
+    document.getElementById('statCustomersTotal').innerText = uniqueCustomersSet.size;
+    document.getElementById('statDeliveryTotal').innerText = formatPrice(cumulativeDriverFeesAllocation) + ' DH';
+
+    const getTime = (ts) => { if (!ts) return 0; const t = new Date(ts).getTime(); return isNaN(t) ? 0 : t; };
+    const recentOrders = [...allOrders].sort((a,b) => getTime(b.timestamp) - getTime(a.timestamp)).slice(0, 2);
+    const dashRecentContainer = document.getElementById('dashRecentOrdersContainer');
+    if(dashRecentContainer) dashRecentContainer.innerHTML = recentOrders.length === 0 ? getEmptyOrdersHTML() : generateOrdersHTML(recentOrders);
+}
+
+// DRIVER METRICS & SETTLEMENTS
+function calculateDriverMetrics(driverPhoneId) {
+    const driverOrders = allOrders.filter(o => o.driverId === driverPhoneId);
+    let activeOrder = null, cashToCollectFromDriver = 0;
+    driverOrders.forEach(o => {
+        if (o.status === 'Driver Assigned' || o.status === 'Out for Delivery') activeOrder = o;
+        if (o.status === 'Delivered' && o.driverSettled !== true) cashToCollectFromDriver += calcOrderCostAndProfit(o).profit;
+    });
+    return { activeOrder, cashToCollectFromDriver };
+}
+
+window.settleDriverCashAccount = async (driverPhoneId) => {
+    if(!confirm(`Confirm full collection from driver ${driverPhoneId}?`)) return;
+    try {
+        const activeUnsettledOrders = allOrders.filter(o => o.driverId === driverPhoneId && o.status === 'Delivered' && o.driverSettled !== true);
+        for (let orderDoc of activeUnsettledOrders) {
+            await updateDoc(doc(db, "orders", orderDoc.id), { driverSettled: true });
+        }
+        showToast("Cash settlement finalized. Driver debt cleared.");
+    } catch(e) { console.error(e); alert("Settlement Error: " + e.message); }
+};
+
+function renderDriversAllocationEngine() {
+    let globalOwedFleetCapital = 0, layoutHtml = '';
+    allDrivers.forEach(driver => {
+        const metrics = calculateDriverMetrics(driver.phone);
+        globalOwedFleetCapital += metrics.cashToCollectFromDriver;
+        let statusClass = 'dot-offline', statusText = 'Offline';
+        if(driver.isActive) {
+            if(metrics.activeOrder) { statusClass = 'dot-online'; statusText = `In Transit (#${metrics.activeOrder.id.substring(0,4).toUpperCase()})`; }
+            else { statusClass = 'dot-online'; statusText = 'Online · Ready'; }
+        }
+        layoutHtml += `<div class="driver-row">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div class="driver-avatar" style="width:40px; height:40px;">
+                    ${driver.photoUrl ? `<img src="${driver.photoUrl}">` : `<svg viewBox="0 0 24 24" style="width:20px; color:var(--text-muted);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`}
+                    <div class="status-dot ${statusClass}" style="width:10px; height:10px;"></div>
+                </div>
+                <div class="d-info">
+                    <h4>${driver.name}</h4>
+                    <p style="font-size:11px; color:var(--text-muted); font-weight:700;">${statusText} • ${driver.phone}</p>
+                    <p style="color:var(--danger); font-weight:800; margin-top:2px;">Owes: ${formatPrice(metrics.cashToCollectFromDriver)} DH</p>
+                </div>
+            </div>
+            ${metrics.cashToCollectFromDriver > 0 ?
+                `<button class="btn btn-outline" style="width:auto; padding:8px 14px; font-size:11px; font-weight:800;" onclick="settleDriverCashAccount('${driver.phone}')">SETTLE</button>` :
+                `<svg viewBox="0 0 24 24" style="width:18px; color:var(--accent); margin-right:12px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`
+            }
+        </div>`;
+    });
+
+    const homeContainer = document.getElementById('dashDriversContainer');
+    if(homeContainer) {
+        const homeDriversList = allDrivers.slice(0, 2);
+        homeContainer.innerHTML = homeDriversList.length ? homeDriversList.map(d => {
+            const metrics = calculateDriverMetrics(d.phone);
+            return `<div class="driver-row"><div class="d-info"><h4>${d.name}</h4><p>Owes: ${formatPrice(metrics.cashToCollectFromDriver)} DH</p></div><span class="d-debt" style="font-size:13px; font-weight:700; color:var(--text-muted);">${d.phone}</span></div>`;
+        }).join('') : `<div style="text-align:center; padding:8px; color:var(--text-muted); font-size:12px;">No drivers listed.</div>`;
+    }
+
+    const masterLedgerTarget = document.getElementById('adminDriversListContainer');
+    if(masterLedgerTarget) {
+        if(layoutHtml === '') {
+            masterLedgerTarget.innerHTML = `<div style="text-align:center; padding:12px; color:var(--text-muted); font-size:13px; font-weight:600;">No active fleet units cataloged.</div>`;
+        } else {
+            masterLedgerTarget.innerHTML = layoutHtml + `<div style="padding-top:16px; margin-top:12px; border-top:1px dashed var(--border-dark); display:flex; justify-content:space-between; font-weight:800; font-size:14px; color:var(--text-main); text-transform:uppercase; letter-spacing:0.5px;"><span>Fleet Cash To Collect</span><span style="color:var(--primary);">${formatPrice(globalOwedFleetCapital)} DH</span></div>`;
+        }
+    }
+}
+
+// ORDERS LIST
+window.filterOrdersList = (status, tabElement) => {
+    document.querySelectorAll('#view-commandes .tab-pill').forEach(t => t.classList.remove('active'));
+    tabElement.classList.add('active');
+    currentOrderFilter = status;
+    renderFullOrdersList();
+};
+
+function renderFullOrdersList() {
+    const getTime = (ts) => { if (!ts) return 0; const t = new Date(ts).getTime(); return isNaN(t) ? 0 : t; };
+    let filtered = [...allOrders].sort((a,b) => getTime(b.timestamp) - getTime(a.timestamp));
+    if (currentOrderFilter !== 'All') filtered = filtered.filter(o => o.status === currentOrderFilter);
+    const container = document.getElementById('adminOrderListContainer');
+    if(container) container.innerHTML = filtered.length === 0 ? getEmptyOrdersHTML() : generateOrdersHTML(filtered);
+}
+
+function generateOrdersHTML(ordersArray) {
+    return ordersArray.map(o => {
+        let orderDate = new Date(); if (o.timestamp) { const parsed = new Date(o.timestamp); if (!isNaN(parsed.getTime())) orderDate = parsed; }
+        const date = orderDate.toLocaleDateString('en-US', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
+        let statusClass = 'b-pending';
+        if(o.status === 'Preparing') statusClass = 'b-preparing';
+        if(o.status === 'Driver Assigned' || o.status === 'Out for Delivery') statusClass = 'b-driver';
+        if(o.status === 'Delivered') statusClass = 'b-delivered';
+        if(o.status === 'Cancelled') statusClass = 'b-cancelled';
+        const price = formatPrice(safeNum(o.totalPrice));
+        const items = parseInt(o.totalItems) || 0;
+        const cName = o.customerName || 'Customer';
+        return `<div class="order-card" onclick="window.viewOrder('${o.id}')">
+            <div class="oc-top"><div><div class="oc-id">#${o.id.substring(0,6).toUpperCase()}</div><div class="oc-date">${date}</div></div><div class="badge ${statusClass}">${o.status}</div></div>
+            <div class="oc-bottom"><div><div class="oc-client"><svg viewBox="0 0 24 24" style="width:14px; color:var(--text-muted);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> ${cName}</div><div class="oc-items">${items} item${items>1?'s':''}</div></div><div class="oc-price">${price} DH</div></div>
+        </div>`;
+    }).join('');
+}
+
+window.viewOrder = (orderId) => {
+    const order = allOrders.find(o => o.id === orderId); if(!order) return;
+    document.getElementById('det-id').innerText = "#" + order.id.substring(0,6).toUpperCase();
+    document.getElementById('det-client').innerText = order.customerName || 'Unknown';
+    document.getElementById('det-phone').innerText = order.customerPhone || 'Not provided';
+    document.getElementById('det-address').innerText = order.deliveryAddress || order.neighborhood || 'Not specified';
+    document.getElementById('btnCallCustomer').href = order.customerPhone ? `tel:${order.customerPhone}` : '#';
+    document.getElementById('btnWaCustomer').href = order.customerPhone ? `https://wa.me/${order.customerPhone.replace(/\+/g, '')}` : '#';
+    const mapLink = document.getElementById('btnNavCustomer');
+    if (order.deliveryCoords && order.deliveryCoords.lat) {
+        mapLink.href = `https://maps.google.com/?q=${order.deliveryCoords.lat},${order.deliveryCoords.lng}`;
+    } else {
+        mapLink.href = order.deliveryAddress ? `https://maps.google.com/?q=${encodeURIComponent(order.deliveryAddress)}` : '#';
+    }
+    let statusClass = 'b-pending';
+    if(order.status === 'Preparing') statusClass = 'b-preparing';
+    if(order.status === 'Driver Assigned' || order.status === 'Out for Delivery') statusClass = 'b-driver';
+    if(order.status === 'Delivered') statusClass = 'b-delivered';
+    if(order.status === 'Cancelled') statusClass = 'b-cancelled';
+    const badge = document.getElementById('det-badge');
+    badge.className = `badge ${statusClass}`; badge.innerText = (order.status || 'Unknown').toUpperCase();
+
+    document.getElementById('det-items-list').innerHTML = (order.cart || []).map(item => {
+        const p = item.product || {};
+        const price = safeNum(item.unitPrice) || safeNum(p.sellPrice);
+        const img = p.imageUrl ? `<img src="${p.imageUrl}">` : `<svg viewBox="0 0 24 24" style="width:24px;color:var(--border-dark);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>`;
+        let metaHtml = '';
+        if(item.variantName) metaHtml += `<span style="color:var(--primary);">Size:</span> ${item.variantName}<br>`;
+        if(item.extras && item.extras.length > 0) metaHtml += `+ ${item.extras.join(', ')}<br>`;
+        if(item.modularChoices) item.modularChoices.forEach(c => metaHtml += `<span style="color:var(--primary);">${c.groupName}:</span> ${c.itemName}<br>`);
+        if(item.note) metaHtml += `<span style="color:var(--danger); font-weight:700;">Note: ${item.note}</span>`;
+        return `<div class="item-card"><div class="item-img">${img}</div><div class="item-details"><div class="item-name"><span>${item.qty}x ${p.name || 'Item'}</span> <span>${formatPrice(price * item.qty)} DH</span></div>${metaHtml ? `<div class="item-meta">${metaHtml}</div>` : ''}</div></div>`;
+    }).join('');
+
+    document.getElementById('det-subtotal').innerText = `${formatPrice(safeNum(order.totalPrice) - safeNum(order.deliveryFee))} DH`;
+    document.getElementById('det-shipping').innerText = `${formatPrice(safeNum(order.deliveryFee))} DH`;
+    document.getElementById('det-total').innerText = `${formatPrice(safeNum(order.totalPrice))} DH`;
+
+    let actionContextHtml = '';
+    const btnCancel = document.getElementById('btnCancelOrder');
+    const btnDelete = document.getElementById('btnDeleteOrder');
+    const btnPrint  = document.getElementById('btnPrintReceipt');
+
+    if (order.status === 'Pending') {
+        actionContextHtml = `<button class="btn btn-primary" onclick="promptOrderStatus('${order.id}', 'Preparing')">ACCEPT & MARK PREPARING</button>`;
+    } else if (order.status === 'Preparing') {
+        actionContextHtml = `<div style="text-align:center; padding:16px; background:var(--bg-main); border-radius:12px; font-weight:800; font-size:13px; text-transform:uppercase; border: 1px dashed var(--border-dark);">WAITING FOR DRIVER POOL DISPATCH</div>`;
+    } else if (order.status === 'Driver Assigned' || order.status === 'Out for Delivery') {
+        const dName = order.driverName || 'Assigned Courier';
+        actionContextHtml = `<div style="text-align:center; padding:16px; background:var(--blue-light); color:var(--blue); border-radius:12px; font-weight:800; font-size:13px; text-transform:uppercase;">Dispatched To: ${dName}</div>`;
+    } else if (order.status === 'Delivered') {
+        actionContextHtml = `<div style="text-align:center; color:var(--accent); font-weight:800; padding:16px; background:var(--accent-light); border-radius:12px;">ORDER DELIVERED SUCCESSFULLY</div>`;
+    } else if (order.status === 'Cancelled') {
+        actionContextHtml = `<div style="text-align:center; color:var(--danger); font-weight:800; padding:16px; background:var(--danger-light); border-radius:12px;">ORDER CANCELLED</div>`;
+    }
+
+    btnCancel.style.display = order.status === 'Cancelled' ? 'none' : 'block';
+    document.getElementById('det-status-actions').innerHTML = actionContextHtml;
+    btnPrint.onclick  = () => printReceipt(order.id);
+    btnCancel.onclick = () => promptOrderStatus(order.id, 'Cancelled');
+    btnDelete.onclick = () => promptOrderDelete(order.id);
+    switchTab('order-detail');
+};
+
+// RECEIPT PRINTER
+window.printReceipt = (orderId) => {
+    const o = allOrders.find(x => x.id === orderId); if(!o) return;
+    let orderDate = "Date not found";
+    if (o.timestamp) { const parsed = new Date(o.timestamp); if (!isNaN(parsed.getTime())) orderDate = parsed.toLocaleString('en-US'); }
+    let itemsHtml = (o.cart || []).map(item => {
+        const p = item.product || {};
+        let metaHtml = "";
+        if(item.variantName) metaHtml += `<div>- Size: ${item.variantName}</div>`;
+        if(item.extras && item.extras.length > 0) metaHtml += `<div>- + ${item.extras.join(', ')}</div>`;
+        if(item.modularChoices) item.modularChoices.forEach(c => { metaHtml += `<div>- ${c.groupName}: ${c.itemName}</div>`; });
+        if(item.note) metaHtml += `<div>** Note: ${item.note} **</div>`;
+        const price = safeNum(item.unitPrice) || safeNum(p.sellPrice);
+        return `<div style="display:flex; justify-content:space-between; margin-top:8px; font-weight:bold;"><div>${item.qty}x ${p.name || 'Item'}</div><div>${formatPrice(price * item.qty)}</div></div><div style="font-size:12px; margin-left:12px; color:#333;">${metaHtml}</div>`;
+    }).join('');
+    const receiptHtml = `<html><head><title>Receipt #${o.id.substring(0,6).toUpperCase()}</title>
+    <style>body{font-family:monospace;color:#000;width:280px;margin:0 auto;padding:5px;font-size:13px;line-height:1.3;}.center{text-align:center;}.line{border-bottom:1px dashed #000;margin:8px 0;}.bold{font-weight:bold;}.flex{display:flex;justify-content:space-between;}</style>
+    </head><body>
+        <div class="center bold" style="font-size:22px;margin-bottom:4px;">TASCO</div>
+        <div class="center">Order #${o.id.substring(0,6).toUpperCase()}</div>
+        <div class="center">${orderDate}</div>
+        <div class="line"></div>
+        <div><span class="bold">Customer:</span> ${o.customerName || 'Unknown'}</div>
+        <div><span class="bold">Phone:</span> ${o.customerPhone || 'Not provided'}</div>
+        <div><span class="bold">Zone:</span> ${o.neighborhood || 'Not specified'}</div>
+        <div class="line"></div>
+        ${itemsHtml}
+        <div class="line"></div>
+        <div class="flex"><span>Subtotal:</span><span>${formatPrice(safeNum(o.totalPrice) - safeNum(o.deliveryFee))} DH</span></div>
+        <div class="flex"><span>Delivery:</span><span>${formatPrice(safeNum(o.deliveryFee))} DH</span></div>
+        <div class="flex bold" style="font-size:15px;margin-top:4px;"><span>TOTAL:</span><span>${formatPrice(safeNum(o.totalPrice))} DH</span></div>
+        <div class="line"></div>
+        <div class="center" style="font-size:11px;margin-top:8px;">Fast Cravings. Real Satisfaction.</div>
+    </body></html>`;
+    const printWindow = window.open('', '', 'width=380,height=550');
+    printWindow.document.write(receiptHtml);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => { printWindow.print(); printWindow.close(); }, 250);
+};
+
+window.promptOrderStatus = (orderId, newStatus) => {
+    document.getElementById('modalTitle').innerText = "Update Status";
+    document.getElementById('modalMsg').innerText = `Confirm changing order status to ${newStatus}?`;
+    const btn = document.getElementById('modalConfirmBtn');
+    btn.className = 'btn ' + (newStatus === 'Cancelled' ? 'btn-danger' : 'btn-primary');
+    btn.style.background = ''; btn.style.color = '';
+    window.confirmActionCallback = async () => {
+        closeModals();
+        try { await updateDoc(doc(db, "orders", orderId), { status: newStatus }); showToast("Status updated successfully."); }
+        catch(e) { alert("Error: " + e.message); }
+    };
+    document.getElementById('confirmOverlay').classList.add('active');
+};
+
+window.promptOrderDelete = (orderId) => {
+    document.getElementById('modalTitle').innerText = "Delete Order";
+    document.getElementById('modalMsg').innerText = `Delete order #${orderId.substring(0,6).toUpperCase()} permanently? This cannot be undone.`;
+    const btn = document.getElementById('modalConfirmBtn');
+    btn.className = 'btn btn-danger'; btn.style.background = 'var(--danger)'; btn.style.color = 'white';
+    window.confirmActionCallback = async () => {
+        closeModals();
+        try { await deleteDoc(doc(db, "orders", orderId)); showToast("Order deleted."); switchTab('commandes'); }
+        catch(e) { alert("Delete Error: " + e.message); }
+    };
+    document.getElementById('confirmOverlay').classList.add('active');
+};
+
+window.closeModals = () => { document.getElementById('confirmOverlay').classList.remove('active'); };
+document.getElementById('modalConfirmBtn').addEventListener('click', () => { if(window.confirmActionCallback) window.confirmActionCallback(); });
+
+function showToast(msg) {
+    const t = document.getElementById('toastBox');
+    document.getElementById('toastMsg').innerText = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ✅ ADDED: register service worker for PWA install
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/firebase-messaging-sw.js', { scope: '/' })
+    .then(reg => console.log('Admin SW registered:', reg.scope))
+    .catch(err => console.warn('Admin SW registration failed:', err));
+}
+</script>
+</body>
+</html>
