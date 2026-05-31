@@ -256,7 +256,7 @@ img{display:block}
 
 <div id="authOverlay">
   <div class="auth-top">
-    <div class="auth-logo">lasGo</div>
+    <div class="auth-logo">TASCO</div>
     <div class="auth-tag">Driver Hub</div>
     <div class="auth-scooter">🛵</div>
   </div>
@@ -505,13 +505,25 @@ const S = {
   prevOrderIds: null,
   homeTab: 'pool',
   confirmationResult: null,
+  storeOrigin: null // Added for Distance Calculation
 };
 
 const safeNum = v => isNaN(parseFloat(v)) ? 0 : parseFloat(v);
 const fmt = n => { const p = Number(n); return p % 1 === 0 ? p.toString() : p.toFixed(2); };
 const today = () => new Date().toDateString();
 
-// ── MATH ENGINE ──────────────────────────────────────────────────────────
+// ── DISTANCE MATH (Haversine Formula) ────────────────────────────────────
+function getDistKm(lat1, lng1, lat2, lng2) {
+  const R = 6371; 
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+// ── FINANCIAL MATH ENGINE ────────────────────────────────────────────────
 function calcOrderMath(order) {
   const totalPrice  = safeNum(order.totalPrice);
   const deliveryFee = safeNum(order.deliveryFee);
@@ -619,7 +631,7 @@ onAuthStateChanged(auth, async user => {
   } else { showAuth(); }
 });
 
-function initApp() {
+async function initApp() {
   hideAuth();
   if (localStorage.getItem('lasgo_dark_mode') === 'true') document.documentElement.classList.add('dark');
   
@@ -632,6 +644,17 @@ function initApp() {
   const av = document.getElementById('profAv');
   if (d.photoUrl) { av.style.background = 'none'; av.innerHTML = '<img src="' + d.photoUrl + '" style="width:100%;height:100%;border-radius:50%;object-fit:cover"/>'; } 
   else { av.textContent = (d.name || 'D').charAt(0).toUpperCase(); }
+
+  // Fetch Store Origin for Distance Calculation
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'delivery'));
+    if (snap.exists() && snap.data().origin) {
+      const [lat, lng] = snap.data().origin.split(',').map(Number);
+      S.storeOrigin = { lat, lng };
+    } else {
+      S.storeOrigin = { lat: 31.6295, lng: -7.9811 }; // Fallback to Marrakech default
+    }
+  } catch(e) { console.error("Error fetching origin", e); }
 
   startOrdersListener();
   setupFCM();
@@ -722,7 +745,13 @@ function renderHome() {
       const m = calcOrderMath(o);
       const isPool = S.homeTab === 'pool';
       const itemsCount = o.cart ? o.cart.reduce((s,i)=>s+(parseInt(i.qty)||1),0) : (o.totalItems||0);
-      const dist = o.distance || '~ km';
+      
+      // Dynamic Distance Math using Haversine
+      let distDisplay = '~ km';
+      if (o.deliveryCoords && o.deliveryCoords.lat && S.storeOrigin) {
+        const calcDist = getDistKm(S.storeOrigin.lat, S.storeOrigin.lng, o.deliveryCoords.lat, o.deliveryCoords.lng);
+        distDisplay = calcDist.toFixed(1) + ' km';
+      }
 
       return '<div class="order-card">' +
         '<div class="oc-header"><div class="oc-id">' + sid + '</div><div class="oc-time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ' + time + '</div></div>' +
@@ -730,7 +759,7 @@ function renderHome() {
         '<div class="oc-stats-box">' +
           '<div class="oc-stat"><div class="oc-stat-ic"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> ' + itemsCount + '</div><div class="oc-stat-lbl">Items</div></div>' +
           '<div class="oc-stat"><div class="oc-stat-ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ' + fmt(m.totalPrice) + '</div><div class="oc-stat-lbl">Cash (DH)</div></div>' +
-          '<div class="oc-stat"><div class="oc-stat-ic"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ' + dist + '</div><div class="oc-stat-lbl">Distance</div></div>' +
+          '<div class="oc-stat"><div class="oc-stat-ic"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ' + distDisplay + '</div><div class="oc-stat-lbl">Distance</div></div>' +
         '</div>' +
         '<button class="btn btn-blue" onclick="openDetail(\'' + o.id + '\')"><svg viewBox="0 0 24 24" style="width:18px;fill:none;stroke:#fff;stroke-width:2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> ' + (isPool ? 'Accept Delivery' : 'View Details') + '</button>' +
       '</div>';
