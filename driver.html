@@ -505,7 +505,7 @@ const S = {
   prevOrderIds: null,
   homeTab: 'pool',
   confirmationResult: null,
-  storeOrigin: null // Added for Distance Calculation
+  storeOrigin: null 
 };
 
 const safeNum = v => isNaN(parseFloat(v)) ? 0 : parseFloat(v);
@@ -523,15 +523,24 @@ function getDistKm(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-// ── FINANCIAL MATH ENGINE ────────────────────────────────────────────────
+// ── DEEP FINANCIAL MATH ENGINE ───────────────────────────────────────────
 function calcOrderMath(order) {
   const totalPrice  = safeNum(order.totalPrice);
   const deliveryFee = safeNum(order.deliveryFee);
 
   let totalCostPrice = 0;   
   (order.cart || []).forEach(item => {
+    // Structural lookup for base items
     const costUnit = safeNum(item.product?.costPrice || item.costPrice || 0);
-    totalCostPrice += (parseInt(item.qty) || 1) * costUnit;
+    let optionsCost = 0;
+    
+    // Deep Scan for Add-ons / Variation Cost Prices
+    const choicesArray = item.modularChoices || item.choices || item.options || [];
+    choicesArray.forEach(opt => {
+      optionsCost += safeNum(opt.costPrice || opt.cost || 0);
+    });
+
+    totalCostPrice += (parseInt(item.qty) || 1) * (costUnit + optionsCost);
   });
 
   const driverRetains = deliveryFee + totalCostPrice;       
@@ -645,16 +654,16 @@ async function initApp() {
   if (d.photoUrl) { av.style.background = 'none'; av.innerHTML = '<img src="' + d.photoUrl + '" style="width:100%;height:100%;border-radius:50%;object-fit:cover"/>'; } 
   else { av.textContent = (d.name || 'D').charAt(0).toUpperCase(); }
 
-  // Fetch Store Origin for Distance Calculation
+  // Sync Store Settings Location
   try {
     const snap = await getDoc(doc(db, 'settings', 'delivery'));
     if (snap.exists() && snap.data().origin) {
       const [lat, lng] = snap.data().origin.split(',').map(Number);
       S.storeOrigin = { lat, lng };
     } else {
-      S.storeOrigin = { lat: 31.6295, lng: -7.9811 }; // Fallback to Marrakech default
+      S.storeOrigin = { lat: 31.6295, lng: -7.9811 }; 
     }
-  } catch(e) { console.error("Error fetching origin", e); }
+  } catch(e) { console.error("Error setting coordinate origin config", e); }
 
   startOrdersListener();
   setupFCM();
@@ -684,14 +693,14 @@ async function setupFCM() {
 
 // ── CORE LOGIC ───────────────────────────────────────────────────────────
 function startOrdersListener() {
-  const q = query(collection(db, 'orders'), where('status', 'in', ['Pending', 'Preparing', 'Driver Assigned', 'Out for Delivery', 'Delivered']));
+  const q = query(collection(db, 'orders'), where('status', 'in', ['Pending', 'Accepted', 'Out for Delivery', 'Delivered']));
   onSnapshot(q, snap => {
     const newOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     if (S.prevOrderIds !== null) {
       snap.docChanges().forEach(ch => {
         if (ch.type === 'added' || ch.type === 'modified') {
           const o = ch.doc.data();
-          if ((o.status === 'Pending' || o.status === 'Preparing') && (!o.driverId || o.driverId === '')) triggerNotification(o);
+          if (o.status === 'Pending' && (!o.driverId || o.driverId === '')) triggerNotification(o);
         }
       });
     }
@@ -725,8 +734,8 @@ window.setHomeTab = function(tab) {
 };
 
 function renderHome() {
-  const pool = S.orders.filter(o => (o.status === 'Pending' || o.status === 'Preparing') && (!o.driverId || o.driverId === '')).sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
-  const active = S.orders.filter(o => o.driverId === S.driver?.phone && ['Driver Assigned', 'Out for Delivery'].includes(o.status)).sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
+  const pool = S.orders.filter(o => o.status === 'Pending' && (!o.driverId || o.driverId === '')).sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
+  const active = S.orders.filter(o => o.driverId === S.driver?.phone && ['Accepted', 'Out for Delivery'].includes(o.status)).sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
   const delivered = S.orders.filter(o => o.driverId === S.driver?.phone && o.status === 'Delivered' && new Date(o.timestamp||0).toDateString() === today()).sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
 
   document.getElementById('poolBadge').textContent = pool.length;
@@ -746,7 +755,7 @@ function renderHome() {
       const isPool = S.homeTab === 'pool';
       const itemsCount = o.cart ? o.cart.reduce((s,i)=>s+(parseInt(i.qty)||1),0) : (o.totalItems||0);
       
-      // Dynamic Distance Math using Haversine
+      // Dynamic Distance Map System
       let distDisplay = '~ km';
       if (o.deliveryCoords && o.deliveryCoords.lat && S.storeOrigin) {
         const calcDist = getDistKm(S.storeOrigin.lat, S.storeOrigin.lng, o.deliveryCoords.lat, o.deliveryCoords.lng);
@@ -789,7 +798,14 @@ window.openDetail = function(id) {
   
   const sid = '#' + o.id.slice(-4).toUpperCase();
   document.getElementById('detTitle').textContent = sid;
-  document.getElementById('detBadge').textContent = o.status;
+  
+  // Clean translation map for statuses
+  let statusText = o.status;
+  if (o.status === 'Pending') statusText = 'Confirmée';
+  if (o.status === 'Accepted') statusText = 'Préparation en cours';
+  if (o.status === 'Out for Delivery') statusText = 'En route';
+  if (o.status === 'Delivered') statusText = 'Livrée';
+  document.getElementById('detBadge').textContent = statusText;
 
   let phone = (o.customerPhone || '').replace(/^0/, '');
   if (!phone.startsWith('+') && !phone.startsWith('212')) phone = '212' + phone;
@@ -818,25 +834,26 @@ window.openDetail = function(id) {
     const p = item.product || {};
     const imgHtml = p.imageUrl ? '<img src="' + p.imageUrl + '" class="item-img" />' : '<div class="item-img" style="display:flex;align-items:center;justify-content:center;font-size:20px">🍔</div>';
     
-    // New Add-ons and Variations Extraction
+    // Extract variation option modifiers
     let optionsHtml = '';
-    if (item.options && item.options.length > 0) {
+    const modifiers = item.modularChoices || item.choices || item.options || [];
+    if (modifiers.length > 0) {
        optionsHtml = '<ul style="margin-top:4px; padding-left:16px; font-size:12px; color:var(--muted); list-style-type:disc;">';
-       item.options.forEach(opt => {
-          optionsHtml += '<li>' + (opt.groupName ? opt.groupName + ': ' : '') + opt.name + '</li>';
+       modifiers.forEach(opt => {
+          optionsHtml += '<li>' + (opt.groupName ? opt.groupName + ': ' : '') + (opt.itemName || opt.name) + '</li>';
        });
        optionsHtml += '</ul>';
     }
 
-    itemsHtml += '<div class="item-row">' + imgHtml + '<div style="flex:1"><div class="item-name">' + (p.name || 'Item') + '</div>' + optionsHtml + '</div><div class="item-qty">x' + (item.qty||1) + '</div></div>';
+    itemsHtml += '<div class="item-row">' + imgHtml + '<div style="flex:1"><div class="item-name">' + (p.name || item.name || 'Item') + '</div>' + optionsHtml + '</div><div class="item-qty">x' + (item.qty||1) + '</div></div>';
   });
   document.getElementById('detItemsList').innerHTML = itemsHtml || '<div style="color:var(--muted);font-size:13px">No items listed.</div>';
 
   let actionsHtml = '';
-  if ((o.status === 'Pending' || o.status === 'Preparing') && (!o.driverId || o.driverId === '')) {
+  if (o.status === 'Pending' && (!o.driverId || o.driverId === '')) {
     document.getElementById('detBannerTxt').textContent = 'Please accept to claim this delivery.';
     actionsHtml = '<button class="btn btn-blue" onclick="doAction(\'' + o.id + '\', \'claim\')">Accept Delivery</button>';
-  } else if (o.status === 'Driver Assigned' && o.driverId === S.driver?.phone) {
+  } else if (o.status === 'Accepted' && o.driverId === S.driver?.phone) {
     document.getElementById('detBannerTxt').textContent = 'Please pick up the order from the shop.';
     actionsHtml = '<button class="btn btn-blue" onclick="doAction(\'' + o.id + '\', \'pickup\')"><svg viewBox="0 0 24 24" style="width:18px;fill:none;stroke:#fff;stroke-width:2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Pick Up Order</button>' +
                   '<button class="btn btn-outline-red" onclick="doAction(\'' + o.id + '\', \'release\')"><svg viewBox="0 0 24 24" style="width:18px;fill:none;stroke:currentColor;stroke-width:2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Release Order</button>';
@@ -856,18 +873,18 @@ window.doAction = async function(id, action) {
     const orderRef = doc(db, 'orders', id);
 
     if (action === 'claim') {
-      // The Firebase Transaction Lock
+      // The Firebase Transaction Lock Strategy
       await runTransaction(db, async (transaction) => {
         const orderDoc = await transaction.get(orderRef);
         if (!orderDoc.exists()) throw "Order no longer exists!";
         
         const data = orderDoc.data();
-        if ((data.status !== 'Pending' && data.status !== 'Preparing') || (data.driverId && data.driverId !== '')) {
+        if (data.status !== 'Pending' || (data.driverId && data.driverId !== '')) {
           throw "Order already claimed by another driver!";
         }
 
         transaction.update(orderRef, { 
-          status: 'Driver Assigned', 
+          status: 'Accepted', 
           driverId: S.driver.phone, 
           driverName: S.driver.name, 
           driverPhone: S.driver.phone, 
@@ -904,7 +921,6 @@ function renderWallet() {
   const mineDelivered = S.orders.filter(o => o.driverId === S.driver.phone && o.status === 'Delivered');
   const unsettled = mineDelivered.filter(o => !o.driverSettled);
   
-  // Math: "You earned" = sum of delivery fees. "To give back" = sum of driverOwes
   const totalEarned = unsettled.reduce((s, o) => s + safeNum(o.deliveryFee), 0);
   const totalDebt = unsettled.reduce((s, o) => s + calcOrderMath(o).driverOwes, 0);
 
