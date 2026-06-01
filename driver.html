@@ -250,7 +250,7 @@ img{display:block}
 #inAppNotif .notif-sub{font-size:13px;color:rgba(255,255,255,.8);font-weight:500}
 
 /* MISC */
-#recaptcha-container{position:fixed;bottom:0;right:0;width:100%;z-index:9999;}
+#recaptcha-container{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;background:var(--surface);border-radius:12px;padding:8px;box-shadow:var(--shadow-lg);}
 .spinner{width:22px;height:22px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
@@ -280,7 +280,7 @@ img{display:block}
       <h2>Welcome back!</h2>
       <p>Enter your number to access your driver workspace.</p>
       <div class="phone-row" style="border-radius:16px">
-        <input type="tel" id="phoneInput" placeholder="Ex: 0612 345 678" inputmode="numeric" maxlength="15" style="padding:18px 20px;font-size:16px;width:100%;"/>
+        <input type="tel" id="phoneInput" placeholder="Ex: 0635 791 674" inputmode="numeric" maxlength="15" style="padding:18px 20px;font-size:16px;width:100%;"/>
       </div>
       <div class="auth-err" id="phoneErr"></div>
       <button class="btn btn-blue" id="btnSendCode" onclick="handleSendCode()">
@@ -590,7 +590,7 @@ function hideAuth() {
 function showStep(id){ document.querySelectorAll('.auth-step').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 function showAuthErr(id, msg){ const el = document.getElementById(id); el.textContent = msg; el.style.display = 'block'; }
 function hideAuthErr(id){ document.getElementById(id).style.display = 'none'; }
-function ensureRecaptcha() { if (!window._rcv) window._rcv = new RecaptchaVerifier(auth, 'recaptcha-container', { size: 'invisible' }); }
+function ensureRecaptcha() { if (!window._rcv) window._rcv = new RecaptchaVerifier(auth, 'recaptcha-container', { size: 'normal', callback: () => {} }); }
 
 window.handleSendCode = async function() {
   hideAuthErr('phoneErr');
@@ -613,7 +613,11 @@ window.handleSendCode = async function() {
     showStep('stepOTP');
     setTimeout(() => document.querySelector('.otp-digit').focus(), 200);
   } catch(e) {
-    showAuthErr('phoneErr', 'Error: ' + (e.message || 'Please try again.'));
+    const msg = e.code === 'auth/error-code:-39' ? 'Please complete the reCAPTCHA check below.' :
+                e.code === 'auth/too-many-requests' ? 'Too many attempts. Wait a few minutes.' :
+                e.code === 'auth/invalid-phone-number' ? 'Invalid phone number format.' :
+                'Error: ' + (e.message || 'Please try again.');
+    showAuthErr('phoneErr', msg);
     if(window._rcv) { try { window._rcv.clear(); } catch(x){} window._rcv = null; }
   }
   resetBtn();
