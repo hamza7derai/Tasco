@@ -66,12 +66,7 @@ input { font-family: inherit; }
 .app-view.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ADMIN AUTH GATE */
-#adminAuthGate { position: fixed; inset: 0; background: var(--bg-main); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; transition: 0.3s; }
-#adminAuthGate.hide { opacity: 0; pointer-events: none; display: none; }
-.auth-card { background: var(--surface); border: 1px solid var(--border-dark); border-radius: 24px; padding: 32px 24px; width: 100%; max-width: 360px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); text-align: center; }
-.auth-logo { font-size: 24px; font-weight: 900; color: var(--primary); letter-spacing: -1px; margin-bottom: 8px; }
-.auth-title { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.5px; }
+/* Auth handled by login.html */
 
 /* HEADERS */
 .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
@@ -177,6 +172,11 @@ input:checked + .slider:before { transform: translateX(18px); }
 .btn-outline { background: var(--surface); color: var(--text-main); border: 1px solid var(--border-dark); }
 
 /* ANALYTICS */
+/* ✅ FIX 3: Date filter pills */
+.date-filter-wrap { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; scrollbar-width: none; }
+.date-filter-wrap::-webkit-scrollbar { display: none; }
+.date-filter-pill { padding: 8px 16px; border-radius: 99px; font-size: 12px; font-weight: 800; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; flex-shrink: 0; }
+.date-filter-pill.active { background: var(--text-main); color: white; border-color: var(--text-main); }
 .analytics-hero { background: var(--surface); border-radius: 24px; padding: 24px; margin-bottom: 24px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 12px;}
 .hero-title { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
 .hero-val { font-size: 36px; font-weight: 800; color: var(--text-main); letter-spacing: -2px;}
@@ -225,9 +225,7 @@ input:checked + .slider:before { transform: translateX(18px); }
   </div>
 </div>
 
-<div id="adminAuthGate">
-    <div class="auth-card">
-        <div class="auth-logo">TASCO ADMIN</div>
+<!-- Login handled by login.html -->
         <div class="auth-title">Secure Command Center</div>
         <div class="form-group">
             <label>Admin Email</label>
@@ -381,6 +379,14 @@ input:checked + .slider:before { transform: translateX(18px); }
         </div>
     </div>
 
+    <!-- ✅ FIX 3: Date filter -->
+    <div class="date-filter-wrap">
+        <div class="date-filter-pill active" onclick="setAnalyticsFilter('today', this)">Today</div>
+        <div class="date-filter-pill" onclick="setAnalyticsFilter('week', this)">This Week</div>
+        <div class="date-filter-pill" onclick="setAnalyticsFilter('month', this)">This Month</div>
+        <div class="date-filter-pill" onclick="setAnalyticsFilter('all', this)">All Time</div>
+    </div>
+
     <div class="analytics-hero">
         <div style="display:flex; align-items:center; gap:16px;">
             <div style="width:48px; height:48px; background:var(--accent-light); color:var(--accent); border-radius:14px; display:flex; align-items:center; justify-content:center;">
@@ -452,7 +458,7 @@ input:checked + .slider:before { transform: translateX(18px); }
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, onSnapshot, updateDoc, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
 
 const firebaseConfig = {
@@ -523,40 +529,25 @@ async function setupAdminFCM(userEmail) {
   }
 }
 
-// AUTH STATE WATCHDOG
-onAuthStateChanged(auth, async (user) => {
-    const gate = document.getElementById('adminAuthGate');
-    document.body.style.display = "block";
+// ✅ FIX 1: Auth redirect — login handled by login.html
+const ROLE_MAP = {
+    "admin@tasco.ma":   "/admin.html",
+    "manager@tasco.ma": "/manager.html",
+};
 
+onAuthStateChanged(auth, async (user) => {
     if (!user) {
-        gate.classList.remove('hide');
+        window.location.replace("login.html");
+        return;
+    }
+    if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+        document.body.style.display = "block";
+        setupAdminFCM(user.email);
     } else {
-        if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
-            gate.classList.add('hide');
-            // ✅ ADDED: start FCM after confirmed admin login
-            setupAdminFCM(user.email);
-        } else {
-            alert("Security Alert: Unauthorized credentials. Signing out...");
-            await signOut(auth);
-            gate.classList.remove('hide');
-        }
+        await signOut(auth);
+        window.location.replace("login.html");
     }
 });
-
-// ADMIN LOGIN
-window.executeAdminLogin = async () => {
-    const email = document.getElementById('adminEmail').value.trim();
-    const pass  = document.getElementById('adminPass').value.trim();
-    const btn   = document.getElementById('btnAdminLogin');
-    if(!email || !pass) return showToast("Enter email and password");
-    btn.innerText = "AUTHENTICATING..."; btn.disabled = true;
-    try {
-        await signInWithEmailAndPassword(auth, email, pass);
-    } catch(e) {
-        alert("Access Denied: Invalid email or password.");
-        btn.innerText = "ACCESS SYSTEM"; btn.disabled = false;
-    }
-};
 
 window.logoutAdmin = async () => { try { await signOut(auth); } catch(e) { console.error(e); } };
 
@@ -661,6 +652,30 @@ onSnapshot(collection(db, "orders"), snap => {
 const getEmptyOrdersHTML = () => `<div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:13px; font-weight:700; text-transform:uppercase;">No orders found.</div>`;
 
 // DASHBOARD ANALYTICS
+// ✅ FIX 3: Analytics date filter
+let analyticsFilter = 'today';
+
+window.setAnalyticsFilter = (filter, el) => {
+    analyticsFilter = filter;
+    document.querySelectorAll('.date-filter-pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    calculateDashboard();
+};
+
+function getFilteredDelivered() {
+    const now = new Date();
+    return allOrders.filter(order => {
+        if (order.status !== 'Delivered') return false;
+        if (!order.timestamp) return false;
+        const d = new Date(order.timestamp);
+        if (isNaN(d.getTime())) return false;
+        if (analyticsFilter === 'today') return d.toDateString() === now.toDateString();
+        if (analyticsFilter === 'week') { const ago = new Date(now); ago.setDate(now.getDate()-7); return d >= ago; }
+        if (analyticsFilter === 'month') return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
+        return true;
+    });
+}
+
 function calculateDashboard() {
     const todayStr = new Date().toDateString();
     let ordersTodayCount = 0, grossToday = 0, pendingCount = 0;
@@ -674,11 +689,21 @@ function calculateDashboard() {
         const isToday = orderDate.toDateString() === todayStr;
         if (isToday) { ordersTodayCount++; if(order.status !== 'Cancelled') grossToday += safeNum(order.totalPrice); }
         if (order.status === 'Pending') pendingCount++;
-        if (order.status === 'Delivered') {
+    });
+
+    // ✅ FIX 3: Analytics calculated from date-filtered delivered orders
+    const filteredDelivered = getFilteredDelivered();
+    filteredDelivered.forEach(order => {
+        {
             totalDeliveredOrdersCount++;
             cumulativeGrossRevenue += safeNum(order.totalPrice);
             cumulativeDriverFeesAllocation += safeNum(order.deliveryFee);
-            cumulativeItemsSold += parseInt(order.totalItems) || 0;
+            // ✅ FIX 2: Count actual quantities from cart items
+            if (order.cart && Array.isArray(order.cart)) {
+                order.cart.forEach(item => { cumulativeItemsSold += parseInt(item.qty) || 1; });
+            } else {
+                cumulativeItemsSold += parseInt(order.totalItems) || 0;
+            }
             if (order.customerId) uniqueCustomersSet.add(order.customerId);
             const math = calcOrderCostAndProfit(order);
             cumulativeNetProfit += math.profit;
@@ -713,14 +738,37 @@ function calculateDriverMetrics(driverPhoneId) {
 }
 
 window.settleDriverCashAccount = async (driverPhoneId) => {
-    if(!confirm(`Confirm full collection from driver ${driverPhoneId}?`)) return;
-    try {
-        const activeUnsettledOrders = allOrders.filter(o => o.driverId === driverPhoneId && o.status === 'Delivered' && o.driverSettled !== true);
-        for (let orderDoc of activeUnsettledOrders) {
-            await updateDoc(doc(db, "orders", orderDoc.id), { driverSettled: true });
+    // ✅ FIX 4: Modal confirmation + writes settledAt timestamp
+    const driver  = allDrivers.find(d => d.phone === driverPhoneId);
+    const dName   = driver ? driver.name : driverPhoneId;
+    const metrics = calculateDriverMetrics(driverPhoneId);
+
+    document.getElementById('modalTitle').innerText = "Settle Cash";
+    document.getElementById('modalMsg').innerText = `Confirm collecting ${formatPrice(metrics.cashToCollectFromDriver)} DH from ${dName}? This clears their debt.`;
+    const btn = document.getElementById('modalConfirmBtn');
+    btn.style.background = 'var(--accent)'; btn.style.color = 'white';
+
+    window.confirmActionCallback = async () => {
+        closeModals();
+        try {
+            const unsettled = allOrders.filter(o =>
+                o.driverId === driverPhoneId &&
+                o.status === 'Delivered' &&
+                o.driverSettled !== true
+            );
+            for (let o of unsettled) {
+                await updateDoc(doc(db, "orders", o.id), {
+                    driverSettled: true,
+                    settledAt: new Date().toISOString()
+                });
+            }
+            showToast(`✅ ${dName} settled — ${formatPrice(metrics.cashToCollectFromDriver)} DH cleared`);
+        } catch(e) {
+            console.error(e);
+            showToast("Settlement error: " + e.message);
         }
-        showToast("Cash settlement finalized. Driver debt cleared.");
-    } catch(e) { console.error(e); alert("Settlement Error: " + e.message); }
+    };
+    document.getElementById('confirmOverlay').classList.add('active');
 };
 
 function renderDriversAllocationEngine() {
