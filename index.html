@@ -7,7 +7,6 @@
 
 <link rel="manifest" href="manifest.json"/>
 
-<!-- ✅ ADDED: PWA meta tags for iOS and Android -->
 <meta name="theme-color" content="#FF5A00"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -294,7 +293,9 @@ h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confi
 .confirmed-oid h3 { font-size:32px; font-family: var(--font-display); font-weight:900; color:var(--orange); letter-spacing:1px }
 
 /* ORDERS TABS & STATUS TIMELINE */
-.orders-tabs { display: flex; padding: 0 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; gap: 0; background: var(--surface); }
+/* ✅ FIXED OVERLAP: Added background and z-index to wrapper to prevent bleeding */
+.orders-header-wrap { position: sticky; top: 0; z-index: 50; background: var(--bg); }
+.orders-tabs { display: flex; padding: 0 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; gap: 0; background: var(--bg); }
 .o-tab { flex: 1; text-align: center; padding: 12px; font-family: var(--font-display); font-weight: 800; font-size: 15px; text-transform: uppercase; color: var(--muted); border-bottom: 3px solid transparent; transition: 0.2s; cursor: pointer; letter-spacing: 0.5px; }
 .o-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
 
@@ -318,15 +319,15 @@ h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confi
 
 /* DRIVER CARD */
 .driver-card { padding: 16px; border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-top: 16px; display: flex; align-items: center; justify-content: space-between; background: var(--surface); }
-.dc-left { display: flex; align-items: center; gap: 12px; }
-.dc-avatar { width: 50px; height: 50px; border-radius: 50%; overflow: hidden; background: var(--bg); display: flex; align-items: center; justify-content: center; }
+.dc-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; } /* ✅ FIXED: Added flex:1 and min-width:0 to prevent squeezing */
+.dc-avatar { width: 50px; height: 50px; border-radius: 50%; overflow: hidden; background: var(--bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; } /* ✅ FIXED: Added flex-shrink: 0 */
 .dc-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.dc-info { display: flex; flex-direction: column; }
-.dc-name { font-family: var(--font-display); font-size: 18px; font-weight: 900; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; }
+.dc-info { display: flex; flex-direction: column; flex: 1; min-width: 0; } /* ✅ FIXED: Ensure text container doesn't overflow */
+.dc-name { font-family: var(--font-display); font-size: 18px; font-weight: 900; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } /* ✅ FIXED: Truncate long names */
 .dc-sub { font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
 .dc-rating { font-size: 12px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 4px; }
 .dc-rating svg { width: 12px; fill: var(--amber); }
-.dc-actions { display: flex; gap: 8px; }
+.dc-actions { display: flex; gap: 8px; flex-shrink: 0; } /* ✅ FIXED: Prevent buttons from shrinking */
 .dc-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 14px; border: 1px solid var(--border); background: var(--surface); text-decoration: none; gap: 6px; transition: 0.2s; }
 .dc-btn:active { transform: scale(0.95); background: var(--bg); }
 .dc-btn span { font-family: var(--font-display); font-size: 11px; font-weight: 800; color: var(--text); letter-spacing: 0.5px; }
@@ -460,10 +461,12 @@ h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confi
     </div>
 
     <div class="screen" id="screenOrders">
-      <div class="cart-hdr" style="padding-bottom:0; border-bottom:none;">
-        <span class="section-title" style="padding-bottom:12px;">MES COMMANDES</span>
+      <div class="orders-header-wrap">
+        <div class="cart-hdr" style="padding-bottom:0; border-bottom:none; position:static;">
+          <span class="section-title" style="padding-bottom:12px;">MES COMMANDES</span>
+        </div>
+        <div id="ordersTabContainer" class="orders-tabs"></div>
       </div>
-      <div id="ordersTabContainer" class="orders-tabs" style="position:sticky; top:65px; z-index:49;"></div>
       <div id="ordersList" style="padding-bottom: 24px;"></div>
     </div>
 
@@ -486,6 +489,7 @@ h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confi
     </div>
     <div class="nav-item" data-tab="orders" onclick="switchTab('orders')">
       <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Commandes
+      <div class="nav-badge" id="ordersBadge" style="display:none; right:calc(50% - 28px);">!</div>
     </div>
     <div class="nav-item" data-tab="account" onclick="switchTab('account')">
       <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Compte
@@ -585,7 +589,21 @@ function listenOrders() {
   onSnapshot(query(collection(db,'orders'), where('customerId','==',S.user.uid)), snap => {
     S.userOrders = snap.docs.map(d => ({id:d.id, ...d.data()})).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
     if(S.currentTab === 'orders') renderOrdersList();
+    updateOrdersBadge(); // ✅ NEW: Call badge updater when orders change
   });
+}
+
+function updateOrdersBadge() {
+  const activeOrders = S.userOrders.filter(o => !['Delivered', 'Cancelled'].includes(o.status));
+  const b = document.getElementById('ordersBadge');
+  if (b) {
+      if (activeOrders.length > 0) {
+          b.textContent = activeOrders.length;
+          b.style.display = 'flex';
+      } else {
+          b.style.display = 'none';
+      }
+  }
 }
 
 onSnapshot(collection(db,'products'), snap => { S.products = snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.isAvailable!==false); if(S.currentTab==='home') renderHomeGrid(); });
@@ -955,12 +973,14 @@ function renderCheckout() {
   
   if(S.checkoutStep === 1) {
     btn.textContent = 'Continuer vers le résumé';
+    
+    // ✅ FIXED: Replaced static text with actual functional inputs for Name and Phone
     content.innerHTML = `
     <div class="checkout-section">
       <span class="cs-label">Vos informations</span>
       <div style="background:var(--surface); border-radius:14px; border:1px solid var(--border); padding:16px; margin-bottom:24px; box-shadow:var(--shadow);">
-        <div style="font-size:15px; font-weight:800; color:var(--text); margin-bottom:4px;">${S.userDoc?.name || 'Client Invité'}</div>
-        <div style="font-size:13px; color:var(--muted); font-weight:600;">${S.userDoc?.phone || 'Non renseigné'}</div>
+        <input type="text" id="checkoutName" class="auth-input" placeholder="Votre nom complet" value="${S.userDoc?.name && S.userDoc.name !== 'Client Invité' ? S.userDoc.name : ''}" style="margin-bottom:12px; padding:12px;">
+        <input type="tel" id="checkoutPhone" class="auth-input" placeholder="Votre numéro de téléphone (ex: 06...)" value="${S.userDoc?.phone || ''}" style="margin-bottom:0; padding:12px;">
       </div>
       
       <span class="cs-label">Comment souhaitez-vous être livré ?</span>
@@ -996,6 +1016,17 @@ function renderCheckout() {
 
 window.checkoutNext = async () => {
   if(S.checkoutStep === 1) {
+    // ✅ FIXED: Grab input values and enforce that they are filled
+    const cName = document.getElementById('checkoutName').value.trim();
+    const cPhone = document.getElementById('checkoutPhone').value.trim();
+    
+    if(!cName || !cPhone) { toast('Veuillez saisir votre nom et téléphone'); return; }
+    
+    // Save to local state so we can pass it to the final order
+    if (!S.userDoc) S.userDoc = {};
+    S.userDoc.name = cName;
+    S.userDoc.phone = cPhone;
+
     if(!S.selectedLoc) { toast('📍 Sélectionnez votre adresse'); return; }
     S.checkoutStep = 2; renderCheckout();
   } else if(S.checkoutStep === 2) {
@@ -1035,7 +1066,15 @@ async function placeOrder() {
     
     if(S.user) {
       const newPts = (S.userDoc?.points || 0) + Math.floor(total);
-      await updateDoc(doc(db, 'tasco_users', S.user.uid), { points: newPts, lastAddress: S.selectedLoc.address, lastLat: S.selectedLoc.lat, lastLng: S.selectedLoc.lng });
+      // ✅ FIXED: Also update the user's name and phone in their firebase profile permanently
+      await updateDoc(doc(db, 'tasco_users', S.user.uid), { 
+        name: S.userDoc.name,
+        phone: S.userDoc.phone,
+        points: newPts, 
+        lastAddress: S.selectedLoc.address, 
+        lastLat: S.selectedLoc.lat, 
+        lastLng: S.selectedLoc.lng 
+      });
       S.userDoc.points = newPts;
     }
     
@@ -1097,7 +1136,7 @@ function renderOrdersList() {
   
   content.innerHTML = `<div style="padding: 16px;">` + displayOrders.map(order => {
     const shortId = '#TSC' + order.id.slice(-4).toUpperCase();
-    const date = new Date(order.timestamp).toLocaleDateString('fr-FR', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
+    const creationDateStr = new Date(order.timestamp).toLocaleDateString('fr-FR', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
     
     let topBadge = '';
     if (order.status === 'Cancelled') {
@@ -1121,25 +1160,37 @@ function renderOrdersList() {
              else activeIdx = 0;
         }
 
-        const tl = ST_STEPS.map((s,i) => `
+        const tl = ST_STEPS.map((s,i) => {
+            // ✅ FIXED: Timestamps are now unique. If backend doesn't have statusTimestamps, it only shows the time on the first step.
+            let stepTimeStr = '';
+            if (order.statusTimestamps && order.statusTimestamps[s.key]) {
+                 stepTimeStr = new Date(order.statusTimestamps[s.key]).toLocaleDateString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+            } else if (i === 0) {
+                 stepTimeStr = creationDateStr; 
+            }
+            
+            return `
             <div class="track-step ${i<activeIdx ? 'done':''} ${i===activeIdx ? 'active':''}">
                 <div class="ts-icon">${s.ic}</div>
                 <div class="ts-content">
                     <div class="ts-title">${s.lb}</div>
-                    ${i <= activeIdx ? `<div style="font-size:12px; color:var(--muted); font-weight:600; margin-top:2px;">${date}</div>` : ''}
+                    ${stepTimeStr && i <= activeIdx ? `<div style="font-size:12px; color:var(--muted); font-weight:600; margin-top:2px;">${stepTimeStr}</div>` : ''}
                 </div>
-            </div>`).join('');
+            </div>`;
+        }).join('');
         
         let driverCard = '';
         if (order.status === 'Out for Delivery' || activeIdx === 2) {
             const safePhone = order.driverPhone || '0600000000';
             const waPhone = safePhone.replace(/^0/, '');
             const dName = order.driverName || 'Youssef';
+            // ✅ FIXED: Looks for order.driverPhotoUrl, falls back to avatar
+            const dPhoto = order.driverPhotoUrl || `https://ui-avatars.com/api/?name=${dName}&background=FF5A00&color=fff&bold=true`;
             
             driverCard = `
             <div class="driver-card fade-up">
                 <div class="dc-left">
-                    <div class="dc-avatar"><img src="https://ui-avatars.com/api/?name=${dName}&background=FF5A00&color=fff&bold=true" /></div>
+                    <div class="dc-avatar"><img src="${dPhoto}" /></div>
                     <div class="dc-info">
                         <div class="dc-name">${dName}</div>
                         <div class="dc-sub">Livreur TASCO</div>
@@ -1181,7 +1232,7 @@ function renderOrdersList() {
         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 16px;">
             <div>
                 <div style="font-size:22px; font-family: var(--font-display); font-weight:900; letter-spacing:0.5px; margin-bottom:2px;">${shortId}</div>
-                <div style="font-size:12px; color:var(--muted); font-weight:600; text-transform:uppercase;">${date}</div>
+                <div style="font-size:12px; color:var(--muted); font-weight:600; text-transform:uppercase;">${creationDateStr}</div>
                 ${S.orderTab === 'history' ? `<div style="font-size:12px; font-family:var(--font-display); font-weight:800; color:var(--muted); text-transform:uppercase; margin-top:8px;">${order.totalItems} Article${order.totalItems>1?'s':''}</div>` : ''}
             </div>
             <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
@@ -1232,8 +1283,6 @@ function renderAccountScreen() {
 }
 
 // ── SERVICE WORKER REGISTRATION ──────────────────────────────
-// Registers firebase-messaging-sw.js so background push works
-// and enables PWA install for the storefront
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/firebase-messaging-sw.js', { scope: '/' })
     .then(reg => console.log('SW registered:', reg.scope))
