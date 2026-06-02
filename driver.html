@@ -265,7 +265,7 @@ img{display:block}
   </div>
 </div>
 
-<div id="authOverlay" style="display:none">
+<div id="authOverlay">
   <div class="auth-top">
     <div class="auth-logo">TASCO</div>
     <div class="auth-tag">Driver Hub</div>
@@ -569,8 +569,8 @@ function normalizePhone(raw) {
   return '+212' + p;
 }
 
-function showAuth()  { document.getElementById('authOverlay').style.display='flex'; document.getElementById('app').style.visibility='hidden'; }
-function hideAuth()  { document.getElementById('authOverlay').style.display='none'; document.getElementById('app').style.visibility='visible'; document.getElementById('app').style.opacity='1'; document.getElementById('app').style.pointerEvents='auto'; }
+function showAuth()  { document.getElementById('authOverlay').classList.remove('hidden'); document.getElementById('app').style.opacity = '0'; document.getElementById('app').style.pointerEvents = 'none'; }
+function hideAuth()  { document.getElementById('authOverlay').classList.add('hidden'); document.getElementById('app').style.opacity = '1'; document.getElementById('app').style.pointerEvents = 'auto'; }
 function showStep(id){ document.querySelectorAll('.auth-step').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 function showAuthErr(id, msg){ const el = document.getElementById(id); el.textContent = msg; el.style.display = 'block'; }
 function hideAuthErr(id){ document.getElementById(id).style.display = 'none'; }
@@ -942,71 +942,77 @@ window.doAction = async function(id, action) {
   }
 };
 
-window.markAsPaid = async function() {
+window.markAsPaid = function() {
   if (!S.driver) return;
   const unsettled = S.orders.filter(o => o.driverId === S.driver.phone && o.status === 'Delivered' && !o.driverSettled);
   if (!unsettled.length) { showToast('Nothing to settle'); return; }
-  const fee  = unsettled.reduce((s,o) => s + safeNum(o.deliveryFee), 0);
+  const fee = unsettled.reduce((s,o) => s + safeNum(o.deliveryFee), 0);
   const debt = unsettled.reduce((s,o) => s + calcOrderMath(o).driverOwes, 0);
-  let m = document.getElementById('_cm');
-  if (!m) {
-    m = document.createElement('div'); m.id = '_cm';
-    m.style.cssText = 'position:fixed;inset:0;z-index:4000;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center;padding:20px';
-    m.innerHTML = '<div style="background:var(--surface);border-radius:24px;padding:28px 24px;width:100%;max-width:400px;box-shadow:var(--shadow-lg)"><div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px">Confirm Settlement</div><div id="_cmMsg" style="font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.5"></div><div style="display:flex;gap:12px"><button onclick="document.getElementById('_cm').style.display='none'" style="flex:1;padding:14px;border-radius:12px;font-size:14px;font-weight:700;background:var(--border-dark);color:var(--text);cursor:pointer;border:none">Cancel</button><button id="_cmOk" style="flex:1;padding:14px;border-radius:12px;font-size:14px;font-weight:700;background:var(--blue);color:#fff;cursor:pointer;border:none">Confirm</button></div></div>';
-    document.body.appendChild(m);
+  if (confirm('Give ' + fmt(debt) + ' DH to shop and keep ' + fmt(fee) + ' DH fee?
+Admin will clear your wallet after receiving the cash.')) {
+    showToast('Admin will clear your wallet tonight.');
   }
-  document.getElementById('_cmMsg').textContent = 'Give ' + fmt(debt) + ' DH to the shop and keep ' + fmt(fee) + ' DH delivery fee. Your admin will clear your wallet after receiving the cash.';
-  document.getElementById('_cmOk').onclick = () => {
-    document.getElementById('_cm').style.display = 'none';
-    // No Firestore write — admin settles from the admin page after receiving cash
-    showToast('✅ Admin will clear your wallet tonight.');
-  };
-  m.style.display = 'flex';
 };
 
 function renderWallet() {
   if (!S.driver) return;
   const mineDelivered = S.orders.filter(o => o.driverId === S.driver.phone && o.status === 'Delivered');
   const unsettled = mineDelivered.filter(o => !o.driverSettled);
-  const settled   = mineDelivered.filter(o => o.driverSettled).sort((a,b) => new Date(b.settledAt||b.timestamp||0) - new Date(a.settledAt||a.timestamp||0));
 
-  document.getElementById('wEarnTotal').textContent = fmt(unsettled.reduce((s,o) => s+safeNum(o.deliveryFee), 0));
-  document.getElementById('wDebtTotal').textContent = fmt(unsettled.reduce((s,o) => s+calcOrderMath(o).driverOwes, 0));
+  document.getElementById('wEarnTotal').textContent = fmt(unsettled.reduce((s,o) => s + safeNum(o.deliveryFee), 0));
+  document.getElementById('wDebtTotal').textContent = fmt(unsettled.reduce((s,o) => s + calcOrderMath(o).driverOwes, 0));
   document.getElementById('wPendCount').textContent = unsettled.length + ' to settle';
 
-  document.getElementById('wPendList').innerHTML = !unsettled.length
-    ? '<div style="padding:32px;text-align:center;color:var(--muted);font-size:14px;font-weight:700">All settled up! 🎉</div>'
-    : unsettled.map(o => {
-        const time = o.timestamp ? new Date(o.timestamp).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : '';
-        const sid = '#' + o.id.slice(-4).toUpperCase();
-        return '<div class="pend-item"><div class="pi-ic"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div><div class="pi-info"><div class="pi-id">' + sid + '</div><div class="pi-meta">' + time + ' • ' + (o.neighborhood||'—') + '</div></div><div class="pi-amt">+' + fmt(safeNum(o.deliveryFee)) + ' DH</div></div>';
-      }).join('');
+  let html = '';
+  if (!unsettled.length) {
+    html = '<div style="padding:32px;text-align:center;color:var(--muted);font-size:14px;font-weight:700">All settled up! 🎉</div>';
+  } else {
+    html = unsettled.map(o => {
+      const time = o.timestamp ? new Date(o.timestamp).toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' }) : '';
+      const sid = '#' + o.id.slice(-4).toUpperCase();
+      return '<div class="pend-item">' +
+        '<div class="pi-ic"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>' +
+        '<div class="pi-info"><div class="pi-id">' + sid + '</div><div class="pi-meta">' + time + ' • ' + (o.neighborhood||'—') + '</div></div>' +
+        '<div class="pi-amt">+' + fmt(safeNum(o.deliveryFee)) + ' DH</div>' +
+      '</div>';
+    }).join('');
+  }
+  document.getElementById('wPendList').innerHTML = html;
 
-  const ht = document.getElementById('historyTitle');
-  const hl = document.getElementById('wHistoryList');
+  // Profit history — all delivered orders grouped by day
+  var ht = document.getElementById('historyTitle');
+  var hl = document.getElementById('wHistoryList');
   if (!ht || !hl) return;
-  // Show ALL delivered orders, not just settled ones
-  const allDelivered = mineDelivered.sort((a,b) => new Date(b.deliveredAt||b.timestamp||0) - new Date(a.deliveredAt||a.timestamp||0));
-  if (!allDelivered.length) { ht.style.display='none'; hl.style.display='none'; return; }
-  ht.style.display = 'flex'; hl.style.display = 'block';
-  const byDay = {};
-  allDelivered.forEach(o => {
-    const key = new Date(o.deliveredAt||o.settledAt||o.timestamp||0).toLocaleDateString('en-US',{weekday:'short',day:'numeric',month:'short'});
-    if (!byDay[key]) byDay[key] = { orders:[], fee:0 };
-    byDay[key].orders.push(o); byDay[key].fee += safeNum(o.deliveryFee);
+  var all = mineDelivered.slice().sort(function(a,b){ return new Date(b.deliveredAt||b.timestamp||0) - new Date(a.deliveredAt||a.timestamp||0); });
+  if (!all.length) { ht.style.display='none'; hl.style.display='none'; return; }
+  ht.style.display='flex'; hl.style.display='block';
+  var tot = document.getElementById('historyTotal');
+  if (tot) tot.textContent = fmt(all.reduce(function(s,o){ return s+safeNum(o.deliveryFee); },0)) + ' DH total';
+  var byDay = {};
+  all.forEach(function(o) {
+    var key = new Date(o.deliveredAt||o.timestamp||0).toLocaleDateString('en-US',{weekday:'short',day:'numeric',month:'short'});
+    if (!byDay[key]) byDay[key] = {orders:[],fee:0};
+    byDay[key].orders.push(o);
+    byDay[key].fee += safeNum(o.deliveryFee);
   });
-  const tot = document.getElementById('historyTotal');
-  if (tot) tot.textContent = fmt(allDelivered.reduce((s,o)=>s+safeNum(o.deliveryFee),0)) + ' DH total';
-  hl.innerHTML = Object.entries(byDay).map(([day,data]) =>
-    '<div style="background:var(--surface);border-radius:16px;margin:0 20px 12px;overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border)">'
-    + '<div style="display:flex;justify-content:space-between;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--border)"><span style="font-size:13px;font-weight:800">' + day + '</span><span style="font-size:13px;font-weight:800;color:var(--green)">+' + fmt(data.fee) + ' DH</span></div>'
-    + data.orders.map(o => {
-        const sid = '#'+o.id.slice(-4).toUpperCase();
-        const t = new Date(o.deliveredAt||o.timestamp||0).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-        return '<div style="display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border)"><div style="width:32px;height:32px;border-radius:8px;background:var(--green-light);color:var(--green);display:flex;align-items:center;justify-content:center;margin-right:12px;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:16px;fill:none;stroke:currentColor;stroke-width:2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:700">' + sid + '</div><div style="font-size:11px;color:var(--muted)">' + t + '</div></div><div style="font-size:14px;font-weight:800;color:var(--green)">+' + fmt(safeNum(o.deliveryFee)) + ' DH</div></div>';
-      }).join('')
-    + '</div>'
-  ).join('');
+  hl.innerHTML = Object.keys(byDay).map(function(day) {
+    var data = byDay[day];
+    var rows = data.orders.map(function(o) {
+      var sid = '#'+o.id.slice(-4).toUpperCase();
+      var t = new Date(o.deliveredAt||o.timestamp||0).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+      var settled = o.driverSettled ? ' · Settled' : '';
+      return '<div style="display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);opacity:'+(o.driverSettled?'0.5':'1')+'">'
+        +'<div style="width:32px;height:32px;border-radius:8px;background:var(--green-light);color:var(--green);display:flex;align-items:center;justify-content:center;margin-right:12px;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:16px;fill:none;stroke:currentColor;stroke-width:2.5"><polyline points="20 6 9 17 4 12"/></svg></div>'
+        +'<div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--text)">'+sid+'</div><div style="font-size:11px;color:var(--muted)">'+t+settled+'</div></div>'
+        +'<div style="font-size:14px;font-weight:800;color:var(--green)">+'+fmt(safeNum(o.deliveryFee))+' DH</div>'
+        +'</div>';
+    }).join('');
+    return '<div style="background:var(--surface);border-radius:16px;margin:0 20px 12px;overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border)">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--border)">'
+      +'<span style="font-size:13px;font-weight:800;color:var(--text)">'+day+'</span>'
+      +'<span style="font-size:13px;font-weight:800;color:var(--green)">+'+fmt(data.fee)+' DH</span>'
+      +'</div>'+rows+'</div>';
+  }).join('');
 }
 
 // ── NAVIGATION & UTILS ────────────────────────────────────────
