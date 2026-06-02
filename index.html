@@ -19,34 +19,34 @@
 
 <style>
 :root {
-  --orange:#FF5A00; --orange-light:#FFF0E5; --orange-mid:rgba(255,90,0,0.15);
-  --green:#16A34A; --green-light:#DCFCE7;
-  --bg:#F8F4EE; --surface:#FFFFFF; --surface2:#F2EEE9;
-  --text:#171717; --muted:#6B7280; --border:#E6E2DC; --border-strong:#D1D5DB;
-  --danger:#EF4444; --danger-light:#FEF2F2;
-  --purple:#8B5CF6; --purple-light:#EDE9FE;
-  --blue:#3B82F6; --blue-light:#F0F4FA;
-  --pink:#DB2777; --pink-light:#FCE7F3;
-  --amber:#F59E0B; --amber-light:#FEF3C7;
-  --font-display: 'Barlow Condensed', sans-serif;
-  --font: 'Barlow', sans-serif;
-  --r:16px; --r-sm:10px; --r-lg:20px; --r-xl:24px;
-  --shadow:0 4px 16px rgba(23, 23, 23, 0.04); --shadow-md:0 10px 40px rgba(23, 23, 23, 0.1);
-  --nav-h:65px;
+--orange:#FF5A00; --orange-light:#FFF0E5; --orange-mid:rgba(255,90,0,0.15);
+--green:#16A34A; --green-light:#DCFCE7;
+--bg:#F8F4EE; --surface:#FFFFFF; --surface2:#F2EEE9;
+--text:#171717; --muted:#6B7280; --border:#E6E2DC; --border-strong:#D1D5DB;
+--danger:#EF4444; --danger-light:#FEF2F2;
+--purple:#8B5CF6; --purple-light:#EDE9FE;
+--blue:#3B82F6; --blue-light:#F0F4FA;
+--pink:#DB2777; --pink-light:#FCE7F3;
+--amber:#F59E0B; --amber-light:#FEF3C7;
+--font-display: 'Barlow Condensed', sans-serif;
+--font: 'Barlow', sans-serif;
+--r:16px; --r-sm:10px; --r-lg:20px; --r-xl:24px;
+--shadow:0 4px 16px rgba(23, 23, 23, 0.04); --shadow-md:0 10px 40px rgba(23, 23, 23, 0.1);
+--nav-h:65px;
 }
 
 * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent }
 html, body { height:100%; overflow:hidden; background: var(--bg); }
 body { font-family:var(--font); color:var(--text); font-size:14px; -webkit-font-smoothing:antialiased; }
 button, input, select, textarea { font-family:inherit; outline:none; border:none; background:none; cursor:pointer }
-img { display:block } 
-::-webkit-scrollbar { display:none } 
+img { display:block }
+::-webkit-scrollbar { display:none }
 * { scrollbar-width:none }
 
 h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confirmed-title, .cb-text h4, .pm-price, .ci-price, .sum-row.total .sv {
-    font-family: var(--font-display);
-    text-transform: uppercase;
-    font-weight: 900;
+font-family: var(--font-display);
+text-transform: uppercase;
+font-weight: 900;
 }
 
 /* SPLASH */
@@ -69,7 +69,7 @@ h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confi
 #bottomNav { flex-shrink:0; height:var(--nav-h); background:var(--surface); border-top:1px solid var(--border); display:flex; align-items:stretch; z-index:100; padding-bottom:env(safe-area-inset-bottom,0px) }
 .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; color:#9CA3AF; font-size:11px; font-family: var(--font-display); font-weight:800; text-transform:uppercase; letter-spacing:.5px; transition:.18s; position:relative; cursor:pointer }
 .nav-item svg { width:22px; height:22px; stroke-width:2.2; fill:none; stroke:currentColor; stroke-linecap:round; stroke-linejoin:round; transition:.18s }
-.nav-item.active { color:var(--orange) } 
+.nav-item.active { color:var(--orange) }
 .nav-item.active svg { fill: var(--orange-light); }
 .nav-badge { position:absolute; top:6px; right:calc(50% - 22px); background:var(--danger); color:#fff; font-size:10px; font-weight:800; min-width:18px; height:18px; border-radius:99px; display:flex; align-items:center; justify-content:center; padding:0 4px; border:2px solid var(--surface) }
 
@@ -293,7 +293,6 @@ h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confi
 .confirmed-oid h3 { font-size:32px; font-family: var(--font-display); font-weight:900; color:var(--orange); letter-spacing:1px }
 
 /* ORDERS TABS & STATUS TIMELINE */
-/* ✅ FIXED OVERLAP: Added background and z-index to wrapper to prevent bleeding */
 .orders-header-wrap { position: sticky; top: 0; z-index: 50; background: var(--bg); }
 .orders-tabs { display: flex; padding: 0 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; gap: 0; background: var(--bg); }
 .o-tab { flex: 1; text-align: center; padding: 12px; font-family: var(--font-display); font-weight: 800; font-size: 15px; text-transform: uppercase; color: var(--muted); border-bottom: 3px solid transparent; transition: 0.2s; cursor: pointer; letter-spacing: 0.5px; }
@@ -319,15 +318,15 @@ h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confi
 
 /* DRIVER CARD */
 .driver-card { padding: 16px; border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-top: 16px; display: flex; align-items: center; justify-content: space-between; background: var(--surface); }
-.dc-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; } /* ✅ FIXED: Added flex:1 and min-width:0 to prevent squeezing */
-.dc-avatar { width: 50px; height: 50px; border-radius: 50%; overflow: hidden; background: var(--bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; } /* ✅ FIXED: Added flex-shrink: 0 */
+.dc-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+.dc-avatar { width: 50px; height: 50px; border-radius: 50%; overflow: hidden; background: var(--bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .dc-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.dc-info { display: flex; flex-direction: column; flex: 1; min-width: 0; } /* ✅ FIXED: Ensure text container doesn't overflow */
-.dc-name { font-family: var(--font-display); font-size: 18px; font-weight: 900; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } /* ✅ FIXED: Truncate long names */
+.dc-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.dc-name { font-family: var(--font-display); font-size: 18px; font-weight: 900; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dc-sub { font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
 .dc-rating { font-size: 12px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 4px; }
 .dc-rating svg { width: 12px; fill: var(--amber); }
-.dc-actions { display: flex; gap: 8px; flex-shrink: 0; } /* ✅ FIXED: Prevent buttons from shrinking */
+.dc-actions { display: flex; gap: 8px; flex-shrink: 0; }
 .dc-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 14px; border: 1px solid var(--border); background: var(--surface); text-decoration: none; gap: 6px; transition: 0.2s; }
 .dc-btn:active { transform: scale(0.95); background: var(--bg); }
 .dc-btn span { font-family: var(--font-display); font-size: 11px; font-weight: 800; color: var(--text); letter-spacing: 0.5px; }
@@ -346,181 +345,167 @@ h1, h2, h3, .section-title, .banner-title, .pc-name, .pm-title, .ci-name, .confi
 <body>
 
 <div id="splash">
-  <img src="https://i.postimg.cc/rmmnn3XM/file-000000007624720ab6ae4d2993693772.png" alt="TASCO"/>
-  <p>Fast Cravings. Real Satisfaction.</p>
-  <div class="bw"><div class="bf"></div></div>
+<img src="https://i.postimg.cc/rmmnn3XM/file-000000007624720ab6ae4d2993693772.png" alt="TASCO"/>
+<p>Fast Cravings. Real Satisfaction.</p>
+<div class="bw"><div class="bf"></div></div>
 </div>
 
 <div id="app" class="ready">
-  <div id="screens">
+<div id="screens">
 
-    <div class="screen active" id="screenHome">
-      <div id="homeHeader">
-        <img src="https://i.postimg.cc/rmmnn3XM/file-000000007624720ab6ae4d2993693772.png" class="logo-img" alt="TASCO"/>
-        <div class="header-right">
-          <div class="location-pill" onclick="openMapPicker()">
-            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <span id="locationPillText">Marrakech</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="home-banner">
-        <div class="banner-content">
-          <div class="banner-hello" id="bannerHello">BONJOUR 👋</div>
-          <div class="banner-title" id="bannerTitle">NOUS SOMMES<br><span>EN LIGNE !</span></div>
-          <div style="display:inline-flex;align-items:center;gap:6px;background:var(--surface);color:var(--text);padding:6px 12px;border-radius:99px;font-size:11px;font-weight:800;font-family:var(--font-display);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;">⚡ Livraison rapide</div>
-        </div>
-        <div class="banner-illus"><div class="banner-illus-emoji">🍔</div><div class="banner-illus-fade"></div></div>
-      </div>
+<div class="screen active" id="screenHome">
+<div id="homeHeader">
+<img src="https://i.postimg.cc/rmmnn3XM/file-000000007624720ab6ae4d2993693772.png" class="logo-img" alt="TASCO"/>
+<div class="header-right">
+<div class="location-pill" onclick="openMapPicker()">
+<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+<span id="locationPillText">Marrakech</span>
+</div>
+</div>
+</div>
 
-      <div class="search-wrap">
-        <div class="search-box">
-          <svg class="si" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="homeSearch" placeholder="Quel plat vous fait envie ?"/>
-        </div>
-      </div>
-      
-      <div class="cats-scroll" id="homeCats">
-        <div class="shimmer sk-cat"></div><div class="shimmer sk-cat"></div><div class="shimmer sk-cat"></div><div class="shimmer sk-cat"></div>
-      </div>
-      <div class="sub-scroll" id="homeSubs" style="display:none"></div>
+<div class="home-banner">
+<div class="banner-content">
+<div class="banner-hello" id="bannerHello">BONJOUR 👋</div>
+<div class="banner-title" id="bannerTitle">NOUS SOMMES<br><span>EN LIGNE !</span></div>
+<div style="display:inline-flex;align-items:center;gap:6px;background:var(--surface);color:var(--text);padding:6px 12px;border-radius:99px;font-size:11px;font-weight:800;font-family:var(--font-display);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;">⚡ Livraison rapide</div>
+</div>
+<div class="banner-illus"><div class="banner-illus-emoji">🍔</div><div class="banner-illus-fade"></div></div>
+</div>
 
-      <div class="club-banner" onclick="switchTab('account')">
-        <div class="cb-left">
-          <div class="cb-icon-wrap">👑</div>
-          <div class="cb-text">
-            <h4>TASCO CLUB</h4>
-            <p>Gagnez 1 point pour chaque 1 DH dépensé</p>
-          </div>
-        </div>
-        <div class="cb-right">
-          <span>Vos Points</span>
-          <strong id="homeClubPts">0 pts <svg style="width:14px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></strong>
-        </div>
-      </div>
+<div class="search-wrap">
+<div class="search-box">
+<svg class="si" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input type="text" id="homeSearch" placeholder="Quel plat vous fait envie ?"/>
+</div>
+</div>
 
-      <div class="prod-section">
-        <div class="prod-sec-head">
-          <span class="section-title" id="homeGridTitle">NOS PRODUITS POPULAIRES</span>
-        </div>
-        <div class="prod-grid" id="homeGrid">
-          <div class="shimmer sk-card"></div><div class="shimmer sk-card"></div><div class="shimmer sk-card"></div><div class="shimmer sk-card"></div>
-        </div>
-      </div>
-    </div>
+<div class="cats-scroll" id="homeCats">
+<div class="shimmer sk-cat"></div><div class="shimmer sk-cat"></div><div class="shimmer sk-cat"></div><div class="shimmer sk-cat"></div>
+</div>
+<div class="sub-scroll" id="homeSubs" style="display:none"></div>
 
-    <div class="screen" id="screenCart">
-      <div style="min-height: calc(100% - 85px); padding-bottom: 24px;">
-        <div class="cart-hdr">
-          <span class="section-title">VOTRE PANIER</span>
-          <button onclick="clearCart()" style="font-size:12px; font-family: var(--font-display); color:var(--danger);font-weight:800;display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--danger-light);border-radius:10px;text-transform:uppercase;letter-spacing:.5px">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-            Vider
-          </button>
-        </div>
-        <div id="cartContent"></div>
-      </div>
-      <div class="cart-cta" id="cartCta" style="display:none">
-        <button class="main-btn" onclick="goToCheckout()">
-          <span>Passer à la caisse</span>
-          <span class="cta-total" id="ctaTotal">0 DH</span>
-        </button>
-        <div class="secure-note">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          Paiement 100% sécurisé à la livraison
-        </div>
-      </div>
-    </div>
+<div class="prod-section">
+<div class="prod-sec-head">
+<span class="section-title" id="homeGridTitle">NOS PRODUITS POPULAIRES</span>
+</div>
+<div class="prod-grid" id="homeGrid">
+<div class="shimmer sk-card"></div><div class="shimmer sk-card"></div><div class="shimmer sk-card"></div><div class="shimmer sk-card"></div>
+</div>
+</div>
+</div>
 
-    <div class="screen" id="screenCheckout">
-      <div style="min-height: calc(100% - 85px); padding-bottom: 24px;">
-        <div class="checkout-hdr">
-          <div class="back-btn" onclick="switchTab('cart')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
-          <span class="section-title">CHECKOUT</span>
-        </div>
-        <div class="step-bar" id="stepBar">
-          <div class="step-item active" id="sp1"><div class="step-dot">1</div><div class="step-lbl">Infos & Adresse</div></div>
-          <div class="step-item" id="sp2"><div class="step-dot">2</div><div class="step-lbl">Résumé</div></div>
-        </div>
-        <div id="checkoutContent"></div>
-      </div>
-      <div class="checkout-cta" id="checkoutCtaRow" style="display:none;">
-        <button class="main-btn" id="checkoutBtn" onclick="checkoutNext()">Continuer vers le résumé</button>
-      </div>
-    </div>
+<div class="screen" id="screenCart">
+<div style="min-height: calc(100% - 85px); padding-bottom: 24px;">
+<div class="cart-hdr">
+<span class="section-title">VOTRE PANIER</span>
+<button onclick="clearCart()" style="font-size:12px; font-family: var(--font-display); color:var(--danger);font-weight:800;display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--danger-light);border-radius:10px;text-transform:uppercase;letter-spacing:.5px">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+Vider
+</button>
+</div>
+<div id="cartContent"></div>
+</div>
+<div class="cart-cta" id="cartCta" style="display:none">
+<button class="main-btn" onclick="goToCheckout()">
+<span>Passer à la caisse</span>
+<span class="cta-total" id="ctaTotal">0 DH</span>
+</button>
+<div class="secure-note">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+Paiement 100% sécurisé à la livraison
+</div>
+</div>
+</div>
 
-    <div class="screen" id="screenConfirmed">
-      <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.96);position:sticky;top:0;z-index:50">
-        <div class="back-btn" onclick="switchTab('home')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-        </div>
-        <span class="section-title">SUIVI DE COMMANDE</span>
-      </div>
-      <div class="confirmed-wrap" id="confirmedContent"></div>
-    </div>
+<div class="screen" id="screenCheckout">
+<div style="min-height: calc(100% - 85px); padding-bottom: 24px;">
+<div class="checkout-hdr">
+<div class="back-btn" onclick="switchTab('cart')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+<span class="section-title">CHECKOUT</span>
+</div>
+<div class="step-bar" id="stepBar">
+<div class="step-item active" id="sp1"><div class="step-dot">1</div><div class="step-lbl">Infos & Adresse</div></div>
+<div class="step-item" id="sp2"><div class="step-dot">2</div><div class="step-lbl">Résumé</div></div>
+</div>
+<div id="checkoutContent"></div>
+</div>
+<div class="checkout-cta" id="checkoutCtaRow" style="display:none;">
+<button class="main-btn" id="checkoutBtn" onclick="checkoutNext()">Continuer vers le résumé</button>
+</div>
+</div>
 
-    <div class="screen" id="screenOrders">
-      <div class="orders-header-wrap">
-        <div class="cart-hdr" style="padding-bottom:0; border-bottom:none; position:static;">
-          <span class="section-title" style="padding-bottom:12px;">MES COMMANDES</span>
-        </div>
-        <div id="ordersTabContainer" class="orders-tabs"></div>
-      </div>
-      <div id="ordersList" style="padding-bottom: 24px;"></div>
-    </div>
+<div class="screen" id="screenConfirmed">
+<div style="padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.96);position:sticky;top:0;z-index:50">
+<div class="back-btn" onclick="switchTab('home')">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+</div>
+<span class="section-title">SUIVI DE COMMANDE</span>
+</div>
+<div class="confirmed-wrap" id="confirmedContent"></div>
+</div>
 
-    <div class="screen" id="screenAccount">
-      <div class="cart-hdr">
-        <span class="section-title">MON COMPTE</span>
-      </div>
-      <div id="accountContent" style="padding-bottom: 24px;"></div>
-    </div>
+<div class="screen" id="screenOrders">
+<div class="orders-header-wrap">
+<div class="cart-hdr" style="padding-bottom:0; border-bottom:none; position:static;">
+<span class="section-title" style="padding-bottom:12px;">MES COMMANDES</span>
+</div>
+<div id="ordersTabContainer" class="orders-tabs"></div>
+</div>
+<div id="ordersList" style="padding-bottom: 24px;"></div>
+</div>
 
-  </div>
+<div class="screen" id="screenAccount">
+<div class="cart-hdr">
+<span class="section-title">MON COMPTE</span>
+</div>
+<div id="accountContent" style="padding-bottom: 24px;"></div>
+</div>
 
-  <nav id="bottomNav">
-    <div class="nav-item active" data-tab="home" onclick="switchTab('home')">
-      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Accueil
-    </div>
-    <div class="nav-item" data-tab="cart" onclick="switchTab('cart')">
-      <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>Panier
-      <div class="nav-badge" id="cartBadge" style="display:none">0</div>
-    </div>
-    <div class="nav-item" data-tab="orders" onclick="switchTab('orders')">
-      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Commandes
-      <div class="nav-badge" id="ordersBadge" style="display:none; right:calc(50% - 28px);">!</div>
-    </div>
-    <div class="nav-item" data-tab="account" onclick="switchTab('account')">
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Compte
-    </div>
-  </nav>
+</div>
+
+<nav id="bottomNav">
+<div class="nav-item active" data-tab="home" onclick="switchTab('home')">
+<svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Accueil
+</div>
+<div class="nav-item" data-tab="cart" onclick="switchTab('cart')">
+<svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>Panier
+<div class="nav-badge" id="cartBadge" style="display:none">0</div>
+</div>
+<div class="nav-item" data-tab="orders" onclick="switchTab('orders')">
+<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Commandes
+<div class="nav-badge" id="ordersBadge" style="display:none; right:calc(50% - 28px);">!</div>
+</div>
+<div class="nav-item" data-tab="account" onclick="switchTab('account')">
+<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Compte
+</div>
+</nav>
 </div>
 
 <div class="modal-ovl" id="prodOvl" onclick="if(event.target===this)closeProd()"></div>
 <div class="prod-modal" id="prodModal">
-  <div class="pm-img-wrap"><img id="pmImg" src="" alt=""/><div class="pm-close" onclick="closeProd()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>
-  <div class="pm-body" id="pmBody"></div>
-  <div class="pm-footer">
-    <div class="pm-qty"><button onclick="pmQ(-1)">−</button><span id="pmQtyVal">1</span><button onclick="pmQ(1)">+</button></div>
-    <div class="pm-add" onclick="addToCart()">AJOUTER · <span id="pmBtnP">0 DH</span></div>
-  </div>
+<div class="pm-img-wrap"><img id="pmImg" src="" alt=""/><div class="pm-close" onclick="closeProd()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>
+<div class="pm-body" id="pmBody"></div>
+<div class="pm-footer">
+<div class="pm-qty"><button onclick="pmQ(-1)">−</button><span id="pmQtyVal">1</span><button onclick="pmQ(1)">+</button></div>
+<div class="pm-add" onclick="addToCart()">AJOUTER · <span id="pmBtnP">0 DH</span></div>
+</div>
 </div>
 
 <div class="modal-ovl" id="mapOvl" onclick="if(event.target===this)closeMapPicker()"></div>
 <div class="prod-modal" id="mapModal" style="padding-bottom: 0;">
-  <div style="padding:16px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
-    <h3 style="font-size:20px; font-family: var(--font-display); font-weight:900; text-transform:uppercase;">CHOISIR L'ADRESSE</h3>
-    <div class="icon-btn" style="width:36px;height:36px;border-radius:50%;" onclick="closeMapPicker()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
-  </div>
-  <div style="position:relative; margin: 16px;">
-    <svg style="position:absolute; left:14px; top:14px; width:18px; color:var(--muted); fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input type="text" id="mapSearchInput" placeholder="Chercher une rue, un quartier..." style="width:100%; padding:14px 14px 14px 42px; border-radius:12px; border:1.5px solid var(--border); background:var(--bg); font-size:15px; font-weight:600; color:var(--text); font-family:var(--font); outline:none;"/>
-  </div>
-  <div id="deliveryMap" style="width:100%; height:40vh; background:var(--bg);"></div>
-  <div style="padding:16px;">
-    <button class="main-btn" style="padding:16px; justify-content:center; text-transform:uppercase;" onclick="confirmMapLoc()">CONFIRMER LA POSITION</button>
-  </div>
+<div style="padding:16px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+<h3 style="font-size:20px; font-family: var(--font-display); font-weight:900; text-transform:uppercase;">CHOISIR L'ADRESSE</h3>
+<div class="icon-btn" style="width:36px;height:36px;border-radius:50%;" onclick="closeMapPicker()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+</div>
+<div style="position:relative; margin: 16px;">
+<svg style="position:absolute; left:14px; top:14px; width:18px; color:var(--muted); fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input type="text" id="mapSearchInput" placeholder="Chercher une rue, un quartier..." style="width:100%; padding:14px 14px 14px 42px; border-radius:12px; border:1.5px solid var(--border); background:var(--bg); font-size:15px; font-weight:600; color:var(--text); font-family:var(--font); outline:none;"/>
+</div>
+<div id="deliveryMap" style="width:100%; height:40vh; background:var(--bg);"></div>
+<div style="padding:16px;">
+<button class="main-btn" style="padding:16px; justify-content:center; text-transform:uppercase;" onclick="confirmMapLoc()">CONFIRMER LA POSITION</button>
+</div>
 </div>
 
 <div id="toast"></div>
@@ -531,24 +516,33 @@ import { getFirestore, collection, onSnapshot, addDoc, doc, getDoc, setDoc, upda
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const fbApp = initializeApp({
-  apiKey: "AIzaSyAaaR52bvyQfkxmZL16lcg4Bd4M76OtbI4",
-  authDomain: "lesgo-cd7f9.firebaseapp.com",
-  projectId: "lesgo-cd7f9",
-  storageBucket: "lesgo-cd7f9.firebasestorage.app",
-  messagingSenderId: "618932234525",
-  appId: "1:618932234525:web:8eb0b934b1bfd1060059f4"
+apiKey: "AIzaSyAaaR52bvyQfkxmZL16lcg4Bd4M76OtbI4",
+authDomain: "lesgo-cd7f9.firebaseapp.com",
+projectId: "lesgo-cd7f9",
+storageBucket: "lesgo-cd7f9.firebasestorage.app",
+messagingSenderId: "618932234525",
+appId: "1:618932234525:web:8eb0b934b1bfd1060059f4"
 });
 const db = getFirestore(fbApp);
 const auth = getAuth(fbApp);
 
+// ── MARRAKECH CITY LIMITS (bounding box for map + delivery zone) ──
+const MARRAKECH_BOUNDS = { north: 31.7100, south: 31.5500, east: -7.9000, west: -8.0800 };
+const MARRAKECH_CENTER = { lat: 31.6295, lng: -7.9811 };
+function isInMarrakech(lat, lng) {
+return lat >= MARRAKECH_BOUNDS.south && lat <= MARRAKECH_BOUNDS.north
+&& lng >= MARRAKECH_BOUNDS.west && lng <= MARRAKECH_BOUNDS.east;
+}
+
 const S = {
-  user: null, userDoc: null,
-  products: [], catsDB: [], promosDB: [],
-  deliveryConfig: null, storeOnline: false,
-  cart: [], selectedLoc: null, checkoutStep: 1,
-  currentTab: 'home', homeActiveCat: '__pop__', homeActiveSub: '__all__',
-  userOrders: [], orderTab: 'active', promo: null, promoOpen: false,
-  pmState: { qty: 1, base: 0, sels: {}, prod: null }
+user: null, userDoc: null,
+products: [], catsDB: [], promosDB: [],
+deliveryConfig: null, storeOnline: false,
+cart: [], selectedLoc: null, checkoutStep: 1,
+currentTab: 'home', homeActiveCat: 'pop', homeActiveSub: 'all',
+userOrders: [], orderTab: 'active', promo: null, promoOpen: false,
+pmState: { qty: 1, base: 0, sels: {}, prod: null },
+driversMap: {} // ✅ live driver profiles keyed by phone doc-id
 };
 
 try { S.cart = JSON.parse(localStorage.getItem('tasco_cart') || '[]'); } catch(e) {}
@@ -559,51 +553,51 @@ function toast(m, d=2600) { const el = document.getElementById('toast'); el.text
 window.toast = toast;
 
 onAuthStateChanged(auth, async user => {
-  if (!user) {
-    try {
-      await signInAnonymously(auth);
-    } catch (e) {
-      console.error("Anonymous Auth Failed:", e);
-    }
-  } else {
-    S.user = user;
-    const uRef = doc(db, 'tasco_users', user.uid);
-    const snap = await getDoc(uRef);
-    
-    if(!snap.exists()) {
-      await setDoc(uRef, { points: 0, createdAt: new Date().toISOString() });
-      S.userDoc = { points: 0 };
-    } else {
-      S.userDoc = snap.data();
-      if(S.userDoc.lastAddress && S.userDoc.lastLat) {
-        S.selectedLoc = { address: S.userDoc.lastAddress, lat: S.userDoc.lastLat, lng: S.userDoc.lastLng };
-      }
-    }
-    listenOrders();
-    renderCurrentTab();
-  }
+if (!user) {
+try {
+await signInAnonymously(auth);
+} catch (e) {
+console.error("Anonymous Auth Failed:", e);
+}
+} else {
+S.user = user;
+const uRef = doc(db, 'tasco_users', user.uid);
+const snap = await getDoc(uRef);
+
+if(!snap.exists()) {
+await setDoc(uRef, { points: 0, createdAt: new Date().toISOString() });
+S.userDoc = { points: 0 };
+} else {
+S.userDoc = snap.data();
+if(S.userDoc.lastAddress && S.userDoc.lastLat) {
+S.selectedLoc = { address: S.userDoc.lastAddress, lat: S.userDoc.lastLat, lng: S.userDoc.lastLng };
+}
+}
+listenOrders();
+renderCurrentTab();
+}
 });
 
 function listenOrders() {
-  if(!S.user) return;
-  onSnapshot(query(collection(db,'orders'), where('customerId','==',S.user.uid)), snap => {
-    S.userOrders = snap.docs.map(d => ({id:d.id, ...d.data()})).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-    if(S.currentTab === 'orders') renderOrdersList();
-    updateOrdersBadge(); // ✅ NEW: Call badge updater when orders change
-  });
+if(!S.user) return;
+onSnapshot(query(collection(db,'orders'), where('customerId','==',S.user.uid)), snap => {
+S.userOrders = snap.docs.map(d => ({id:d.id, ...d.data()})).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+if(S.currentTab === 'orders') renderOrdersList();
+updateOrdersBadge();
+});
 }
 
 function updateOrdersBadge() {
-  const activeOrders = S.userOrders.filter(o => !['Delivered', 'Cancelled'].includes(o.status));
-  const b = document.getElementById('ordersBadge');
-  if (b) {
-      if (activeOrders.length > 0) {
-          b.textContent = activeOrders.length;
-          b.style.display = 'flex';
-      } else {
-          b.style.display = 'none';
-      }
-  }
+const activeOrders = S.userOrders.filter(o => !['Delivered', 'Cancelled'].includes(o.status));
+const b = document.getElementById('ordersBadge');
+if (b) {
+if (activeOrders.length > 0) {
+b.textContent = activeOrders.length;
+b.style.display = 'flex';
+} else {
+b.style.display = 'none';
+}
+}
 }
 
 onSnapshot(collection(db,'products'), snap => { S.products = snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.isAvailable!==false); if(S.currentTab==='home') renderHomeGrid(); });
@@ -612,46 +606,76 @@ onSnapshot(collection(db,'promos'), snap => { S.promosDB = snap.docs.map(d=>({id
 onSnapshot(doc(db,'settings','store_status'), snap => { S.storeOnline = snap.exists() ? snap.data().isOnline===true : false; updateStoreUI(); });
 onSnapshot(doc(db,'settings','delivery'), snap => { if(snap.exists()) S.deliveryConfig = snap.data(); if(S.currentTab==='checkout') renderCheckout(); });
 
+// ── DRIVER PHOTOS: real-time listener on the drivers collection ──
+// Documents are keyed by phone (e.g. "+212..."). We index them so an assigned
+// order can instantly resolve the driver's live photoUrl and name.
+onSnapshot(collection(db,'drivers'), snap => {
+const map = {};
+snap.docs.forEach(d => {
+const data = d.data() || {};
+map[d.id] = { name: data.name || '', photoUrl: data.photoUrl || data.photoURL || '' };
+});
+S.driversMap = map;
+if(S.currentTab === 'orders') renderOrdersList();
+});
+
+// Build the list of phone formats a driver doc might be stored under
+function driverPhoneVariants(phone) {
+if(!phone) return [];
+const raw = String(phone).trim();
+const out = new Set();
+if(raw) out.add(raw);
+const digits = raw.replace(/[^\d]/g, '');
+if(raw.startsWith('+')) out.add(raw);
+if(raw.startsWith('0')) out.add('+212' + raw.slice(1));
+if(digits.startsWith('0')) out.add('+212' + digits.slice(1));
+if(digits.startsWith('212')) out.add('+' + digits);
+if(digits.length === 9) out.add('+212' + digits); // bare 6XXXXXXXX
+return [...out];
+}
+
+function getDriverInfo(order) {
+const variants = driverPhoneVariants(order.driverPhone);
+for(const v of variants) {
+if(S.driversMap[v]) return S.driversMap[v];
+}
+return {};
+}
+
 function updateStoreUI() {
-  const t = document.getElementById('bannerTitle');
-  if(!t) return;
-  if(S.storeOnline) { t.innerHTML = 'NOUS SOMMES<br><span>EN LIGNE !</span>'; } 
-  else { t.innerHTML = 'NOUS SOMMES<br><span style="color:var(--danger)">FERMÉS</span>'; }
+const t = document.getElementById('bannerTitle');
+if(!t) return;
+if(S.storeOnline) { t.innerHTML = 'NOUS SOMMES<br><span>EN LIGNE !</span>'; }
+else { t.innerHTML = 'NOUS SOMMES<br><span style="color:var(--danger)">FERMÉS</span>'; }
 }
 
 window.switchTab = tab => {
-  const hideNav = ['checkout', 'confirmed'];
-  document.getElementById('bottomNav').style.display = hideNav.includes(tab) ? 'none' : 'flex';
-  S.currentTab = tab;
-  
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  
-  document.getElementById('screen' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
-  const ni = document.querySelector(`.nav-item[data-tab="${tab}"]`);
-  if(ni) ni.classList.add('active');
-  
-  renderCurrentTab();
+const hideNav = ['checkout', 'confirmed'];
+document.getElementById('bottomNav').style.display = hideNav.includes(tab) ? 'none' : 'flex';
+S.currentTab = tab;
+
+document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+document.getElementById('screen' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+const ni = document.querySelector(`.nav-item[data-tab="${tab}"]`);
+if(ni) ni.classList.add('active');
+
+renderCurrentTab();
 };
 
 function renderCurrentTab() {
-  if(S.userDoc && S.userDoc.name && S.userDoc.name !== 'Client Invité') {
-    document.getElementById('bannerHello').textContent = greet() + ' ' + S.userDoc.name.split(' ')[0] + ' 👋';
-  } else {
-    document.getElementById('bannerHello').textContent = greet() + ' 👋';
-  }
+if(S.userDoc && S.userDoc.name && S.userDoc.name !== 'Client Invité') {
+document.getElementById('bannerHello').textContent = greet() + ' ' + S.userDoc.name.split(' ')[0] + ' 👋';
+} else {
+document.getElementById('bannerHello').textContent = greet() + ' 👋';
+}
 
-  const ptsEl = document.getElementById('homeClubPts');
-  if(ptsEl) {
-    const pts = S.userDoc?.points || 0;
-    ptsEl.innerHTML = `${pts} pts <svg style="width:14px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>`;
-  }
-
-  if(S.currentTab === 'home') renderHomeGrid();
-  if(S.currentTab === 'cart') renderCartScreen();
-  if(S.currentTab === 'checkout') renderCheckout();
-  if(S.currentTab === 'orders') renderOrdersList();
-  if(S.currentTab === 'account') renderAccountScreen();
+if(S.currentTab === 'home') renderHomeGrid();
+if(S.currentTab === 'cart') renderCartScreen();
+if(S.currentTab === 'checkout') renderCheckout();
+if(S.currentTab === 'orders') renderOrdersList();
+if(S.currentTab === 'account') renderAccountScreen();
 }
 
 const ICONS = {"Top ventes":"🔥","Burgers":"🍔","Tacos":"🌮","Pizzas":"🍕","Fast Food":"🍔","Petit-déjeuner":"🥐","Desserts":"🍦","Boissons":"🥤","Snacks":"🍿","Fruits":"🍎","Viande":"🥩"};
@@ -661,169 +685,171 @@ function getMainCats() { const cats = [...new Set(S.products.map(p=>p.category).
 function getSubCats(main) { return [...new Set(S.products.filter(p=>p.category===main).map(p=>p.subCategory).filter(Boolean))].sort(); }
 
 function renderHomeCats() {
-  const cats = getMainCats();
-  const all = [{id:'__pop__', lb:'Top ventes', ic:'🔥'}, ...cats.map(c=>({id:c, lb:c, ic:getIcon(c)}))];
-  const container = document.getElementById('homeCats');
-  const currentScroll = container.scrollLeft;
-  container.innerHTML = all.map(c => `<div class="cat-chip ${S.homeActiveCat===c.id?'active':''}" onclick="setHomeCat('${c.id}')"><div class="cc-ic">${c.ic}</div><div class="cc-lb">${c.lb}</div></div>`).join('');
-  container.scrollLeft = currentScroll;
+const cats = getMainCats();
+const all = [{id:'pop', lb:'Top ventes', ic:'🔥'}, ...cats.map(c=>({id:c, lb:c, ic:getIcon(c)}))];
+const container = document.getElementById('homeCats');
+const currentScroll = container.scrollLeft;
+container.innerHTML = all.map(c => `<div class="cat-chip ${S.homeActiveCat===c.id?'active':''}" onclick="setHomeCat('${c.id}')"><div class="cc-ic">${c.ic}</div><div class="cc-lb">${c.lb}</div></div>`).join('');
+container.scrollLeft = currentScroll;
 }
 
 function renderHomeSubs() {
-  const row = document.getElementById('homeSubs');
-  if(S.homeActiveCat==='__pop__') { row.style.display='none'; return; }
-  const subs = getSubCats(S.homeActiveCat);
-  if(!subs.length) { row.style.display='none'; return; }
-  row.style.display='flex';
-  const currentScroll = row.scrollLeft;
-  row.innerHTML = [{id:'__all__', lb:'Tous'}, ...subs.map(s=>({id:s, lb:s}))].map(s => `<div class="sub-pill ${S.homeActiveSub===s.id?'active':''}" onclick="setHomeSub('${s.id}')">${s.lb}</div>`).join('');
-  row.scrollLeft = currentScroll;
+const row = document.getElementById('homeSubs');
+if(S.homeActiveCat==='pop') { row.style.display='none'; return; }
+const subs = getSubCats(S.homeActiveCat);
+if(!subs.length) { row.style.display='none'; return; }
+row.style.display='flex';
+const currentScroll = row.scrollLeft;
+row.innerHTML = [{id:'all', lb:'Tous'}, ...subs.map(s=>({id:s, lb:s}))].map(s => `<div class="sub-pill ${S.homeActiveSub===s.id?'active':''}" onclick="setHomeSub('${s.id}')">${s.lb}</div>`).join('');
+row.scrollLeft = currentScroll;
 }
 
-window.setHomeCat = id => { 
-  S.homeActiveCat = id; S.homeActiveSub = '__all__'; 
-  renderHomeGrid(); 
-  setTimeout(() => {
-    const activeEl = document.querySelector('#homeCats .cat-chip.active');
-    if (activeEl) activeEl.parentElement.scrollTo({ left: activeEl.offsetLeft - 16, behavior: 'smooth' });
-  }, 10);
+window.setHomeCat = id => {
+S.homeActiveCat = id; S.homeActiveSub = 'all';
+renderHomeGrid();
+setTimeout(() => {
+const activeEl = document.querySelector('#homeCats .cat-chip.active');
+if (activeEl) activeEl.parentElement.scrollTo({ left: activeEl.offsetLeft - 16, behavior: 'smooth' });
+}, 10);
 };
 
-window.setHomeSub = id => { 
-  S.homeActiveSub = id; 
-  renderHomeGrid(); 
-  setTimeout(() => {
-    const activeEl = document.querySelector('#homeSubs .sub-pill.active');
-    if (activeEl) activeEl.parentElement.scrollTo({ left: activeEl.offsetLeft - 16, behavior: 'smooth' });
-  }, 10);
+window.setHomeSub = id => {
+S.homeActiveSub = id;
+renderHomeGrid();
+setTimeout(() => {
+const activeEl = document.querySelector('#homeSubs .sub-pill.active');
+if (activeEl) activeEl.parentElement.scrollTo({ left: activeEl.offsetLeft - 16, behavior: 'smooth' });
+}, 10);
 };
 
 document.getElementById('homeSearch').addEventListener('input', () => renderHomeGrid());
 
 function renderHomeGrid() {
-  renderHomeCats(); renderHomeSubs();
-  let prods = S.products;
-  
-  if(S.homeActiveCat === '__pop__') {
-    prods = prods.filter(p => p.sortWeight > 0 || (p.badge && p.badge !== 'Standard'));
-    document.getElementById('homeGridTitle').textContent = 'NOS PRODUITS POPULAIRES';
-  } else {
-    prods = prods.filter(p => p.category === S.homeActiveCat);
-    if(S.homeActiveSub !== '__all__') prods = prods.filter(p => p.subCategory === S.homeActiveSub);
-    document.getElementById('homeGridTitle').textContent = S.homeActiveSub !== '__all__' ? S.homeActiveSub : S.homeActiveCat;
-  }
-  
-  const q = document.getElementById('homeSearch')?.value?.toLowerCase() || '';
-  if(q) prods = prods.filter(p => p.name.toLowerCase().includes(q));
-  
-  prods.sort((a,b) => (b.sortWeight||0) - (a.sortWeight||0) || (a.name||'').localeCompare(b.name||''));
-  
-  const g = document.getElementById('homeGrid');
-  g.innerHTML = prods.length ? prods.map(pcHTML).join('') : `<p style="color:var(--muted);font-weight:600;grid-column:1/-1;padding:24px 0">Aucun article trouvé.</p>`;
+renderHomeCats(); renderHomeSubs();
+let prods = S.products;
+
+if(S.homeActiveCat === 'pop') {
+prods = prods.filter(p => p.sortWeight > 0 || (p.badge && p.badge !== 'Standard'));
+document.getElementById('homeGridTitle').textContent = 'NOS PRODUITS POPULAIRES';
+} else {
+prods = prods.filter(p => p.category === S.homeActiveCat);
+if(S.homeActiveSub !== 'all') prods = prods.filter(p => p.subCategory === S.homeActiveSub);
+document.getElementById('homeGridTitle').textContent = S.homeActiveSub !== 'all' ? S.homeActiveSub : S.homeActiveCat;
+}
+
+const q = document.getElementById('homeSearch')?.value?.toLowerCase() || '';
+if(q) prods = prods.filter(p => p.name.toLowerCase().includes(q));
+
+prods.sort((a,b) => (b.sortWeight||0) - (a.sortWeight||0) || (a.name||'').localeCompare(b.name||''));
+
+const g = document.getElementById('homeGrid');
+g.innerHTML = prods.length ? prods.map(pcHTML).join('') : `<p style="color:var(--muted);font-weight:600;grid-column:1/-1;padding:24px 0">Aucun article trouvé.</p>`;
 }
 
 function pcHTML(p) {
-  const hasP = p.promoPrice != null && p.promoPrice > 0;
-  let tag = '';
-  if(hasP) {
-    const d = p.sellPrice > p.promoPrice ? `-${Math.round(((p.sellPrice-p.promoPrice)/p.sellPrice)*100)}%` : 'PROMO';
-    tag = `<div class="pc-tag t-promo">${d}</div>`;
-  } else if(p.badge && p.badge !== 'Standard') {
-    const cls = { VEDETTE:'t-vedette', NOUVEAU:'t-new', 'COMBO PACK':'t-combo', 'TOP VENTE':'t-top' }[p.badge.toUpperCase()] || 't-top';
-    tag = `<div class="pc-tag ${cls}">★ ${p.badge.toUpperCase()}</div>`;
-  }
-  
-  const img = p.imageUrl ? `<img src="${p.imageUrl}" loading="lazy"/>` : `<div class="pc-emoji">${getIcon(p.category)}</div>`;
-  const ph = hasP ? `<span class="pc-old">${fmt(p.sellPrice)} DH</span><span class="pc-price">${fmt(p.promoPrice)} DH</span>` : `<span class="pc-price">${fmt(p.sellPrice)} DH</span>`;
-  const traits = (p.traits||[]).slice(0,2).map(t => `<span class="pc-trait" style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);">${t}</span>`).join('');
-  
-  return `<div class="pc fade-up" onclick="openProd('${p.id}')">${tag}<div class="pc-img">${img}</div><div class="pc-body"><div class="pc-name">${p.name}</div><div class="pc-sub">${p.subtitle||p.category||''}</div>${traits ? `<div style="display:flex;gap:4px;margin-bottom:6px">${traits}</div>` : ''}<div class="pc-bottom"><div>${ph}</div><div class="add-btn" onclick="event.stopPropagation();quickAdd('${p.id}')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div></div></div>`;
+const hasP = p.promoPrice != null && p.promoPrice > 0;
+let tag = '';
+if(hasP) {
+const d = p.sellPrice > p.promoPrice ? `-${Math.round(((p.sellPrice-p.promoPrice)/p.sellPrice)*100)}%` : 'PROMO';
+tag = `<div class="pc-tag t-promo">${d}</div>`;
+} else if(p.badge && p.badge !== 'Standard') {
+const cls = { VEDETTE:'t-vedette', NOUVEAU:'t-new', 'COMBO PACK':'t-combo', 'TOP VENTE':'t-top' }[p.badge.toUpperCase()] || 't-top';
+tag = `<div class="pc-tag ${cls}">★ ${p.badge.toUpperCase()}</div>`;
+}
+
+const img = p.imageUrl ? `<img src="${p.imageUrl}" loading="lazy"/>` : `<div class="pc-emoji">🍽️</div>`;
+const ph = hasP
+? `<div><span class="pc-old">${fmt(p.sellPrice)} DH</span><span class="pc-price">${fmt(p.promoPrice)} DH</span></div>`
+: `<div><span class="pc-price">${fmt(p.sellPrice)} DH</span></div>`;
+const traits = (p.traits||[]).slice(0,2).map(t => `<span class="pc-trait" style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);">${t}</span>`).join('');
+
+return `<div class="pc fade-up" onclick="openProd('${p.id}')"><div class="pc-img">${tag}${img}</div><div class="pc-body"><div><div class="pc-name">${p.name}</div><div class="pc-sub">${p.subtitle||p.category||''}</div>${traits ? `<div style="display:flex;gap:4px;margin-bottom:6px">${traits}</div>` : ''}</div><div class="pc-bottom"><div>${ph}</div><div class="add-btn" onclick="event.stopPropagation();quickAdd('${p.id}')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div></div></div>`;
 }
 
 window.openProd = id => {
-  const p = S.products.find(x => x.id === id); if(!p) return;
-  S.pmState = { qty: 1, base: p.promoPrice > 0 ? p.promoPrice : p.sellPrice, sels: {}, prod: p };
-  const img = document.getElementById('pmImg');
-  if(p.imageUrl) { img.src = p.imageUrl; img.style.display = 'block'; } else img.style.display = 'none';
-  
-  let html = '';
-  if(p.traits?.length) html += `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px">${p.traits.map(t=>`<span class="pm-opt">${t}</span>`).join('')}</div>`;
-  html += `<div class="pm-title">${p.name}</div><div class="pm-price">${fmt(S.pmState.base)} DH</div>`;
-  if(p.description) html += `<div class="pm-desc">${p.description}</div>`;
-  
-  if(p.optionGroups?.length) {
-    p.optionGroups.forEach(g => {
-      S.pmState.sels[g.id] = g.selection === 'single' && g.items?.length ? [{name:g.items[0].name, price:g.items[0].price, costPrice:g.items[0].costPrice || g.items[0].cost || 0}] : [];
-      const badge = g.selection === 'single' ? `<span class="pm-req">OBLIGATOIRE</span>` : `<span class="pm-opt">OPTIONNEL</span>`;
-      html += `<div class="pm-group"><div class="pm-g-title">${g.name} ${badge}</div>`;
-      
-      if(g.layout === 'grid') {
-        html += `<div class="opt-grid">${g.items.map((item,i) => `<div class="opt-card ${i===0 && g.selection==='single' ? 'sel':''}" onclick="pmT(this,${g.id},'${item.name.replace(/'/g,"\\'")}',${item.price},${item.costPrice || item.cost || 0},'${g.selection}')"><div class="opt-chk"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>${item.imageUrl ? `<img src="${item.imageUrl}"/>` : ''}<div class="opt-card-t">${item.name}</div>${item.price > 0 ? `<div class="opt-card-p">+${fmt(item.price)} DH</div>` : ''}</div>`).join('')}</div>`;
-      } else if(g.layout === 'list') {
-        html += `<div>${g.items.map((item,i) => `<div class="opt-li ${i===0 && g.selection==='single' ? 'sel':''}" onclick="pmT(this,${g.id},'${item.name.replace(/'/g,"\\'")}',${item.price},${item.costPrice || item.cost || 0},'${g.selection}')"><div class="oli-l">${item.name}</div><div class="oli-r">${item.price > 0 ? `+${fmt(item.price)} DH` : ''}<div class="oli-chk"></div></div></div>`).join('')}</div>`;
-      } else {
-        html += `<div class="opt-scroll">${g.items.map((item,i) => `<div class="opt-pill ${i===0 && g.selection==='single' ? 'sel':''}" onclick="pmT(this,${g.id},'${item.name.replace(/'/g,"\\'")}',${item.price},${item.costPrice || item.cost || 0},'${g.selection}')">${item.name}${item.price > 0 ? ` <span style="font-size:10px;opacity:0.7">+${fmt(item.price)}</span>` : ''}</div>`).join('')}</div>`;
-      }
-      html += `</div>`;
-    });
-  }
-  
-  html += `<div class="pm-group"><div class="pm-g-title">Note <span class="pm-opt">OPTIONNEL</span></div><textarea class="auth-input" id="pmNotes" rows="2" placeholder="Ex: Sans oignons..." style="text-align:left; font-size:15px;"></textarea></div>`;
-  
-  document.getElementById('pmBody').innerHTML = html;
-  updatePmP();
-  document.getElementById('prodOvl').classList.add('show');
-  document.getElementById('prodModal').classList.add('show');
+const p = S.products.find(x => x.id === id); if(!p) return;
+S.pmState = { qty: 1, base: p.promoPrice > 0 ? p.promoPrice : p.sellPrice, sels: {}, prod: p };
+const img = document.getElementById('pmImg');
+if(p.imageUrl) { img.src = p.imageUrl; img.style.display = 'block'; } else img.style.display = 'none';
+
+let html = '';
+if(p.traits?.length) html += `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px">${p.traits.map(t=>`<span class="pm-opt">${t}</span>`).join('')}</div>`;
+html += `<div class="pm-title">${p.name}</div><div class="pm-price">${fmt(S.pmState.base)} DH</div>`;
+if(p.description) html += `<div class="pm-desc">${p.description}</div>`;
+
+if(p.optionGroups?.length) {
+p.optionGroups.forEach(g => {
+S.pmState.sels[g.id] = g.selection === 'single' && g.items?.length ? [{name:g.items[0].name, price:g.items[0].price, costPrice:g.items[0].costPrice || g.items[0].cost || 0}] : [];
+const badge = g.selection === 'single' ? `<span class="pm-req">OBLIGATOIRE</span>` : `<span class="pm-opt">OPTIONNEL</span>`;
+html += `<div class="pm-group"><div class="pm-g-title">${g.name} ${badge}</div>`;
+
+if(g.layout === 'grid') {
+html += `<div class="opt-grid">${g.items.map((item,i) => `<div class="opt-card ${i===0 && g.selection==='single' ? 'sel':''}" onclick="pmT(this,'${g.id}','${item.name.replace(/'/g,"\\'")}',${item.price},${item.costPrice || item.cost || 0},'${g.selection}')"><div class="opt-chk"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>${item.imageUrl ? `<img src="${item.imageUrl}"/>` : ''}<div class="opt-card-t">${item.name}</div>${item.price > 0 ? `<div class="opt-card-p">+${fmt(item.price)} DH</div>` : ''}</div>`).join('')}</div>`;
+} else if(g.layout === 'list') {
+html += `<div>${g.items.map((item,i) => `<div class="opt-li ${i===0 && g.selection==='single' ? 'sel':''}" onclick="pmT(this,'${g.id}','${item.name.replace(/'/g,"\\'")}',${item.price},${item.costPrice || item.cost || 0},'${g.selection}')"><div class="oli-l">${item.name}</div><div class="oli-r">${item.price > 0 ? `+${fmt(item.price)} DH` : ''}<div class="oli-chk"></div></div></div>`).join('')}</div>`;
+} else {
+html += `<div class="opt-scroll">${g.items.map((item,i) => `<div class="opt-pill ${i===0 && g.selection==='single' ? 'sel':''}" onclick="pmT(this,'${g.id}','${item.name.replace(/'/g,"\\'")}',${item.price},${item.costPrice || item.cost || 0},'${g.selection}')">${item.name}${item.price > 0 ? `<span style="font-size:10px;opacity:0.7">+${fmt(item.price)}</span>` : ''}</div>`).join('')}</div>`;
+}
+html += `</div>`;
+});
+}
+
+html += `<div class="pm-group"><div class="pm-g-title">Note <span class="pm-opt">OPTIONNEL</span></div><textarea class="auth-input" id="pmNotes" rows="2" placeholder="Ex: Sans oignons..." style="text-align:left; font-size:15px;"></textarea></div>`;
+
+document.getElementById('pmBody').innerHTML = html;
+updatePmP();
+document.getElementById('prodOvl').classList.add('show');
+document.getElementById('prodModal').classList.add('show');
 };
 
 window.closeProd = () => { document.getElementById('prodOvl').classList.remove('show'); document.getElementById('prodModal').classList.remove('show'); };
 
 window.pmT = (el, gId, name, price, costPrice, type) => {
-  let sels = S.pmState.sels[gId] || [];
-  if(type === 'single') {
-    el.parentElement.querySelectorAll('.opt-pill, .opt-card, .opt-li').forEach(e => e.classList.remove('sel'));
-    el.classList.add('sel');
-    S.pmState.sels[gId] = [{name, price, costPrice}];
-  } else {
-    const g = S.pmState.prod.optionGroups?.find(g => g.id === gId);
-    const lim = g?.maxLimit || 0;
-    const idx = sels.findIndex(s => s.name === name);
-    if(idx > -1) { sels.splice(idx,1); el.classList.remove('sel'); } 
-    else {
-      if(lim > 0 && sels.length >= lim) { toast(`Maximum ${lim} options.`); return; }
-      sels.push({name, price, costPrice}); el.classList.add('sel');
-    }
-    S.pmState.sels[gId] = sels;
-  }
-  updatePmP();
+let sels = S.pmState.sels[gId] || [];
+if(type === 'single') {
+el.parentElement.querySelectorAll('.opt-pill, .opt-card, .opt-li').forEach(e => e.classList.remove('sel'));
+el.classList.add('sel');
+S.pmState.sels[gId] = [{name, price, costPrice}];
+} else {
+const g = S.pmState.prod.optionGroups?.find(g => g.id === gId);
+const lim = g?.maxLimit || 0;
+const idx = sels.findIndex(s => s.name === name);
+if(idx > -1) { sels.splice(idx,1); el.classList.remove('sel'); }
+else {
+if(lim > 0 && sels.length >= lim) { toast(`Maximum ${lim} options.`); return; }
+sels.push({name, price, costPrice}); el.classList.add('sel');
+}
+S.pmState.sels[gId] = sels;
+}
+updatePmP();
 };
 
 window.pmQ = d => { S.pmState.qty = Math.max(1, S.pmState.qty + d); updatePmP(); };
 function updatePmP() {
-  document.getElementById('pmQtyVal').textContent = S.pmState.qty;
-  let ex = 0; Object.values(S.pmState.sels).forEach(g => g.forEach(i => ex += i.price));
-  document.getElementById('pmBtnP').textContent = `${fmt((S.pmState.base + ex) * S.pmState.qty)} DH`;
+document.getElementById('pmQtyVal').textContent = S.pmState.qty;
+let ex = 0; Object.values(S.pmState.sels).forEach(g => g.forEach(i => ex += i.price));
+document.getElementById('pmBtnP').textContent = `${fmt((S.pmState.base + ex) * S.pmState.qty)} DH`;
 }
 
 window.addToCart = () => {
-  const p = S.pmState.prod; const note = document.getElementById('pmNotes')?.value.trim() || '';
-  let ex = 0, choices = [];
-  if(p.optionGroups) p.optionGroups.forEach(g => { (S.pmState.sels[g.id] || []).forEach(sel => { ex += sel.price; choices.push({groupId: g.id, groupName: g.name, itemName: sel.name, price: sel.price, costPrice: sel.costPrice || 0}); }); });
-  const up = S.pmState.base + ex;
-  const key = p.id + '_' + choices.map(c => `${c.groupId}-${c.itemName}`).join('|');
-  const idx = S.cart.findIndex(i => i.key === key && i.note === note);
-  if(idx > -1) S.cart[idx].qty += S.pmState.qty; else S.cart.push({key, product: {id:p.id, name:p.name, imageUrl:p.imageUrl||''}, qty: S.pmState.qty, unitPrice: up, costPrice: p.costPrice || 0, choices, note});
-  saveCart(); closeProd(); toast('Ajouté au panier 🛒'); updateBadge();
+const p = S.pmState.prod; const note = document.getElementById('pmNotes')?.value.trim() || '';
+let ex = 0, choices = [];
+if(p.optionGroups) p.optionGroups.forEach(g => { (S.pmState.sels[g.id] || []).forEach(sel => { ex += sel.price; choices.push({groupId: g.id, groupName: g.name, itemName: sel.name, price: sel.price, costPrice: sel.costPrice || 0}); }); });
+const up = S.pmState.base + ex;
+const key = p.id + '_' + choices.map(c => `${c.groupId}-${c.itemName}`).join('|');
+const idx = S.cart.findIndex(i => i.key === key && i.note === note);
+if(idx > -1) S.cart[idx].qty += S.pmState.qty; else S.cart.push({key, product: {id:p.id, name:p.name, imageUrl:p.imageUrl||''}, qty: S.pmState.qty, unitPrice: up, costPrice: p.costPrice || 0, choices, note});
+saveCart(); closeProd(); toast('Ajouté au panier 🛒'); updateBadge();
 };
 
 window.quickAdd = id => {
-  const p = S.products.find(x => x.id === id); if(!p) return;
-  if(p.optionGroups?.length) { openProd(id); return; }
-  const price = p.promoPrice > 0 ? p.promoPrice : p.sellPrice;
-  const key = p.id + '_q';
-  const idx = S.cart.findIndex(i => i.key === key);
-  if(idx > -1) S.cart[idx].qty += 1; else S.cart.push({key, product: {id:p.id, name:p.name, imageUrl:p.imageUrl||''}, qty: 1, unitPrice: price, costPrice: p.costPrice || 0, choices: [], note: ''});
-  saveCart(); toast(p.name + ' ajouté !'); updateBadge();
+const p = S.products.find(x => x.id === id); if(!p) return;
+if(p.optionGroups?.length) { openProd(id); return; }
+const price = p.promoPrice > 0 ? p.promoPrice : p.sellPrice;
+const key = p.id + '_q';
+const idx = S.cart.findIndex(i => i.key === key);
+if(idx > -1) S.cart[idx].qty += 1; else S.cart.push({key, product: {id:p.id, name:p.name, imageUrl:p.imageUrl||''}, qty: 1, unitPrice: price, costPrice: p.costPrice || 0, choices: [], note: ''});
+saveCart(); toast(p.name + ' ajouté !'); updateBadge();
 };
 
 function saveCart() { localStorage.setItem('tasco_cart', JSON.stringify(S.cart)); }
@@ -833,460 +859,431 @@ updateBadge();
 window.clearCart = () => { if(!confirm('Vider le panier ?')) return; S.cart = []; S.promo = null; saveCart(); updateBadge(); renderCartScreen(); toast('Panier vidé'); };
 
 function renderCartScreen() {
-  const content = document.getElementById('cartContent'); const cta = document.getElementById('cartCta');
-  if(!S.cart.length) {
-    content.innerHTML = `<div class="empty-state"><div class="es-ic">🛒</div><h3>Panier vide</h3><p>Votre panier est vide. Découvrez notre menu et laissez-vous tenter !</p><button class="main-btn" style="width: auto; padding: 14px 24px;" onclick="switchTab('home')">Découvrir le menu</button></div>`;
-    cta.style.display = 'none'; return;
-  }
-  
-  cta.style.display = 'block';
-  let html = `<div class="cart-items-card">`;
-  S.cart.forEach((item, i) => {
-    const img = item.product.imageUrl ? `<img class="ci-img" src="${item.product.imageUrl}" loading="lazy"/>` : `<div class="ci-img">🍔</div>`;
-    const meta = [...item.choices.map(c => `<span style="color:var(--muted);">${c.groupName}:</span> <b style="color:var(--text);">${c.itemName}</b>`), item.note ? `Note: ${item.note}` : null].filter(Boolean).join('<br>');
-    html += `<div class="cart-item">${img}<div class="ci-body"><div class="ci-name">${item.product.name}</div>${meta ? `<div class="ci-meta">${meta}</div>` : ''}<div class="ci-price">${fmt(item.unitPrice * item.qty)} DH</div></div><div class="ci-ctrl"><div class="qty-ctrl"><button onclick="cartQ(${i},-1)">−</button><span>${item.qty}</span><button onclick="cartQ(${i},1)">+</button></div><button class="ci-del" onclick="cartQ(${i},-999)">Retirer</button></div></div>`;
-  });
-  html += `</div>`;
-  
-  html += `<div class="promo-card" style="margin-top:12px"><div class="promo-row" onclick="togglePromo()"><div class="promo-icon"><svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div><div class="promo-txt" style="flex:1;"><strong>Vous avez un code promo ?</strong><span>${S.promo ? 'Appliqué: ' + S.promo.code : 'Saisissez votre code'}</span></div><svg class="promo-chevron" style="width:16px; stroke:var(--muted); fill:none; stroke-width:2.5; transition:0.2s; transform:${S.promoOpen?'rotate(180deg)':'rotate(0)'}" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>${S.promoOpen ? `<div class="promo-inp-row"><input type="text" id="promoInp" class="promo-inp" placeholder="CODE PROMO" value="${S.promo?.code||''}"><button class="promo-apply" onclick="applyPromo()">Appliquer</button></div>` : ''}</div>`;
-  
-  const sub = S.cart.reduce((s,i) => s + i.qty * i.unitPrice, 0);
-  let disc = 0;
-  if(S.promo) disc = S.promo.type === '%' ? Math.round(sub * (S.promo.value / 100)) : S.promo.value;
-  const total = sub - disc;
-  
-  html += `<div class="summary-card"><div class="sum-row"><span>Sous-total (${S.cart.reduce((s,i)=>s+i.qty,0)} articles)</span><span class="sv">${fmt(sub)} DH</span></div>${disc ? `<div class="sum-row discount"><span>Promo</span><span class="sv">-${fmt(disc)} DH</span></div>` : ''}<div class="sum-row"><span>Livraison</span><span class="sv" style="color:var(--muted)">Calculée à l'étape suivante</span></div><div class="sum-row total"><span>Sous-total</span><span class="sv">${fmt(Math.max(0, total))} DH</span></div></div>`;
-  
-  content.innerHTML = html;
-  document.getElementById('ctaTotal').textContent = fmt(Math.max(0, total)) + ' DH';
+const content = document.getElementById('cartContent'); const cta = document.getElementById('cartCta');
+if(!S.cart.length) {
+content.innerHTML = `<div class="empty-state"><div class="es-ic">🛒</div><h3>Panier vide</h3><p>Votre panier est vide. Découvrez notre menu et laissez-vous tenter !</p><button class="main-btn" style="width: auto; padding: 14px 24px;" onclick="switchTab('home')">Découvrir le menu</button></div>`;
+cta.style.display = 'none'; return;
+}
+
+cta.style.display = 'block';
+let html = `<div class="cart-items-card">`;
+S.cart.forEach((item, i) => {
+const img = item.product.imageUrl ? `<img class="ci-img" src="${item.product.imageUrl}" loading="lazy"/>` : `<div class="ci-img">🍔</div>`;
+const meta = [...item.choices.map(c => c.itemName), item.note ? `Note: ${item.note}` : ''].filter(Boolean).join(' • ');
+html += `<div class="cart-item">${img}<div class="ci-body"><div class="ci-name">${item.product.name}</div>${meta ? `<div class="ci-meta">${meta}</div>` : ''}<div class="ci-price">${fmt(item.unitPrice * item.qty)} DH</div></div><div class="ci-ctrl"><div class="qty-ctrl"><button onclick="cartQ(${i},-1)">−</button><span>${item.qty}</span><button onclick="cartQ(${i},1)">+</button></div><button class="ci-del" onclick="cartQ(${i},-999)">Retirer</button></div></div>`;
+});
+html += `</div>`;
+
+html += `<div class="promo-card" style="margin-top:12px"><div class="promo-row" onclick="togglePromo()"><div class="promo-icon"><svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div><div class="promo-txt" style="flex:1;"><strong>Vous avez un code promo ?</strong><span>${S.promo ? 'Appliqué: ' + S.promo.code : 'Saisissez votre code'}</span></div><svg class="promo-chevron" style="width:16px; stroke:var(--muted); fill:none; stroke-width:2.5; transition:0.2s; transform:${S.promoOpen?'rotate(180deg)':'rotate(0)'}" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>${S.promoOpen ? `<div class="promo-inp-row"><input type="text" id="promoInp" class="promo-inp" placeholder="CODE PROMO" value="${S.promo?.code||''}"><button class="promo-apply" onclick="applyPromo()">Appliquer</button></div>` : ''}</div>`;
+
+const sub = S.cart.reduce((s,i) => s + i.qty * i.unitPrice, 0);
+let disc = 0;
+if(S.promo) disc = S.promo.type === '%' ? Math.round(sub * (S.promo.value / 100)) : S.promo.value;
+const total = sub - disc;
+
+html += `<div class="summary-card"><div class="sum-row"><span>Sous-total (${S.cart.reduce((s,i)=>s+i.qty,0)} articles)</span><span class="sv">${fmt(sub)} DH</span></div>${disc ? `<div class="sum-row discount"><span>Promo</span><span class="sv">-${fmt(disc)} DH</span></div>` : ''}<div class="sum-row"><span>Livraison</span><span class="sv" style="color:var(--muted)">Calculée à l'étape suivante</span></div><div class="sum-row total"><span>Sous-total</span><span class="sv">${fmt(Math.max(0, total))} DH</span></div></div>`;
+
+content.innerHTML = html;
+document.getElementById('ctaTotal').textContent = fmt(Math.max(0, total)) + ' DH';
 }
 
 window.cartQ = (i, d) => { S.cart[i].qty += d; if(S.cart[i].qty <= 0) S.cart.splice(i,1); saveCart(); updateBadge(); renderCartScreen(); };
 window.togglePromo = () => { S.promoOpen = !S.promoOpen; renderCartScreen(); };
 window.applyPromo = () => {
-  const code = (document.getElementById('promoInp')?.value || '').trim().toUpperCase();
-  if(!code) { toast('Entrez un code'); return; }
-  const pr = S.promosDB.find(p => p.code === code);
-  if(!pr) { toast('Code invalide ❌'); return; }
-  if(pr.maxUses > 0 && pr.timesUsed >= pr.maxUses) { toast('Ce code a expiré ❌'); return; }
-  S.promo = pr; S.promoOpen = false; toast(`Code appliqué ! 🎉`); renderCartScreen();
+const code = (document.getElementById('promoInp')?.value || '').trim().toUpperCase();
+if(!code) { toast('Entrez un code'); return; }
+const pr = S.promosDB.find(p => p.code === code);
+if(!pr) { toast('Code invalide ❌'); return; }
+if(pr.maxUses > 0 && pr.timesUsed >= pr.maxUses) { toast('Ce code a expiré ❌'); return; }
+S.promo = pr; S.promoOpen = false; toast('Code appliqué ! 🎉'); renderCartScreen();
 };
 
-window.goToCheckout = () => { 
-  S.checkoutStep = 1; 
-  switchTab('checkout'); 
+window.goToCheckout = () => {
+S.checkoutStep = 1;
+switchTab('checkout');
 };
 
 function getDistKm(lat1, lng1, lat2, lng2) {
-  const R = 6371, dLat = (lat2-lat1)*Math.PI/180, dLng = (lng2-lng1)*Math.PI/180;
-  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+const R = 6371, dLat = (lat2-lat1)*Math.PI/180, dLng = (lng2-lng1)*Math.PI/180;
+const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
 function calcDeliveryFee(lat, lng, cartTotal) {
-  if(!S.deliveryConfig || !S.deliveryConfig.origin) return 20; 
-  if(S.deliveryConfig.freeDeliveryThreshold > 0 && cartTotal >= S.deliveryConfig.freeDeliveryThreshold) return 0; 
-  
-  const [oLat, oLng] = S.deliveryConfig.origin.split(',').map(Number);
-  const dist = getDistKm(oLat, oLng, lat, lng);
-  
-  if(dist <= (S.deliveryConfig.tier1Km || 5)) return S.deliveryConfig.tier1Fee || 15;
-  if(dist <= (S.deliveryConfig.tier2Km || 10)) return S.deliveryConfig.tier2Fee || 25;
-  return S.deliveryConfig.tier3Fee || 40;
+if(!S.deliveryConfig || !S.deliveryConfig.origin) return 20;
+if(S.deliveryConfig.freeDeliveryThreshold > 0 && cartTotal >= S.deliveryConfig.freeDeliveryThreshold) return 0;
+
+const [oLat, oLng] = S.deliveryConfig.origin.split(',').map(Number);
+const dist = getDistKm(oLat, oLng, lat, lng);
+
+if(dist <= (S.deliveryConfig.tier1Km || 5)) return S.deliveryConfig.tier1Fee || 15;
+if(dist <= (S.deliveryConfig.tier2Km || 10)) return S.deliveryConfig.tier2Fee || 25;
+return S.deliveryConfig.tier3Fee || 40;
 }
 
 let dMap = null, dMarker = null, mapAuto = null;
 
 window.useGPS = () => {
-  if(!navigator.geolocation) { toast('GPS non disponible'); return; }
-  toast('Localisation en cours...');
-  navigator.geolocation.getCurrentPosition(pos => {
-    revGeo(pos.coords.latitude, pos.coords.longitude);
-  }, () => toast('Impossible. Utilisez la carte.'));
+if(!navigator.geolocation) { toast('GPS non disponible'); return; }
+toast('Localisation en cours...');
+navigator.geolocation.getCurrentPosition(pos => {
+revGeo(pos.coords.latitude, pos.coords.longitude);
+}, () => toast('Impossible. Utilisez la carte.'));
 };
-window.openMapPicker = () => { 
-  document.getElementById('mapOvl').classList.add('show');
-  document.getElementById('mapModal').classList.add('show');
-  setTimeout(() => initMap(), 300); 
+window.openMapPicker = () => {
+document.getElementById('mapOvl').classList.add('show');
+document.getElementById('mapModal').classList.add('show');
+setTimeout(() => initMap(), 300);
 };
 window.closeMapPicker = () => {
-  document.getElementById('mapOvl').classList.remove('show');
-  document.getElementById('mapModal').classList.remove('show');
+document.getElementById('mapOvl').classList.remove('show');
+document.getElementById('mapModal').classList.remove('show');
 };
 window.resetLoc = () => { S.selectedLoc = null; renderCheckout(); };
 
 function initMap() {
-  if(!window.google || dMap) return;
-  const el = document.getElementById('deliveryMap'); if(!el) return;
-  const center = { lat: 31.6295, lng: -7.9811 };
-  dMap = new google.maps.Map(el, { center, zoom: 14, disableDefaultUI: true, zoomControl: true, styles: [{featureType:'poi', elementType:'labels', stylers:[{visibility:'off'}]}]});
-  dMarker = new google.maps.Marker({ position: center, map: dMap, draggable: true, icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#FF5A00', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 3, scale: 10 }});
-  dMarker.addListener('dragend', () => { const p = dMarker.getPosition(); revGeo(p.lat(), p.lng(), true); });
-  dMap.addListener('click', e => { dMarker.setPosition(e.latLng); revGeo(e.latLng.lat(), e.latLng.lng(), true); });
-  
-  const si = document.getElementById('mapSearchInput');
-  if(si && !mapAuto) {
-    mapAuto = new google.maps.places.Autocomplete(si, { componentRestrictions: { country: 'ma' }, fields: ['geometry', 'formatted_address'] });
-    mapAuto.addListener('place_changed', () => {
-      const pl = mapAuto.getPlace();
-      if(pl.geometry) { const lat = pl.geometry.location.lat(), lng = pl.geometry.location.lng(); dMap.panTo({lat, lng}); dMap.setZoom(16); dMarker.setPosition({lat, lng}); revGeo(lat, lng, true); }
-    });
-  }
+if(!window.google || dMap) return;
+const el = document.getElementById('deliveryMap'); if(!el) return;
+const center = MARRAKECH_CENTER;
+// ✅ MARRAKECH CITY LIMITS: lock pan to the bounding box and prevent zooming out to the ocean.
+dMap = new google.maps.Map(el, {
+center,
+zoom: 14,
+minZoom: 12,
+disableDefaultUI: true,
+zoomControl: true,
+restriction: { latLngBounds: MARRAKECH_BOUNDS, strictBounds: true },
+styles: [{featureType:'poi', elementType:'labels', stylers:[{visibility:'off'}]}]
+});
+dMarker = new google.maps.Marker({ position: center, map: dMap, draggable: true, icon: { path: google.maps.SymbolPath.CIRCLE, fillColor: '#FF5A00', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 3, scale: 10 }});
+dMarker.addListener('dragend', () => { const p = dMarker.getPosition(); revGeo(p.lat(), p.lng(), true); });
+dMap.addListener('click', e => { dMarker.setPosition(e.latLng); revGeo(e.latLng.lat(), e.latLng.lng(), true); });
+
+const si = document.getElementById('mapSearchInput');
+if(si && !mapAuto) {
+// ✅ Prioritise local Marrakech streets and restrict predictions to the city box.
+mapAuto = new google.maps.places.Autocomplete(si, {
+componentRestrictions: { country: 'ma' },
+bounds: new google.maps.LatLngBounds(
+{ lat: MARRAKECH_BOUNDS.south, lng: MARRAKECH_BOUNDS.west },
+{ lat: MARRAKECH_BOUNDS.north, lng: MARRAKECH_BOUNDS.east }
+),
+strictBounds: true,
+fields: ['geometry', 'formatted_address']
+});
+mapAuto.addListener('place_changed', () => {
+const pl = mapAuto.getPlace();
+if(pl.geometry) { const lat = pl.geometry.location.lat(), lng = pl.geometry.location.lng(); dMap.panTo({lat, lng}); dMap.setZoom(16); dMarker.setPosition({lat, lng}); revGeo(lat, lng, true); }
+});
+}
 }
 
-window.confirmMapLoc = () => { 
-  if(!dMarker) return; 
-  const p = dMarker.getPosition(); 
-  revGeo(p.lat(), p.lng(), false); 
-  closeMapPicker(); 
+window.confirmMapLoc = () => {
+if(!dMarker) return;
+const p = dMarker.getPosition();
+revGeo(p.lat(), p.lng(), false);
 };
 
 function revGeo(lat, lng, fromMap=false) {
-  new google.maps.Geocoder().geocode({location: {lat, lng}}, (results, status) => {
-    if(status === 'OK' && results[0]) {
-      const address = results[0].formatted_address;
-      S.selectedLoc = { address, lat, lng };
-      renderCheckout();
-      if(!fromMap) toast('📍 Position confirmée');
-    } else toast('Adresse introuvable, déplacez le pin.');
-  });
+// ✅ Reject any point outside the Marrakech delivery zone.
+if(!isInMarrakech(lat, lng)) {
+toast('Nous livrons uniquement à Marrakech 🛵');
+return;
+}
+new google.maps.Geocoder().geocode({location: {lat, lng}}, (results, status) => {
+if(status === 'OK' && results[0]) {
+const address = results[0].formatted_address;
+S.selectedLoc = { address, lat, lng };
+renderCheckout();
+if(!fromMap) { toast('📍 Position confirmée'); closeMapPicker(); }
+} else toast('Adresse introuvable, déplacez le pin.');
+});
 }
 
 function updateStepProgress() {
-  [1,2].forEach(i => {
-    const el = document.getElementById('sp'+i); if(!el) return;
-    el.className = 'step-item';
-    if(i < S.checkoutStep) el.className = 'step-item done';
-    else if(i === S.checkoutStep) el.className = 'step-item active';
-  });
+[1,2].forEach(i => {
+const el = document.getElementById('sp'+i); if(!el) return;
+el.className = 'step-item';
+if(i < S.checkoutStep) el.className = 'step-item done';
+else if(i === S.checkoutStep) el.className = 'step-item active';
+});
 }
 
-function renderCheckout() {
-  updateStepProgress();
-  const content = document.getElementById('checkoutContent'); 
-  const cta = document.getElementById('checkoutCtaRow');
-  const btn = document.getElementById('checkoutBtn');
-  cta.style.display = 'block';
-  
-  const sub = S.cart.reduce((s,i) => s + i.qty * i.unitPrice, 0);
-  let disc = 0; if(S.promo) disc = S.promo.type === '%' ? Math.round(sub * (S.promo.value / 100)) : S.promo.value;
-  
-  if(S.checkoutStep === 1) {
-    btn.textContent = 'Continuer vers le résumé';
-    
-    // ✅ FIXED: Replaced static text with actual functional inputs for Name and Phone
-    content.innerHTML = `
-    <div class="checkout-section">
-      <span class="cs-label">Vos informations</span>
-      <div style="background:var(--surface); border-radius:14px; border:1px solid var(--border); padding:16px; margin-bottom:24px; box-shadow:var(--shadow);">
-        <input type="text" id="checkoutName" class="auth-input" placeholder="Votre nom complet" value="${S.userDoc?.name && S.userDoc.name !== 'Client Invité' ? S.userDoc.name : ''}" style="margin-bottom:12px; padding:12px;">
-        <input type="tel" id="checkoutPhone" class="auth-input" placeholder="Votre numéro de téléphone (ex: 06...)" value="${S.userDoc?.phone || ''}" style="margin-bottom:0; padding:12px;">
-      </div>
-      
-      <span class="cs-label">Comment souhaitez-vous être livré ?</span>
-      <div style="background:var(--surface); border-radius:var(--r-lg); border:1px solid var(--border); overflow:hidden; box-shadow:var(--shadow);">
-        <div class="acc-item" onclick="useGPS()" style="border-bottom:1px solid var(--border);">
-          <div class="acc-ic" style="background:var(--orange-light); color:var(--orange);"><svg viewBox="0 0 24 24" style="width:16px;stroke:currentColor;fill:none;stroke-width:2.5;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div>
-          <div class="acc-body"><div class="acc-lbl">Ma position GPS</div><div class="acc-sub">Localisation rapide et précise</div></div>
-        </div>
-        <div class="acc-item" onclick="openMapPicker()">
-          <div class="acc-ic" style="background:var(--blue-light); color:var(--blue);"><svg viewBox="0 0 24 24" style="width:16px;stroke:currentColor;fill:none;stroke-width:2.5;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-          <div class="acc-body"><div class="acc-lbl">Sur la carte</div><div class="acc-sub">Choisir un point précis</div></div>
-        </div>
-      </div>
-      <div class="loc-confirmed ${S.selectedLoc?'show':''}" id="locConf" style="margin-top:20px;">
-        <div class="lc-icon">📍</div>
-        <div class="lc-body">
-          <div class="lc-addr">${S.selectedLoc?.address||'—'}</div>
-          <span class="lc-change" onclick="resetLoc()">Changer de position</span>
-        </div>
-      </div>
-    </div>`;
-  } else if(S.checkoutStep === 2) {
-    const delivery = S.selectedLoc ? calcDeliveryFee(S.selectedLoc.lat, S.selectedLoc.lng, sub - disc) : 0;
-    const total = Math.max(0, sub - disc) + delivery;
-    
-    let delHTML = `<span class="sv">${fmt(delivery)} DH</span>`;
-    if(delivery === 0 && S.deliveryConfig?.freeDeliveryThreshold > 0) delHTML = `<span class="sv" style="color:var(--green)">GRATUITE</span>`;
+// ── CHECKOUT AUTO-FILL & PROFILE SYNC ──
+// As the user types name/phone in Step 1 we save to their tasco_users profile
+// (debounced) so it pre-fills next time and shows correctly on the Profile tab.
+let _ckSaveT = null;
+window.onCheckoutInfoInput = () => {
+const cName = (document.getElementById('checkoutName')?.value || '').trim();
+const cPhone = (document.getElementById('checkoutPhone')?.value || '').trim();
+if(!S.userDoc) S.userDoc = {};
+S.userDoc.name = cName;
+S.userDoc.phone = cPhone;
+clearTimeout(_ckSaveT);
+_ckSaveT = setTimeout(async () => {
+if(!S.user) return;
+if(!cName && !cPhone) return;
+try {
+await setDoc(doc(db, 'tasco_users', S.user.uid), { name: cName, phone: cPhone }, { merge: true });
+} catch(e) { console.warn('Profile autosave failed:', e); }
+}, 700);
+};
 
-    content.innerHTML = `<div class="checkout-section"><span class="cs-label">Adresse confirmée</span><div class="loc-confirmed show" style="margin-top:0"><div class="lc-icon">📍</div><div class="lc-body"><div class="lc-addr" style="margin-bottom:0">${S.selectedLoc.address}</div></div></div></div><div class="checkout-section" style="margin-top:0"><span class="cs-label">Récapitulatif</span><div class="summary-card" style="margin:0"><div class="sum-row"><span>Sous-total</span><span class="sv">${fmt(sub)} DH</span></div>${disc ? `<div class="sum-row discount"><span>Promo</span><span class="sv">-${fmt(disc)} DH</span></div>` : ''}<div class="sum-row"><span>Livraison</span>${delHTML}</div><div class="sum-row total"><span>Total à payer (Cash)</span><span class="sv">${fmt(total)} DH</span></div></div></div>`;
-    btn.textContent = `Confirmer la commande · ${fmt(total)} DH`;
-  }
+function renderCheckout() {
+updateStepProgress();
+const content = document.getElementById('checkoutContent');
+const cta = document.getElementById('checkoutCtaRow');
+const btn = document.getElementById('checkoutBtn');
+cta.style.display = 'block';
+
+const sub = S.cart.reduce((s,i) => s + i.qty * i.unitPrice, 0);
+let disc = 0; if(S.promo) disc = S.promo.type === '%' ? Math.round(sub * (S.promo.value / 100)) : S.promo.value;
+
+if(S.checkoutStep === 1) {
+btn.textContent = 'Continuer vers le résumé';
+
+content.innerHTML = `<div class="checkout-section"><span class="cs-label">Vos informations</span><div style="background:var(--surface); border-radius:14px; border:1px solid var(--border); padding:16px; margin-bottom:24px; box-shadow:var(--shadow);"><input type="text" id="checkoutName" class="auth-input" placeholder="Votre nom complet" value="${S.userDoc?.name && S.userDoc.name !== 'Client Invité' ? S.userDoc.name : ''}" oninput="onCheckoutInfoInput()" style="margin-bottom:12px; padding:12px;"><input type="tel" id="checkoutPhone" class="auth-input" placeholder="Votre numéro de téléphone (ex: 06...)" value="${S.userDoc?.phone || ''}" oninput="onCheckoutInfoInput()" style="margin-bottom:0; padding:12px;"></div><span class="cs-label">Comment souhaitez-vous être livré ?</span><div style="background:var(--surface); border-radius:var(--r-lg); border:1px solid var(--border); overflow:hidden; box-shadow:var(--shadow);"><div class="acc-item" onclick="useGPS()" style="border-bottom:1px solid var(--border);"><div class="acc-ic" style="background:var(--orange-light); color:var(--orange);"><svg viewBox="0 0 24 24" style="width:16px;stroke:currentColor;fill:none;stroke-width:2.5;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div><div class="acc-body"><div class="acc-lbl">Ma position GPS</div><div class="acc-sub">Localisation rapide et précise</div></div></div><div class="acc-item" onclick="openMapPicker()"><div class="acc-ic" style="background:var(--blue-light); color:var(--blue);"><svg viewBox="0 0 24 24" style="width:16px;stroke:currentColor;fill:none;stroke-width:2.5;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="acc-body"><div class="acc-lbl">Sur la carte</div><div class="acc-sub">Choisir un point précis</div></div></div></div><div class="loc-confirmed ${S.selectedLoc?'show':''}" id="locConf" style="margin-top:20px;"><div class="lc-icon">📍</div><div class="lc-body"><div class="lc-addr">${S.selectedLoc?.address||'—'}</div><span class="lc-change" onclick="resetLoc()">Changer de position</span></div></div></div>`;
+} else if(S.checkoutStep === 2) {
+const delivery = S.selectedLoc ? calcDeliveryFee(S.selectedLoc.lat, S.selectedLoc.lng, sub - disc) : 0;
+const total = Math.max(0, sub - disc) + delivery;
+
+let delHTML = `<span class="sv">${fmt(delivery)} DH</span>`;
+if(delivery === 0 && S.deliveryConfig?.freeDeliveryThreshold > 0) delHTML = `<span class="sv" style="color:var(--green)">GRATUITE</span>`;
+
+content.innerHTML = `<div class="checkout-section"><span class="cs-label">Adresse confirmée</span><div class="loc-confirmed show" style="margin-top:0"><div class="lc-icon">📍</div><div class="lc-body"><div class="lc-addr" style="margin-bottom:0">${S.selectedLoc.address}</div></div></div></div><div class="checkout-section" style="margin-top:0"><span class="cs-label">Récapitulatif</span><div class="summary-card" style="margin:0"><div class="sum-row"><span>Sous-total</span><span class="sv">${fmt(sub)} DH</span></div>${disc ? `<div class="sum-row discount"><span>Promo</span><span class="sv">-${fmt(disc)} DH</span></div>` : ''}<div class="sum-row"><span>Livraison</span>${delHTML}</div><div class="sum-row total"><span>Total à payer (Cash)</span><span class="sv">${fmt(total)} DH</span></div></div></div>`;
+btn.textContent = `Confirmer la commande · ${fmt(total)} DH`;
+}
 }
 
 window.checkoutNext = async () => {
-  if(S.checkoutStep === 1) {
-    // ✅ FIXED: Grab input values and enforce that they are filled
-    const cName = document.getElementById('checkoutName').value.trim();
-    const cPhone = document.getElementById('checkoutPhone').value.trim();
-    
-    if(!cName || !cPhone) { toast('Veuillez saisir votre nom et téléphone'); return; }
-    
-    // Save to local state so we can pass it to the final order
-    if (!S.userDoc) S.userDoc = {};
-    S.userDoc.name = cName;
-    S.userDoc.phone = cPhone;
+if(S.checkoutStep === 1) {
+const cName = document.getElementById('checkoutName').value.trim();
+const cPhone = document.getElementById('checkoutPhone').value.trim();
 
-    if(!S.selectedLoc) { toast('📍 Sélectionnez votre adresse'); return; }
-    S.checkoutStep = 2; renderCheckout();
-  } else if(S.checkoutStep === 2) {
-    await placeOrder();
-  }
+if(!cName || !cPhone) { toast('Veuillez saisir votre nom et téléphone'); return; }
+
+if (!S.userDoc) S.userDoc = {};
+S.userDoc.name = cName;
+S.userDoc.phone = cPhone;
+
+// Persist immediately so the profile is in sync even before ordering.
+if(S.user) {
+try { await setDoc(doc(db, 'tasco_users', S.user.uid), { name: cName, phone: cPhone }, { merge: true }); }
+catch(e) { console.warn('Profile sync failed:', e); }
+}
+
+if(!S.selectedLoc) { toast('📍 Sélectionnez votre adresse'); return; }
+S.checkoutStep = 2; renderCheckout();
+} else if(S.checkoutStep === 2) {
+await placeOrder();
+}
 };
 
 async function placeOrder() {
-  if(!S.storeOnline) { toast('La boutique est fermée 😕'); return; }
-  const btn = document.getElementById('checkoutBtn'); btn.textContent = 'ENVOI EN COURS...'; btn.disabled = true;
-  
-  const sub = S.cart.reduce((s,i) => s + i.qty * i.unitPrice, 0);
-  let disc = 0; if(S.promo) disc = S.promo.type === '%' ? Math.round(sub * (S.promo.value / 100)) : S.promo.value;
-  const delivery = calcDeliveryFee(S.selectedLoc.lat, S.selectedLoc.lng, sub - disc);
-  const total = Math.max(0, sub - disc) + delivery;
-  
-  const orderData = {
-    customerName: S.userDoc?.name || 'Client Invité', 
-    customerPhone: S.userDoc?.phone || 'Non renseigné', 
-    deliveryAddress: S.selectedLoc.address, deliveryCoords: { lat: S.selectedLoc.lat, lng: S.selectedLoc.lng },
-    deliveryFee: delivery, subtotal: sub, discount: disc, totalPrice: total, totalItems: S.cart.reduce((s,i)=>s+i.qty,0),
-    promoCode: S.promo?.code || null, status: 'Pending', timestamp: new Date().toISOString(),
-    customerId: S.user?.uid || 'anonymous', driverEmail: '',
-    cart: S.cart.map(c => ({
-        product: {id: c.product.id, name: c.product.name, imageUrl: c.product.imageUrl}, 
-        qty: c.qty, 
-        unitPrice: c.unitPrice, 
-        costPrice: c.costPrice || 0, 
-        modularChoices: c.choices||[], 
-        note: c.note||''
-    }))
-  };
+if(!S.storeOnline) { toast('La boutique est fermée 😕'); return; }
+const btn = document.getElementById('checkoutBtn'); btn.textContent = 'ENVOI EN COURS...'; btn.disabled = true;
 
-  try {
-    const ref = await addDoc(collection(db, 'orders'), orderData);
-    if(S.promo) { await updateDoc(doc(db, "promos", S.promo.id), { timesUsed: (S.promo.timesUsed || 0) + 1 }); }
-    
-    if(S.user) {
-      const newPts = (S.userDoc?.points || 0) + Math.floor(total);
-      // ✅ FIXED: Also update the user's name and phone in their firebase profile permanently
-      await updateDoc(doc(db, 'tasco_users', S.user.uid), { 
-        name: S.userDoc.name,
-        phone: S.userDoc.phone,
-        points: newPts, 
-        lastAddress: S.selectedLoc.address, 
-        lastLat: S.selectedLoc.lat, 
-        lastLng: S.selectedLoc.lng 
-      });
-      S.userDoc.points = newPts;
-    }
-    
-    S.cart = []; S.promo = null; saveCart(); updateBadge();
-    renderConfirmed(ref.id);
-    switchTab('confirmed');
-  } catch(e) { console.error(e); toast('Erreur. Réessayez.'); btn.textContent = 'CONFIRMER LA COMMANDE'; btn.disabled = false; }
+const sub = S.cart.reduce((s,i) => s + i.qty * i.unitPrice, 0);
+let disc = 0; if(S.promo) disc = S.promo.type === '%' ? Math.round(sub * (S.promo.value / 100)) : S.promo.value;
+const delivery = calcDeliveryFee(S.selectedLoc.lat, S.selectedLoc.lng, sub - disc);
+const total = Math.max(0, sub - disc) + delivery;
+
+const orderData = {
+customerName: S.userDoc?.name || 'Client Invité',
+customerPhone: S.userDoc?.phone || 'Non renseigné',
+deliveryAddress: S.selectedLoc.address, deliveryCoords: { lat: S.selectedLoc.lat, lng: S.selectedLoc.lng },
+deliveryFee: delivery, subtotal: sub, discount: disc, totalPrice: total, totalItems: S.cart.reduce((s,i)=>s+i.qty,0),
+promoCode: S.promo?.code || null, status: 'Pending', timestamp: new Date().toISOString(),
+customerId: S.user?.uid || 'anonymous', driverEmail: '',
+cart: S.cart.map(c => ({
+product: {id: c.product.id, name: c.product.name, imageUrl: c.product.imageUrl},
+qty: c.qty,
+unitPrice: c.unitPrice,
+costPrice: c.costPrice || 0,
+modularChoices: c.choices||[],
+note: c.note||''
+}))
+};
+
+try {
+const ref = await addDoc(collection(db, 'orders'), orderData);
+if(S.promo) { await updateDoc(doc(db, "promos", S.promo.id), { timesUsed: (S.promo.timesUsed || 0) + 1 }); }
+
+if(S.user) {
+const newPts = (S.userDoc?.points || 0) + Math.floor(total);
+// ✅ SUCCESS PAGE CRASH FIX: setDoc(..., {merge:true}) safely creates the
+// profile document for brand-new guests instead of throwing on updateDoc.
+await setDoc(doc(db, 'tasco_users', S.user.uid), {
+name: S.userDoc?.name || 'Client Invité',
+phone: S.userDoc?.phone || 'Non renseigné',
+points: newPts,
+lastAddress: S.selectedLoc.address,
+lastLat: S.selectedLoc.lat,
+lastLng: S.selectedLoc.lng,
+createdAt: S.userDoc?.createdAt || new Date().toISOString()
+}, { merge: true });
+if(!S.userDoc) S.userDoc = {};
+S.userDoc.points = newPts;
+}
+
+S.cart = []; S.promo = null; saveCart(); updateBadge();
+renderConfirmed(ref.id);
+switchTab('confirmed');
+} catch(e) { console.error(e); toast('Erreur. Réessayez.'); btn.textContent = 'CONFIRMER LA COMMANDE'; btn.disabled = false; }
 }
 
 function renderConfirmed(orderId) {
-  const shortId = '#TSC' + orderId.slice(-4).toUpperCase();
-  document.getElementById('confirmedContent').innerHTML = `<div class="confirmed-anim"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div class="confirmed-title">COMMANDE REÇUE ! 🎉</div><div class="confirmed-sub">Merci ${S.userDoc?.name || 'Client'}. Nous préparons votre commande.</div><div class="confirmed-oid"><p>NUMÉRO DE COMMANDE</p><h3>${shortId}</h3></div><button class="main-btn" style="width: 100%; justify-content:center; text-transform:uppercase; letter-spacing:0.5px;" onclick="switchTab('orders')">SUIVRE MA COMMANDE</button>`;
+const shortId = '#TSC' + orderId.slice(-4).toUpperCase();
+document.getElementById('confirmedContent').innerHTML = `<div class="confirmed-anim"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div class="confirmed-title">COMMANDE REÇUE ! 🎉</div><div class="confirmed-sub">Merci ${S.userDoc?.name || 'Client'}. Nous préparons votre commande.</div><div class="confirmed-oid"><p>NUMÉRO DE COMMANDE</p><h3>${shortId}</h3></div><button class="main-btn" style="width: 100%; justify-content:center; text-transform:uppercase; letter-spacing:0.5px;" onclick="switchTab('orders')">SUIVRE MA COMMANDE</button>`;
 }
 
 const ST_STEPS = [
-  {key:'Pending', lb:'Confirmée', sub:'', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'},
-  {key:'Preparing', lb:'Préparation', sub:'', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/></svg>'},
-  {key:'Out for Delivery', lb:'En route', sub:'Le livreur est en chemin 🛵', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>'},
-  {key:'Delivered', lb:'Livrée', sub:'', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'}
+{key:'Pending', lb:'Confirmée', sub:'', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'},
+// ✅ Clean chef-hat icon for "Préparation"
+{key:'Preparing', lb:'Préparation', sub:'', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/><line x1="6" y1="17" x2="18" y2="17"/></svg>'},
+{key:'Out for Delivery', lb:'En route', sub:'Le livreur est en chemin 🛵', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>'},
+{key:'Delivered', lb:'Livrée', sub:'', ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'}
 ];
 
 window.switchOrderTab = tab => {
-  S.orderTab = tab;
-  renderOrdersList();
+S.orderTab = tab;
+renderOrdersList();
 };
 
+// ── HISTORY REORDER FIX ──
+// Old orders store line items as { product, qty, unitPrice, modularChoices, note }.
+// The live cart expects { key, product, qty, unitPrice, costPrice, choices, note }.
+// We rebuild the key and map modularChoices -> choices so reordering recreates
+// the cart perfectly (and merges with identical items).
 window.reorderPast = orderId => {
-  const order = S.userOrders.find(o => o.id === orderId);
-  if(!order || !order.cart) return;
-  S.cart = [...order.cart]; 
-  saveCart(); 
-  updateBadge(); 
-  switchTab('cart'); 
-  toast('Panier recréé ! 🛒');
+const order = S.userOrders.find(o => o.id === orderId);
+if(!order || !order.cart) return;
+S.cart = order.cart.map(c => {
+const choices = c.modularChoices || c.choices || [];
+const key = choices.length
+? c.product.id + '_' + choices.map(ch => `${ch.groupId}-${ch.itemName}`).join('|')
+: c.product.id + '_q';
+return {
+key,
+product: { id: c.product.id, name: c.product.name, imageUrl: c.product.imageUrl || '' },
+qty: c.qty,
+unitPrice: c.unitPrice,
+costPrice: c.costPrice || 0,
+choices,
+note: c.note || ''
+};
+});
+saveCart();
+updateBadge();
+switchTab('cart');
+toast('Panier recréé ! 🛒');
 };
 
 function renderOrdersList() {
-  const content = document.getElementById('ordersList');
-  let orders = [...S.userOrders];
+const content = document.getElementById('ordersList');
+let orders = [...S.userOrders];
 
-  if(!orders.length) {
-    document.getElementById('ordersTabContainer').style.display = 'none';
-    content.innerHTML = `<div class="empty-state" style="padding-top: 100px;"><div class="es-ic">📦</div><h3>Aucune commande</h3><p>Vous n'avez pas encore passé de commande. C'est le moment de vous faire plaisir !</p><button class="main-btn" style="width: auto; padding: 14px 24px;" onclick="switchTab('home')">VOIR LE MENU</button></div>`;
-    return;
-  }
-  
-  const historyOrders = orders.filter(o => ['Delivered', 'Cancelled'].includes(o.status));
-  const activeOrders = orders.filter(o => !['Delivered', 'Cancelled'].includes(o.status));
-  const displayOrders = S.orderTab === 'active' ? activeOrders : historyOrders;
+if(!orders.length) {
+document.getElementById('ordersTabContainer').style.display = 'none';
+content.innerHTML = `<div class="empty-state" style="padding-top: 100px;"><div class="es-ic">📦</div><h3>Aucune commande</h3><p>Vous n'avez pas encore passé de commande. C'est le moment de vous faire plaisir !</p><button class="main-btn" style="width: auto; padding: 14px 24px;" onclick="switchTab('home')">VOIR LE MENU</button></div>`;
+return;
+}
 
-  document.getElementById('ordersTabContainer').style.display = 'flex';
-  const activeTabTxt = activeOrders.length ? `EN COURS (${activeOrders.length})` : 'EN COURS';
-  document.getElementById('ordersTabContainer').innerHTML = `<div class="o-tab ${S.orderTab === 'active' ? 'active' : ''}" onclick="switchOrderTab('active')">${activeTabTxt}</div><div class="o-tab ${S.orderTab === 'history' ? 'active' : ''}" onclick="switchOrderTab('history')">HISTORIQUE</div>`;
+const historyOrders = orders.filter(o => ['Delivered', 'Cancelled'].includes(o.status));
+const activeOrders = orders.filter(o => !['Delivered', 'Cancelled'].includes(o.status));
+const displayOrders = S.orderTab === 'active' ? activeOrders : historyOrders;
 
-  if(!displayOrders.length) {
-      content.innerHTML = `<div class="empty-state" style="padding-top: 100px;"><div class="es-ic">${S.orderTab==='active'?'🛵':'🕰️'}</div><h3>${S.orderTab==='active'?'Aucune commande en cours':'Historique vide'}</h3></div>`;
-      return;
-  }
-  
-  content.innerHTML = `<div style="padding: 16px;">` + displayOrders.map(order => {
-    const shortId = '#TSC' + order.id.slice(-4).toUpperCase();
-    const creationDateStr = new Date(order.timestamp).toLocaleDateString('fr-FR', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
-    
-    let topBadge = '';
-    if (order.status === 'Cancelled') {
-        topBadge = `<div style="color:var(--danger); font-size:11px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--danger-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">Annulée</div>`;
-    } else if (order.status === 'Delivered') {
-        topBadge = `<div style="color:var(--green); font-size:11px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--green-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">Livrée</div>`;
-    } else if (order.status === 'Out for Delivery') {
-        topBadge = `<div style="color:var(--orange); font-size:11px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--orange-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">En Livraison</div>`;
-    } else if (order.status === 'Preparing') {
-        topBadge = `<div style="color:var(--amber); font-size:11px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--amber-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">Préparation</div>`;
-    } else {
-        topBadge = `<div style="color:var(--blue); font-size:11px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--blue-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">Confirmée</div>`;
-    }
+document.getElementById('ordersTabContainer').style.display = 'flex';
+const activeTabTxt = activeOrders.length ? `EN COURS (${activeOrders.length})` : 'EN COURS';
+document.getElementById('ordersTabContainer').innerHTML = `<div class="o-tab ${S.orderTab === 'active' ? 'active' : ''}" onclick="switchOrderTab('active')">${activeTabTxt}</div><div class="o-tab ${S.orderTab === 'history' ? 'active' : ''}" onclick="switchOrderTab('history')">HISTORIQUE</div>`;
 
-    let innerHtml = '';
-    
-    if (S.orderTab === 'active') {
-        let activeIdx = ST_STEPS.findIndex(s => s.key === order.status);
-        if (activeIdx === -1) {
-             if (order.status === 'Accepted' || order.status === 'In Transit') activeIdx = 1;
-             else activeIdx = 0;
-        }
+if(!displayOrders.length) {
+content.innerHTML = `<div class="empty-state" style="padding-top: 100px;"><div class="es-ic">${S.orderTab==='active'?'🛵':'🕰️'}</div><h3>${S.orderTab==='active'?'Aucune commande en cours':'Historique vide'}</h3></div>`;
+return;
+}
 
-        const tl = ST_STEPS.map((s,i) => {
-            // ✅ FIXED: Timestamps are now unique. If backend doesn't have statusTimestamps, it only shows the time on the first step.
-            let stepTimeStr = '';
-            if (order.statusTimestamps && order.statusTimestamps[s.key]) {
-                 stepTimeStr = new Date(order.statusTimestamps[s.key]).toLocaleDateString('fr-FR', {hour:'2-digit', minute:'2-digit'});
-            } else if (i === 0) {
-                 stepTimeStr = creationDateStr; 
-            }
-            
-            return `
-            <div class="track-step ${i<activeIdx ? 'done':''} ${i===activeIdx ? 'active':''}">
-                <div class="ts-icon">${s.ic}</div>
-                <div class="ts-content">
-                    <div class="ts-title">${s.lb}</div>
-                    ${stepTimeStr && i <= activeIdx ? `<div style="font-size:12px; color:var(--muted); font-weight:600; margin-top:2px;">${stepTimeStr}</div>` : ''}
-                </div>
-            </div>`;
-        }).join('');
-        
-        let driverCard = '';
-        if (order.status === 'Out for Delivery' || activeIdx === 2) {
-            const safePhone = order.driverPhone || '0600000000';
-            const waPhone = safePhone.replace(/^0/, '');
-            const dName = order.driverName || 'Youssef';
-            // ✅ FIXED: Looks for order.driverPhotoUrl, falls back to avatar
-            const dPhoto = order.driverPhotoUrl || `https://ui-avatars.com/api/?name=${dName}&background=FF5A00&color=fff&bold=true`;
-            
-            driverCard = `
-            <div class="driver-card fade-up">
-                <div class="dc-left">
-                    <div class="dc-avatar"><img src="${dPhoto}" /></div>
-                    <div class="dc-info">
-                        <div class="dc-name">${dName}</div>
-                        <div class="dc-sub">Livreur TASCO</div>
-                        <div class="dc-rating"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> 4.8</div>
-                    </div>
-                </div>
-                <div class="dc-actions">
-                    <a href="tel:${safePhone}" class="dc-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                        <span>APPELER</span>
-                    </a>
-                    <a href="https://wa.me/212${waPhone}" target="_blank" class="dc-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                        <span>MESSAGE</span>
-                    </a>
-                </div>
-            </div>`;
-        }
-        
-        innerHtml = `
-            <div style="padding-top:16px; border-top:1px solid var(--border); padding-bottom: 8px;">
-                ${activeIdx === 2 ? `<div style="font-family:var(--font-display); font-size:18px; font-weight:900; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:4px;">Votre commande est en route !</div><div style="font-size:13px; color:var(--muted); font-weight:500; margin-bottom:20px;">Le livreur est en chemin 🛵</div>` : ''}
-                ${tl}
-                ${driverCard}
-            </div>`;
-            
-    } else {
-        innerHtml = `
-            <div style="border-top:1px solid var(--border); padding-top:16px; margin-top:16px;">
-                <button class="btn-reorder" onclick="reorderPast('${order.id}')">
-                    <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>
-                    COMMANDER ENCORE
-                </button>
-            </div>`;
-    }
-    
-    return `
-    <div class="track-card fade-up">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 16px;">
-            <div>
-                <div style="font-size:22px; font-family: var(--font-display); font-weight:900; letter-spacing:0.5px; margin-bottom:2px;">${shortId}</div>
-                <div style="font-size:12px; color:var(--muted); font-weight:600; text-transform:uppercase;">${creationDateStr}</div>
-                ${S.orderTab === 'history' ? `<div style="font-size:12px; font-family:var(--font-display); font-weight:800; color:var(--muted); text-transform:uppercase; margin-top:8px;">${order.totalItems} Article${order.totalItems>1?'s':''}</div>` : ''}
-            </div>
-            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
-                <div style="font-size:20px; font-family: var(--font-display); font-weight:900; color:var(--text); line-height:1;">${fmt(order.totalPrice)} DH</div>
-                ${topBadge}
-            </div>
-        </div>
-        ${innerHtml}
-    </div>`;
-  }).join('') + `</div>`;
+content.innerHTML = `<div style="padding: 16px;">` + displayOrders.map(order => {
+const shortId = '#TSC' + order.id.slice(-4).toUpperCase();
+const creationDateStr = new Date(order.timestamp).toLocaleDateString('fr-FR', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
+
+// ✅ HISTORY mini-summary: "1x Burger, 2x Frites"
+const itemsSummary = (order.cart || []).map(c => `${c.qty}x ${c.product?.name || 'Article'}`).join(', ');
+
+let topBadge = '';
+if (order.status === 'Cancelled') {
+topBadge = `<div style="color:var(--danger); font-size:11px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--danger-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">Annulée</div>`;
+} else if (order.status === 'Delivered') {
+topBadge = `<div style="color:var(--green); font-size:11px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--green-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">Livrée</div>`;
+} else if (order.status === 'Out for Delivery') {
+topBadge = `<div style="color:var(--orange); font-size:11px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--orange-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">En Livraison</div>`;
+} else if (order.status === 'Preparing') {
+topBadge = `<div style="color:var(--amber); font-size:11px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--amber-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">Préparation</div>`;
+} else {
+topBadge = `<div style="color:var(--blue); font-size:11px; font-weight:800; font-family:var(--font-display); text-transform:uppercase; background:var(--blue-light); padding:4px 8px; border-radius:6px; letter-spacing:0.5px;">Confirmée</div>`;
+}
+
+let innerHtml = '';
+
+if (S.orderTab === 'active') {
+let activeIdx = ST_STEPS.findIndex(s => s.key === order.status);
+if (activeIdx === -1) {
+if (order.status === 'Accepted' || order.status === 'In Transit') activeIdx = 1;
+else activeIdx = 0;
+}
+
+const tl = ST_STEPS.map((s,i) => {
+// ✅ TIMESTAMPS: use exact per-step time if the backend wrote statusTimestamps.
+// Otherwise only the first step shows a time (avoids the "cloned time" bug).
+let stepTimeStr = '';
+if (order.statusTimestamps && order.statusTimestamps[s.key]) {
+stepTimeStr = new Date(order.statusTimestamps[s.key]).toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+} else if (i === 0) {
+stepTimeStr = creationDateStr;
+}
+
+const cls = i < activeIdx ? 'done' : (i === activeIdx ? 'active' : '');
+return `<div class="track-step ${cls}"><div class="ts-icon">${s.ic}</div><div class="ts-content"><div class="ts-title">${s.lb}</div>${stepTimeStr && i <= activeIdx ? `<div style="font-size:12px; color:var(--muted); font-weight:600; margin-top:2px;">${stepTimeStr}</div>` : ''}</div></div>`;
+}).join('');
+
+let driverCard = '';
+if (order.status === 'Out for Delivery' || activeIdx === 2) {
+// ✅ DRIVER PHOTOS: pull the live name/photo from the drivers collection,
+// falling back to anything stored on the order, then a generated avatar.
+const di = getDriverInfo(order);
+const safePhone = order.driverPhone || '0600000000';
+const waPhone = safePhone.replace(/^0/, '');
+const dName = di.name || order.driverName || 'Youssef';
+const dPhoto = di.photoUrl || order.driverPhotoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(dName)}&background=FF5A00&color=fff&bold=true`;
+
+driverCard = `<div class="driver-card fade-up"><div class="dc-left"><div class="dc-avatar"><img src="${dPhoto}" /></div><div class="dc-info"><div class="dc-name">${dName}</div><div class="dc-sub">Livreur TASCO</div><div class="dc-rating"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> 4.8</div></div></div><div class="dc-actions"><a href="tel:${safePhone}" class="dc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg><span>APPELER</span></a><a href="https://wa.me/212${waPhone}" target="_blank" class="dc-btn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg><span>MESSAGE</span></a></div></div>`;
+}
+
+innerHtml = `<div style="padding-top:16px; border-top:1px solid var(--border); padding-bottom: 8px;">${activeIdx === 2 ? `<div style="font-family:var(--font-display); font-size:18px; font-weight:900; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:4px;">Votre commande est en route !</div><div style="font-size:13px; color:var(--muted); font-weight:500; margin-bottom:20px;">Le livreur est en chemin 🛵</div>` : ''}${tl}${driverCard}</div>`;
+
+} else {
+innerHtml = `<div style="border-top:1px solid var(--border); padding-top:16px; margin-top:16px;"><button class="btn-reorder" onclick="reorderPast('${order.id}')"><svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>COMMANDER ENCORE</button></div>`;
+}
+
+return `<div class="track-card fade-up"><div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 16px;"><div><div style="font-size:22px; font-family: var(--font-display); font-weight:900; letter-spacing:0.5px; margin-bottom:2px;">${shortId}</div><div style="font-size:12px; color:var(--muted); font-weight:600; text-transform:uppercase;">${creationDateStr}</div>${S.orderTab === 'history' && itemsSummary ? `<div style="font-size:12px; font-family:var(--font-display); font-weight:800; color:var(--muted); text-transform:uppercase; margin-top:8px;">${itemsSummary}</div>` : ''}</div><div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;"><div style="font-size:20px; font-family: var(--font-display); font-weight:900; color:var(--text); line-height:1;">${fmt(order.totalPrice)} DH</div>${topBadge}</div></div>${innerHtml}</div>`;
+}).join('') + `</div>`;
 }
 
 function renderAccountScreen() {
-  const content = document.getElementById('accountContent');
-  const name = S.userDoc?.name || 'Client Invité';
-  const pts = S.userDoc?.points || 0;
-  
-  content.innerHTML = `
-    <div class="profile-card" style="margin: 16px; background:var(--surface); border-radius:var(--r-xl); border:1.5px solid var(--border); padding:16px; display:flex; align-items:center; gap:16px; box-shadow:var(--shadow);">
-      <div class="prof-av" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#ff8040);display:flex;align-items:center;justify-content:center;font-size:28px;font-family:var(--font-display);font-weight:900;color:#fff;">
-        ${name.charAt(0).toUpperCase()}
-      </div>
-      <div style="flex:1">
-        <div class="prof-name" style="font-size:22px;font-family:var(--font-display);text-transform:uppercase;font-weight:900;letter-spacing:0.5px;margin-bottom:2px;">${name}</div>
-        <div class="prof-phone" style="font-size:13px;color:var(--muted);font-weight:600;">${S.userDoc?.phone || 'Non renseigné'}</div>
-      </div>
-    </div>
-    
-    <div class="club-card" style="margin: 0 16px 24px; background:var(--orange-light); border-radius:var(--r-xl); border:1px solid var(--orange-mid); padding:20px; box-shadow:var(--shadow);">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <div style="font-size:20px; font-family:var(--font-display); font-weight:900; letter-spacing:0.5px; color:var(--text);">TASCO CLUB 👑</div>
-        <div style="font-size:20px; font-family:var(--font-display); font-weight:900; color:var(--orange);">${pts} PTS</div>
-      </div>
-      <p style="font-size:12px; color:var(--text); font-weight:500; line-height:1.5; opacity:0.8;">Vos points se convertissent en cadeaux. Protégez-les en créant un compte !</p>
-    </div>
-    
-    <div style="margin: 0 16px;">
-      <div style="background:var(--surface); border-radius:var(--r-lg); border:1px solid var(--border); overflow:hidden; box-shadow:var(--shadow);">
-        <div style="padding:18px 16px; font-weight:800; font-size:14px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; cursor:pointer;" onclick="window.open('https://wa.me/212708006088','_blank')">
-          <span style="font-family:var(--font-display); font-size:16px; letter-spacing:0.5px;">SUPPORT WHATSAPP</span><span style="color:var(--muted);"><svg viewBox="0 0 24 24" style="width:18px;stroke:currentColor;fill:none;stroke-width:2.5;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span>
-        </div>
-        <div style="padding:18px 16px; font-weight:800; font-size:14px; border-bottom:none; display:flex; justify-content:space-between; cursor:pointer;" onclick="window.open('https://instagram.com/tasco.ma','_blank')">
-          <span style="font-family:var(--font-display); font-size:16px; letter-spacing:0.5px;">SUIVEZ-NOUS SUR INSTAGRAM</span><span style="color:var(--muted);"><svg viewBox="0 0 24 24" style="width:18px;stroke:currentColor;fill:none;stroke-width:2.5;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span>
-        </div>
-      </div>
-    </div>
-  `;
+const content = document.getElementById('accountContent');
+const name = S.userDoc?.name || 'Client Invité';
+
+content.innerHTML = `<div class="profile-card" style="margin: 16px; background:var(--surface); border-radius:var(--r-xl); border:1.5px solid var(--border); padding:16px; display:flex; align-items:center; gap:16px; box-shadow:var(--shadow);"><div class="prof-av" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#ff8040);display:flex;align-items:center;justify-content:center;font-size:28px;font-family:var(--font-display);font-weight:900;color:#fff;">${name.charAt(0).toUpperCase()}</div><div style="flex:1"><div class="prof-name" style="font-size:22px;font-family:var(--font-display);text-transform:uppercase;font-weight:900;letter-spacing:0.5px;margin-bottom:2px;">${name}</div><div class="prof-phone" style="font-size:13px;color:var(--muted);font-weight:600;">${S.userDoc?.phone || 'Non renseigné'}</div></div></div>
+
+<div class="club-card" style="margin: 0 16px 24px; background:var(--surface2); border-radius:var(--r-xl); border:1px solid var(--border); padding:20px; box-shadow:var(--shadow); opacity:0.6;"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;"><div style="font-size:20px; font-family:var(--font-display); font-weight:900; letter-spacing:0.5px; color:var(--muted);">TASCO CLUB 👑</div><div style="font-size:11px; font-family:var(--font-display); font-weight:900; color:var(--muted); background:var(--border); padding:5px 10px; border-radius:99px; letter-spacing:0.5px;">PROCHAINEMENT</div></div><p style="font-size:12px; color:var(--muted); font-weight:500; line-height:1.5;">Gagnez des points et débloquez des récompenses. Bientôt disponible !</p></div>
+
+<div style="margin: 0 16px;"><div style="background:var(--surface); border-radius:var(--r-lg); border:1px solid var(--border); overflow:hidden; box-shadow:var(--shadow);"><div style="padding:18px 16px; font-weight:800; font-size:14px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; cursor:pointer;" onclick="window.open('https://wa.me/212708006088','_blank')"><span style="font-family:var(--font-display); font-size:16px; letter-spacing:0.5px;">SUPPORT WHATSAPP</span><span style="color:var(--muted);"><svg viewBox="0 0 24 24" style="width:18px;stroke:currentColor;fill:none;stroke-width:2.5;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span></div><div style="padding:18px 16px; font-weight:800; font-size:14px; border-bottom:none; display:flex; justify-content:space-between; cursor:pointer;" onclick="window.open('https://instagram.com/tasco.ma','_blank')"><span style="font-family:var(--font-display); font-size:16px; letter-spacing:0.5px;">SUIVEZ-NOUS SUR INSTAGRAM</span><span style="color:var(--muted);"><svg viewBox="0 0 24 24" style="width:18px;stroke:currentColor;fill:none;stroke-width:2.5;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span></div></div></div>`;
 }
 
 // ── SERVICE WORKER REGISTRATION ──────────────────────────────
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/firebase-messaging-sw.js', { scope: '/' })
-    .then(reg => console.log('SW registered:', reg.scope))
-    .catch(err => console.warn('SW registration failed:', err));
+navigator.serviceWorker.register('/firebase-messaging-sw.js', { scope: '/' })
+.then(reg => console.log('SW registered:', reg.scope))
+.catch(err => console.warn('SW registration failed:', err));
 }
 
 // Ensure initial load renders correctly
