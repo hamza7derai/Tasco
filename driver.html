@@ -60,7 +60,8 @@ img{display:block}
 
 /* AUTH OVERLAY */
 #authOverlay{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;overflow-y:auto;transition:opacity .4s ease}
-#authOverlay.hidden{opacity:0;pointer-events:none}
+#authOverlay.hidden{display:none !important;}
+/* auth hidden state handled by JS display:none */
 .auth-top{background:var(--primary);padding:60px 24px 40px;display:flex;flex-direction:column;align-items:center;text-align:center;flex-shrink:0;border-bottom-left-radius:32px;border-bottom-right-radius:32px;box-shadow:var(--shadow-sm)}
 .auth-logo{font-size:36px;font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:4px}
 .auth-tag{color:rgba(255,255,255,.8);font-size:14px;font-weight:600;letter-spacing:.5px;margin-bottom:24px}
@@ -268,7 +269,7 @@ img{display:block}
   </div>
 </div>
 
-<div id="authOverlay">
+<div id="authOverlay" style="display:none">
   <div class="auth-top">
     <div class="auth-logo">TASCO</div>
     <div class="auth-tag">Driver Hub</div>
@@ -389,6 +390,20 @@ img{display:block}
         <span class="seg-badge" id="wPendCount" style="font-size:11px">0 to settle</span>
       </div>
       <div class="pend-list" id="wPendList"></div>
+
+      <!-- Earnings history section -->
+      <div class="section-title" id="historyTitle" style="display:none">
+        <h3>Earnings History</h3>
+        <span id="historyTotal" style="font-size:13px;color:var(--muted);font-weight:600"></span>
+      </div>
+      <div id="wHistoryList" style="display:none;margin-bottom:4px"></div>
+
+      <!-- Earnings history — must exist before renderWallet() is called -->
+      <div class="section-title" id="historyTitle" style="display:none">
+        <h3>Earnings History</h3>
+        <span id="historyTotal" style="font-size:13px;color:var(--muted);font-weight:600"></span>
+      </div>
+      <div id="wHistoryList" style="display:none;margin-bottom:4px"></div>
 
       <div class="info-banner" style="background:var(--primary-light);color:var(--primary)">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
@@ -575,8 +590,18 @@ function normalizePhone(raw) {
   return '+212' + p;
 }
 
-function showAuth()  { document.getElementById('authOverlay').classList.remove('hidden'); document.getElementById('app').style.opacity = '0'; document.getElementById('app').style.pointerEvents = 'none'; document.getElementById('app').style.visibility = 'hidden'; }
-function hideAuth()  { document.getElementById('authOverlay').classList.add('hidden'); document.getElementById('app').style.opacity = '1'; document.getElementById('app').style.pointerEvents = 'auto'; document.getElementById('app').style.visibility = 'visible'; }
+function showAuth()  { const o = document.getElementById('authOverlay'); o.style.display = 'flex'; o.style.opacity = '0'; requestAnimationFrame(() => { o.style.transition = 'opacity .3s ease'; o.style.opacity = '1'; }); document.getElementById('app').style.visibility = 'hidden'; }
+function hideAuth() {
+  const overlay = document.getElementById('authOverlay');
+  const app = document.getElementById('app');
+  // Fade out overlay then hide completely
+  overlay.style.opacity = '0';
+  overlay.style.pointerEvents = 'none';
+  app.style.visibility = 'visible';
+  app.style.opacity = '1';
+  app.style.pointerEvents = 'auto';
+  setTimeout(() => { overlay.classList.add('hidden'); overlay.style.opacity = ''; }, 350);
+}
 function showStep(id){ document.querySelectorAll('.auth-step').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 function showAuthErr(id, msg){ const el = document.getElementById(id); el.textContent = msg; el.style.display = 'block'; }
 function hideAuthErr(id){ document.getElementById(id).style.display = 'none'; }
@@ -752,6 +777,7 @@ async function setupFCM() {
 // ── ORDERS LISTENER ──────────────────────────────────────────
 function startOrdersListener() {
   const q = query(collection(db, 'orders'), where('status', 'in', ['Pending', 'Accepted', 'Out for Delivery', 'Delivered']));
+  // Note: settled delivered orders also come through since status stays 'Delivered'
   onSnapshot(q, snap => {
     const newOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     if (S.prevOrderIds !== null) {
@@ -984,18 +1010,52 @@ window.markAsPaid = async function() {
     !o.driverSettled
   );
   if (!unsettled.length) { showToast('Nothing to settle'); return; }
-  try {
-    for (const o of unsettled) {
-      await updateDoc(doc(db, 'orders', o.id), {
-        driverSettled: true,
-        settledAt: new Date().toISOString()
-      });
+
+  // ✅ FIX 3: Confirmation before clearing wallet
+  const totalDebt = unsettled.reduce((s, o) => s + calcOrderMath(o).driverOwes, 0);
+  const totalFee  = unsettled.reduce((s, o) => s + safeNum(o.deliveryFee), 0);
+  showConfirm(
+    'Confirm Settlement',
+    'Hand ' + fmt(totalDebt) + ' DH to the shop and keep ' + fmt(totalFee) + ' DH delivery fee?',
+    async () => {
+      try {
+        for (const o of unsettled) {
+          await updateDoc(doc(db, 'orders', o.id), {
+            driverSettled: true,
+            settledAt: new Date().toISOString()
+          });
+        }
+        showToast('✅ Wallet cleared!');
+      } catch(e) {
+        showToast('Error: ' + e.message);
+      }
     }
-    showToast('✅ Settled! Wallet cleared');
-  } catch(e) {
-    showToast('Error: ' + e.message);
-  }
+  );
 };
+
+// ✅ FIX 3: In-app confirm modal (no browser confirm())
+function showConfirm(title, msg, onConfirm) {
+  let modal = document.getElementById('_confirmModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = '_confirmModal';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:4000;background:rgba(0,0,0,0.5);display:flex;align-items:flex-end;justify-content:center;padding:20px';
+    modal.innerHTML = \`<div style="background:var(--surface);border-radius:24px;padding:28px 24px;width:100%;max-width:400px;box-shadow:var(--shadow-lg)">
+      <div id="_cmTitle" style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px"></div>
+      <div id="_cmMsg" style="font-size:14px;color:var(--muted);font-weight:500;margin-bottom:24px;line-height:1.5"></div>
+      <div style="display:flex;gap:12px">
+        <button id="_cmCancel" style="flex:1;padding:14px;border-radius:12px;font-size:14px;font-weight:700;background:var(--border);color:var(--text);cursor:pointer;border:none">Cancel</button>
+        <button id="_cmConfirm" style="flex:1;padding:14px;border-radius:12px;font-size:14px;font-weight:700;background:var(--primary);color:#fff;cursor:pointer;border:none">Confirm</button>
+      </div>
+    </div>\`;
+    document.body.appendChild(modal);
+    document.getElementById('_cmCancel').onclick = () => modal.style.display = 'none';
+  }
+  document.getElementById('_cmTitle').textContent = title;
+  document.getElementById('_cmMsg').textContent = msg;
+  document.getElementById('_cmConfirm').onclick = () => { modal.style.display = 'none'; onConfirm(); };
+  modal.style.display = 'flex';
+}
 
 function renderWallet() {
   if (!S.driver) return;
@@ -1027,21 +1087,49 @@ function renderWallet() {
   }
   document.getElementById('wPendList').innerHTML = html;
 
-  // ✅ FIX 6+8: Settlement history
+  // Earnings history — group settled orders by day
   const historyTitle = document.getElementById('historyTitle');
   const historyList  = document.getElementById('wHistoryList');
+  if (!historyTitle || !historyList) return; // safety — elements must exist
   if (settled.length > 0) {
     historyTitle.style.display = 'flex';
     historyList.style.display = 'block';
-    historyList.innerHTML = settled.slice(0, 10).map(o => {
-      const settledDate = o.settledAt ? new Date(o.settledAt).toLocaleDateString('en-US', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '—';
-      const sid = '#' + o.id.slice(-4).toUpperCase();
-      return '<div class="pend-item" style="opacity:0.6">' +
-        '<div class="pi-ic" style="background:var(--green-light);color:var(--green)"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>' +
-        '<div class="pi-info"><div class="pi-id">' + sid + '</div><div class="pi-meta">Settled ' + settledDate + '</div></div>' +
-        '<div class="pi-amt" style="color:var(--muted)">+' + fmt(safeNum(o.deliveryFee)) + ' DH</div>' +
+
+    // Group by date
+    const byDay = {};
+    settled.forEach(o => {
+      const d = new Date(o.settledAt || o.deliveredAt || o.timestamp || 0);
+      const key = d.toLocaleDateString('en-US', { weekday:'short', day:'numeric', month:'short' });
+      if (!byDay[key]) byDay[key] = { orders: [], totalFee: 0, totalDebt: 0 };
+      byDay[key].orders.push(o);
+      byDay[key].totalFee  += safeNum(o.deliveryFee);
+      byDay[key].totalDebt += calcOrderMath(o).driverOwes;
+    });
+
+    const totalAllTime = settled.reduce((s, o) => s + safeNum(o.deliveryFee), 0);
+    document.getElementById('historyTotal').textContent = fmt(totalAllTime) + ' DH total';
+
+    let html = '';
+    Object.entries(byDay).forEach(([day, data]) => {
+      html += '<div style="background:var(--surface);border-radius:16px;margin:0 20px 12px;overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border)">';
+      // Day header
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);background:var(--bg)">' +
+        '<span style="font-size:13px;font-weight:800;color:var(--text)">' + day + '</span>' +
+        '<span style="font-size:13px;font-weight:800;color:var(--green)">+' + fmt(data.totalFee) + ' DH</span>' +
       '</div>';
-    }).join('');
+      // Orders in that day
+      data.orders.forEach(o => {
+        const sid = '#' + o.id.slice(-4).toUpperCase();
+        const time = new Date(o.deliveredAt || o.timestamp || 0).toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
+        html += '<div style="display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border)">' +
+          '<div style="width:32px;height:32px;border-radius:8px;background:var(--green-light);color:var(--green);display:flex;align-items:center;justify-content:center;margin-right:12px;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:16px;fill:none;stroke:currentColor;stroke-width:2.5"><polyline points="20 6 9 17 4 12"/></svg></div>' +
+          '<div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--text)">' + sid + '</div><div style="font-size:11px;color:var(--muted)">' + time + '</div></div>' +
+          '<div style="font-size:14px;font-weight:800;color:var(--green)">+' + fmt(safeNum(o.deliveryFee)) + ' DH</div>' +
+        '</div>';
+      });
+      html += '</div>';
+    });
+    historyList.innerHTML = html;
   } else {
     historyTitle.style.display = 'none';
     historyList.style.display = 'none';
