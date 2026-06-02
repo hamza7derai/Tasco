@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest-driver.json"/>
 
 <!-- ✅ PWA meta tags for iOS and Android -->
-<meta name="theme-color" content="#FF5A00"/>
+<meta name="theme-color" content="#004EEB"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
@@ -17,12 +17,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  /* ✅ FIX 1: Orange brand theme replacing blue */
-  --blue: #FF5A00; --blue-light: #FFF0E5; --blue-hover: #E64E00;
-  --primary: #FF5A00; --primary-light: #FFF0E5;
+  --blue: #004EEB; --blue-light: #EFF4FF; --blue-hover: #003BCC;
   --green: #10B981; --green-light: #E1F8ED;
   --red: #EF4444; --red-light: #FEE2E2;
-  --orange: #FF5A00; --orange-light: #FFF0E5;
+  --orange: #FF6B00; --orange-light: #FFF0E5;
   --bg: #F8F9FA; --surface: #FFFFFF;
   --text: #111827; --muted: #6B7280; --subtle: #9CA3AF;
   --border: #F3F4F6; --border-dark: #E5E7EB;
@@ -35,11 +33,10 @@
   --bg: #111827; --surface: #1F2937;
   --text: #F9FAFB; --muted: #9CA3AF; --subtle: #6B7280;
   --border: #374151; --border-dark: #4B5563;
-  --blue-light: rgba(255, 90, 0, 0.15);
-  --primary-light: rgba(255, 90, 0, 0.15);
+  --blue-light: rgba(0, 78, 235, 0.15);
   --green-light: rgba(16, 185, 129, 0.15);
   --red-light: rgba(239, 68, 68, 0.15);
-  --orange-light: rgba(255, 90, 0, 0.15);
+  --orange-light: rgba(255, 107, 0, 0.15);
   --shadow-sm: 0 2px 8px rgba(0,0,0,.3);
   --shadow: 0 6px 20px rgba(0,0,0,.4);
 }
@@ -60,9 +57,8 @@ img{display:block}
 
 /* AUTH OVERLAY */
 #authOverlay{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;overflow-y:auto;transition:opacity .4s ease}
-#authOverlay.hidden{display:none !important;}
-/* auth hidden state handled by JS display:none */
-.auth-top{background:var(--primary);padding:60px 24px 40px;display:flex;flex-direction:column;align-items:center;text-align:center;flex-shrink:0;border-bottom-left-radius:32px;border-bottom-right-radius:32px;box-shadow:var(--shadow-sm)}
+#authOverlay.hidden{opacity:0;pointer-events:none}
+.auth-top{background:var(--blue);padding:60px 24px 40px;display:flex;flex-direction:column;align-items:center;text-align:center;flex-shrink:0;border-bottom-left-radius:32px;border-bottom-right-radius:32px;box-shadow:var(--shadow-sm)}
 .auth-logo{font-size:36px;font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:4px}
 .auth-tag{color:rgba(255,255,255,.8);font-size:14px;font-weight:600;letter-spacing:.5px;margin-bottom:24px}
 .auth-scooter{font-size:64px;animation:float 2.8s ease-in-out infinite}
@@ -73,22 +69,22 @@ img{display:block}
 .auth-step{display:none !important;}
 .auth-step.active{display:block !important; animation:screenIn .3s ease}
 .phone-row{display:flex;background:var(--surface);border:1.5px solid var(--border-dark);border-radius:16px;overflow:hidden;margin-bottom:14px;transition:.2s;box-shadow:var(--shadow-sm)}
-.phone-row:focus-within{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-light)}
+.phone-row:focus-within{border-color:var(--blue);box-shadow:0 0 0 4px var(--blue-light)}
 .phone-prefix{padding:16px;background:var(--surface);font-size:15px;font-weight:800;color:var(--text);border-right:1.5px solid var(--border-dark);display:flex;align-items:center;gap:6px;flex-shrink:0}
 .phone-row input{flex:1;padding:16px;font-size:16px;font-weight:700;background:transparent;color:var(--text);min-width:0}
 .phone-row input::placeholder{color:var(--subtle);font-weight:500}
 .otp-row{display:flex;gap:10px;justify-content:space-between;margin-bottom:24px}
 .otp-row input{width:48px;height:60px;background:var(--surface);border:1.5px solid var(--border-dark);border-radius:14px;text-align:center;font-size:24px;font-weight:800;color:var(--text);transition:.2s;box-shadow:var(--shadow-sm)}
-.otp-row input:focus{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-light);outline:none}
+.otp-row input:focus{border-color:var(--blue);box-shadow:0 0 0 4px var(--blue-light);outline:none}
 .auth-err{font-size:13px;color:var(--red);font-weight:600;margin-bottom:16px;padding:12px 16px;background:var(--red-light);border-radius:12px;border:1px solid rgba(239,68,68,0.2);display:none}
 .auth-link{text-align:center;margin-top:20px;font-size:14px;color:var(--muted)}
-.auth-link b{color:var(--primary);font-weight:800;cursor:pointer}
+.auth-link b{color:var(--blue);font-weight:800;cursor:pointer}
 
 /* BUTTONS */
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;border-radius:12px;font-size:15px;font-weight:700;transition:.15s;cursor:pointer;border:none}
 .btn:active{transform:scale(.97)}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.btn-blue{background:var(--primary);color:#fff;box-shadow:0 4px 16px rgba(255,90,0,.25)}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 16px rgba(0,78,235,.25)}
 .btn-outline-red{background:transparent;color:var(--red);border:1.5px solid var(--red-light)}
 
 /* GLOBAL HEADER */
@@ -106,7 +102,7 @@ img{display:block}
 /* SEGMENTED CONTROL */
 .segment-wrap{background:var(--surface);border-radius:99px;padding:5px;display:flex;margin:0 20px 20px;box-shadow:var(--shadow-sm);border:1px solid var(--border)}
 .seg-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:99px;font-size:14px;font-weight:700;color:var(--muted);transition:.2s;position:relative}
-.seg-btn.active{background:var(--primary);color:#fff;box-shadow:0 4px 12px rgba(255,90,0,.25)}
+.seg-btn.active{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(0,78,235,.25)}
 .seg-badge{background:var(--blue-light);color:var(--blue);font-size:12px;font-weight:800;padding:2px 8px;border-radius:99px;}
 .seg-btn.active .seg-badge{background:#fff;color:var(--blue)}
 
@@ -150,11 +146,11 @@ img{display:block}
 .sh-back{width:44px;height:44px;border-radius:12px;background:var(--surface);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:var(--shadow-sm)}
 .sh-back svg{width:20px;fill:none;stroke:var(--text);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .sh-title{font-size:22px;font-weight:800;color:var(--text);flex:1}
-.status-pill{background:var(--primary);color:#fff;padding:6px 12px;border-radius:99px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+.status-pill{background:var(--blue);color:#fff;padding:6px 12px;border-radius:99px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
 .action-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 20px 20px}
 .ag-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--surface);border:1px solid var(--border);padding:14px;border-radius:12px;font-size:14px;font-weight:700;box-shadow:var(--shadow-sm);transition:.15s}
 .ag-btn:active{transform:scale(.96)}
-.ag-btn.call{color:var(--primary)}
+.ag-btn.call{color:var(--blue)}
 .ag-btn.wa{color:var(--green)}
 .ag-btn svg{width:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
@@ -242,7 +238,7 @@ img{display:block}
 .dark .toggle-thumb { transform: translateX(18px); }
 
 /* IN-APP NOTIFICATION BANNER */
-#inAppNotif{position:fixed;top:16px;left:16px;right:16px;z-index:2000;background:var(--primary);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;box-shadow:0 12px 40px rgba(255,90,0,.35);transform:translateY(-150px);transition:.5s cubic-bezier(.175,.885,.32,1.275);pointer-events:none}
+#inAppNotif{position:fixed;top:16px;left:16px;right:16px;z-index:2000;background:var(--blue);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;box-shadow:0 12px 40px rgba(0,78,235,.35);transform:translateY(-150px);transition:.5s cubic-bezier(.175,.885,.32,1.275);pointer-events:none}
 #inAppNotif.show{transform:translateY(0)}
 #inAppNotif svg{width:26px;flex-shrink:0;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 #inAppNotif .notif-body{flex:1}
@@ -269,7 +265,7 @@ img{display:block}
   </div>
 </div>
 
-<div id="authOverlay" style="display:none">
+<div id="authOverlay">
   <div class="auth-top">
     <div class="auth-logo">TASCO</div>
     <div class="auth-tag">Driver Hub</div>
@@ -311,8 +307,7 @@ img{display:block}
   <div id="recaptcha-container"></div>
 </div>
 
-<!-- ✅ FIX 4: App hidden until auth confirmed -->
-<div id="app" style="visibility:hidden">
+<div id="app">
   <div id="screens">
 
     <div id="sHome" class="screen active">
@@ -391,28 +386,13 @@ img{display:block}
       </div>
       <div class="pend-list" id="wPendList"></div>
 
-      <!-- Earnings history section -->
-      <div class="section-title" id="historyTitle" style="display:none">
-        <h3>Earnings History</h3>
-        <span id="historyTotal" style="font-size:13px;color:var(--muted);font-weight:600"></span>
-      </div>
-      <div id="wHistoryList" style="display:none;margin-bottom:4px"></div>
-
-      <!-- Earnings history — must exist before renderWallet() is called -->
-      <div class="section-title" id="historyTitle" style="display:none">
-        <h3>Earnings History</h3>
-        <span id="historyTotal" style="font-size:13px;color:var(--muted);font-weight:600"></span>
-      </div>
-      <div id="wHistoryList" style="display:none;margin-bottom:4px"></div>
-
-      <div class="info-banner" style="background:var(--primary-light);color:var(--primary)">
+      <div class="info-banner" style="background:var(--blue-light);color:var(--blue)">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
         <span>Give back shop money at the end of your shift<br><span style="font-weight:500;font-size:11px">Settle to clear your wallet.</span></span>
       </div>
 
       <div style="padding:0 20px 20px">
-        <!-- ✅ FIX 5: Actually writes driverSettled to Firestore -->
-        <button class="btn btn-blue" onclick="markAsPaid()"><svg viewBox="0 0 24 24" style="width:18px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Mark as Paid</button>
+        <button class="btn btn-blue" onclick="showToast('Admin notified for settlement')"><svg viewBox="0 0 24 24" style="width:18px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Mark as Paid</button>
       </div>
     </div>
 
@@ -475,8 +455,7 @@ img{display:block}
       </div>
 
       <div class="card-block" style="display:flex;align-items:center;gap:16px;padding:24px">
-        <!-- ✅ FIX 3: Better avatar with orange gradient fallback -->
-        <div id="profAv" style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#FF8C42);color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;flex-shrink:0;box-shadow:0 4px 16px rgba(255,90,0,.3)">D</div>
+        <div class="cust-av" style="width:72px;height:72px;font-size:28px" id="profAv">D</div>
         <div>
           <div class="cust-name" id="profName" style="font-size:20px">Driver</div>
           <div class="cust-phone" id="profPhone" style="font-size:14px;margin-bottom:8px">—</div>
@@ -492,10 +471,7 @@ img{display:block}
           <div class="toggle-track"><div class="toggle-thumb"></div></div>
         </div>
         <a href="https://wa.me/212708006088" target="_blank" class="pm-item">
-          <div class="pm-ic" style="background:var(--green-light);color:var(--green)">
-            <!-- ✅ FIX 2: Real WhatsApp logo SVG -->
-            <svg viewBox="0 0 24 24" style="width:20px;fill:#25D366;stroke:none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-          </div>
+          <div class="pm-ic" style="background:var(--green-light);color:var(--green)"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
           <span class="pm-lbl">Support Center</span>
           <svg viewBox="0 0 24 24" style="width:16px;stroke:var(--muted);fill:none;stroke-width:2.5"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
@@ -590,18 +566,8 @@ function normalizePhone(raw) {
   return '+212' + p;
 }
 
-function showAuth()  { const o = document.getElementById('authOverlay'); o.style.display = 'flex'; o.style.opacity = '0'; requestAnimationFrame(() => { o.style.transition = 'opacity .3s ease'; o.style.opacity = '1'; }); document.getElementById('app').style.visibility = 'hidden'; }
-function hideAuth() {
-  const overlay = document.getElementById('authOverlay');
-  const app = document.getElementById('app');
-  // Fade out overlay then hide completely
-  overlay.style.opacity = '0';
-  overlay.style.pointerEvents = 'none';
-  app.style.visibility = 'visible';
-  app.style.opacity = '1';
-  app.style.pointerEvents = 'auto';
-  setTimeout(() => { overlay.classList.add('hidden'); overlay.style.opacity = ''; }, 350);
-}
+function showAuth()  { document.getElementById('authOverlay').classList.remove('hidden'); document.getElementById('app').style.opacity = '0'; document.getElementById('app').style.pointerEvents = 'none'; }
+function hideAuth()  { document.getElementById('authOverlay').classList.add('hidden'); document.getElementById('app').style.opacity = '1'; document.getElementById('app').style.pointerEvents = 'auto'; }
 function showStep(id){ document.querySelectorAll('.auth-step').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 function showAuthErr(id, msg){ const el = document.getElementById(id); el.textContent = msg; el.style.display = 'block'; }
 function hideAuthErr(id){ document.getElementById(id).style.display = 'none'; }
@@ -700,15 +666,8 @@ async function initApp() {
   document.getElementById('profPhone').textContent = d.phone || '—';
 
   const av = document.getElementById('profAv');
-  if (d.photoUrl) {
-    av.style.background = 'none';
-    av.style.padding = '0';
-    av.innerHTML = '<img src="' + d.photoUrl + '" style="width:100%;height:100%;border-radius:50%;object-fit:cover"/>';
-  } else {
-    // ✅ FIX 3: Gradient fallback with first letter
-    av.textContent = (d.name || 'D').charAt(0).toUpperCase();
-    av.style.background = 'linear-gradient(135deg, #FF5A00, #FF8C42)';
-  }
+  if (d.photoUrl) { av.style.background = 'none'; av.innerHTML = '<img src="' + d.photoUrl + '" style="width:100%;height:100%;border-radius:50%;object-fit:cover"/>'; } 
+  else { av.textContent = (d.name || 'D').charAt(0).toUpperCase(); }
 
   try {
     const snap = await getDoc(doc(db, 'settings', 'delivery'));
@@ -777,7 +736,6 @@ async function setupFCM() {
 // ── ORDERS LISTENER ──────────────────────────────────────────
 function startOrdersListener() {
   const q = query(collection(db, 'orders'), where('status', 'in', ['Pending', 'Accepted', 'Out for Delivery', 'Delivered']));
-  // Note: settled delivered orders also come through since status stays 'Delivered'
   onSnapshot(q, snap => {
     const newOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     if (S.prevOrderIds !== null) {
@@ -845,29 +803,9 @@ function renderHome() {
         distDisplay = calcDist.toFixed(1) + ' km';
       }
 
-      // ✅ FIX 7: Smart zone display — extract neighborhood from address, skip Plus Codes
-      function getZone(order) {
-        if (order.neighborhood && order.neighborhood !== 'Marrakech') return order.neighborhood;
-        if (order.deliveryAddress) {
-          const addr = order.deliveryAddress;
-          // Skip Google Plus Codes like JXMQ+8M2
-          if (/^[A-Z0-9]{4,}\+/.test(addr)) {
-            // Try to extract city from after the plus code
-            const parts = addr.split(',');
-            const meaningful = parts.find(p => !/^[A-Z0-9]{4,}\+/.test(p.trim()) && p.trim().length > 2);
-            return meaningful ? meaningful.trim() : 'Marrakech';
-          }
-          // Return first meaningful part of address
-          const parts = addr.split(',');
-          return parts[0].trim() || 'Marrakech';
-        }
-        return 'Marrakech';
-      }
-      const zone = getZone(o);
-
       return '<div class="order-card">' +
         '<div class="oc-header"><div class="oc-id">' + sid + '</div><div class="oc-time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ' + time + '</div></div>' +
-        '<div class="oc-location"><div class="oc-loc-ic"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="oc-zone">' + zone + '</div><div class="oc-client">' + (o.customerName || 'Client') + '</div></div></div>' +
+        '<div class="oc-location"><div class="oc-loc-ic"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="oc-zone">' + (o.neighborhood || 'Marrakech') + '</div><div class="oc-client">' + (o.customerName || 'Client') + '</div></div></div>' +
         '<div class="oc-stats-box">' +
           '<div class="oc-stat"><div class="oc-stat-ic"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> ' + itemsCount + '</div><div class="oc-stat-lbl">Items</div></div>' +
           '<div class="oc-stat"><div class="oc-stat-ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ' + fmt(m.totalPrice) + '</div><div class="oc-stat-lbl">Cash (DH)</div></div>' +
@@ -1001,76 +939,18 @@ window.doAction = async function(id, action) {
   }
 };
 
-// ✅ FIX 8: markAsPaid writes driverSettled to Firestore
-window.markAsPaid = async function() {
-  if (!S.driver) return;
-  const unsettled = S.orders.filter(o =>
-    o.driverId === S.driver.phone &&
-    o.status === 'Delivered' &&
-    !o.driverSettled
-  );
-  if (!unsettled.length) { showToast('Nothing to settle'); return; }
-
-  // ✅ FIX 3: Confirmation before clearing wallet
-  const totalDebt = unsettled.reduce((s, o) => s + calcOrderMath(o).driverOwes, 0);
-  const totalFee  = unsettled.reduce((s, o) => s + safeNum(o.deliveryFee), 0);
-  showConfirm(
-    'Confirm Settlement',
-    'Hand ' + fmt(totalDebt) + ' DH to the shop and keep ' + fmt(totalFee) + ' DH delivery fee?',
-    async () => {
-      try {
-        for (const o of unsettled) {
-          await updateDoc(doc(db, 'orders', o.id), {
-            driverSettled: true,
-            settledAt: new Date().toISOString()
-          });
-        }
-        showToast('✅ Wallet cleared!');
-      } catch(e) {
-        showToast('Error: ' + e.message);
-      }
-    }
-  );
-};
-
-// ✅ FIX 3: In-app confirm modal (no browser confirm())
-function showConfirm(title, msg, onConfirm) {
-  let modal = document.getElementById('_confirmModal');
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = '_confirmModal';
-    modal.style.cssText = 'position:fixed;inset:0;z-index:4000;background:rgba(0,0,0,0.5);display:flex;align-items:flex-end;justify-content:center;padding:20px';
-    modal.innerHTML = \`<div style="background:var(--surface);border-radius:24px;padding:28px 24px;width:100%;max-width:400px;box-shadow:var(--shadow-lg)">
-      <div id="_cmTitle" style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px"></div>
-      <div id="_cmMsg" style="font-size:14px;color:var(--muted);font-weight:500;margin-bottom:24px;line-height:1.5"></div>
-      <div style="display:flex;gap:12px">
-        <button id="_cmCancel" style="flex:1;padding:14px;border-radius:12px;font-size:14px;font-weight:700;background:var(--border);color:var(--text);cursor:pointer;border:none">Cancel</button>
-        <button id="_cmConfirm" style="flex:1;padding:14px;border-radius:12px;font-size:14px;font-weight:700;background:var(--primary);color:#fff;cursor:pointer;border:none">Confirm</button>
-      </div>
-    </div>\`;
-    document.body.appendChild(modal);
-    document.getElementById('_cmCancel').onclick = () => modal.style.display = 'none';
-  }
-  document.getElementById('_cmTitle').textContent = title;
-  document.getElementById('_cmMsg').textContent = msg;
-  document.getElementById('_cmConfirm').onclick = () => { modal.style.display = 'none'; onConfirm(); };
-  modal.style.display = 'flex';
-}
-
 function renderWallet() {
   if (!S.driver) return;
   const mineDelivered = S.orders.filter(o => o.driverId === S.driver.phone && o.status === 'Delivered');
   const unsettled = mineDelivered.filter(o => !o.driverSettled);
-  const settled   = mineDelivered.filter(o => o.driverSettled).sort((a,b) => new Date(b.settledAt||b.timestamp||0) - new Date(a.settledAt||a.timestamp||0));
-
+  
   const totalEarned = unsettled.reduce((s, o) => s + safeNum(o.deliveryFee), 0);
-  const totalDebt   = unsettled.reduce((s, o) => s + calcOrderMath(o).driverOwes, 0);
+  const totalDebt = unsettled.reduce((s, o) => s + calcOrderMath(o).driverOwes, 0);
 
   document.getElementById('wEarnTotal').textContent = fmt(totalEarned);
   document.getElementById('wDebtTotal').textContent = fmt(totalDebt);
   document.getElementById('wPendCount').textContent = unsettled.length + ' to settle';
 
-  // Pending list
   let html = '';
   if (!unsettled.length) {
     html = '<div style="padding:32px;text-align:center;color:var(--muted);font-size:14px;font-weight:700">All settled up! 🎉</div>';
@@ -1086,54 +966,6 @@ function renderWallet() {
     }).join('');
   }
   document.getElementById('wPendList').innerHTML = html;
-
-  // Earnings history — group settled orders by day
-  const historyTitle = document.getElementById('historyTitle');
-  const historyList  = document.getElementById('wHistoryList');
-  if (!historyTitle || !historyList) return; // safety — elements must exist
-  if (settled.length > 0) {
-    historyTitle.style.display = 'flex';
-    historyList.style.display = 'block';
-
-    // Group by date
-    const byDay = {};
-    settled.forEach(o => {
-      const d = new Date(o.settledAt || o.deliveredAt || o.timestamp || 0);
-      const key = d.toLocaleDateString('en-US', { weekday:'short', day:'numeric', month:'short' });
-      if (!byDay[key]) byDay[key] = { orders: [], totalFee: 0, totalDebt: 0 };
-      byDay[key].orders.push(o);
-      byDay[key].totalFee  += safeNum(o.deliveryFee);
-      byDay[key].totalDebt += calcOrderMath(o).driverOwes;
-    });
-
-    const totalAllTime = settled.reduce((s, o) => s + safeNum(o.deliveryFee), 0);
-    document.getElementById('historyTotal').textContent = fmt(totalAllTime) + ' DH total';
-
-    let html = '';
-    Object.entries(byDay).forEach(([day, data]) => {
-      html += '<div style="background:var(--surface);border-radius:16px;margin:0 20px 12px;overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border)">';
-      // Day header
-      html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);background:var(--bg)">' +
-        '<span style="font-size:13px;font-weight:800;color:var(--text)">' + day + '</span>' +
-        '<span style="font-size:13px;font-weight:800;color:var(--green)">+' + fmt(data.totalFee) + ' DH</span>' +
-      '</div>';
-      // Orders in that day
-      data.orders.forEach(o => {
-        const sid = '#' + o.id.slice(-4).toUpperCase();
-        const time = new Date(o.deliveredAt || o.timestamp || 0).toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
-        html += '<div style="display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border)">' +
-          '<div style="width:32px;height:32px;border-radius:8px;background:var(--green-light);color:var(--green);display:flex;align-items:center;justify-content:center;margin-right:12px;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:16px;fill:none;stroke:currentColor;stroke-width:2.5"><polyline points="20 6 9 17 4 12"/></svg></div>' +
-          '<div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--text)">' + sid + '</div><div style="font-size:11px;color:var(--muted)">' + time + '</div></div>' +
-          '<div style="font-size:14px;font-weight:800;color:var(--green)">+' + fmt(safeNum(o.deliveryFee)) + ' DH</div>' +
-        '</div>';
-      });
-      html += '</div>';
-    });
-    historyList.innerHTML = html;
-  } else {
-    historyTitle.style.display = 'none';
-    historyList.style.display = 'none';
-  }
 }
 
 // ── NAVIGATION & UTILS ────────────────────────────────────────
