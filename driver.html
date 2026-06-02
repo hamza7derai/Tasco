@@ -6,7 +6,6 @@
 <title>TASCO | Driver Hub</title>
 <link rel="manifest" href="manifest-driver.json"/>
 
-<!-- PWA meta tags for iOS and Android -->
 <meta name="theme-color" content="#FF4500"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -14,7 +13,6 @@
 <meta name="apple-mobile-web-app-title" content="TASCO Driver"/>
 <link rel="apple-touch-icon" href="/icon-192.png"/>
 
-<!-- 🎨 NEW FONT: Barlow -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -115,7 +113,7 @@ img{display:block}
 
 /* SEGMENTED CONTROL */
 .segment-wrap{background:var(--surface);border-radius:99px;padding:6px;display:flex;margin:0 20px 20px;box-shadow:var(--shadow-sm);}
-.seg-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:99px;font-size:15px;font-weight:800;color:var(--text); text-transform:uppercase; transition:.2s;position:relative}
+.seg-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:99px;font-size:15px;font-weight:800;color:var(--text); text-transform:uppercase; transition:.2s;position:relative; cursor:pointer;}
 .seg-btn.active{background:var(--primary);color:#fff;box-shadow:0 4px 12px rgba(255,69,0,.25)}
 .seg-badge{background:var(--bg);color:var(--text);font-size:14px;font-weight:800; width:24px; height:24px; display:flex; align-items:center; justify-content:center; border-radius:50%;}
 .seg-btn.active .seg-badge{background:#fff;color:var(--primary)}
@@ -174,6 +172,7 @@ img{display:block}
 
 .card-block{background:var(--surface);border-radius:20px;margin:0 20px 20px;padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--border)}
 .cb-title{font-size:14px;font-weight:800;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:8px; text-transform:uppercase;}
+.cb-title svg { width: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; flex-shrink: 0; }
 
 /* Customer Block */
 .cust-row{display:flex;align-items:center;gap:16px}
@@ -355,7 +354,6 @@ img{display:block}
 <div id="app" style="visibility:hidden">
   <div id="screens">
 
-    <!-- HOME SCREEN -->
     <div id="sHome" class="screen active">
       <div class="global-hdr">
         <div class="hdr-left">
@@ -391,7 +389,6 @@ img{display:block}
       <div class="ra-card" id="recentList" style="display:none"></div>
     </div>
 
-    <!-- WALLET SCREEN -->
     <div id="sWallet" class="screen">
       <div class="wallet-hdr">
         <div class="sh-back" onclick="closeScreen()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
@@ -436,7 +433,6 @@ img{display:block}
         </div>
       </div>
 
-      <!-- NEW: Waiting for Admin Approval Section -->
       <div class="pend-list-wrap" id="wPendingApprovalWrap" style="display:none; margin-top:24px;">
         <div class="pend-list-hdr" style="color:var(--primary)">Waiting For Admin</div>
         <div id="wPendingApprovalList"></div>
@@ -446,11 +442,10 @@ img{display:block}
         <button class="btn btn-primary" onclick="markAsPaid()"><svg viewBox="0 0 24 24" style="width:20px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Mark Shop Money As Paid</button>
       </div>
 
-      <!-- Tabs visualization matching mockup -->
-      <div class="segment-wrap" style="margin-bottom:24px">
-        <div class="seg-btn active">Today</div>
-        <div class="seg-btn" style="color:var(--muted)">Week</div>
-        <div class="seg-btn" style="color:var(--muted)">Month</div>
+      <div class="segment-wrap" style="margin-bottom:24px; color:var(--muted)">
+        <div class="seg-btn active" id="htDay" onclick="setHistoryTab('day')">Daily</div>
+        <div class="seg-btn" id="htWeek" onclick="setHistoryTab('week')">Weekly</div>
+        <div class="seg-btn" id="htMonth" onclick="setHistoryTab('month')">Monthly</div>
       </div>
 
       <div class="section-title" id="historyTitle" style="display:none">
@@ -459,7 +454,6 @@ img{display:block}
       <div class="pend-list-wrap" id="wHistoryList" style="display:none; border:none; box-shadow:none; background:transparent"></div>
     </div>
 
-    <!-- DETAIL SCREEN -->
     <div id="sDetail" class="screen">
       <div class="screen-hdr">
         <div class="sh-back" onclick="closeScreen()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
@@ -507,7 +501,6 @@ img{display:block}
       <div class="bottom-actions" id="detActions"></div>
     </div>
 
-    <!-- PROFILE SCREEN -->
     <div id="sProfile" class="screen">
       <div class="wallet-hdr" style="margin-bottom:12px">
         <div class="sh-back" onclick="closeScreen()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
@@ -587,6 +580,7 @@ const S = {
   orders: [],
   prevOrderIds: null,
   homeTab: 'pool',
+  historyTab: 'day',
   confirmationResult: null,
   storeOrigin: null 
 };
@@ -658,7 +652,6 @@ window.handleSendCode = async function() {
     ensureRecaptcha();
     S.confirmationResult = await signInWithPhoneNumber(auth, phone, window._rcv);
     
-    // Update step OTP subtext to match design
     document.getElementById('otpSubtext').innerHTML = 'We\'ve sent a code to<br><span style="color:var(--primary); font-weight:700; font-size:18px; display:block; margin-top:8px">' + phone + '</span>';
     
     showStep('stepOTP');
@@ -823,6 +816,14 @@ window.setHomeTab = function(tab) {
   renderHome();
 };
 
+window.setHistoryTab = function(tab) {
+  S.historyTab = tab;
+  document.getElementById('htDay').classList.toggle('active', tab === 'day');
+  document.getElementById('htWeek').classList.toggle('active', tab === 'week');
+  document.getElementById('htMonth').classList.toggle('active', tab === 'month');
+  renderWallet(); 
+};
+
 function renderHome() {
   const pool = S.orders.filter(o => o.status === 'Pending' && (!o.driverId || o.driverId === '')).sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
   const active = S.orders.filter(o => o.driverId === S.driver?.phone && ['Accepted', 'Out for Delivery'].includes(o.status)).sort((a,b) => new Date(b.timestamp||0) - new Date(a.timestamp||0));
@@ -892,8 +893,15 @@ function renderHome() {
       const time = o.timestamp ? new Date(o.timestamp).toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' }) : '';
       const sid = '#' + o.id.slice(-4).toUpperCase();
       const m = calcOrderMath(o);
+      
+      let locHtml = '';
+      const zone = o.neighborhood || (o.deliveryAddress ? o.deliveryAddress.split(',')[0] : '');
+      if (zone && zone.trim() !== '') {
+        locHtml = '<div class="ra-meta"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' + zone + '</div>';
+      }
+
       return '<div class="ra-item"><div class="ra-ic"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>' +
-             '<div class="ra-info"><div class="ra-id">' + sid + '</div><div class="ra-meta"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' + (o.neighborhood||'') + '</div></div>' +
+             '<div class="ra-info"><div class="ra-id">' + sid + '</div>' + locHtml + '</div>' +
              '<div style="text-align:right"><div class="ra-pill">Delivered</div><div class="ra-price">' + fmt(m.totalPrice) + ' DH</div></div></div>';
     }).join('');
   } else {
@@ -1094,19 +1102,52 @@ function renderWallet() {
   // 3. Settlement History
   const historyTitle = document.getElementById('historyTitle');
   const historyList  = document.getElementById('wHistoryList');
+  
   if (settled.length > 0) {
     historyTitle.style.display = 'flex';
     historyList.style.display = 'block';
-    historyList.innerHTML = settled.slice(0, 15).map(o => {
-      const settledDate = o.settledAt ? new Date(o.settledAt).toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric'}) : '—';
-      const owe = calcOrderMath(o).driverOwes;
-      const profit = fmt(safeNum(o.deliveryFee));
+
+    const groups = {};
+    const todayStr = new Date().toDateString();
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toDateString();
+
+    settled.forEach(o => {
+      const d = new Date(o.settledAt || o.timestamp || 0);
+      const profit = safeNum(o.deliveryFee);
+      let key, label;
+
+      if (S.historyTab === 'day') {
+        key = d.toDateString();
+        if (key === todayStr) label = "Today";
+        else if (key === yesterdayStr) label = "Yesterday";
+        else label = d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+      } else if (S.historyTab === 'week') {
+        const day = d.getDay();
+        const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust to Monday start
+        const startOfWeek = new Date(d.setDate(diff));
+        key = startOfWeek.toDateString();
+        label = "Week of " + startOfWeek.toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+      } else if (S.historyTab === 'month') {
+        key = d.getFullYear() + '-' + d.getMonth();
+        label = d.toLocaleDateString('en-GB', { month:'long', year:'numeric' });
+      }
+
+      if (!groups[key]) groups[key] = { label, count: 0, profit: 0, timestamp: d.getTime() };
+      groups[key].count += 1;
+      groups[key].profit += profit;
+    });
+
+    const groupedArray = Object.values(groups).sort((a, b) => b.timestamp - a.timestamp);
+    const limit = S.historyTab === 'day' ? 7 : S.historyTab === 'week' ? 4 : 12;
+    
+    historyList.innerHTML = groupedArray.slice(0, limit).map(g => {
       return '<div class="pend-item" style="background:var(--surface); border-radius:12px; margin-bottom:12px; padding:16px">' +
         '<div style="display:flex; align-items:center; gap:16px;">' +
           '<div class="wc-ic" style="background:var(--green);color:var(--green-text)"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>' +
-          '<div><div class="pi-id" style="text-transform:uppercase">' + settledDate + '</div><div style="font-size:12px; color:var(--muted); font-weight:600">Order #' + o.id.slice(-4).toUpperCase() + '</div></div>' +
+          '<div><div class="pi-id" style="text-transform:uppercase">' + g.label + '</div><div style="font-size:13px; color:var(--muted); font-weight:600">' + g.count + ' deliveries</div></div>' +
         '</div>' +
-        '<div style="text-align:right"><div class="pi-amt" style="color:var(--green-text)">+' + profit + ' DH</div><svg viewBox="0 0 24 24" style="width:16px;stroke:var(--muted);fill:none;stroke-width:2.5;margin-top:4px"><polyline points="9 18 15 12 9 6"/></svg></div>' +
+        '<div style="text-align:right"><div class="pi-amt" style="color:var(--green-text)">+' + fmt(g.profit) + ' DH</div></div>' +
       '</div>';
     }).join('');
   } else {
