@@ -1178,6 +1178,14 @@ function refreshNow() {
 document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshNow(); });
 window.addEventListener('focus', refreshNow);
 
+// When a push notification is tapped, the service worker focuses this page and
+// posts NOTIF_CLICK — re-render right away so the order is there immediately.
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', ev => {
+    if (ev.data && ev.data.type === 'NOTIF_CLICK') refreshNow();
+  });
+}
+
 // Lightweight pull-to-refresh on the active screen (re-renders live data).
 (function () {
   let startY = 0, pulling = false, ready = false;
