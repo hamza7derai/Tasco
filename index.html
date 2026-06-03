@@ -691,8 +691,8 @@ if(S.currentTab === 'account') renderAccountScreen();
 const ICONS = {"Top ventes":"🔥","Burgers":"🍔","Tacos":"🌮","Pizzas":"🍕","Fast Food":"🍔","Petit-déjeuner":"🥐","Desserts":"🍦","Boissons":"🥤","Snacks":"🍿","Fruits":"🍎","Viande":"🥩"};
 function getIcon(n) { const db2 = S.catsDB.find(c=>c.name===n); if(db2?.icon) return db2.icon; for(const k in ICONS) if(n.toLowerCase().includes(k.toLowerCase())) return ICONS[k]; return '🍽️'; }
 
-function getMainCats() { const cats = [...new Set(S.products.map(p=>p.category).filter(Boolean))]; cats.sort((a,b) => (S.catsDB.find(c=>c.name===b)?.sortWeight||0) - (S.catsDB.find(c=>c.name===a)?.sortWeight||0) || a.localeCompare(b)); return cats; }
-function getSubCats(main) { return [...new Set(S.products.filter(p=>p.category===main).map(p=>p.subCategory).filter(Boolean))].sort(); }
+function getMainCats() { const avail = S.products.filter(p => isProductAvailableNow(p)); const cats = [...new Set(avail.map(p=>p.category).filter(Boolean))]; cats.sort((a,b) => (S.catsDB.find(c=>c.name===b)?.sortWeight||0) - (S.catsDB.find(c=>c.name===a)?.sortWeight||0) || a.localeCompare(b)); return cats; }
+function getSubCats(main) { return [...new Set(S.products.filter(p=>p.category===main && isProductAvailableNow(p)).map(p=>p.subCategory).filter(Boolean))].sort(); }
 
 function renderHomeCats() {
 const cats = getMainCats();
@@ -734,9 +734,32 @@ if (activeEl) activeEl.parentElement.scrollTo({ left: activeEl.offsetLeft - 16, 
 
 document.getElementById('homeSearch').addEventListener('input', () => renderHomeGrid());
 
+// ── PRODUCT AVAILABILITY (day + time-of-day scheduling) ──────────────
+// Reads the fields written by the manager page:
+//   daysAvailable : array of weekday numbers using JS getDay()
+//                   0=Dimanche, 1=Lundi, 2=Mardi, 3=Mercredi, 4=Jeudi, 5=Vendredi, 6=Samedi
+//   startTime / endTime : "HH:MM" 24-hour strings (e.g. "08:50" → "20:50")
+// A product is only restricted on an axis when that field is present, so
+// products without scheduling fields always show.
+function isProductAvailableNow(p, now = new Date()) {
+// Day-of-week restriction
+if (Array.isArray(p.daysAvailable) && p.daysAvailable.length) {
+if (!p.daysAvailable.map(Number).includes(now.getDay())) return false;
+}
+// Time-of-day restriction (supports windows that cross midnight)
+if (p.startTime && p.endTime) {
+const toMin = t => { const [h, m] = String(t).split(':').map(Number); return (h || 0) * 60 + (m || 0); };
+const cur = now.getHours() * 60 + now.getMinutes();
+const s = toMin(p.startTime), e = toMin(p.endTime);
+if (s <= e) { if (cur < s || cur > e) return false; }   // same-day window
+else { if (cur < s && cur > e) return false; }          // e.g. 22:00 → 02:00
+}
+return true;
+}
+
 function renderHomeGrid() {
 renderHomeCats(); renderHomeSubs();
-let prods = S.products;
+let prods = S.products.filter(p => isProductAvailableNow(p));
 
 if(S.homeActiveCat === 'pop') {
 prods = prods.filter(p => p.sortWeight > 0 || (p.badge && p.badge !== 'Standard'));
@@ -1304,6 +1327,16 @@ navigator.serviceWorker.register('/firebase-messaging-sw.js', { scope: '/' })
 }
 
 // Ensure initial load renders correctly
+// Re-render the home menu when a product's day/time window opens or closes,
+// but only if the available set actually changed (so it never disrupts scrolling).
+let _availSig = null;
+setInterval(() => {
+if (S.currentTab !== 'home') return;
+const sig = S.products.filter(p => isProductAvailableNow(p)).map(p => p.id).sort().join(',');
+if (_availSig !== null && sig !== _availSig) renderHomeGrid();
+_availSig = sig;
+}, 60000);
+
 setTimeout(() => document.getElementById('splash').classList.add('hide'), 1500);
 </script>
 </body>
