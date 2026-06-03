@@ -399,6 +399,7 @@ ADD OPTION GROUP
 <option value="VEDETTE">VEDETTE (Star Item)</option>
 <option value="TOP VENTE">TOP VENTE</option>
 <option value="NOUVEAU">NOUVEAU</option>
+<option value="COMBO PACK">COMBO PACK</option>
 <option value="PROMO">PROMO</option>
 </select>
 </div>
@@ -691,6 +692,26 @@ tier3Fee: parseFloat(document.getElementById('inpT3Fee').value) || 0
 }, { merge: true });
 showToast("Delivery configuration saved!");
 } catch(e) { console.error(e); }
+};
+
+// Live Announcement (shown as a bar at the top of the customer app)
+onSnapshot(doc(db, "settings", "announcement"), snap => {
+if(snap.exists()) {
+const a = snap.data();
+document.getElementById('tglAnnounce').checked = !!a.active;
+document.getElementById('announceText').value = a.text || '';
+}
+});
+
+window.saveAnnouncement = async () => {
+try {
+await setDoc(doc(db, "settings", "announcement"), {
+active: document.getElementById('tglAnnounce').checked,
+text: document.getElementById('announceText').value.trim(),
+updatedAt: new Date().toISOString()
+}, { merge: true });
+showToast("Announcement saved!");
+} catch(e) { console.error(e); showToast("Error saving announcement."); }
 };
 
 // Promos
