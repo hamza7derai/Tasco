@@ -33,7 +33,7 @@ messaging.onBackgroundMessage(payload => {
   self.registration.showNotification(title || '🛵 New Order!', {
     body:     body || 'A new delivery is available.',
     icon:     '/icon-192.png',  // create a 192x192 PNG of your logo
-    badge:    '/icon-96.png',   // small monochrome icon shown in status bar
+    badge:    '/iconBar-96.png',   // small monochrome icon shown in status bar
     vibrate:  [200, 100, 200, 100, 400],
     tag:      'tasco-order',    // replaces previous notification instead of stacking
     renotify: true,             // vibrate again even if same tag
