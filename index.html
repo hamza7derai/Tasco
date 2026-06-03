@@ -108,7 +108,6 @@ font-weight: 900;
 .banner-illus { position:absolute; right:0; top:0; bottom:0; width:118px; display:flex; align-items:center; justify-content:center; z-index:1 }
 .banner-illus-emoji { font-size:62px; filter:drop-shadow(0 6px 10px rgba(0,0,0,.18)) }
 .banner-illus-fade { display:none }
-.banner-swoosh { position:absolute; right:84px; top:50%; transform:translateY(-50%); font-family:var(--font-display); font-weight:900; font-size:160px; line-height:1; color:rgba(255,255,255,.16); z-index:0; pointer-events:none; user-select:none }
 .banner-eta { position:absolute; right:12px; bottom:12px; background:#fff; color:var(--orange); border-radius:50%; width:60px; height:60px; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(0,0,0,.18); z-index:3 }
 .banner-eta b { font-family:var(--font-display); font-size:15px; font-weight:900; line-height:1 }
 .banner-eta small { font-size:8px; font-weight:800; letter-spacing:.5px; color:var(--muted); margin-top:1px }
@@ -157,6 +156,7 @@ font-weight: 900;
 .t-top { background:var(--amber-light); color:var(--amber) }
 .t-new { background:var(--purple-light); color:var(--purple) }
 .t-vedette { background:var(--danger-light); color:var(--danger) }
+.t-combo { background:var(--blue-light); color:var(--blue) }
 .pc-body { padding:12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;}
 .pc-name { font-size:20px; font-weight:900; line-height:1; margin-bottom:4px; letter-spacing:0.5px; color: var(--text); }
 .pc-sub { font-size:12px; color:var(--muted); font-family: var(--font-display); font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px }
@@ -236,8 +236,8 @@ font-weight: 900;
 .lc-change { font-size:12px; color:var(--muted); cursor:pointer; text-decoration:underline; display:block; font-weight:600 }
 
 /* PRODUCT MODAL & MAP MODAL */
-.prod-modal { position:fixed; bottom:0; left:0; right:0; max-width:600px; margin:0 auto; background:#fff; border-radius:30px 30px 0 0; z-index:2001; transform:translateY(100%); transition:.38s cubic-bezier(.175,.885,.32,1); max-height:92vh; display:flex; flex-direction:column; overflow:hidden; box-shadow: 0 -10px 40px rgba(0,0,0,0.15);}
-.prod-modal.show { transform:translateY(0) }
+.prod-modal { position:fixed; bottom:0; left:0; right:0; max-width:600px; margin:0 auto; background:#fff; border-radius:30px 30px 0 0; z-index:2001; transform:translateY(100%); transition:.38s cubic-bezier(.175,.885,.32,1); max-height:92vh; display:flex; flex-direction:column; overflow:hidden; }
+.prod-modal.show { transform:translateY(0); box-shadow: 0 -10px 40px rgba(0,0,0,0.15); }
 .modal-ovl { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; }
 .modal-ovl.show { opacity: 1; pointer-events: auto; }
 
@@ -380,13 +380,12 @@ font-weight: 900;
 </div>
 
 <div class="home-banner">
-<div class="banner-swoosh">S</div>
 <div class="banner-content">
 <div class="banner-hello" id="bannerHello">BONJOUR 👋</div>
 <div class="banner-title" id="bannerTitle">NOUS SOMMES<br><span>EN LIGNE !</span></div>
 <div style="display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--text);padding:6px 12px;border-radius:99px;font-size:11px;font-weight:800;font-family:var(--font-display);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;box-shadow:0 2px 8px rgba(0,0,0,.12);">⚡ Livraison rapide</div>
 </div>
-<div class="banner-illus"><div class="banner-illus-emoji">🍔</div></div>
+<div class="banner-illus"><div class="banner-illus-emoji">🍕</div></div>
 <div class="banner-eta"><b>20–30</b><small>MIN</small></div>
 </div>
 
@@ -834,7 +833,7 @@ html += `</div>`;
 });
 }
 
-html += `<div class="pm-group"><div class="pm-g-title">Note <span class="pm-opt">OPTIONNEL</span></div><textarea class="auth-input" id="pmNotes" rows="2" placeholder="Ex: Sans oignons..." style="text-align:left; font-size:15px;"></textarea></div>`;
+html += `<div class="pm-group"><div class="pm-g-title">Note <span class="pm-opt">OPTIONNEL</span></div><textarea class="auth-input" id="pmNotes" rows="2" placeholder="Ex: Sans sucre, peu épicé..." style="text-align:left; font-size:15px;"></textarea></div>`;
 
 document.getElementById('pmBody').innerHTML = html;
 updatePmP();
@@ -1235,7 +1234,8 @@ const displayOrders = S.orderTab === 'active' ? activeOrders : historyOrders;
 
 document.getElementById('ordersTabContainer').style.display = 'flex';
 const activeTabTxt = activeOrders.length ? `EN COURS (${activeOrders.length})` : 'EN COURS';
-document.getElementById('ordersTabContainer').innerHTML = `<div class="o-tab ${S.orderTab === 'active' ? 'active' : ''}" onclick="switchOrderTab('active')">${activeTabTxt}</div><div class="o-tab ${S.orderTab === 'history' ? 'active' : ''}" onclick="switchOrderTab('history')">HISTORIQUE</div>`;
+const historyTabTxt = historyOrders.length ? `HISTORIQUE (${historyOrders.length})` : 'HISTORIQUE';
+document.getElementById('ordersTabContainer').innerHTML = `<div class="o-tab ${S.orderTab === 'active' ? 'active' : ''}" onclick="switchOrderTab('active')">${activeTabTxt}</div><div class="o-tab ${S.orderTab === 'history' ? 'active' : ''}" onclick="switchOrderTab('history')">${historyTabTxt}</div>`;
 
 if(!displayOrders.length) {
 content.innerHTML = `<div class="empty-state" style="padding-top: 100px;"><div class="es-ic">${S.orderTab==='active'?'🛵':'🕰️'}</div><h3>${S.orderTab==='active'?'Aucune commande en cours':'Historique vide'}</h3></div>`;
@@ -1319,13 +1319,13 @@ function renderAccountScreen() {
 const content = document.getElementById('accountContent');
 const name = S.userDoc?.name || 'Client Invité';
 
-content.innerHTML = `<div style="margin:0 16px 16px; font-size:14px; color:var(--muted); font-weight:600;">Gérez vos informations et préférences</div>
+content.innerHTML = `<div style="margin:14px 16px 18px; font-size:14px; color:var(--muted); font-weight:600;">Gérez vos informations et préférences</div>
 
-<div class="profile-card" style="margin:0 16px 20px; background:var(--surface); border-radius:var(--r-xl); border:1.5px solid var(--border); padding:16px; display:flex; align-items:center; gap:16px; box-shadow:var(--shadow);"><div class="prof-av" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#ff8040);display:flex;align-items:center;justify-content:center;font-size:30px;font-family:var(--font-display);font-weight:900;color:#fff;flex-shrink:0;">${name.charAt(0).toUpperCase()}</div><div style="flex:1;min-width:0;"><div class="prof-name" style="font-size:22px;font-family:var(--font-display);text-transform:uppercase;font-weight:900;letter-spacing:0.5px;margin-bottom:4px;">${name}</div><div class="prof-phone" style="font-size:14px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:6px;"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--orange);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>${S.userDoc?.phone || 'Non renseigné'}</div></div><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg></div>
+<div class="profile-card" style="margin:0 16px 20px; background:var(--surface); border-radius:var(--r-xl); border:1.5px solid var(--border); padding:16px; display:flex; align-items:center; gap:16px; box-shadow:var(--shadow);"><div class="prof-av" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#ff8040);display:flex;align-items:center;justify-content:center;font-size:30px;font-family:var(--font-display);font-weight:900;color:#fff;flex-shrink:0;">${name.charAt(0).toUpperCase()}</div><div style="flex:1;min-width:0;"><div class="prof-name" style="font-size:22px;font-family:var(--font-display);text-transform:uppercase;font-weight:900;letter-spacing:0.5px;margin-bottom:4px;">${name}</div><div class="prof-phone" style="font-size:14px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:6px;"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--orange);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>${S.userDoc?.phone || 'Non renseigné'}</div></div></div>
 
 <div class="club-card" style="margin:0 16px 24px; position:relative; overflow:hidden; background:linear-gradient(135deg, var(--orange-light), #fff5ee); border-radius:var(--r-xl); border:1px solid var(--orange-light); padding:20px; box-shadow:var(--shadow);"><div style="position:absolute; right:-8px; bottom:-16px; font-size:96px; opacity:0.13; pointer-events:none;">🎁</div><div style="display:flex; align-items:flex-start; gap:14px; position:relative; z-index:1;"><div style="width:46px;height:46px;border-radius:14px;background:rgba(255,90,0,0.14);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">👑</div><div style="flex:1;"><div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px;"><div style="font-size:20px; font-family:var(--font-display); font-weight:900; letter-spacing:0.5px; color:var(--orange);">TASCO CLUB</div><div style="font-size:11px; font-family:var(--font-display); font-weight:900; color:var(--orange); background:rgba(255,90,0,0.14); padding:5px 10px; border-radius:99px; letter-spacing:0.5px; white-space:nowrap;">PROCHAINEMENT</div></div><p style="font-size:13px; color:var(--muted); font-weight:500; line-height:1.5;">Gagnez des points et débloquez des récompenses exclusives.</p></div></div></div>
 
-<div style="margin:0 16px;"><div class="cs-label" style="margin-bottom:12px;">Assistance & Réseaux</div><div style="background:var(--surface); border-radius:var(--r-lg); border:1px solid var(--border); overflow:hidden; box-shadow:var(--shadow);"><div class="acc-item" onclick="window.open('https://wa.me/212708006088','_blank')" style="border-bottom:1px solid var(--border);"><div class="acc-ic" style="background:var(--green-light);"><svg viewBox="0 0 24 24" style="width:20px;stroke:var(--green);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></div><div class="acc-body"><div class="acc-lbl">Support WhatsApp</div><div class="acc-sub">Discutez avec notre équipe</div></div><svg viewBox="0 0 24 24" style="width:18px;stroke:var(--muted);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg></div><div class="acc-item" onclick="window.open('https://instagram.com/tasco.ma','_blank')"><div class="acc-ic" style="background:linear-gradient(135deg,#feda75,#d62976 45%,#962fbf 75%,#4f5bd5);"><svg viewBox="0 0 24 24" style="width:20px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></div><div class="acc-body"><div class="acc-lbl">Suivez-nous sur Instagram</div><div class="acc-sub">Restez informé de nos nouveautés</div></div><svg viewBox="0 0 24 24" style="width:18px;stroke:var(--muted);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg></div></div></div>`;
+<div style="margin:0 16px;"><div class="cs-label" style="margin-bottom:12px;">Assistance & Réseaux</div><div style="background:var(--surface); border-radius:var(--r-lg); border:1px solid var(--border); overflow:hidden; box-shadow:var(--shadow);"><div class="acc-item" onclick="window.open('https://wa.me/212708006088','_blank')" style="border-bottom:1px solid var(--border);"><div class="acc-ic" style="background:var(--green-light);"><svg viewBox="0 0 24 24" style="width:22px;fill:var(--green);"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4 7.94 7.94 0 0 0 4.1 11.9a7.84 7.84 0 0 0 1.07 3.96L4 20l4.25-1.11a7.93 7.93 0 0 0 3.79.97h.01a7.94 7.94 0 0 0 7.94-7.9 7.85 7.85 0 0 0-2.39-5.64zM12.05 18.5a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.44-.16-.25a6.55 6.55 0 0 1-1-3.5 6.59 6.59 0 0 1 11.26-4.65 6.5 6.5 0 0 1 1.95 4.66 6.59 6.59 0 0 1-6.58 6.58zm3.61-4.93c-.2-.1-1.17-.58-1.35-.64s-.31-.1-.44.1-.51.64-.62.77-.23.15-.42.05a5.4 5.4 0 0 1-1.6-.99 6 6 0 0 1-1.1-1.38c-.12-.2 0-.31.09-.41s.2-.23.3-.35a1.34 1.34 0 0 0 .2-.33.37.37 0 0 0 0-.35c0-.1-.44-1.06-.6-1.45s-.32-.33-.44-.34h-.38a.72.72 0 0 0-.52.24 2.18 2.18 0 0 0-.68 1.62 3.79 3.79 0 0 0 .79 2 8.7 8.7 0 0 0 3.33 2.94c.47.2.83.32 1.11.41a2.68 2.68 0 0 0 1.23.08c.37-.06 1.17-.48 1.34-.94a1.66 1.66 0 0 0 .11-.94c-.05-.08-.18-.13-.38-.23z"/></svg></div><div class="acc-body"><div class="acc-lbl">Support WhatsApp</div><div class="acc-sub">Discutez avec notre équipe</div></div><svg viewBox="0 0 24 24" style="width:18px;stroke:var(--muted);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg></div><div class="acc-item" onclick="window.open('https://instagram.com/tasco.ma','_blank')"><div class="acc-ic" style="background:#fce7f0;"><svg viewBox="0 0 24 24" style="width:20px;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;"><defs><linearGradient id="igGrad" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#feda75"/><stop offset="0.45" stop-color="#d62976"/><stop offset="0.75" stop-color="#962fbf"/><stop offset="1" stop-color="#4f5bd5"/></linearGradient></defs><rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="url(#igGrad)"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="url(#igGrad)"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="url(#igGrad)"></line></svg></div><div class="acc-body"><div class="acc-lbl">Suivez-nous sur Instagram</div><div class="acc-sub">Restez informé de nos nouveautés</div></div><svg viewBox="0 0 24 24" style="width:18px;stroke:var(--muted);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg></div></div></div>`;
 }
 
 // ── SERVICE WORKER REGISTRATION ──────────────────────────────
