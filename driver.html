@@ -386,7 +386,7 @@ img{display:block}
         <div class="w-card">
           <div class="wc-ic-wrap">
             <div class="wc-ic" style="background:var(--green);color:var(--green-text)"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01"/><path d="M17 12h.01"/><path d="M7 12h.01"/></svg></div>
-            <div class="wc-title">Today Earned</div>
+            <div class="wc-title">Earned (Unsettled)</div>
           </div>
           <div class="wc-val"><span id="wEarnTotal">0.00</span> <span>DH</span></div>
           <div class="wc-sub">
@@ -466,7 +466,7 @@ img{display:block}
       </div>
 
       <div class="card-block" style="padding:0 24px 24px">
-        <div class="sum-row"><span class="sum-lbl">Pay to Kitchen (Upfront)</span><span class="sum-val" id="detCost">0.00 DH</span></div>
+        <div class="sum-row"><span class="sum-lbl">Pay to Restaurant (Upfront)</span><span class="sum-val" id="detCost">0.00 DH</span></div>
         <div class="sum-row"><span class="sum-lbl">Collect Cash from Client</span><span class="sum-val" id="detPrice">0.00 DH</span></div>
         <div class="sum-row profit"><span class="sum-lbl">Your Delivery Profit</span><span class="sum-val" id="detFee">0.00 DH</span></div>
         <div class="sum-row total"><span class="sum-lbl">Margin for Shop (Owed)</span><span class="sum-val" id="detOwe">0.00 DH</span></div>
@@ -479,7 +479,7 @@ img{display:block}
 
       <div class="info-banner" id="detBanner">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        <span id="detBannerTxt">Please pick up the order from the shop and deliver to the customer.</span>
+        <span id="detBannerTxt">Please pick up the order from the restaurant and deliver to the customer.</span>
       </div>
 
       <div class="bottom-actions" id="detActions"></div>
@@ -536,7 +536,7 @@ img{display:block}
 </div>
 
 <script type="module">
-import { getFirestore, collection, doc, getDoc, onSnapshot, updateDoc, query, where, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, doc, getDoc, onSnapshot, updateDoc, query, where, runTransaction, writeBatch } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
@@ -562,6 +562,7 @@ const VAPID_KEY = 'BIA11IYOKDeINtdv7w9WyCUyhPM6Ym7IugYsxQCFFqZmt_8dm0vjnmtThikBZ
 const S = {
   driver: null,       
   orders: [],
+  settlements: [],
   prevOrderIds: null,
   homeTab: 'pool',
   historyTab: 'day',
@@ -681,18 +682,36 @@ window.goBackToPhone = function() { showStep('stepPhone'); };
 
 let _appInitialised = false;
 onAuthStateChanged(auth, async user => {
-  if (user) {
-    const saved = localStorage.getItem('lasgo_driver_session');
-    if (saved) { try { S.driver = JSON.parse(saved); initApp(); return; } catch(e){} }
-    const phone = user.phoneNumber;
-    if (phone) {
-      const snap = await getDoc(doc(db, 'drivers', phone));
-      const data = snap.exists() ? snap.data() : {};
-      S.driver = { name: data.name || 'Driver', phone, photoUrl: data.photoUrl || data.photo || '' };
-      localStorage.setItem('lasgo_driver_session', JSON.stringify(S.driver));
-      initApp();
-    } else { showAuth(); }
-  } else { showAuth(); }
+  if (!user) { showAuth(); return; }
+
+  const saved = localStorage.getItem('lasgo_driver_session');
+  let savedDriver = null;
+  if (saved) { try { savedDriver = JSON.parse(saved); } catch(e) {} }
+  const phone = (savedDriver && savedDriver.phone) || user.phoneNumber;
+  if (!phone) { showAuth(); return; }
+
+  try {
+    // Always re-check the driver doc — a deactivated or deleted driver must be
+    // locked out even if they still have a saved session. Missing isActive = active.
+    const snap = await getDoc(doc(db, 'drivers', phone));
+    if (!snap.exists() || snap.data().isActive === false) {
+      localStorage.removeItem('lasgo_driver_session');
+      await signOut(auth);
+      showAuth();
+      showAuthErr('phoneErr', 'Your driver account is no longer active. Please contact the admin.');
+      return;
+    }
+    const data = snap.data();
+    S.driver = { name: data.name || 'Driver', phone, photoUrl: data.photoUrl || data.photo || '' };
+    localStorage.setItem('lasgo_driver_session', JSON.stringify(S.driver));
+    initApp();
+  } catch(e) {
+    // Network/transient error: don't lock a working driver out over a hiccup —
+    // fall back to the cached session if we have one.
+    console.warn('Driver re-validation failed, using cached session:', e.message);
+    if (savedDriver) { S.driver = savedDriver; initApp(); }
+    else { showAuth(); }
+  }
 });
 
 async function initApp() {
@@ -770,6 +789,15 @@ function startOrdersListener() {
     S.orders = newOrders;
     renderAll();
   });
+
+  // Settlement requests for this driver (source of truth for frozen amounts owed).
+  if (S.driver) {
+    const sq = query(collection(db, 'settlements'), where('driverId', '==', S.driver.phone));
+    onSnapshot(sq, snap => {
+      S.settlements = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      if (document.getElementById('sWallet').classList.contains('active')) renderWallet();
+    });
+  }
 }
 
 function triggerNotification(order) {
@@ -943,7 +971,7 @@ window.openDetail = function(id) {
     document.getElementById('detBannerTxt').textContent = 'Please accept to claim this delivery.';
     actionsHtml = '<button class="btn btn-primary" onclick="doAction(\'' + o.id + '\', \'claim\')"><svg viewBox="0 0 24 24" style="width:20px;fill:none;stroke:#fff;stroke-width:2.5"><polyline points="20 6 9 17 4 12"/></svg> Accept Delivery</button>';
   } else if (o.status === 'Accepted' && o.driverId === S.driver?.phone) {
-    document.getElementById('detBannerTxt').textContent = 'Please pick up the order from the shop.';
+    document.getElementById('detBannerTxt').textContent = 'Please pick up the order from the restaurant.';
     actionsHtml = '<button class="btn btn-primary" onclick="doAction(\'' + o.id + '\', \'pickup\')"><svg viewBox="0 0 24 24" style="width:20px;fill:none;stroke:#fff;stroke-width:2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Pick Up Order</button>' +
                   '<button class="btn btn-outline" style="color:var(--red)" onclick="doAction(\'' + o.id + '\', \'release\')"><svg viewBox="0 0 24 24" style="width:20px;fill:none;stroke:currentColor;stroke-width:2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Release Order</button>';
   } else if (o.status === 'Out for Delivery' && o.driverId === S.driver?.phone) {
@@ -992,30 +1020,68 @@ window.doAction = async function(id, action) {
   }
 };
 
-// ── NEW SETTLEMENT LOGIC ──────────────────────────────────────
+// ── SETTLEMENT LOGIC ──────────────────────────────────────────
+// "Mark as Paid" does NOT clear any debt. It freezes the exact amount owed
+// into a single `settlements` record (atomic), and flags the covered orders
+// as "settlementRequested". The admin later approves it. Because the amount
+// is captured as a number at request time, it can never be lost or drift if
+// an order changes afterwards.
 window.markAsPaid = async function() {
   if (!S.driver) return;
+
   const unsettled = S.orders.filter(o =>
     o.driverId === S.driver.phone &&
     o.status === 'Delivered' &&
     !o.driverSettled &&
     !o.settlementRequested
   );
-  
+
   if (!unsettled.length) { showToast('Nothing to settle right now'); return; }
-  if (!confirm('Send settlement request to admin?')) return;
+
+  // Freeze the figures NOW.
+  let amountOwed = 0, earnings = 0;
+  const breakdown = unsettled.map(o => {
+    const m = calcOrderMath(o);
+    amountOwed += m.driverOwes;
+    earnings   += m.deliveryFee;
+    return { orderId: o.id, owed: m.driverOwes, deliveryFee: m.deliveryFee, totalPrice: m.totalPrice };
+  });
+  const orderIds = unsettled.map(o => o.id);
+
+  if (!confirm(`Send settlement request to admin?\n\nAmount to hand over: ${fmt(amountOwed)} DH\nOrders: ${orderIds.length}`)) return;
 
   try {
-    for (const o of unsettled) {
-      await updateDoc(doc(db, 'orders', o.id), {
-        settlementRequested: true,
-        settlementRequestedAt: new Date().toISOString()
+    const batch = writeBatch(db);
+
+    // 1) One frozen settlement record (auto-id).
+    const settlementRef = doc(collection(db, 'settlements'));
+    batch.set(settlementRef, {
+      driverId:    S.driver.phone,
+      driverName:  S.driver.name || 'Driver',
+      amountOwed:  Math.round(amountOwed * 100) / 100,  // frozen — what the admin collects
+      earnings:    Math.round(earnings * 100) / 100,    // driver's delivery-fee cut (info)
+      orderCount:  orderIds.length,
+      orderIds,
+      breakdown,
+      status:      'pending',                            // admin flips to 'approved'
+      requestedAt: new Date().toISOString()
+    });
+
+    // 2) Link & flag each covered order (debt stays intact until admin approves).
+    unsettled.forEach(o => {
+      batch.update(doc(db, 'orders', o.id), {
+        settlementRequested:   true,
+        settlementRequestedAt: new Date().toISOString(),
+        settlementId:          settlementRef.id
       });
-    }
-    showToast('⏳ Request sent to admin!');
+    });
+
+    await batch.commit();   // all-or-nothing
+    showToast('⏳ Settlement request sent to admin!');
     renderWallet();
   } catch(e) {
     showToast('Error: ' + e.message);
+    console.error('Settlement failed:', e);
   }
 };
 
@@ -1023,9 +1089,8 @@ function renderWallet() {
   if (!S.driver) return;
   const mineDelivered = S.orders.filter(o => o.driverId === S.driver.phone && o.status === 'Delivered');
   
-  // Split into three distinct states
+  // Split into states (settled is order-based; pending-approval is settlement-based below)
   const unsettled = mineDelivered.filter(o => !o.driverSettled && !o.settlementRequested);
-  const pendingApproval = mineDelivered.filter(o => !o.driverSettled && o.settlementRequested);
   const settled = mineDelivered.filter(o => o.driverSettled).sort((a,b) => new Date(b.settledAt||b.timestamp||0) - new Date(a.settledAt||a.timestamp||0));
 
   // Totals for cash the driver hasn't requested settlement for yet
@@ -1057,17 +1122,20 @@ function renderWallet() {
   document.getElementById('wPendList').innerHTML = pendHtml;
   document.getElementById('wPendTotalAmt').textContent = fmt(pendTotal) + ' DH';
 
-  // 2. Pending Admin Approval
+  // 2. Pending Admin Approval — driven by the frozen settlement records.
   const approvalWrap = document.getElementById('wPendingApprovalWrap');
   const approvalList = document.getElementById('wPendingApprovalList');
-  if (pendingApproval.length > 0) {
+  const pendingSettlements = (S.settlements || [])
+    .filter(s => s.status === 'pending')
+    .sort((a,b) => new Date(b.requestedAt||0) - new Date(a.requestedAt||0));
+  if (pendingSettlements.length > 0) {
     approvalWrap.style.display = 'block';
-    approvalList.innerHTML = pendingApproval.map(o => {
-      const sid = '#' + o.id.slice(-4).toUpperCase();
-      const owe = calcOrderMath(o).driverOwes;
-      return '<div class="pend-item" style="opacity:0.7">' +
-        '<div class="pi-id">' + sid + '</div>' +
-        '<div class="pi-amt" style="color:var(--primary)">' + fmt(owe) + ' DH (Waiting)</div>' +
+    approvalList.innerHTML = pendingSettlements.map(s => {
+      const when = s.requestedAt ? new Date(s.requestedAt).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
+      const count = s.orderCount || (s.orderIds || []).length;
+      return '<div class="pend-item" style="opacity:0.85">' +
+        '<div class="pi-id">' + count + ' orders · ' + when + '</div>' +
+        '<div class="pi-amt" style="color:var(--primary)">' + fmt(s.amountOwed) + ' DH (Waiting)</div>' +
       '</div>';
     }).join('');
   } else {
