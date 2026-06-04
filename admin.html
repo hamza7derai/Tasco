@@ -977,7 +977,7 @@ const btnDelete = document.getElementById('btnDeleteOrder');
 const btnPrint = document.getElementById('btnPrintReceipt');
 
 if (order.status === 'Pending') {
-actionContextHtml = `<button class="btn btn-primary" onclick="promptOrderStatus('${order.id}', 'Preparing')">ACCEPT & MARK PREPARING</button>`;
+actionContextHtml = `<div style="text-align:center; padding:16px; background:var(--bg-main); border-radius:12px; font-weight:800; font-size:13px; text-transform:uppercase; border: 1px dashed var(--border-dark);">WAITING FOR A DRIVER TO CLAIM</div>`;
 } else if (order.status === 'Preparing') {
 actionContextHtml = `<div style="text-align:center; padding:16px; background:var(--bg-main); border-radius:12px; font-weight:800; font-size:13px; text-transform:uppercase; border: 1px dashed var(--border-dark);">WAITING FOR DRIVER POOL DISPATCH</div>`;
 } else if (order.status === 'Accepted' || order.status === 'Driver Assigned' || order.status === 'Out for Delivery') {
