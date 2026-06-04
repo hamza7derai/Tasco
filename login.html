@@ -7,284 +7,284 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #F8F4EE;
-  --surface: #FFFFFF;
-  --primary: #FF5A00;
-  --primary-light: rgba(255,90,0,0.1);
-  --text: #171717;
-  --muted: #6B7280;
-  --border: #E6E2DC;
-  --border-dark: #D1D5DB;
-  --danger: #EF4444;
-  --danger-light: #FEF2F2;
-  --shadow: 0 10px 40px rgba(23,23,23,0.08);
+--bg: #F8F4EE;
+--surface: #FFFFFF;
+--primary: #FF5A00;
+--primary-light: rgba(255,90,0,0.1);
+--text: #171717;
+--muted: #6B7280;
+--border: #E6E2DC;
+--border-dark: #D1D5DB;
+--danger: #EF4444;
+--danger-light: #FEF2F2;
+--shadow: 0 10px 40px rgba(23,23,23,0.08);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
 html, body {
-  height: 100%;
-  background: var(--bg);
-  font-family: 'Space Grotesk', sans-serif;
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
+height: 100%;
+background: var(--bg);
+font-family: 'Space Grotesk', sans-serif;
+color: var(--text);
+-webkit-font-smoothing: antialiased;
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 24px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+min-height: 100vh;
+padding: 24px;
 }
 
 /* TOP BRAND MARK */
 .brand {
-  text-align: center;
-  margin-bottom: 40px;
+text-align: center;
+margin-bottom: 40px;
 }
 .brand-logo {
-  font-size: 32px;
-  font-weight: 900;
-  color: var(--primary);
-  letter-spacing: -1.5px;
-  margin-bottom: 6px;
+font-size: 32px;
+font-weight: 900;
+color: var(--primary);
+letter-spacing: -1.5px;
+margin-bottom: 6px;
 }
 .brand-sub {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+font-size: 11px;
+font-weight: 700;
+color: var(--muted);
+text-transform: uppercase;
+letter-spacing: 1.5px;
 }
 
 /* LOGIN CARD */
 .login-card {
-  background: var(--surface);
-  border-radius: 24px;
-  padding: 32px 24px;
-  width: 100%;
-  max-width: 380px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
+background: var(--surface);
+border-radius: 24px;
+padding: 32px 24px;
+width: 100%;
+max-width: 380px;
+box-shadow: var(--shadow);
+border: 1px solid var(--border);
 }
 
 .card-title {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 4px;
-  letter-spacing: -0.5px;
+font-size: 20px;
+font-weight: 800;
+color: var(--text);
+margin-bottom: 4px;
+letter-spacing: -0.5px;
 }
 
 .card-sub {
-  font-size: 13px;
-  color: var(--muted);
-  font-weight: 500;
-  margin-bottom: 28px;
-  line-height: 1.5;
+font-size: 13px;
+color: var(--muted);
+font-weight: 500;
+margin-bottom: 28px;
+line-height: 1.5;
 }
 
 /* FORM */
 .form-group {
-  margin-bottom: 16px;
+margin-bottom: 16px;
 }
 .form-group label {
-  display: block;
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--text);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 8px;
+display: block;
+font-size: 11px;
+font-weight: 800;
+color: var(--text);
+text-transform: uppercase;
+letter-spacing: 0.5px;
+margin-bottom: 8px;
 }
 .form-control {
-  width: 100%;
-  padding: 14px 16px;
-  border: 1.5px solid var(--border-dark);
-  border-radius: 12px;
-  background: var(--bg);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  font-family: inherit;
-  outline: none;
-  transition: 0.2s;
+width: 100%;
+padding: 14px 16px;
+border: 1.5px solid var(--border-dark);
+border-radius: 12px;
+background: var(--bg);
+font-size: 14px;
+font-weight: 600;
+color: var(--text);
+font-family: inherit;
+outline: none;
+transition: 0.2s;
 }
 .form-control:focus {
-  border-color: var(--primary);
-  background: var(--surface);
-  box-shadow: 0 0 0 3px var(--primary-light);
+border-color: var(--primary);
+background: var(--surface);
+box-shadow: 0 0 0 3px var(--primary-light);
 }
 
 /* PASSWORD FIELD WITH SHOW/HIDE */
 .pass-wrap {
-  position: relative;
+position: relative;
 }
 .pass-wrap .form-control {
-  padding-right: 48px;
+padding-right: 48px;
 }
 .btn-eye {
-  position: absolute;
-  right: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--muted);
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 4px;
-  display: flex;
-  align-items: center;
+position: absolute;
+right: 14px;
+top: 50%;
+transform: translateY(-50%);
+color: var(--muted);
+cursor: pointer;
+background: none;
+border: none;
+padding: 4px;
+display: flex;
+align-items: center;
 }
 .btn-eye svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+width: 18px;
+height: 18px;
+fill: none;
+stroke: currentColor;
+stroke-width: 2.2;
+stroke-linecap: round;
+stroke-linejoin: round;
 }
 
 /* ERROR MESSAGE */
 .error-box {
-  display: none;
-  background: var(--danger-light);
-  border: 1px solid rgba(239,68,68,0.2);
-  border-radius: 10px;
-  padding: 12px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--danger);
-  margin-bottom: 16px;
-  display: none;
-  align-items: center;
-  gap: 8px;
+display: none;
+background: var(--danger-light);
+border: 1px solid rgba(239,68,68,0.2);
+border-radius: 10px;
+padding: 12px 14px;
+font-size: 13px;
+font-weight: 600;
+color: var(--danger);
+margin-bottom: 16px;
+display: none;
+align-items: center;
+gap: 8px;
 }
 .error-box svg {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.5;
-  flex-shrink: 0;
+width: 16px;
+height: 16px;
+fill: none;
+stroke: currentColor;
+stroke-width: 2.5;
+flex-shrink: 0;
 }
 .error-box.show {
-  display: flex;
+display: flex;
 }
 
 /* LOGIN BUTTON */
 .btn-login {
-  width: 100%;
-  padding: 16px;
-  background: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 800;
-  font-family: inherit;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 8px;
-  box-shadow: 0 6px 20px rgba(255,90,0,0.25);
+width: 100%;
+padding: 16px;
+background: var(--primary);
+color: white;
+border: none;
+border-radius: 12px;
+font-size: 15px;
+font-weight: 800;
+font-family: inherit;
+cursor: pointer;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+transition: 0.2s;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+margin-top: 8px;
+box-shadow: 0 6px 20px rgba(255,90,0,0.25);
 }
 .btn-login:active { transform: scale(0.98); }
 .btn-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
 /* SPINNER */
 .spinner {
-  width: 20px;
-  height: 20px;
-  border: 2.5px solid rgba(255,255,255,0.3);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  flex-shrink: 0;
+width: 20px;
+height: 20px;
+border: 2.5px solid rgba(255,255,255,0.3);
+border-top-color: #fff;
+border-radius: 50%;
+animation: spin 0.7s linear infinite;
+flex-shrink: 0;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* DIVIDER */
 .divider {
-  text-align: center;
-  margin: 24px 0 20px;
-  position: relative;
+text-align: center;
+margin: 24px 0 20px;
+position: relative;
 }
 .divider::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--border);
+content: '';
+position: absolute;
+top: 50%;
+left: 0;
+right: 0;
+height: 1px;
+background: var(--border);
 }
 .divider span {
-  background: var(--surface);
-  padding: 0 12px;
-  position: relative;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+background: var(--surface);
+padding: 0 12px;
+position: relative;
+font-size: 11px;
+font-weight: 700;
+color: var(--muted);
+text-transform: uppercase;
+letter-spacing: 1px;
 }
 
 /* CUSTOMER LINK */
 .customer-link {
-  text-align: center;
-  font-size: 13px;
-  color: var(--muted);
-  font-weight: 500;
+text-align: center;
+font-size: 13px;
+color: var(--muted);
+font-weight: 500;
 }
 .customer-link a {
-  color: var(--primary);
-  font-weight: 700;
-  text-decoration: none;
+color: var(--primary);
+font-weight: 700;
+text-decoration: none;
 }
 
 /* FOOTER */
 .login-footer {
-  margin-top: 32px;
-  text-align: center;
-  font-size: 11px;
-  color: var(--muted);
-  font-weight: 500;
+margin-top: 32px;
+text-align: center;
+font-size: 11px;
+color: var(--muted);
+font-weight: 500;
 }
 
 /* LOADING OVERLAY */
 #loadingOverlay {
-  position: fixed;
-  inset: 0;
-  background: var(--bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-  transition: opacity 0.3s;
+position: fixed;
+inset: 0;
+background: var(--bg);
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 999;
+transition: opacity 0.3s;
 }
 #loadingOverlay.hide {
-  opacity: 0;
-  pointer-events: none;
+opacity: 0;
+pointer-events: none;
 }
 .loading-logo {
-  font-size: 28px;
-  font-weight: 900;
-  color: var(--primary);
-  letter-spacing: -1px;
-  animation: pulse 1.2s ease-in-out infinite;
+font-size: 28px;
+font-weight: 900;
+color: var(--primary);
+letter-spacing: -1px;
+animation: pulse 1.2s ease-in-out infinite;
 }
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+0%, 100% { opacity: 1; }
+50% { opacity: 0.4; }
 }
 </style>
 </head>
@@ -292,64 +292,64 @@ body {
 
 <!-- Loading overlay while Firebase checks auth state -->
 <div id="loadingOverlay">
-  <div class="loading-logo">TASCO</div>
+<div class="loading-logo">TASCO</div>
 </div>
 
 <div class="brand">
-  <div class="brand-logo">TASCO</div>
-  <div class="brand-sub">Staff Access</div>
+<div class="brand-logo">TASCO</div>
+<div class="brand-sub">Staff Access</div>
 </div>
 
 <div class="login-card">
-  <div class="card-title">Welcome back</div>
-  <div class="card-sub">Sign in to access your workspace.</div>
+<div class="card-title">Welcome back</div>
+<div class="card-sub">Sign in to access your workspace.</div>
 
-  <div class="form-group">
-    <label>Email</label>
-    <input
-      type="email"
-      id="loginEmail"
-      class="form-control"
-      placeholder="admin@tasco.ma"
-      autocomplete="email"
-      inputmode="email"
-    />
-  </div>
+<div class="form-group">
+<label>Email</label>
+<input
+type="email"
+id="loginEmail"
+class="form-control"
+placeholder="admin@tasco.ma"
+autocomplete="email"
+inputmode="email"
+/>
+</div>
 
-  <div class="form-group">
-    <label>Password</label>
-    <div class="pass-wrap">
-      <input
-        type="password"
-        id="loginPass"
-        class="form-control"
-        placeholder="••••••••"
-        autocomplete="current-password"
-      />
-      <button class="btn-eye" onclick="togglePassword()" id="btnEye" type="button">
-        <svg id="eyeIcon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-      </button>
-    </div>
-  </div>
+<div class="form-group">
+<label>Password</label>
+<div class="pass-wrap">
+<input
+type="password"
+id="loginPass"
+class="form-control"
+placeholder="••••••••"
+autocomplete="current-password"
+/>
+<button class="btn-eye" onclick="togglePassword()" id="btnEye" type="button">
+<svg id="eyeIcon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+</button>
+</div>
+</div>
 
-  <div class="error-box" id="errorBox">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-    <span id="errorMsg">Invalid email or password.</span>
-  </div>
+<div class="error-box" id="errorBox">
+<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+<span id="errorMsg">Invalid email or password.</span>
+</div>
 
-  <button class="btn-login" id="btnLogin" onclick="handleLogin()">
-    Sign In
-  </button>
+<button class="btn-login" id="btnLogin" onclick="handleLogin()">
+Sign In
+</button>
 
-  <div class="divider"><span>or</span></div>
+<div class="divider"><span>or</span></div>
 
-  <div class="customer-link">
-    Looking for the store? <a href="/index.html">Order here →</a>
-  </div>
+<div class="customer-link">
+Looking for the store? <a href="/index.html">Order here →</a>
+</div>
 </div>
 
 <div class="login-footer">
-  TASCO · Staff Portal · Secure Access
+TASCO · Staff Portal · Secure Access
 </div>
 
 <script type="module">
@@ -357,106 +357,106 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const app = initializeApp({
-  apiKey: "AIzaSyAaaR52bvyQfkxmZL16lcg4Bd4M76OtbI4",
-  authDomain: "lesgo-cd7f9.firebaseapp.com",
-  projectId: "lesgo-cd7f9",
-  storageBucket: "lesgo-cd7f9.firebasestorage.app",
-  messagingSenderId: "618932234525",
-  appId: "1:618932234525:web:8eb0b934b1bfd1060059f4"
+apiKey: "AIzaSyAaaR52bvyQfkxmZL16lcg4Bd4M76OtbI4",
+authDomain: "lesgo-cd7f9.firebaseapp.com",
+projectId: "lesgo-cd7f9",
+storageBucket: "lesgo-cd7f9.firebasestorage.app",
+messagingSenderId: "618932234525",
+appId: "1:618932234525:web:8eb0b934b1bfd1060059f4"
 });
 const auth = getAuth(app);
 
 // ── ROLE MAP ──────────────────────────────────────────────────
 // Add new staff emails here — no other file needs to change
 const ROLE_MAP = {
-  "admin@tasco.ma":   "/admin.html",
-  "manager@tasco.ma": "/manager.html",
+"admin@tasco.ma": "/admin.html",
+"manager@tasco.ma": "/manager.html",
 };
 
 // ── AUTH STATE CHECK ──────────────────────────────────────────
 // If already logged in redirect immediately — no need to show form
 onAuthStateChanged(auth, (user) => {
-  const overlay = document.getElementById('loadingOverlay');
-  if (user && user.email) {
-    const destination = ROLE_MAP[user.email.toLowerCase()];
-    if (destination) {
-      window.location.replace(destination);
-      return;
-    }
-  }
-  // Not logged in or unknown email — show the form
-  overlay.classList.add('hide');
+const overlay = document.getElementById('loadingOverlay');
+if (user && user.email) {
+const destination = ROLE_MAP[user.email.toLowerCase()];
+if (destination) {
+window.location.replace(destination);
+return;
+}
+}
+// Not logged in or unknown email — show the form
+overlay.classList.add('hide');
 });
 
 // ── LOGIN HANDLER ─────────────────────────────────────────────
 window.handleLogin = async function() {
-  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-  const pass  = document.getElementById('loginPass').value;
-  const btn   = document.getElementById('btnLogin');
-  const errBox = document.getElementById('errorBox');
+const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+const pass = document.getElementById('loginPass').value;
+const btn = document.getElementById('btnLogin');
+const errBox = document.getElementById('errorBox');
 
-  // Hide previous error
-  errBox.classList.remove('show');
+// Hide previous error
+errBox.classList.remove('show');
 
-  // Basic validation
-  if (!email || !pass) {
-    showError('Please enter your email and password.');
-    return;
-  }
+// Basic validation
+if (!email || !pass) {
+showError('Please enter your email and password.');
+return;
+}
 
-  // Check if this email is allowed at all
-  if (!ROLE_MAP[email]) {
-    showError('This email is not authorised for staff access.');
-    return;
-  }
+// Check if this email is allowed at all
+if (!ROLE_MAP[email]) {
+showError('This email is not authorised for staff access.');
+return;
+}
 
-  // Show loading state
-  btn.innerHTML = '<div class="spinner"></div> Signing in...';
-  btn.disabled = true;
+// Show loading state
+btn.innerHTML = '<div class="spinner"></div> Signing in...';
+btn.disabled = true;
 
-  try {
-    await signInWithEmailAndPassword(auth, email, pass);
-    // onAuthStateChanged above will handle the redirect
-  } catch(e) {
-    const code = e.code || '';
-    if (code === 'auth/wrong-password' || code === 'auth/invalid-credential') {
-      showError('Incorrect password. Please try again.');
-    } else if (code === 'auth/user-not-found' || code === 'auth/invalid-email') {
-      showError('Email not found. Check and try again.');
-    } else if (code === 'auth/too-many-requests') {
-      showError('Too many attempts. Please wait a moment.');
-    } else {
-      showError('Login failed. Please try again.');
-    }
-    btn.innerHTML = 'Sign In';
-    btn.disabled = false;
-  }
+try {
+await signInWithEmailAndPassword(auth, email, pass);
+// onAuthStateChanged above will handle the redirect
+} catch(e) {
+const code = e.code || '';
+if (code === 'auth/wrong-password' || code === 'auth/invalid-credential') {
+showError('Incorrect password. Please try again.');
+} else if (code === 'auth/user-not-found' || code === 'auth/invalid-email') {
+showError('Email not found. Check and try again.');
+} else if (code === 'auth/too-many-requests') {
+showError('Too many attempts. Please wait a moment.');
+} else {
+showError('Login failed. Please try again.');
+}
+btn.innerHTML = 'Sign In';
+btn.disabled = false;
+}
 };
 
 // ── HELPERS ───────────────────────────────────────────────────
 function showError(msg) {
-  document.getElementById('errorMsg').textContent = msg;
-  document.getElementById('errorBox').classList.add('show');
+document.getElementById('errorMsg').textContent = msg;
+document.getElementById('errorBox').classList.add('show');
 }
 
 window.togglePassword = function() {
-  const input = document.getElementById('loginPass');
-  const icon  = document.getElementById('eyeIcon');
-  if (input.type === 'password') {
-    input.type = 'text';
-    icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
-  } else {
-    input.type = 'password';
-    icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
-  }
+const input = document.getElementById('loginPass');
+const icon = document.getElementById('eyeIcon');
+if (input.type === 'password') {
+input.type = 'text';
+icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+} else {
+input.type = 'password';
+icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+}
 };
 
 // Allow Enter key to submit
 document.getElementById('loginPass').addEventListener('keydown', e => {
-  if (e.key === 'Enter') handleLogin();
+if (e.key === 'Enter') handleLogin();
 });
 document.getElementById('loginEmail').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('loginPass').focus();
+if (e.key === 'Enter') document.getElementById('loginPass').focus();
 });
 </script>
 </body>
