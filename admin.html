@@ -501,15 +501,12 @@ updatedAt: new Date().toISOString()
 console.log('Admin FCM token saved');
 }
 
-// Foreground notifications. Functions send DATA-ONLY, so read from data first.
+// Foreground messages: do NOT show the big in-app banner (it's intrusive).
+// When the admin app is backgrounded/closed, the service worker shows a
+// proper system notification instead. We just log it here.
 onMessage(messaging, payload => {
 const d = payload.data || {};
-const n = payload.notification || {};
-document.getElementById('adminNotifTitle').textContent = d.title || n.title || '🔔 New Order!';
-document.getElementById('adminNotifSub').textContent = d.body || n.body || 'A new order just came in';
-const banner = document.getElementById('adminNotifBanner');
-banner.classList.add('show');
-setTimeout(() => banner.classList.remove('show'), 5000);
+console.log('Admin foreground message:', d.title || '', d.body || '');
 });
 
 } catch(e) {
